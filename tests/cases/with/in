@@ -1,0 +1,8 @@
+[
+  (with       b;       c)
+  (with       b; /*b*/ c)
+  (with /*a*/ b;       c)
+  (with /*a*/ b; /*b*/ c)
+  ( with b; cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc )
+  ( with b; cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc )
+]

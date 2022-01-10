@@ -1,0 +1,16 @@
+[dependencies]
+  clap = "3"
+  rnix = "0.10"
+  rowan = "0.15"
+  walkdir = "2"
+
+[dev-dependencies]
+  indoc = "*"
+
+[package]
+  authors = ["Kevin Amado <kamadorueda@gmail.com>"]
+  description = "The uncompromising Nix formatter"
+  edition = "2021"
+  name = "alejandra"
+  repository = "https://github.com/kamadorueda/alejandra"
+  version = "0.1.0"

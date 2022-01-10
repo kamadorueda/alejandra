@@ -1,0 +1,6 @@
+[
+  { inherit (      b      ) d; }
+  { inherit (      b /*c*/) d; }
+  { inherit (/*a*/ b      ) d; }
+  { inherit (/*a*/ b /*c*/) d; }
+]

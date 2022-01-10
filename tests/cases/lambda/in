@@ -1,0 +1,10 @@
+[
+  (a       :       d)
+  (a       : /*c*/ d)
+  (a /*b*/ :       d)
+  (a /*b*/ : /*c*/ d)
+  (
+    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+  )
+  ( aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa )
+]
