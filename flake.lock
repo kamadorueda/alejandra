@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "flakeCompat": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1641205782,
+        "narHash": "sha256-4jY7RCWUoZ9cKD8co0/4tFARpWB+57+r1bLLvXNJliY=",
+        "owner": "edolstra",
+        "repo": "flake-compat",
+        "rev": "b7547d3eed6f32d06102ead8991ec52ab0a4f1a7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "edolstra",
+        "repo": "flake-compat",
+        "type": "github"
+      }
+    },
     "flakeUtils": {
       "locked": {
         "lastModified": 1642700792,
@@ -33,6 +49,7 @@
     },
     "root": {
       "inputs": {
+        "flakeCompat": "flakeCompat",
         "flakeUtils": "flakeUtils",
         "nixpkgs": "nixpkgs"
       }

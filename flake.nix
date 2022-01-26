@@ -1,6 +1,8 @@
 {
   inputs =
     {
+      flakeCompat.url = github:edolstra/flake-compat;
+      flakeCompat.flake = false;
       flakeUtils.url = "github:numtide/flake-utils";
       nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     };
@@ -11,20 +13,15 @@
         system:
         let
           nixpkgs = import inputs.nixpkgs { inherit system; };
-          cargoToml = builtins.fromTOML (builtins.readFile ./Cargo.toml);
+          cargoToml = builtins.fromTOML ( builtins.readFile ./Cargo.toml );
         in
         {
           checks =
             {
               defaultPackage = inputs.self.defaultPackage.${ system };
-              inherit (inputs.self.packages.${ system }) nixpkgsFormatted;
+              inherit ( inputs.self.packages.${ system } ) nixpkgsFormatted;
             };
-          defaultApp =
-            {
-              type = "app";
-              program =
-                "${ inputs.self.defaultPackage.${ system } }/bin/alejandra";
-            };
+          defaultApp = { type = "app"; program = "${ inputs.self.defaultPackage.${ system } }/bin/alejandra"; };
           defaultPackage =
             nixpkgs.rustPlatform.buildRustPackage
               {
@@ -35,9 +32,9 @@
                 NIX_BUILD_CORES = 0;
                 meta =
                   {
-                    description = inputs.self.description;
+                    description = cargoToml.package.description;
                     homepage = "https://github.com/kamadorueda/alejandra";
-                    license = nixpkgs.lib.licenses.mit;
+                    license = nixpkgs.lib.licenses.unlicense;
                     maintainers = [ nixpkgs.lib.maintainers.kamadorueda ];
                   };
               };
@@ -69,8 +66,7 @@
 
                           git diff --no-index $nixpkgs $out > $diff || true
                         '';
-                    buildInputs =
-                      [ inputs.self.defaultPackage.${ system } nixpkgs.git ];
+                    buildInputs = [ inputs.self.defaultPackage.${ system } nixpkgs.git ];
                     nixpkgs = inputs.nixpkgs.sourceInfo.outPath;
                     NIX_BUILD_CORES = 0;
                     outputs = [ "diff" "out" ];
