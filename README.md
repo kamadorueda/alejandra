@@ -57,25 +57,31 @@ Let's get Alejandra on our systems:
   $ alejandra --help
   ```
 
-## Goals
+## Features
 
 - ✔️ **Fast**
 
-  It's written in rust
+  It's written in [Rust](https://www.rust-lang.org/)
   and formats [Nixpkgs](https://github.com/NixOS/nixpkgs)
-  in under 1 minute.
+  in just a few seconds[^benchmark-specs].
 
-  That's 55000 lines of Nix code per second.
+  | Cores | Seconds |
+  |:-----:|:--------:
+  | 1     | 40      |
+  | 2     | 21      |
+  | 4     | 15      |
+  | 8     | 11      |
+  | 16    | 10      |
 
 - ✔️ **Highly tested**
 
   Coverage currently > 80%,
-  aiming to a 💯% soon.
+  aiming to 💯% soon.
 
 - ✔️ **Comprehensive**
 
   All elements in the Nix grammar have a rule,
-  so there won't be portions of code unformatted.
+  so there won't be portions of code without style.
 
 - ✔️ **Tolerant to syntax errors**
 
@@ -98,3 +104,22 @@ Let's get Alejandra on our systems:
 ## Do I need to configure anything?
 
 - No.
+
+## References
+
+- [RFC 0101 - Nix formatting](https://github.com/NixOS/rfcs/pull/101)
+- [rnix-parser](https://github.com/nix-community/rnix-parser)
+
+## Alternatives
+
+- [nixpkgs-fmt](https://github.com/nix-community/nixpkgs-fmt)
+- [nixfmt](https://github.com/serokell/nixfmt)
+
+[^benchmark-specs]:
+
+    Running on a [machine](https://github.com/kamadorueda/machine) with:
+
+    - CPU: 16 x Intel(R) Core(TM) i7-10700K
+    - MHz: 3800.00
+    - BogoMips: 7599.80
+    - Cache Size: 16384 KB

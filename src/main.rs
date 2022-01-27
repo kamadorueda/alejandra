@@ -1,3 +1,4 @@
+use rayon::prelude::*;
 use std::io::Read;
 
 fn main() -> std::io::Result<()> {
@@ -17,9 +18,17 @@ fn main() -> std::io::Result<()> {
                 alejandra::find::nix_files(paths.collect());
 
             eprintln!("Formatting {} files.", paths.len());
-            for path in paths {
-                alejandra::format::file(&config, &path)?;
-                eprintln!("Formatting: {}", path);
+
+            for result in paths
+                .par_iter()
+                .map(|path| -> std::io::Result<()> {
+                    eprintln!("Formatting: {}", &path);
+                    alejandra::format::file(&config, &path)?;
+                    Ok(())
+                })
+                .collect::<Vec<std::io::Result<()>>>()
+            {
+                result?;
             }
         }
         None => {
