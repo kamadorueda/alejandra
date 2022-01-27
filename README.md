@@ -86,7 +86,6 @@ Let's get Alejandra on our systems:
   Yet there are a few improvements to implement like:
   - Multiline strings indentation `'' ... ''`.
   - Multiline comments indentation `/* ... */`.
-  - Not indenting attr sets, lists, or parenthesis after binding `name = {`.
   - And many more as community feedback drives.
 
   Style is negotiable at this moment.

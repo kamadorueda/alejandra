@@ -40,13 +40,23 @@ pub fn rule(
     }
 
     // =
+    let mut dedent = false;
     let child = children.get_next().unwrap();
     steps.push_back(crate::builder::Step::Format(child.element));
     match layout {
         crate::config::Layout::Tall => {
-            steps.push_back(crate::builder::Step::Indent);
-            steps.push_back(crate::builder::Step::NewLine);
-            steps.push_back(crate::builder::Step::Pad);
+            if let rnix::SyntaxKind::NODE_ATTR_SET
+            | rnix::SyntaxKind::NODE_LIST
+            | rnix::SyntaxKind::NODE_PAREN =
+                children.peek_next().unwrap().element.kind()
+            {
+                steps.push_back(crate::builder::Step::Whitespace);
+            } else {
+                dedent = true;
+                steps.push_back(crate::builder::Step::Indent);
+                steps.push_back(crate::builder::Step::NewLine);
+                steps.push_back(crate::builder::Step::Pad);
+            }
         }
         crate::config::Layout::Wide => {
             steps.push_back(crate::builder::Step::Whitespace);
@@ -88,11 +98,8 @@ pub fn rule(
     // ;
     let child = children.get_next().unwrap();
     steps.push_back(crate::builder::Step::Format(child.element));
-    match layout {
-        crate::config::Layout::Tall => {
-            steps.push_back(crate::builder::Step::Dedent);
-        }
-        crate::config::Layout::Wide => {}
+    if dedent {
+        steps.push_back(crate::builder::Step::Dedent);
     }
 
     steps
