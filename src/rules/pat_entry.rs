@@ -16,17 +16,7 @@ pub fn rule(
     let child = children.get_next().unwrap();
     match layout {
         crate::config::Layout::Tall => {
-            match child.element.kind() {
-                rnix::SyntaxKind::NODE_OR_DEFAULT => {
-                    steps
-                        .push_back(crate::builder::Step::Format(child.element));
-                }
-                _ => {
-                    steps.push_back(crate::builder::Step::FormatWider(
-                        child.element,
-                    ));
-                }
-            }
+            steps.push_back(crate::builder::Step::FormatWider(child.element));
             steps.push_back(crate::builder::Step::Indent);
         }
         crate::config::Layout::Wide => {

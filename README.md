@@ -65,6 +65,8 @@ Let's get Alejandra on our systems:
   and formats [Nixpkgs](https://github.com/NixOS/nixpkgs)
   in under 1 minute.
 
+  That's 55000 lines of Nix code per second.
+
 - ✔️ **Highly tested**
 
   Coverage currently > 80%,
@@ -75,6 +77,11 @@ Let's get Alejandra on our systems:
   All elements in the Nix grammar have a rule,
   so there won't be portions of code unformatted.
 
+- ✔️ **Tolerant to syntax errors**
+
+  We'll format the portions of a file that is valid Nix code,
+  and leave as-is the portions that contain syntax errors.
+
 - ✔️ **Reproducible**
 
   Formatting many times yields the same results.
@@ -84,8 +91,8 @@ Let's get Alejandra on our systems:
   Beauty is subjective, right?
 
   Yet there are a few improvements to implement like:
-  - Multiline strings indentation `'' ... ''`.
-  - Multiline comments indentation `/* ... */`.
+  - Multiline strings indentation is missing `'' ... ''`.
+  - Multiline comments indentation is bugged `/* ... */`.
   - And many more as community feedback drives.
 
   Style is negotiable at this moment.
