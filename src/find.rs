@@ -1,5 +1,8 @@
 pub fn nix_files(paths: Vec<&str>) -> Vec<String> {
-    paths.iter().flat_map(nix_files_in_path).collect()
+    let mut paths: Vec<String> =
+        paths.iter().flat_map(nix_files_in_path).collect();
+    paths.sort();
+    paths
 }
 
 fn nix_files_in_path(path: &&str) -> Vec<String> {

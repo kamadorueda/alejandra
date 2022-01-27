@@ -19,6 +19,7 @@ fn main() -> std::io::Result<()> {
             eprintln!("Formatting {} files.", paths.len());
             for path in paths {
                 alejandra::format::file(&config, &path)?;
+                eprintln!("Formatting: {}", path);
             }
         }
         None => {
