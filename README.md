@@ -30,6 +30,51 @@
   </a>
 </p>
 
+## Features
+
+- ✔️ **Fast**
+
+  It's written in [Rust](https://www.rust-lang.org/)
+  and formats [Nixpkgs](https://github.com/NixOS/nixpkgs)
+  in just a few seconds[^benchmark-specs].
+
+  | Cores | Seconds |
+  |:-----:|:--------:
+  | 1     | 40      |
+  | 2     | 21      |
+  | 4     | 15      |
+  | 8     | 11      |
+  | 16    | 10      |
+
+- ✔️ **Powerful**
+
+  All elements in the Nix grammar have a totally defined style.
+
+- ✔️ **Reliable**
+
+  Coverage is currently 80%,
+  and we'll have 💯% soon.
+
+- ✔️ **Developer aware**
+
+  Syntax errors are gracefully handled
+  by leaving that specific zone unformatted.
+
+  The rest of the file will be formatted normally.
+
+- ✔️ **Reproducible**
+
+  Formatting many times yields the same results.
+
+- 🚧 **Beautiful**
+
+  Beauty is subjective, right?
+
+  Yet there are a few improvements to implement like:
+  - Multiline strings indentation is missing `'' ... ''`.
+
+  Style is negotiable at this moment.
+
 ## Getting started
 
 Let's get Alejandra on our systems:
@@ -57,63 +102,24 @@ Let's get Alejandra on our systems:
   $ alejandra --help
   ```
 
-## Features
-
-- ✔️ **Fast**
-
-  It's written in [Rust](https://www.rust-lang.org/)
-  and formats [Nixpkgs](https://github.com/NixOS/nixpkgs)
-  in just a few seconds[^benchmark-specs].
-
-  | Cores | Seconds |
-  |:-----:|:--------:
-  | 1     | 40      |
-  | 2     | 21      |
-  | 4     | 15      |
-  | 8     | 11      |
-  | 16    | 10      |
-
-- ✔️ **Highly tested**
-
-  Coverage currently > 80%,
-  aiming to 💯% soon.
-
-- ✔️ **Comprehensive**
-
-  All elements in the Nix grammar have a rule,
-  so there won't be portions of code without style.
-
-- ✔️ **Tolerant to syntax errors**
-
-  We'll format the portions of a file that is valid Nix code,
-  and leave as-is the portions that contain syntax errors.
-
-- ✔️ **Reproducible**
-
-  Formatting many times yields the same results.
-
-- 🚧 **Beautiful**
-
-  Beauty is subjective, right?
-
-  Yet there are a few improvements to implement like:
-  - Multiline strings indentation is missing `'' ... ''`.
-
-  Style is negotiable at this moment.
-
 ## Do I need to configure anything?
 
 - No.
 
-## References
+## Discussion
 
 - [RFC 0101 - Nix formatting](https://github.com/NixOS/rfcs/pull/101)
+
+## Cool libraries
+
 - [rnix-parser](https://github.com/nix-community/rnix-parser)
 
 ## Alternatives
 
 - [nixpkgs-fmt](https://github.com/nix-community/nixpkgs-fmt)
 - [nixfmt](https://github.com/serokell/nixfmt)
+
+## Footnotes
 
 [^benchmark-specs]:
 
