@@ -2,20 +2,28 @@
   ( assert b; c )
   (
     assert b;
-    /*b*/
+    /*
+     b
+     */
     c
   )
   (
     assert
-    /*a*/
+    /*
+     a
+     */
     b;
     c
   )
   (
     assert
-    /*a*/
+    /*
+     a
+     */
     b;
-    /*b*/
+    /*
+     b
+     */
     c
   )
   (

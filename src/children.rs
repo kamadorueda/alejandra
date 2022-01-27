@@ -132,21 +132,108 @@ fn dedent_comment(pos: &crate::position::Position, text: &str) -> String {
     if text.starts_with("#") {
         text.to_string()
     } else {
-        let text = text[2..text.len() - 2]
+        let mut lines: Vec<String> = text[2..text.len() - 2]
             .lines()
+            .map(|line| line.to_string())
+            .collect();
+
+        // If all lines are whitespace just return a compact comment
+        if lines.iter().all(|line| line.trim().len() == 0) {
+            return "/**/".to_string();
+        }
+
+        // println!("{:?}", lines);
+        // println!("0\n{0:<1$}/*{2}*/\n", "", pos.column, lines.join("\n"));
+
+        if lines.len() == 1 {
+            lines.insert(0, "".to_string());
+            lines[1] = format!("{0:<1$}{2}", "", pos.column + 2, lines[1]);
+        } else if lines[0].trim().len() == 0 {
+            lines[0] = "".to_string();
+        } else {
+            lines.insert(0, format!("{0:<1$}", "", pos.column + 1));
+            lines[1] = format!("{0:<1$}{2}", "", pos.column + 2, lines[1]);
+        }
+
+        // println!("{:?}", lines);
+        // println!("1\n{0:<1$}/*{2}*/\n", "", pos.column, lines.join("\n"));
+
+        let len = lines.len();
+        if len == 2 {
+            lines.push(format!("{0:<1$}", "", pos.column + 1));
+        } else if lines[len - 1].trim().len() == 0 {
+            lines[len - 1] = format!("{0:<1$}", "", pos.column + 1)
+        } else {
+            // lines[len - 1] =
+            //     format!("{0:<1$}{2}", "", pos.column + 2, lines[len - 1]);
+            lines.push(format!("{0:<1$}", "", pos.column + 1));
+        }
+
+        // println!("{:?}", lines);
+        // println!("2\n{0:<1$}/*{2}*/\n", "", pos.column, lines.join("\n"));
+
+        let mut indentation: usize = usize::MAX;
+        for (index, line) in lines.iter().enumerate() {
+            if index != 0 && index + 1 != lines.len() {
+                let line = line.trim_end();
+
+                if line.len() > 0 {
+                    indentation = usize::min(
+                        indentation,
+                        line.len() - line.trim_start().len(),
+                    );
+                }
+            }
+        }
+        if indentation == usize::MAX {
+            indentation = pos.column;
+        };
+
+        lines = lines
+            .iter()
             .enumerate()
             .map(|(index, line)| {
-                if index > 0 {
-                    line.chars()
-                        .skip(if pos.column >= 1 { pos.column - 1 } else { 0 })
-                        .collect::<String>()
+                if index == 0 || index + 1 == lines.len() {
+                    line.to_string()
+                } else {
+                    if pos.column >= indentation {
+                        format!(
+                            "{0:<1$}{2}",
+                            "",
+                            pos.column - indentation + 1,
+                            line,
+                        )
+                    } else if line.len() >= indentation - pos.column {
+                        line[indentation - pos.column - 1..line.len()]
+                            .to_string()
+                    } else {
+                        line.to_string()
+                    }
+                }
+            })
+            .collect();
+
+        // println!("{:?}", lines);
+        // println!("3\n{0:<1$}/*{2}*/\n", "", pos.column, lines.join("\n"));
+        // println!("indentation={} pos.column{}", indentation, pos.column);
+
+        lines = lines
+            .iter()
+            .enumerate()
+            .map(|(index, line)| {
+                if index == 0 {
+                    line.to_string()
+                } else if line.len() >= pos.column + 1 {
+                    line[pos.column + 1..line.len()].to_string()
                 } else {
                     line.to_string()
                 }
             })
-            .collect::<Vec<String>>()
-            .join("\n");
+            .collect();
 
-        format!("/*{}*/", text)
+        // println!("{:?}", lines);
+        // println!("4\n{0:<1$}/*{2}*/\n", "", pos.column, lines.join("\n"));
+
+        format!("/*{}*/", lines.join("\n"))
     }
 }

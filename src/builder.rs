@@ -71,11 +71,31 @@ fn build_step(
 
     match step {
         crate::builder::Step::Comment(text) => {
+            let mut lines: Vec<String> =
+                text.lines().map(|line| line.trim_end().to_string()).collect();
+
+            lines = lines
+                .iter()
+                .enumerate()
+                .map(|(index, line)| {
+                    if index == 0 {
+                        line.to_string()
+                    } else {
+                        format!(
+                            "{0:<1$} {2}",
+                            "",
+                            2 * build_ctx.indentation,
+                            line,
+                        )
+                    }
+                })
+                .collect();
+
             add_token(
                 builder,
                 build_ctx,
                 rnix::SyntaxKind::TOKEN_COMMENT,
-                text,
+                &lines.join("\n"),
             );
         }
         crate::builder::Step::Dedent => {

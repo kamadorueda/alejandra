@@ -51,21 +51,30 @@ pub fn rule(
                 | rnix::SyntaxKind::TOKEN_CURLY_B_OPEN = prev_kind
                 {
                     steps.push_back(crate::builder::Step::Whitespace);
+                    steps.push_back(crate::builder::Step::Indent);
                 }
 
                 if let rnix::SyntaxKind::TOKEN_COMMENT
                 | rnix::SyntaxKind::TOKEN_ELLIPSIS
                 | rnix::SyntaxKind::NODE_PAT_ENTRY = prev_kind
                 {
+                    steps.push_back(crate::builder::Step::Indent);
                     steps.push_back(crate::builder::Step::NewLine);
                     steps.push_back(crate::builder::Step::Pad);
-                    steps.push_back(crate::builder::Step::Whitespace);
-                    steps.push_back(crate::builder::Step::Whitespace);
                 }
 
                 children.drain_comment(|text| {
                     steps.push_back(crate::builder::Step::Comment(text));
                 });
+
+                if let rnix::SyntaxKind::TOKEN_COMMA
+                | rnix::SyntaxKind::TOKEN_CURLY_B_OPEN
+                | rnix::SyntaxKind::TOKEN_COMMENT
+                | rnix::SyntaxKind::TOKEN_ELLIPSIS
+                | rnix::SyntaxKind::NODE_PAT_ENTRY = prev_kind
+                {
+                    steps.push_back(crate::builder::Step::Dedent);
+                }
             }
             // item
             rnix::SyntaxKind::TOKEN_ELLIPSIS
