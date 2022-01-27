@@ -4,11 +4,11 @@
 
 <p align="center">
   <a
-    href="https://coveralls.io/github/kamadorueda/.github?branch=main"
+    href="https://coveralls.io/github/kamadorueda/alejandra?branch=main"
   >
     <img
       alt="Coverage"
-      src="https://coveralls.io/repos/github/kamadorueda/.github/badge.svg?branch=main"
+      src="https://coveralls.io/repos/github/kamadorueda/alejandra/badge.svg?branch=main"
     >
     </img>
   </a>
