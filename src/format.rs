@@ -7,7 +7,8 @@ pub fn string(
     let ast = rnix::parser::parse(tokens);
 
     for error in ast.errors() {
-        eprintln!("Warning: parsing error: {}, at: {}", error, path);
+        eprintln!("Error: {}, at: {}", error, path);
+        return ast.node().to_string();
     }
 
     let green_node =
