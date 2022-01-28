@@ -43,14 +43,6 @@ impl Children {
         Children { children, current_index: 0 }
     }
 
-    pub fn count(&self) -> usize {
-        self.children.len()
-    }
-
-    pub fn current_index(&self) -> usize {
-        self.current_index
-    }
-
     pub fn get(&mut self, index: usize) -> Option<Child> {
         if index + 1 > self.children.len() {
             None
@@ -66,14 +58,9 @@ impl Children {
     }
 
     pub fn get_remaining(&mut self) -> Vec<Child> {
-        if self.current_index < self.children.len() {
-            let remaining =
-                &self.children[self.current_index..self.children.len()];
-            self.current_index = self.children.len();
-            remaining.to_vec()
-        } else {
-            vec![]
-        }
+        let remaining = &self.children[self.current_index..self.children.len()];
+        self.current_index = self.children.len();
+        remaining.to_vec()
     }
 
     pub fn has_next(&self) -> bool {
@@ -85,11 +72,7 @@ impl Children {
     }
 
     pub fn peek_prev(&mut self) -> Option<Child> {
-        if self.current_index >= 1 {
-            self.get(self.current_index - 1)
-        } else {
-            None
-        }
+        self.get(self.current_index - 1)
     }
 
     pub fn move_next(&mut self) {
