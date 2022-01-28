@@ -26,82 +26,113 @@ pub fn rule(
             }
         }
     } else {
-        let indentation = get_double_quoted_string_indentation(&node);
+        let placeholder = get_placeholder();
 
-        while let Some(child) = children.peek_next() {
-            match child.element.kind() {
+        let elements: Vec<rnix::SyntaxElement> = children
+            .get_remaining()
+            .iter()
+            .map(|child| child.element.clone())
+            .collect();
+
+        let mut interpolations = elements
+            .iter()
+            .filter(|e| e.kind() != rnix::SyntaxKind::TOKEN_STRING_CONTENT);
+
+        let mut lines: Vec<String> = elements[0..elements.len() - 1]
+            .iter()
+            .map(|element| match element.kind() {
                 rnix::SyntaxKind::TOKEN_STRING_CONTENT => {
-                    let child_token = child.element.into_token().unwrap();
-                    let lines: Vec<&str> =
-                        child_token.text().split('\n').collect();
+                    let token = element.clone().into_token().unwrap();
+                    token.text().to_string()
+                }
+                _ => placeholder.to_string(),
+            })
+            .collect::<String>()
+            .split('\n')
+            .map(|line| line.trim_end().to_string())
+            .collect();
 
-                    children.move_next();
-                    for (index, line) in lines.iter().enumerate() {
-                        if index + 1 == lines.len() && line.trim().len() == 0 {
-                            if let rnix::SyntaxKind::TOKEN_STRING_END =
-                                children.peek_next().unwrap().element.kind()
-                            {
-                                continue;
-                            }
-                        }
+        // eprintln!("0: {:?}", lines);
 
-                        steps.push_back(crate::builder::Step::Token(
-                            rnix::SyntaxKind::TOKEN_STRING_CONTENT,
-                            if indentation >= line.len() {
-                                line.to_string()
-                            } else {
-                                line[indentation..line.len()].to_string()
-                            },
+        let mut indentation: usize = usize::MAX;
+        for line in lines.iter() {
+            let line = line.trim_end();
+
+            if line.len() > 0 {
+                indentation = usize::min(
+                    indentation,
+                    line.len() - line.trim_start().len(),
+                );
+            }
+        }
+        if indentation == usize::MAX {
+            indentation = 0;
+        };
+
+        // Dedent everything as much as possible
+        lines = lines
+            .iter()
+            .map(|line| {
+                if indentation < line.len() {
+                    line[indentation..line.len()].to_string()
+                } else {
+                    line.to_string()
+                }
+            })
+            .collect();
+
+        // eprintln!("1: ''{}''", lines.join("\n"));
+        // eprintln!("indentation={}, placeholder={}", indentation, placeholder);
+
+        for (index, line) in lines.iter().enumerate() {
+            let portions: Vec<String> = line
+                .split(&placeholder)
+                .map(|portion| portion.to_string())
+                .collect();
+
+            if portions.len() == 1 {
+                steps.push_back(crate::builder::Step::Pad);
+                steps.push_back(crate::builder::Step::Token(
+                    rnix::SyntaxKind::TOKEN_STRING_CONTENT,
+                    portions[0].to_string(),
+                ));
+            } else {
+                steps.push_back(crate::builder::Step::Pad);
+                for (index, portion) in portions.iter().enumerate() {
+                    steps.push_back(crate::builder::Step::Token(
+                        rnix::SyntaxKind::TOKEN_STRING_CONTENT,
+                        portion.to_string(),
+                    ));
+
+                    if index + 1 != portions.len() {
+                        steps.push_back(crate::builder::Step::FormatWider(
+                            interpolations.next().unwrap().clone(),
                         ));
-
-                        if index == 0 && lines.len() > 1 {
-                            steps.push_back(crate::builder::Step::NewLine);
-                            steps.push_back(crate::builder::Step::Pad);
-                        } else if index + 1 < lines.len()
-                            && lines[index + 1].trim().len() == 0
-                        {
-                            steps.push_back(crate::builder::Step::NewLine);
-                            steps.push_back(crate::builder::Step::Pad);
-                        }
                     }
                 }
-                rnix::SyntaxKind::TOKEN_STRING_END => {
-                    steps
-                        .push_back(crate::builder::Step::Format(child.element));
-                    children.move_next();
-                }
-                _ => {
-                    steps.push_back(crate::builder::Step::FormatWider(
-                        child.element,
-                    ));
-                    children.move_next();
-                }
             }
+
+            if index + 1 < lines.len() {
+                steps.push_back(crate::builder::Step::NewLine);
+            }
+        }
+
+        for interpolation in interpolations {
+            steps.push_back(crate::builder::Step::FormatWider(
+                interpolation.clone(),
+            ));
         }
     }
 
-    // steps = crate::rules::default(build_ctx, node);
     steps
 }
 
-fn get_double_quoted_string_indentation(node: &rnix::SyntaxNode) -> usize {
-    let mut indentation: usize = usize::MAX;
+fn get_placeholder() -> String {
+    use rand::RngCore;
 
-    let text: String = node
-        .children_with_tokens()
-        .filter(|child| child.kind() == rnix::SyntaxKind::TOKEN_STRING_CONTENT)
-        .map(|child| child.into_token().unwrap())
-        .map(|token| token.text().to_string())
-        .collect();
+    let mut bytes = [0u8; 32];
 
-    for line in text.split('\n') {
-        let line = line.trim_end();
+    rand::thread_rng().fill_bytes(&mut bytes);
 
-        if line.len() > 0 {
-            indentation =
-                usize::min(indentation, line.len() - line.trim_start().len());
-        }
-    }
-
-    if indentation == usize::MAX { 0 } else { indentation }
+    bytes.iter().map(|byte| format!("{:02X}", byte)).collect()
 }

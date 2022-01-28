@@ -1,40 +1,62 @@
 [
   ""
-
+###
   "
   "
-
+###
   "a
    ${x}
    b
   "
-
+###
   ''''
-
-
+###
   ''a''
-
+###
   ''${""}''
+###
+  ''${""}
 
+  ''
+###
+  ''a
+      ''
+###
+  ''a
+
+      ''
+###
+  ''  a
+      ''
+###
+
+    ''a
+  ''
+###
               ''
         a
-        ${""}
+      ${""}
          b
         ${""}
          c ${""} d
          e
             ''
-
+###
   ''
   ''
-
+###
           ''
               declare -a makefiles=(./*.mak)
               sed -i -f ${makefile-sed} "''${makefiles[@]}"
-              # assign Makefile variables eagerly & change backticks to `$(shell …)`
+              ### assign Makefile variables eagerly & change backticks to `$(shell …)`
               sed -i -e 's/ = `\([^`]\+\)`/ := $(shell \1)/' \
                 -e 's/`\([^`]\+\)`/$(shell \1)/' \
                 "''${makefiles[@]}"
             ''
-
+###
+        ''
+                [${ mkSectionName sectName }]
+        ''
+###
+''-couch_ini ${ cfg.package }/etc/default.ini ${ configFile } ${ pkgs.writeText "couchdb-extra.ini" cfg.extraConfig } ${ cfg.configFile }''
 ]

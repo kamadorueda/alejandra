@@ -55,13 +55,6 @@
   Coverage is currently 80%,
   and we'll have 💯% soon.
 
-- ✔️ **Developer aware**
-
-  Syntax errors are gracefully handled
-  by leaving that specific zone unformatted.
-
-  The rest of the file will be formatted normally.
-
 - ✔️ **Reproducible**
 
   Formatting many times yields the same results.
@@ -69,9 +62,6 @@
 - 🚧 **Beautiful**
 
   Beauty is subjective, right?
-
-  Yet there are a few improvements to implement like:
-  - Multiline strings indentation is missing `'' ... ''`.
 
   Style is negotiable at this moment.
 

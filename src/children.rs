@@ -65,6 +65,17 @@ impl Children {
         child
     }
 
+    pub fn get_remaining(&mut self) -> Vec<Child> {
+        if self.current_index < self.children.len() {
+            let remaining =
+                &self.children[self.current_index..self.children.len()];
+            self.current_index = self.children.len();
+            remaining.to_vec()
+        } else {
+            vec![]
+        }
+    }
+
     pub fn has_next(&self) -> bool {
         self.current_index < self.children.len()
     }

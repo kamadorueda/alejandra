@@ -123,7 +123,7 @@ fn build_step(
                 add_token(
                     builder,
                     build_ctx,
-                    rnix::SyntaxKind::TOKEN_COMMA,
+                    rnix::SyntaxKind::TOKEN_WHITESPACE,
                     &format!("{0:<1$}", "", 2 * build_ctx.indentation),
                 );
             }
@@ -209,7 +209,7 @@ fn format(
                 }
                 rnix::SyntaxKind::NODE_ROOT => crate::rules::root::rule,
                 rnix::SyntaxKind::NODE_SELECT => crate::rules::select::rule,
-                rnix::SyntaxKind::NODE_STRING => crate::rules::default,
+                rnix::SyntaxKind::NODE_STRING => crate::rules::string::rule,
                 rnix::SyntaxKind::NODE_STRING_INTERPOL => {
                     crate::rules::string_interpol::rule
                 }
