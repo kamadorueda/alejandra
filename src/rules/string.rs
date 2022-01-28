@@ -91,11 +91,13 @@ pub fn rule(
                 .collect();
 
             if portions.len() == 1 {
-                steps.push_back(crate::builder::Step::Pad);
-                steps.push_back(crate::builder::Step::Token(
-                    rnix::SyntaxKind::TOKEN_STRING_CONTENT,
-                    portions[0].to_string(),
-                ));
+                if portions[0].len() > 0 || index + 1 == lines.len() {
+                    steps.push_back(crate::builder::Step::Pad);
+                    steps.push_back(crate::builder::Step::Token(
+                        rnix::SyntaxKind::TOKEN_STRING_CONTENT,
+                        portions[0].to_string(),
+                    ));
+                }
             } else {
                 steps.push_back(crate::builder::Step::Pad);
                 for (index, portion) in portions.iter().enumerate() {

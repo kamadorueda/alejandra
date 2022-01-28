@@ -16,14 +16,14 @@
   ''  ${ "" }''
   ###
   ''  ${ "" }
-  
+
   ''
   ###
   ''  a
   ''
   ###
   ''  a
-  
+
   ''
   ###
   ''  a
@@ -32,7 +32,7 @@
   ''  a
   ''
   ###
-  ''  
+  ''
     a
   ${ "" }
      b
@@ -41,10 +41,10 @@
      e
   ''
   ###
-  ''  
+  ''
   ''
   ###
-  ''  
+  ''
   declare -a makefiles=(./*.mak)
   sed -i -f ${ makefile-sed } "''${makefiles[@]}"
   ### assign Makefile variables eagerly & change backticks to `$(shell …)`
@@ -53,7 +53,7 @@
     "''${makefiles[@]}"
   ''
   ###
-  ''  
+  ''
   [${ mkSectionName sectName }]
   ''
   ###

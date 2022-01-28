@@ -46,7 +46,7 @@
                 packages = [ nixpkgs.cargo-tarpaulin nixpkgs.rustup ];
                 shellHook =
                   ''
-                    rustup toolchain install nightly
+                  rustup toolchain install nightly
                   '';
               };
           packages = {
@@ -58,15 +58,15 @@
                     builtins.toFile
                       "builder.sh"
                       ''
-                          source $stdenv/setup
+                      source $stdenv/setup
 
-                          cp -rT $nixpkgs $out
-                          chmod -R +w $out
+                      cp -rT $nixpkgs $out
+                      chmod -R +w $out
 
-                          alejandra $out
+                      alejandra $out
 
-                          git diff --no-index $nixpkgs $out > $diff || true
-                        '';
+                      git diff --no-index $nixpkgs $out > $diff || true
+                      '';
                   buildInputs = [ inputs.self.defaultPackage.${ system } nixpkgs.git ];
                   nixpkgs = inputs.nixpkgs.sourceInfo.outPath;
                   NIX_BUILD_CORES = 0;
