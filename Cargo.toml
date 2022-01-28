@@ -15,4 +15,4 @@
   edition = "2021"
   name = "alejandra"
   repository = "https://github.com/kamadorueda/alejandra"
-  version = "0.1.0"
+  version = "0.0.0"
