@@ -24,7 +24,7 @@
             nixpkgs.rustPlatform.buildRustPackage
               {
                 pname = cargoToml.package.name;
-                version = cargoToml.package.version;
+                version = inputs.self.sourceInfo.rev;
                 src = inputs.self.sourceInfo;
                 cargoLock.lockFile = ./Cargo.lock;
                 NIX_BUILD_CORES = 0;
