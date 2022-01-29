@@ -8,6 +8,13 @@ pub fn rule(
 
     let layout = if children.has_comments() {
         &crate::config::Layout::Tall
+    } else if node
+        .children()
+        .filter(|node| node.kind() == rnix::SyntaxKind::NODE_KEY_VALUE)
+        .count()
+        > 1
+    {
+        &crate::config::Layout::Tall
     } else {
         build_ctx.config.layout()
     };
