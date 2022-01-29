@@ -19,6 +19,14 @@ pub fn rule(
         build_ctx.config.layout()
     };
 
+    // rec
+    let child = children.peek_next().unwrap();
+    if let rnix::SyntaxKind::TOKEN_REC = child.element.kind() {
+        steps.push_back(crate::builder::Step::Format(child.element));
+        steps.push_back(crate::builder::Step::Whitespace);
+        children.move_next();
+    }
+
     // {
     let child = children.get_next().unwrap();
     steps.push_back(crate::builder::Step::Format(child.element));
