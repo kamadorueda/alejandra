@@ -38,7 +38,7 @@ pub fn rule(
             .iter()
             .filter(|e| e.kind() != rnix::SyntaxKind::TOKEN_STRING_CONTENT);
 
-        let mut lines: Vec<String> = elements[0..elements.len() - 1]
+        let content: String = elements[0..elements.len() - 1]
             .iter()
             .map(|element| match element.kind() {
                 rnix::SyntaxKind::TOKEN_STRING_CONTENT => {
@@ -47,9 +47,23 @@ pub fn rule(
                 }
                 _ => placeholder.to_string(),
             })
-            .collect::<String>()
-            .split('\n')
-            .map(|line| line.trim_end().to_string())
+            .collect();
+
+        let lines: Vec<String> =
+            content.split('\n').map(|line| line.to_string()).collect();
+
+        let should_trim_end: bool =
+            lines.len() >= 1 && lines[lines.len() - 1].trim().len() == 0;
+
+        let mut lines: Vec<String> = lines
+            .iter()
+            .map(|line| {
+                if should_trim_end {
+                    line.trim_end().to_string()
+                } else {
+                    line.to_string()
+                }
+            })
             .collect();
 
         // eprintln!("0: {:?}", lines);
@@ -92,14 +106,18 @@ pub fn rule(
 
             if portions.len() == 1 {
                 if portions[0].len() > 0 || index + 1 == lines.len() {
-                    steps.push_back(crate::builder::Step::Pad);
+                    if lines.len() > 1 {
+                        steps.push_back(crate::builder::Step::Pad);
+                    }
                     steps.push_back(crate::builder::Step::Token(
                         rnix::SyntaxKind::TOKEN_STRING_CONTENT,
                         portions[0].to_string(),
                     ));
                 }
             } else {
-                steps.push_back(crate::builder::Step::Pad);
+                if lines.len() > 1 {
+                    steps.push_back(crate::builder::Step::Pad);
+                }
                 for (index, portion) in portions.iter().enumerate() {
                     steps.push_back(crate::builder::Step::Token(
                         rnix::SyntaxKind::TOKEN_STRING_CONTENT,

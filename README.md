@@ -36,7 +36,8 @@
 
   It's written in [Rust](https://www.rust-lang.org/)
   and formats [Nixpkgs](https://github.com/NixOS/nixpkgs)
-  in just a few seconds[^benchmark-specs].
+  in just a few seconds.
+  [^benchmark-specs]
 
   | Cores | Seconds |
   |:-----:|:--------:
