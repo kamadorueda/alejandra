@@ -30,17 +30,8 @@ pub fn rule(
             steps.push_back(crate::builder::Step::Comment(text));
         });
 
-        if let Some(child) = children.peek_next() {
-            let kind = child.element.kind();
-
-            if let rnix::SyntaxKind::TOKEN_COMMENT
-            | rnix::SyntaxKind::TOKEN_SEMICOLON = kind
-            {
-                break;
-            }
-
+        if let Some(child) = children.get_next() {
             // expr
-            let child = children.get_next().unwrap();
             match layout {
                 crate::config::Layout::Tall => {
                     steps.push_back(crate::builder::Step::NewLine);
@@ -50,7 +41,12 @@ pub fn rule(
                     ));
                 }
                 crate::config::Layout::Wide => {
-                    steps.push_back(crate::builder::Step::Whitespace);
+                    if let rnix::SyntaxKind::TOKEN_SEMICOLON =
+                        child.element.kind()
+                    {
+                    } else {
+                        steps.push_back(crate::builder::Step::Whitespace);
+                    }
                     steps
                         .push_back(crate::builder::Step::Format(child.element));
                 }
@@ -60,30 +56,12 @@ pub fn rule(
         }
     }
 
-    // /**/
-    children.drain_comments(|text| {
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
-        steps.push_back(crate::builder::Step::Comment(text));
-    });
-
-    if let rnix::SyntaxKind::TOKEN_COMMENT =
-        children.peek_prev().unwrap().element.kind()
-    {
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
-    } else {
-    }
-
-    // ;
-    let child = children.get_next().unwrap();
     match layout {
         crate::config::Layout::Tall => {
             steps.push_back(crate::builder::Step::Dedent);
         }
         crate::config::Layout::Wide => {}
     }
-    steps.push_back(crate::builder::Step::Format(child.element));
 
     steps
 }

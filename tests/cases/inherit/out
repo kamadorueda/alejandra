@@ -4,7 +4,8 @@
   }
   {
     inherit
-      aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa;
+      aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      ;
   }
   { inherit b d; }
   {
@@ -22,7 +23,8 @@
       /*
        c
        */
-      d;
+      d
+      ;
   }
   {
     inherit
@@ -42,7 +44,8 @@
        a
        */
       b
-      d;
+      d
+      ;
   }
   {
     inherit
@@ -65,7 +68,8 @@
       /*
        c
        */
-      d;
+      d
+      ;
   }
   {
     inherit

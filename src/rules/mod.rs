@@ -5,7 +5,6 @@ pub mod bin_op;
 pub mod dynamic;
 pub mod if_else;
 pub mod inherit;
-pub mod inherit_from;
 pub mod key_value;
 pub mod lambda;
 pub mod let_in;

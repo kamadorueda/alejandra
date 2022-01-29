@@ -10,7 +10,12 @@ pub fn rule(
         &crate::config::Layout::Tall
     } else if node
         .children()
-        .filter(|node| node.kind() == rnix::SyntaxKind::NODE_KEY_VALUE)
+        .filter(|node| match node.kind() {
+            rnix::SyntaxKind::NODE_KEY_VALUE
+            | rnix::SyntaxKind::NODE_INHERIT
+            | rnix::SyntaxKind::NODE_INHERIT_FROM => true,
+            _ => false,
+        })
         .count()
         > 1
     {
