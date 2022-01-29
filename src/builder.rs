@@ -165,29 +165,45 @@ fn format(
             builder.start_node(rowan::SyntaxKind(kind as u16));
 
             let rule = match kind {
+                // a b
                 rnix::SyntaxKind::NODE_APPLY => crate::rules::apply::rule,
+                // assert a; b
                 rnix::SyntaxKind::NODE_ASSERT => crate::rules::assert::rule,
+                // { }
                 rnix::SyntaxKind::NODE_ATTR_SET => crate::rules::attr_set::rule,
+                // a $op b
                 rnix::SyntaxKind::NODE_BIN_OP => crate::rules::bin_op::rule,
+                //
                 rnix::SyntaxKind::NODE_DYNAMIC => crate::rules::dynamic::rule,
+                // implementation detail of rnix-parser
                 rnix::SyntaxKind::NODE_ERROR => {
                     eprintln!("Warning: found an error node at: {}", path);
                     crate::rules::default
                 }
+                // $identifier
                 rnix::SyntaxKind::NODE_IDENT => crate::rules::default,
+                // if a then b else c
                 rnix::SyntaxKind::NODE_IF_ELSE => crate::rules::if_else::rule,
+                // inherit NODE_INHERIT_FROM? b+ ;
                 rnix::SyntaxKind::NODE_INHERIT => crate::rules::inherit::rule,
+                // ( a )
                 rnix::SyntaxKind::NODE_INHERIT_FROM => {
-                    crate::rules::inherit::rule
+                    crate::rules::paren::rule
                 }
                 rnix::SyntaxKind::NODE_KEY => crate::rules::default,
+                // a = b;
                 rnix::SyntaxKind::NODE_KEY_VALUE => {
                     crate::rules::key_value::rule
                 }
+                // a: b
                 rnix::SyntaxKind::NODE_LAMBDA => crate::rules::lambda::rule,
+                // let NODE_KEY_VALUE* in b;
                 rnix::SyntaxKind::NODE_LET_IN => crate::rules::let_in::rule,
+                // [ ... ]
                 rnix::SyntaxKind::NODE_LIST => crate::rules::list::rule,
+                // $literal
                 rnix::SyntaxKind::NODE_LITERAL => crate::rules::default,
+                // let { }
                 rnix::SyntaxKind::NODE_LEGACY_LET => {
                     eprintln!(
                         "Warning: found a `legacy let` expression at: {}",
@@ -195,25 +211,36 @@ fn format(
                     );
                     crate::rules::default
                 }
+                // a or b
                 rnix::SyntaxKind::NODE_OR_DEFAULT => {
                     crate::rules::or_default::rule
                 }
+                // ( a )
                 rnix::SyntaxKind::NODE_PAREN => crate::rules::paren::rule,
+                // a | a ? b
                 rnix::SyntaxKind::NODE_PAT_BIND => crate::rules::pat_bind::rule,
+                // { NODE_PAT_ENTRY* }
                 rnix::SyntaxKind::NODE_PATTERN => crate::rules::pattern::rule,
+                // NODE_PAT_BIND | TOKEN_ELLIPSIS
                 rnix::SyntaxKind::NODE_PAT_ENTRY => {
                     crate::rules::pat_entry::rule
                 }
+                // /path/to/${a}
                 rnix::SyntaxKind::NODE_PATH_WITH_INTERPOL => {
                     crate::rules::default
                 }
+                // implementation detail of rowan
                 rnix::SyntaxKind::NODE_ROOT => crate::rules::root::rule,
                 rnix::SyntaxKind::NODE_SELECT => crate::rules::select::rule,
+                // "..." || ''...''
                 rnix::SyntaxKind::NODE_STRING => crate::rules::string::rule,
+                // ${a}
                 rnix::SyntaxKind::NODE_STRING_INTERPOL => {
                     crate::rules::string_interpol::rule
                 }
+                // !a
                 rnix::SyntaxKind::NODE_UNARY_OP => crate::rules::default,
+                // with a; b
                 rnix::SyntaxKind::NODE_WITH => crate::rules::with::rule,
                 kind => {
                     panic!("Missing rule for {:?} at: {}", kind, path);
