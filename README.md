@@ -53,8 +53,13 @@
 
 - ✔️ **Reliable**
 
-  Coverage is currently 80%,
+  Coverage is currently 90%,
   and we'll have 💯% soon.
+
+  Plus, after formatting [Nixpkgs](https://github.com/nixos/nixpkgs)
+  no semantically significant changes are made.
+  From Nix's eyes, code is _just_ the same.
+  [^semantic-changes]
 
 - ✔️ **Reproducible**
 
@@ -120,3 +125,30 @@ Let's get Alejandra on our systems:
     - MHz: 3800.00
     - BogoMips: 7599.80
     - Cache Size: 16384 KB
+
+[^semantic-changes]:
+
+    The methodology to claim this is:
+
+    1.  Checkout [Nixpkgs](https://github.com/nixos/nixpkgs) and run:
+
+        ```bash
+        $ nix-env -qaP --json --drv-path > before
+        ```
+
+    1.  Now format with Alejandra and run:
+
+        ```bash
+        $ nix-env -qaP --json --drv-path > after
+        ```
+
+    As of 2022-01-28,
+    there are 94 differences in a set of 34079 derivations
+    because of things like this:
+
+    ```
+    goDeps = ./deps.nix;
+    ```
+
+    Since `./deps.nix` was also formatted
+    you get a semantical difference.
