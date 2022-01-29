@@ -1,10 +1,10 @@
 [dependencies]
-  clap = "3"
-  rand = "0.8"
-  rayon = "1.5"
-  rnix = "0.10"
-  rowan = "0.15"
-  walkdir = "2"
+  clap = "*"
+  rand = "*"
+  rayon = "*"
+  rnix = "*"
+  rowan = "*"
+  walkdir = "*"
 
 [dev-dependencies]
   indoc = "*"
