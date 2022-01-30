@@ -3,7 +3,9 @@
     flakeCompat.url = github:edolstra/flake-compat;
     flakeCompat.flake = false;
     flakeUtils.url = "github:numtide/flake-utils";
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs.follows = "fenix/nixpkgs";
+    # add https://app.cachix.org/cache/nix-community to your `nix.conf`
+    fenix.url = "github:nix-community/fenix";
   };
   outputs =
     inputs:
@@ -11,6 +13,7 @@
       (
         system:
         let
+          toolchain = "stable";
           nixpkgs = import inputs.nixpkgs { inherit system; };
           cargoToml = builtins.fromTOML ( builtins.readFile ./Cargo.toml );
         in
@@ -21,7 +24,9 @@
           };
           defaultApp = { type = "app"; program = "${ inputs.self.defaultPackage.${ system } }/bin/alejandra"; };
           defaultPackage =
-            nixpkgs.rustPlatform.buildRustPackage
+            (nixpkgs.makeRustPlatform {
+              inherit (inputs.fenix.packages.${ system }.${ toolchain }) cargo rustc;
+            }).buildRustPackage
               {
                 pname = cargoToml.package.name;
                 version =
@@ -43,11 +48,16 @@
           devShell =
             nixpkgs.mkShell
               {
-                packages = [ nixpkgs.cargo-tarpaulin nixpkgs.rustup ];
-                shellHook =
-                  ''
-                  rustup toolchain install nightly
-                  '';
+                packages = [
+                  inputs.fenix.packages.${ system }.rust-analyzer
+                  (inputs.fenix.packages.${ system }.${ toolchain }.withComponents [
+                    "cargo"
+                    "clippy"
+                    "rust-src"
+                    "rustc"
+                    "rustfmt"
+                  ])
+                ];
               };
           packages = {
             nixpkgsFormatted =
