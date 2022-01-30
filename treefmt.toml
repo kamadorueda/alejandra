@@ -1,0 +1,59 @@
+# One CLI to format the code tree - https://github.com/numtide/treefmt
+
+[formatter.nix]
+command = "./target/debug/alejandra"
+includes = ["*.nix"]
+
+[formatter.prettier]
+command = "prettier"
+options = ["--write"]
+includes = [
+    "*.css",
+    "*.html",
+    "*.js",
+    "*.json",
+    "*.jsx",
+    "*.md",
+    "*.mdx",
+    "*.scss",
+    "*.ts",
+    "*.yaml",
+]
+
+[formatter.rust]
+command = "rustfmt"
+options = [
+    "--edition", "2021",
+    "--config",
+    """enum_discrim_align_threshold=999,\
+    format_code_in_doc_comments=true,\
+    format_generated_files=true,\
+    format_macro_bodies=true,\
+    format_macro_matchers=true,\
+    format_strings=true,\
+    hex_literal_case=Lower,\
+    imports_granularity=Crate,\
+    imports_layout=HorizontalVertical,\
+    max_width=80,\
+    normalize_comments=true,\
+    normalize_doc_attributes=true,\
+    reorder_impl_items=true,\
+    struct_field_align_threshold=999,\
+    unstable_features=true,\
+    use_small_heuristics=Max,\
+    version=Two""",
+]
+includes = ["*.rs"]
+
+[formatter.shell]
+command = "shfmt"
+options = [
+    "-bn", # binary ops like && and | may start a line
+    "-ci", # switch cases will be indented
+    "-sr", # redirect operators will be followed by a space
+    "-i", "2",  # indent 2
+    "-s",  # simplify the code
+    "-w",  # write back to the file
+]
+includes = ["*.sh"]
+
