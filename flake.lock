@@ -17,9 +17,7 @@
         "nixpkgs": [
           "nixpkgs"
         ],
-        "rustAnalyzerSrc": [
-          "rustAnalyzerSrc"
-        ],
+        "rustAnalyzerSrc": "rustAnalyzerSrc",
         "treefmt": [
           "treefmt"
         ]
@@ -44,7 +42,7 @@
           "nixpkgs"
         ],
         "rust-analyzer-src": [
-          "rustAnalyzerSrc"
+          "rustAnalyzer"
         ]
       },
       "locked": {
@@ -115,8 +113,24 @@
         "flakeCompat": "flakeCompat",
         "flakeUtils": "flakeUtils",
         "nixpkgs": "nixpkgs",
-        "rustAnalyzerSrc": "rustAnalyzerSrc",
+        "rustAnalyzer": "rustAnalyzer",
         "treefmt": "treefmt"
+      }
+    },
+    "rustAnalyzer": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1643549027,
+        "narHash": "sha256-M1+EmMsidaI+ZQCJEV3wVSAS+PaDqZ63OiGDkoRccjg=",
+        "owner": "rust-analyzer",
+        "repo": "rust-analyzer",
+        "rev": "c08df0f1f5e188e2e1e8f1715ff3a6d583cfb9f3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "rust-analyzer",
+        "repo": "rust-analyzer",
+        "type": "github"
       }
     },
     "rustAnalyzerSrc": {
