@@ -38,6 +38,21 @@
         "type": "github"
       }
     },
+    "devshell": {
+      "locked": {
+        "lastModified": 1643393796,
+        "narHash": "sha256-+wb2OFWJjXUZw3HQezACc9Lj/5uuhNpUtrjDiIYw8H4=",
+        "owner": "numtide",
+        "repo": "devshell",
+        "rev": "fff3dc6e4538f6df85ee3027f13cc7730b23f61d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "devshell",
+        "type": "github"
+      }
+    },
     "fenix": {
       "inputs": {
         "nixpkgs": [
@@ -111,6 +126,7 @@
     "root": {
       "inputs": {
         "alejandra": "alejandra",
+        "devshell": "devshell",
         "fenix": "fenix",
         "flakeCompat": "flakeCompat",
         "flakeUtils": "flakeUtils",

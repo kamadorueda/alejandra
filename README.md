@@ -116,6 +116,21 @@ Let's get Alejandra on our systems:
 - [nixpkgs-fmt](https://github.com/nix-community/nixpkgs-fmt)
 - [nixfmt](https://github.com/serokell/nixfmt)
 
+## Contributing
+
+#### With `direnv`
+
+```console
+$ direnv allow
+```
+
+#### Without `direnv`
+
+```console
+$ nix develop -c $SHELL
+$ menu
+```
+
 ## Footnotes
 
 [^benchmark-specs]:
