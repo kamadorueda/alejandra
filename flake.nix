@@ -1,11 +1,11 @@
 {
   inputs = {
+    fenix.url = "github:nix-community/fenix";
+    fenix.inputs.nixpkgs.follows = "nixpkgs";
     flakeCompat.url = github:edolstra/flake-compat;
     flakeCompat.flake = false;
     flakeUtils.url = "github:numtide/flake-utils";
-    nixpkgs.follows = "fenix/nixpkgs";
-    # add https://app.cachix.org/cache/nix-community to your `nix.conf`
-    fenix.url = "github:nix-community/fenix";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
   };
   outputs =
     inputs:
@@ -13,20 +13,19 @@
       (
         system:
         let
-          toolchain = "stable";
           nixpkgs = import inputs.nixpkgs { inherit system; };
           cargoToml = builtins.fromTOML ( builtins.readFile ./Cargo.toml );
+          fenix = inputs.fenix.packages.${ system };
+          fenixPlatform = nixpkgs.makeRustPlatform { inherit ( fenix.latest ) cargo rustc; };
         in
         {
-          checks = {
-            defaultPackage = inputs.self.defaultPackage.${ system };
-            inherit ( inputs.self.packages.${ system } ) nixpkgsFormatted;
+          checks = { defaultPackage = inputs.self.defaultPackage.${ system }; };
+          defaultApp = {
+            type = "app";
+            program = "${ inputs.self.defaultPackage.${ system } }/bin/alejandra";
           };
-          defaultApp = { type = "app"; program = "${ inputs.self.defaultPackage.${ system } }/bin/alejandra"; };
           defaultPackage =
-            (nixpkgs.makeRustPlatform {
-              inherit (inputs.fenix.packages.${ system }.${ toolchain }) cargo rustc;
-            }).buildRustPackage
+            fenixPlatform.buildRustPackage
               {
                 pname = cargoToml.package.name;
                 version =
@@ -37,7 +36,6 @@
                   "${ builtins.substring 0 8 date }_${ commit }";
                 src = inputs.self.sourceInfo;
                 cargoLock.lockFile = ./Cargo.lock;
-                NIX_BUILD_CORES = 0;
                 meta = {
                   description = cargoToml.package.description;
                   homepage = "https://github.com/kamadorueda/alejandra";
@@ -49,40 +47,14 @@
             nixpkgs.mkShell
               {
                 packages = [
-                  inputs.fenix.packages.${ system }.rust-analyzer
-                  (inputs.fenix.packages.${ system }.${ toolchain }.withComponents [
-                    "cargo"
-                    "clippy"
-                    "rust-src"
-                    "rustc"
-                    "rustfmt"
-                  ])
+                  fenix.rust-analyzer
+                  fenix.latest.cargo
+                  fenix.latest.clippy
+                  fenix.latest.rust-src
+                  fenix.latest.rustc
+                  fenix.latest.rustfmt
                 ];
               };
-          packages = {
-            nixpkgsFormatted =
-              nixpkgs.stdenv.mkDerivation
-                {
-                  name = "nixpkgs-formatted";
-                  builder =
-                    builtins.toFile
-                      "builder.sh"
-                      ''
-                      source $stdenv/setup
-
-                      cp -rT $nixpkgs $out
-                      chmod -R +w $out
-
-                      alejandra $out
-
-                      git diff --no-index $nixpkgs $out > $diff || true
-                      '';
-                  buildInputs = [ inputs.self.defaultPackage.${ system } nixpkgs.git ];
-                  nixpkgs = inputs.nixpkgs.sourceInfo.outPath;
-                  NIX_BUILD_CORES = 0;
-                  outputs = [ "diff" "out" ];
-                };
-          };
         }
       );
 }

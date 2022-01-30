@@ -173,7 +173,7 @@ fn format(
                 rnix::SyntaxKind::NODE_ATTR_SET => crate::rules::attr_set::rule,
                 // a $op b
                 rnix::SyntaxKind::NODE_BIN_OP => crate::rules::bin_op::rule,
-                //
+                // ${a} (interpolation but for NODE_SELECT)
                 rnix::SyntaxKind::NODE_DYNAMIC => crate::rules::dynamic::rule,
                 // implementation detail of rnix-parser
                 rnix::SyntaxKind::NODE_ERROR => {
@@ -201,7 +201,7 @@ fn format(
                 rnix::SyntaxKind::NODE_LET_IN => crate::rules::let_in::rule,
                 // [ ... ]
                 rnix::SyntaxKind::NODE_LIST => crate::rules::list::rule,
-                // $literal
+                // 1 | true | null
                 rnix::SyntaxKind::NODE_LITERAL => crate::rules::default,
                 // let { }
                 rnix::SyntaxKind::NODE_LEGACY_LET => {
@@ -231,6 +231,7 @@ fn format(
                 }
                 // implementation detail of rowan
                 rnix::SyntaxKind::NODE_ROOT => crate::rules::root::rule,
+                // a.b | a.NODE_DYNAMIC
                 rnix::SyntaxKind::NODE_SELECT => crate::rules::select::rule,
                 // "..." || ''...''
                 rnix::SyntaxKind::NODE_STRING => crate::rules::string::rule,
