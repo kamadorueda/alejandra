@@ -5,6 +5,8 @@
     flakeCompat.url = github:edolstra/flake-compat;
     flakeCompat.flake = false;
     flakeUtils.url = "github:numtide/flake-utils";
+    treefmt.url = "github:numtide/treefmt";
+    treefmt.inputs.nixpkgs.follows = "nixpkgs";
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
   };
   outputs =
@@ -15,6 +17,7 @@
         let
           nixpkgs = import inputs.nixpkgs { inherit system; };
           cargoToml = builtins.fromTOML ( builtins.readFile ./Cargo.toml );
+          treefmt = inputs.treefmt.defaultPackage.${ system };
           fenix = inputs.fenix.packages.${ system };
           fenixPlatform = nixpkgs.makeRustPlatform { inherit ( fenix.latest ) cargo rustc; };
         in
@@ -53,7 +56,11 @@
                   fenix.latest.rust-src
                   fenix.latest.rustc
                   fenix.latest.rustfmt
+                  treefmt
+                  nixpkgs.shfmt
+                  nixpkgs.nodePackages.prettier
                 ];
+                shellHook = "cargo build";
               };
         }
       );
