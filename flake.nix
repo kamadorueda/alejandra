@@ -1,6 +1,13 @@
 {
   inputs = {
     alejandra.url = "github:kamadorueda/alejandra";
+    alejandra.inputs.alejandra.follows = "alejandra";
+    alejandra.inputs.fenix.follows = "fenix";
+    alejandra.inputs.flakeCompat.follows = "flakeCompat";
+    alejandra.inputs.flakeUtils.follows = "flakeUtils";
+    alejandra.inputs.nixpkgs.follows = "nixpkgs";
+    alejandra.inputs.rustAnalyzerSrc.follows = "rustAnalyzerSrc";
+    alejandra.inputs.treefmt.follows = "treefmt";
     fenix.url = "github:nix-community/fenix";
     fenix.inputs.nixpkgs.follows = "nixpkgs";
     fenix.inputs.rust-analyzer-src.follows = "rustAnalyzerSrc";
