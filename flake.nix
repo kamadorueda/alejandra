@@ -64,14 +64,12 @@
                   fenix.latest.rustfmt
                   inputs.alejandra.outputs.defaultPackage.${ system }
                   nixpkgs.jq
+                  nixpkgs.nodejs
                   nixpkgs.nodePackages.prettier
+                  nixpkgs.nodePackages.prettier-plugin-toml
                   nixpkgs.shfmt
                   treefmt
                 ];
-                shellHook =
-                  ''
-                  export NODE_PATH=${ nixpkgs.nodePackages.prettier-plugin-toml }/lib/node_modules:$NODE_PATH
-                  '';
               };
         }
       );
