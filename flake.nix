@@ -20,7 +20,6 @@
     treefmt.url = "github:numtide/treefmt";
     treefmt.inputs.flake-utils.follows = "flakeUtils";
     treefmt.inputs.nixpkgs.follows = "nixpkgs";
-    devshell.url = "github:numtide/devshell";
   };
   outputs =
     inputs:
@@ -62,14 +61,9 @@
                 };
               };
           devShell =
-            devshell.mkShell
+            nixpkgs.mkShell
               {
-                imports = [ "${ devshell.extraModulesDir }/git/hooks.nix" ];
-                git.hooks = {
-                  enable = true;
-                  pre-commit.text = builtins.readFile ./pre-commit.sh;
-                };
-                name = "alejandra";
+                name = "Alejandra";
                 packages = [
                   fenix.rust-analyzer
                   fenix.latest.clippy
@@ -82,21 +76,6 @@
                   nixpkgs.nodePackages.prettier
                   nixpkgs.nodePackages.prettier-plugin-toml
                   nixpkgs.shfmt
-                ];
-                commands = [
-                  {
-                    package = fenix.latest.cargo;
-                    name = "cargo";
-                    help = "the cargo tool";
-                  }
-                  {
-                    package = treefmt;
-                    category = "formatters";
-                  }
-                  {
-                    package = nixpkgs.editorconfig-checker;
-                    category = "formatters";
-                  }
                 ];
               };
         }
