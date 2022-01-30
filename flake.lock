@@ -5,6 +5,7 @@
         "alejandra": [
           "alejandra"
         ],
+        "devshell": "devshell",
         "fenix": [
           "fenix"
         ],
@@ -25,11 +26,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1643571374,
-        "narHash": "sha256-UiH+zqlF4TOdkzIOeHUgE/7pOQTULtF9ysl/PcDYsrA=",
+        "lastModified": 1643579913,
+        "narHash": "sha256-YmpwC0uZxYQflCf2HGzGvTqjFmxBDv/zXAUzoKa77Wo=",
         "owner": "kamadorueda",
         "repo": "alejandra",
-        "rev": "b7b044ca85a9f8da2507aaf82188b2a3b73076eb",
+        "rev": "a065143815de2f70e66faad85b37a4d27de065da",
         "type": "github"
       },
       "original": {
@@ -126,7 +127,6 @@
     "root": {
       "inputs": {
         "alejandra": "alejandra",
-        "devshell": "devshell",
         "fenix": "fenix",
         "flakeCompat": "flakeCompat",
         "flakeUtils": "flakeUtils",
@@ -138,11 +138,11 @@
     "rustAnalyzer": {
       "flake": false,
       "locked": {
-        "lastModified": 1643549027,
-        "narHash": "sha256-M1+EmMsidaI+ZQCJEV3wVSAS+PaDqZ63OiGDkoRccjg=",
+        "lastModified": 1643580505,
+        "narHash": "sha256-6+d/x7ZIyvkPLdn7ziXuPyKfxt/7z5PCWs7B960DFqk=",
         "owner": "rust-analyzer",
         "repo": "rust-analyzer",
-        "rev": "c08df0f1f5e188e2e1e8f1715ff3a6d583cfb9f3",
+        "rev": "fd3942eb620e37a4e4bfdd587d8a2893ccf6fea0",
         "type": "github"
       },
       "original": {
