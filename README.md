@@ -40,12 +40,12 @@
   [^benchmark-specs]
 
   | Cores | Seconds |
-  |:-----:|:--------:
-  | 1     | 40      |
-  | 2     | 21      |
-  | 4     | 15      |
-  | 8     | 11      |
-  | 16    | 10      |
+  | :---: | :-----: |
+  |   1   |   40    |
+  |   2   |   21    |
+  |   4   |   15    |
+  |   8   |   11    |
+  |  16   |   10    |
 
 - ✔️ **Powerful**
 
@@ -84,6 +84,7 @@ Let's get Alejandra on our systems:
 - Nix stable:
 
   Pick one depending on your platform:
+
   ```bash
   $ nix-env -ivA aarch64-darwin -f https://github.com/kamadorueda/alejandra/tarball/main
   $ nix-env -ivA aarch64-linux -f https://github.com/kamadorueda/alejandra/tarball/main
@@ -118,7 +119,6 @@ Let's get Alejandra on our systems:
 ## Footnotes
 
 [^benchmark-specs]:
-
     Running on a [machine](https://github.com/kamadorueda/machine) with:
 
     - CPU: 16 x Intel(R) Core(TM) i7-10700K
@@ -126,9 +126,7 @@ Let's get Alejandra on our systems:
     - BogoMips: 7599.80
     - Cache Size: 16384 KB
 
-[^semantic-changes]:
-
-    The methodology to claim this is:
+[^semantic-changes]: The methodology to claim this is:
 
     1.  Checkout [Nixpkgs](https://github.com/nixos/nixpkgs) and run:
 

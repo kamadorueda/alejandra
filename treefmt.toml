@@ -23,8 +23,10 @@ includes = [
 [formatter.shell]
 command = "shfmt"
 options = [
-    "-i",
-    "2",  # indent 2
+    "-bn", # binary ops like && and | may start a line
+    "-ci", # switch cases will be indented
+    "-sr", # redirect operators will be followed by a space
+    "-i", "2",  # indent 2
     "-s",  # simplify the code
     "-w",  # write back to the file
 ]
