@@ -31,7 +31,6 @@
           nixpkgs = import inputs.nixpkgs { inherit system; };
           cargoToml = builtins.fromTOML ( builtins.readFile ./Cargo.toml );
           treefmt = inputs.treefmt.defaultPackage.${ system };
-          devshell = inputs.devshell.legacyPackages.${ system };
           fenix = inputs.fenix.packages.${ system };
           fenixPlatform = nixpkgs.makeRustPlatform { inherit ( fenix.latest ) cargo rustc; };
         in
