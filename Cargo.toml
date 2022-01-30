@@ -1,18 +1,18 @@
 [dependencies]
-  clap = "*"
-  rand = "*"
-  rayon = "*"
-  rnix = "*"
-  rowan = "*"
-  walkdir = "*"
+clap = "*"
+rand = "*"
+rayon = "*"
+rnix = "*"
+rowan = "*"
+walkdir = "*"
 
 [dev-dependencies]
-  indoc = "*"
+indoc = "*"
 
 [package]
-  authors = ["Kevin Amado <kamadorueda@gmail.com>"]
-  description = "The uncompromising Nix formatter"
-  edition = "2021"
-  name = "alejandra"
-  repository = "https://github.com/kamadorueda/alejandra"
-  version = "0.0.0"
+authors = ["Kevin Amado <kamadorueda@gmail.com>"]
+description = "The uncompromising Nix formatter"
+edition = "2021"
+name = "alejandra"
+repository = "https://github.com/kamadorueda/alejandra"
+version = "0.0.0"

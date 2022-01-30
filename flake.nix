@@ -1,12 +1,17 @@
 {
   inputs = {
+    alejandra.url = "github:kamadorueda/alejandra";
     fenix.url = "github:nix-community/fenix";
     fenix.inputs.nixpkgs.follows = "nixpkgs";
+    fenix.inputs.rust-analyzer-src.follows = "rustAnalyzerSrc";
     flakeCompat.url = github:edolstra/flake-compat;
     flakeCompat.flake = false;
     flakeUtils.url = "github:numtide/flake-utils";
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    rustAnalyzerSrc.url = "github:rust-analyzer/rust-analyzer";
+    rustAnalyzerSrc.flake = false;
     treefmt.url = "github:numtide/treefmt";
+    treefmt.inputs.flake-utils.follows = "flakeUtils";
     treefmt.inputs.nixpkgs.follows = "nixpkgs";
   };
   outputs =
@@ -57,11 +62,16 @@
                   fenix.latest.rust-src
                   fenix.latest.rustc
                   fenix.latest.rustfmt
-                  treefmt
-                  nixpkgs.shfmt
+                  inputs.alejandra.outputs.defaultPackage.${ system }
+                  nixpkgs.jq
                   nixpkgs.nodePackages.prettier
+                  nixpkgs.shfmt
+                  treefmt
                 ];
-                shellHook = "cargo build";
+                shellHook =
+                  ''
+                  export NODE_PATH=${ nixpkgs.nodePackages.prettier-plugin-toml }/lib/node_modules:$NODE_PATH
+                  '';
               };
         }
       );
