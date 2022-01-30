@@ -1,5 +1,5 @@
 [
-  ( assert b; c )
+  (assert b; c)
   (
     assert b;
     /*
@@ -26,9 +26,7 @@
      */
     c
   )
-  (
-    assert b; cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-  )
+  (assert b; cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc)
   (
     assert b;
     cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc

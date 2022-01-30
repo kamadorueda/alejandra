@@ -1,5 +1,5 @@
 [
-  ( with b; c )
+  (with b; c)
   (
     with b;
     /*
@@ -26,9 +26,7 @@
      */
     c
   )
-  (
-    with b; cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-  )
+  (with b; cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc)
   (
     with b;
     cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc

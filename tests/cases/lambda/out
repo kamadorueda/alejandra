@@ -1,5 +1,5 @@
 [
-  ( a: d )
+  (a: d)
   (
     a:
     /*
@@ -26,9 +26,7 @@
      */
     d
   )
-  (
-    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-  )
+  (aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa)
   (
     aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa:
     aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
