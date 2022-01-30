@@ -5,13 +5,14 @@
     flakeCompat.url = github:edolstra/flake-compat;
     flakeCompat.flake = false;
     flakeUtils.url = "github:numtide/flake-utils";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     treefmt.url = "github:numtide/treefmt";
     treefmt.inputs.nixpkgs.follows = "nixpkgs";
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
   };
   outputs =
     inputs:
-    inputs.flakeUtils.lib.eachDefaultSystem
+    inputs.flakeUtils.lib.eachSystem
+      [ "x86_64-darwin" "x86_64-linux" ]
       (
         system:
         let
