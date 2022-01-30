@@ -6,7 +6,27 @@ pub fn rule(
 
     let mut children = crate::children::Children::new(build_ctx, node);
 
-    let layout = if children.has_comments() {
+    let has_comments = children.has_comments();
+    let has_comments_between_curly_b = node
+        .children_with_tokens()
+        .skip_while(|element| {
+            element.kind() != rnix::SyntaxKind::TOKEN_CURLY_B_OPEN
+        })
+        .take_while(|element| {
+            element.kind() != rnix::SyntaxKind::TOKEN_CURLY_B_CLOSE
+        })
+        .any(|element| element.kind() == rnix::SyntaxKind::TOKEN_COMMENT);
+
+    let items_count = node
+        .children_with_tokens()
+        .filter(|element| match element.kind() {
+            rnix::SyntaxKind::TOKEN_ELLIPSIS
+            | rnix::SyntaxKind::NODE_PAT_ENTRY => true,
+            _ => false,
+        })
+        .count();
+
+    let layout = if has_comments {
         &crate::config::Layout::Tall
     } else {
         build_ctx.config.layout()
@@ -20,8 +40,12 @@ pub fn rule(
                 steps.push_back(crate::builder::Step::FormatWider(
                     child.element,
                 ));
-                steps.push_back(crate::builder::Step::NewLine);
-                steps.push_back(crate::builder::Step::Pad);
+                if !has_comments && items_count <= 1 {
+                    steps.push_back(crate::builder::Step::Whitespace);
+                } else {
+                    steps.push_back(crate::builder::Step::NewLine);
+                    steps.push_back(crate::builder::Step::Pad);
+                }
             }
             crate::config::Layout::Wide => {
                 steps.push_back(crate::builder::Step::Format(child.element));
@@ -130,8 +154,12 @@ pub fn rule(
     let child = children.get_next().unwrap();
     match layout {
         crate::config::Layout::Tall => {
-            steps.push_back(crate::builder::Step::NewLine);
-            steps.push_back(crate::builder::Step::Pad);
+            if !has_comments_between_curly_b && items_count <= 1 {
+                steps.push_back(crate::builder::Step::Whitespace);
+            } else {
+                steps.push_back(crate::builder::Step::NewLine);
+                steps.push_back(crate::builder::Step::Pad);
+            }
         }
         crate::config::Layout::Wide => {
             steps.push_back(crate::builder::Step::Whitespace);
@@ -151,8 +179,12 @@ pub fn rule(
         if let rnix::SyntaxKind::NODE_PAT_BIND = child.element.kind() {
             match layout {
                 crate::config::Layout::Tall => {
-                    steps.push_back(crate::builder::Step::NewLine);
-                    steps.push_back(crate::builder::Step::Pad);
+                    if !has_comments && items_count <= 1 {
+                        steps.push_back(crate::builder::Step::Whitespace);
+                    } else {
+                        steps.push_back(crate::builder::Step::NewLine);
+                        steps.push_back(crate::builder::Step::Pad);
+                    }
                     steps.push_back(crate::builder::Step::FormatWider(
                         child.element,
                     ));
