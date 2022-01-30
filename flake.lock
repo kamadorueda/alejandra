@@ -17,17 +17,19 @@
         "nixpkgs": [
           "nixpkgs"
         ],
-        "rustAnalyzerSrc": "rustAnalyzerSrc",
+        "rustAnalyzer": [
+          "rustAnalyzer"
+        ],
         "treefmt": [
           "treefmt"
         ]
       },
       "locked": {
-        "lastModified": 1643567537,
-        "narHash": "sha256-/vjhEPBc2emB2oYkE6h+1ny3S88o8FUi4Lw60i4yNfc=",
+        "lastModified": 1643571374,
+        "narHash": "sha256-UiH+zqlF4TOdkzIOeHUgE/7pOQTULtF9ysl/PcDYsrA=",
         "owner": "kamadorueda",
         "repo": "alejandra",
-        "rev": "8df9020a1dd3f3974c99b5137bf89e53eddcbc1e",
+        "rev": "b7b044ca85a9f8da2507aaf82188b2a3b73076eb",
         "type": "github"
       },
       "original": {
@@ -118,22 +120,6 @@
       }
     },
     "rustAnalyzer": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1643549027,
-        "narHash": "sha256-M1+EmMsidaI+ZQCJEV3wVSAS+PaDqZ63OiGDkoRccjg=",
-        "owner": "rust-analyzer",
-        "repo": "rust-analyzer",
-        "rev": "c08df0f1f5e188e2e1e8f1715ff3a6d583cfb9f3",
-        "type": "github"
-      },
-      "original": {
-        "owner": "rust-analyzer",
-        "repo": "rust-analyzer",
-        "type": "github"
-      }
-    },
-    "rustAnalyzerSrc": {
       "flake": false,
       "locked": {
         "lastModified": 1643549027,
