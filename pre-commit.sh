@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if git rev-parse --verify HEAD >/dev/null 2>&1; then
+if git rev-parse --verify HEAD > /dev/null 2>&1; then
   against=HEAD
 else
   # Initial commit: diff against an empty tree object
@@ -21,5 +21,3 @@ if [[ $? != '0' ]]; then
     "Review the output and commit your fixes" >&2
   exit 1
 fi
-
-
