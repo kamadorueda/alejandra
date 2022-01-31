@@ -10,21 +10,47 @@ pub fn rule(
         // if/then/else
         let child = children.get_next().unwrap();
         steps.push_back(crate::builder::Step::Format(child.element));
-        steps.push_back(crate::builder::Step::Indent);
 
-        // /**/
-        children.drain_comments(|text| {
+        if let rnix::SyntaxKind::TOKEN_COMMENT =
+            children.peek_next().unwrap().element.kind()
+        {
+            steps.push_back(crate::builder::Step::Indent);
+
+            // /**/
+            children.drain_comments(|text| {
+                steps.push_back(crate::builder::Step::NewLine);
+                steps.push_back(crate::builder::Step::Pad);
+                steps.push_back(crate::builder::Step::Comment(text));
+            });
+
+            // expr
+            let child = children.get_next().unwrap();
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
-            steps.push_back(crate::builder::Step::Comment(text));
-        });
+            steps.push_back(crate::builder::Step::FormatWider(child.element));
+            steps.push_back(crate::builder::Step::Dedent);
+        } else {
+            let child = children.get_next().unwrap();
 
-        // expr
-        let child = children.get_next().unwrap();
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
-        steps.push_back(crate::builder::Step::FormatWider(child.element));
-        steps.push_back(crate::builder::Step::Dedent);
+            // expr
+            if crate::builder::fits_in_single_line(
+                build_ctx,
+                child.element.clone(),
+            ) {
+                steps.push_back(crate::builder::Step::Whitespace);
+                steps.push_back(crate::builder::Step::FormatWider(
+                    child.element,
+                ));
+            } else {
+                steps.push_back(crate::builder::Step::Indent);
+                steps.push_back(crate::builder::Step::NewLine);
+                steps.push_back(crate::builder::Step::Pad);
+                steps.push_back(crate::builder::Step::FormatWider(
+                    child.element,
+                ));
+                steps.push_back(crate::builder::Step::Dedent);
+            }
+        }
 
         if branch != "else" {
             steps.push_back(crate::builder::Step::NewLine);

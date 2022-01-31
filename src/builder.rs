@@ -275,7 +275,8 @@ fn format_wider(
 ) {
     match element {
         rnix::SyntaxElement::Node(node) => {
-            let layout = if fits_in_single_line(build_ctx, node) {
+            let layout = if fits_in_single_line(build_ctx, node.clone().into())
+            {
                 crate::config::Layout::Wide
             } else {
                 crate::config::Layout::Tall
@@ -293,11 +294,11 @@ fn format_wider(
 
 pub fn fits_in_single_line(
     build_ctx: &crate::builder::BuildCtx,
-    node: &rnix::SyntaxNode,
+    node: rnix::SyntaxElement,
 ) -> bool {
     let maybe_green_node = build(
         &build_ctx.config.with_layout(crate::config::Layout::Wide),
-        node.clone().into(),
+        node,
         true,
         build_ctx.path.clone(),
     );
