@@ -1,7 +1,6 @@
 {
   inputs = {
     alejandra.url = "github:kamadorueda/alejandra";
-    alejandra.inputs.alejandra.follows = "alejandra";
     alejandra.inputs.fenix.follows = "fenix";
     alejandra.inputs.flakeCompat.follows = "flakeCompat";
     alejandra.inputs.flakeUtils.follows = "flakeUtils";
