@@ -6,8 +6,9 @@ includes = ["*.json"]
 options = ["-S"]
 
 [formatter.nix]
-command = "alejandra"
+command = "cargo"
 includes = ["*.nix"]
+options = ["run", "--"]
 
 [formatter.prettier]
 command = "prettier"

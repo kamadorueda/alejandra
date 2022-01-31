@@ -1,12 +1,5 @@
 {
   inputs = {
-    alejandra.url = "github:kamadorueda/alejandra";
-    alejandra.inputs.fenix.follows = "fenix";
-    alejandra.inputs.flakeCompat.follows = "flakeCompat";
-    alejandra.inputs.flakeUtils.follows = "flakeUtils";
-    alejandra.inputs.nixpkgs.follows = "nixpkgs";
-    alejandra.inputs.rustAnalyzer.follows = "rustAnalyzer";
-    alejandra.inputs.treefmt.follows = "treefmt";
     fenix.url = "github:nix-community/fenix";
     fenix.inputs.nixpkgs.follows = "nixpkgs";
     fenix.inputs.rust-analyzer-src.follows = "rustAnalyzer";
@@ -69,7 +62,6 @@
                     fenix.latest.rust-src
                     fenix.latest.rustc
                     fenix.latest.rustfmt
-                    inputs.alejandra.outputs.defaultPackage.${ system }
                     nixpkgs.cargo-tarpaulin
                     nixpkgs.jq
                     nixpkgs.nodejs
