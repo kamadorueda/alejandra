@@ -20,6 +20,7 @@
     treefmt.url = "github:numtide/treefmt";
     treefmt.inputs.flake-utils.follows = "flakeUtils";
     treefmt.inputs.nixpkgs.follows = "nixpkgs";
+    devshell.url = "github:numtide/devshell";
   };
   outputs =
     inputs:
@@ -31,6 +32,7 @@
           nixpkgs = import inputs.nixpkgs { inherit system; };
           cargoToml = builtins.fromTOML ( builtins.readFile ./Cargo.toml );
           treefmt = inputs.treefmt.defaultPackage.${ system };
+          devshell = inputs.devshell.legacyPackages.${ system };
           fenix = inputs.fenix.packages.${ system };
           fenixPlatform = nixpkgs.makeRustPlatform { inherit ( fenix.latest ) cargo rustc; };
         in
@@ -60,24 +62,47 @@
                 };
               };
           devShell =
-            nixpkgs.mkShell
+            devshell.mkShell
               {
                 name = "Alejandra";
+                imports = [ "${ devshell.extraModulesDir }/git/hooks.nix" ];
+                git.hooks = {
+                  enable = true;
+                  pre-commit.text = builtins.readFile ./pre-commit.sh;
+                };
                 packages = [
                   fenix.rust-analyzer
-                  fenix.latest.cargo
                   fenix.latest.clippy
                   fenix.latest.rust-src
                   fenix.latest.rustc
                   fenix.latest.rustfmt
                   inputs.alejandra.outputs.defaultPackage.${ system }
                   nixpkgs.jq
-                  nixpkgs.nodejs
                   nixpkgs.nodePackages.prettier
                   nixpkgs.nodePackages.prettier-plugin-toml
                   nixpkgs.shfmt
-                  treefmt
                 ];
+                commands = [
+                  {
+                    package = fenix.latest.cargo;
+                    name = "cargo";
+                    help = "the cargo tool";
+                  }
+                  {
+                    package = treefmt;
+                    category = "formatters";
+                  }
+                  {
+                    package = nixpkgs.editorconfig-checker;
+                    category = "formatters";
+                  }
+                ];
+                # devshell.load_profiles = true;
+                devshell.startup.nodejs-setuphook =
+                  nixpkgs.lib.stringsWithDeps.noDepEntry
+                    ''
+                    export NODE_PATH=${ nixpkgs.nodePackages.prettier-plugin-toml }/lib/node_modules:$NODE_PATH
+                    '';
               };
         }
       );

@@ -5,6 +5,7 @@
         "alejandra": [
           "alejandra"
         ],
+        "devshell": "devshell",
         "fenix": [
           "fenix"
         ],
@@ -25,16 +26,46 @@
         ]
       },
       "locked": {
-        "lastModified": 1643584963,
-        "narHash": "sha256-yj/Lu9V0CZXC+9QRnkD2Lwd9jw3pbixUS7AuULGXuaw=",
+        "lastModified": 1643579913,
+        "narHash": "sha256-YmpwC0uZxYQflCf2HGzGvTqjFmxBDv/zXAUzoKa77Wo=",
         "owner": "kamadorueda",
         "repo": "alejandra",
-        "rev": "9b6797f30d52bad6b5d889e6f24946ddba15a56a",
+        "rev": "a065143815de2f70e66faad85b37a4d27de065da",
         "type": "github"
       },
       "original": {
         "owner": "kamadorueda",
         "repo": "alejandra",
+        "type": "github"
+      }
+    },
+    "devshell": {
+      "locked": {
+        "lastModified": 1643393796,
+        "narHash": "sha256-+wb2OFWJjXUZw3HQezACc9Lj/5uuhNpUtrjDiIYw8H4=",
+        "owner": "numtide",
+        "repo": "devshell",
+        "rev": "fff3dc6e4538f6df85ee3027f13cc7730b23f61d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "devshell",
+        "type": "github"
+      }
+    },
+    "devshell_2": {
+      "locked": {
+        "lastModified": 1643393796,
+        "narHash": "sha256-+wb2OFWJjXUZw3HQezACc9Lj/5uuhNpUtrjDiIYw8H4=",
+        "owner": "numtide",
+        "repo": "devshell",
+        "rev": "fff3dc6e4538f6df85ee3027f13cc7730b23f61d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "devshell",
         "type": "github"
       }
     },
@@ -111,6 +142,7 @@
     "root": {
       "inputs": {
         "alejandra": "alejandra",
+        "devshell": "devshell_2",
         "fenix": "fenix",
         "flakeCompat": "flakeCompat",
         "flakeUtils": "flakeUtils",
