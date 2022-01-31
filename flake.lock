@@ -25,11 +25,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1643597368,
-        "narHash": "sha256-P8VJio7BGjHGYDjIZmVM2RlmpgcL1/W7PxQvDVFOT38=",
+        "lastModified": 1643605065,
+        "narHash": "sha256-UPD3gVrq4TwkRL1dGXg9mU0YbbFAfM/HfRg3MeJVyu4=",
         "owner": "kamadorueda",
         "repo": "alejandra",
-        "rev": "969023c1d6bf11ba13d1ffe91f938602fb33b185",
+        "rev": "0f5e67f50994710122b3908e349d727d459928f2",
         "type": "github"
       },
       "original": {
