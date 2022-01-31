@@ -41,6 +41,13 @@ pub fn rule(
                 steps.push_back(crate::builder::Step::FormatWider(
                     child.element,
                 ));
+            } else if branch == "else"
+                && child.element.kind() == rnix::SyntaxKind::NODE_IF_ELSE
+            {
+                steps.push_back(crate::builder::Step::Whitespace);
+                steps.push_back(crate::builder::Step::FormatWider(
+                    child.element,
+                ));
             } else {
                 steps.push_back(crate::builder::Step::Indent);
                 steps.push_back(crate::builder::Step::NewLine);

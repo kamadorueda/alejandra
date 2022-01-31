@@ -1,6 +1,8 @@
 [
   (if ./a then b else c)
   (if /**/ a /**/ then /**/ b /**/ else /**/ c)
+  (if if a then b else c then b else if a then b else if a then b else c)
+  (if if a then b else c then b else if a then b else /*x*/ if a then b else c)
   (if
     (if
       (if
