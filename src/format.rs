@@ -1,6 +1,6 @@
 pub fn string(
     config: &crate::config::Config,
-    path: &str,
+    path: String,
     string: String,
 ) -> String {
     let tokens = rnix::tokenizer::Tokenizer::new(&string);
@@ -21,11 +21,14 @@ pub fn string(
     green_node.to_string()
 }
 
-pub fn file(config: &crate::config::Config, path: &str) -> std::io::Result<()> {
+pub fn file(
+    config: &crate::config::Config,
+    path: String,
+) -> std::io::Result<()> {
     use std::io::Write;
 
-    let input = std::fs::read_to_string(path)?;
-    let output = crate::format::string(config, path, input);
+    let input = std::fs::read_to_string(&path)?;
+    let output = crate::format::string(config, path.clone(), input);
 
     std::fs::File::create(path)?.write_all(output.as_bytes())?;
 

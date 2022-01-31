@@ -23,7 +23,7 @@ fn main() -> std::io::Result<()> {
                 .par_iter()
                 .map(|path| -> std::io::Result<()> {
                     eprintln!("Formatting: {}", &path);
-                    alejandra::format::file(&config, &path)?;
+                    alejandra::format::file(&config, path.to_string())?;
                     Ok(())
                 })
                 .collect::<Vec<std::io::Result<()>>>()
@@ -35,7 +35,10 @@ fn main() -> std::io::Result<()> {
             eprintln!("Formatting stdin.");
             let mut stdin = String::new();
             std::io::stdin().read_to_string(&mut stdin).unwrap();
-            print!("{}", alejandra::format::string(&config, "stdin", stdin));
+            print!(
+                "{}",
+                alejandra::format::string(&config, "stdin".to_string(), stdin)
+            );
         }
     }
 

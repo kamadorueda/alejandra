@@ -17,7 +17,7 @@ fn cases() {
         let path_out = format!("tests/cases/{}/out", case);
         let content_in = std::fs::read_to_string(path_in.clone()).unwrap();
         let content_got =
-            alejandra::format::string(&config, &path_in, content_in.clone());
+            alejandra::format::string(&config, path_in, content_in.clone());
 
         if should_update {
             std::fs::File::create(&path_out)
@@ -28,25 +28,6 @@ fn cases() {
 
         let content_out = std::fs::read_to_string(path_out.clone()).unwrap();
 
-        assert!(
-            content_got == content_out,
-            indoc::indoc!(
-                r"
-
-
-                    input from {}:
-                    {}
-                    after formatting:
-                    {}
-                    expected from {}:
-                    {}
-                "
-            ),
-            path_in,
-            &content_in,
-            &content_got,
-            path_out,
-            &content_out,
-        );
+        assert!(content_got == content_out);
     }
 }

@@ -18,16 +18,18 @@ pub struct BuildCtx {
     pub indentation: usize,
     pub pos_new:     crate::position::Position,
     pub pos_old:     crate::position::Position,
+    pub path:        String,
 }
 
 impl BuildCtx {
     pub fn new(
         config: crate::config::Config,
         force_wide: bool,
+        path: String,
         pos_new: crate::position::Position,
         pos_old: crate::position::Position,
     ) -> BuildCtx {
-        BuildCtx { config, force_wide, indentation: 0, pos_new, pos_old }
+        BuildCtx { config, force_wide, indentation: 0, path, pos_new, pos_old }
     }
 }
 
@@ -35,12 +37,13 @@ pub fn build(
     config: &crate::config::Config,
     element: rnix::SyntaxElement,
     force_wide: bool,
-    path: &str,
+    path: String,
 ) -> Option<rowan::GreenNode> {
     let mut builder = rowan::GreenNodeBuilder::new();
     let mut build_ctx = BuildCtx::new(
         config.clone(),
         force_wide,
+        path,
         crate::position::Position::new(),
         crate::position::Position::new(),
     );
@@ -48,7 +51,6 @@ pub fn build(
     build_step(
         &mut builder,
         &mut build_ctx,
-        path,
         &crate::builder::Step::Format(element),
     );
 
@@ -62,7 +64,7 @@ pub fn build(
 fn build_step(
     builder: &mut rowan::GreenNodeBuilder,
     build_ctx: &mut BuildCtx,
-    path: &str,
+
     step: &crate::builder::Step,
 ) {
     if build_ctx.force_wide && build_ctx.pos_new.line > 1 {
@@ -102,10 +104,10 @@ fn build_step(
             build_ctx.indentation -= 1;
         }
         crate::builder::Step::Format(element) => {
-            format(builder, build_ctx, element, path);
+            format(builder, build_ctx, element);
         }
         crate::builder::Step::FormatWider(element) => {
-            format_wider(builder, build_ctx, element, path);
+            format_wider(builder, build_ctx, element);
         }
         crate::builder::Step::Indent => {
             build_ctx.indentation += 1;
@@ -156,7 +158,6 @@ fn format(
     builder: &mut rowan::GreenNodeBuilder,
     build_ctx: &mut BuildCtx,
     element: &rnix::SyntaxElement,
-    path: &str,
 ) {
     let kind = element.kind();
 
@@ -177,7 +178,10 @@ fn format(
                 rnix::SyntaxKind::NODE_DYNAMIC => crate::rules::dynamic::rule,
                 // implementation detail of rnix-parser
                 rnix::SyntaxKind::NODE_ERROR => {
-                    eprintln!("Warning: found an error node at: {}", path);
+                    eprintln!(
+                        "Warning: found an error node at: {}",
+                        build_ctx.path
+                    );
                     crate::rules::default
                 }
                 // $identifier
@@ -207,7 +211,7 @@ fn format(
                 rnix::SyntaxKind::NODE_LEGACY_LET => {
                     eprintln!(
                         "Warning: found a `legacy let` expression at: {}",
-                        path
+                        build_ctx.path
                     );
                     crate::rules::default
                 }
@@ -244,12 +248,15 @@ fn format(
                 // with a; b
                 rnix::SyntaxKind::NODE_WITH => crate::rules::with::rule,
                 kind => {
-                    panic!("Missing rule for {:?} at: {}", kind, path);
+                    panic!(
+                        "Missing rule for {:?} at: {}",
+                        kind, build_ctx.path
+                    );
                 }
             };
 
             for step in rule(build_ctx, node) {
-                build_step(builder, build_ctx, path, &step);
+                build_step(builder, build_ctx, &step);
             }
 
             builder.finish_node();
@@ -265,37 +272,41 @@ fn format_wider(
     builder: &mut rowan::GreenNodeBuilder,
     build_ctx: &mut BuildCtx,
     element: &rnix::SyntaxElement,
-    path: &str,
 ) {
     match element {
         rnix::SyntaxElement::Node(node) => {
-            let maybe_green_node = build(
-                &build_ctx.config.with_layout(crate::config::Layout::Wide),
-                node.clone().into(),
-                true,
-                path,
-            );
-
-            let layout = match maybe_green_node {
-                Some(finished) => {
-                    if build_ctx.pos_new.column
-                        + finished.to_string().chars().count()
-                        > build_ctx.config.max_width()
-                    {
-                        crate::config::Layout::Tall
-                    } else {
-                        crate::config::Layout::Wide
-                    }
-                }
-                None => crate::config::Layout::Tall,
+            let layout = if fits_in_single_line(build_ctx, node) {
+                crate::config::Layout::Wide
+            } else {
+                crate::config::Layout::Tall
             };
 
             let mut build_ctx_clone = build_ctx.clone();
             build_ctx_clone.config = build_ctx.config.with_layout(layout);
-            format(builder, &mut build_ctx_clone, element, path);
+            format(builder, &mut build_ctx_clone, element);
         }
         rnix::SyntaxElement::Token(_) => {
-            format(builder, build_ctx, element, path);
+            format(builder, build_ctx, element);
         }
     };
+}
+
+pub fn fits_in_single_line(
+    build_ctx: &crate::builder::BuildCtx,
+    node: &rnix::SyntaxNode,
+) -> bool {
+    let maybe_green_node = build(
+        &build_ctx.config.with_layout(crate::config::Layout::Wide),
+        node.clone().into(),
+        true,
+        build_ctx.path.clone(),
+    );
+
+    match maybe_green_node {
+        Some(finished) => {
+            build_ctx.pos_new.column + finished.to_string().chars().count()
+                <= build_ctx.config.max_width()
+        }
+        None => false,
+    }
 }
