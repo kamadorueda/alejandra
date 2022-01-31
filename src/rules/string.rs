@@ -95,6 +95,22 @@ pub fn rule(
             })
             .collect();
 
+        // Indent everything 2 spaces
+        if lines.len() > 1
+            && lines.iter().filter(|line| line.trim().len() > 0).count() >= 1
+        {
+            lines = lines
+                .iter()
+                .map(|line| {
+                    if line.trim().len() > 0 {
+                        format!("  {}", line)
+                    } else {
+                        line.to_string()
+                    }
+                })
+                .collect();
+        }
+
         // eprintln!("1: ''{}''", lines.join("\n"));
         // eprintln!("indentation={}, placeholder={}", indentation, placeholder);
 
