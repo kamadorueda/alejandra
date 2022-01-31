@@ -71,6 +71,7 @@
                     fenix.latest.rustc
                     fenix.latest.rustfmt
                     inputs.alejandra.outputs.defaultPackage.${ system }
+                    nixpkgs.cargo-tarpaulin
                     nixpkgs.jq
                     nixpkgs.nodejs
                     nixpkgs.nodePackages.prettier
