@@ -65,6 +65,7 @@
                 name = "Alejandra";
                 packages = [
                   fenix.rust-analyzer
+                  fenix.latest.cargo
                   fenix.latest.clippy
                   fenix.latest.rust-src
                   fenix.latest.rustc
@@ -75,6 +76,7 @@
                   nixpkgs.nodePackages.prettier
                   nixpkgs.nodePackages.prettier-plugin-toml
                   nixpkgs.shfmt
+                  treefmt
                 ];
               };
         }
