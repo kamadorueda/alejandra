@@ -30,7 +30,7 @@
             checks = { defaultPackage = inputs.self.defaultPackage.${ system }; };
             defaultApp = {
               type = "app";
-              program = "${ inputs.self.defaultPackage.${ system } }/bin/alejandra";
+              program = "${inputs.self.defaultPackage.${ system }}/bin/alejandra";
             };
             defaultPackage =
               fenixPlatform.buildRustPackage
@@ -41,7 +41,7 @@
                       commit = inputs.self.shortRev or "dirty";
                       date = inputs.self.lastModifiedDate or inputs.self.lastModified or "19700101";
                     in
-                      "${ builtins.substring 0 8 date }_${ commit }";
+                      "${builtins.substring 0 8 date}_${commit}";
                   src = inputs.self.sourceInfo;
                   cargoLock.lockFile = ./Cargo.lock;
                   meta = {
