@@ -140,8 +140,8 @@ Let's get Alejandra on our systems:
         $ nix-env -qaP --json --drv-path > after
         ```
 
-    As of 2022-01-28,
-    there are 94 differences in a set of 34079 derivations
+    As of 2022-02-01,
+    there are 89 differences in a set of 34079 derivations
     because of things like this:
 
     ```
