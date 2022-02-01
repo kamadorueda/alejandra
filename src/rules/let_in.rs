@@ -82,6 +82,7 @@ pub fn rule(
 
     // in
     let child = children.get_next().unwrap();
+    let indent = child.pos.column > 1;
     match layout {
         crate::config::Layout::Tall => {
             steps.push_back(crate::builder::Step::Dedent);
@@ -95,7 +96,9 @@ pub fn rule(
     steps.push_back(crate::builder::Step::Format(child.element));
     match layout {
         crate::config::Layout::Tall => {
-            steps.push_back(crate::builder::Step::Indent);
+            if indent {
+                steps.push_back(crate::builder::Step::Indent);
+            }
         }
         crate::config::Layout::Wide => {}
     }
@@ -114,7 +117,9 @@ pub fn rule(
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
             steps.push_back(crate::builder::Step::FormatWider(child.element));
-            steps.push_back(crate::builder::Step::Dedent);
+            if indent {
+                steps.push_back(crate::builder::Step::Dedent);
+            }
         }
         crate::config::Layout::Wide => {
             steps.push_back(crate::builder::Step::Whitespace);
