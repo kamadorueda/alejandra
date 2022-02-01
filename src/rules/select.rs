@@ -18,12 +18,10 @@ pub fn rule(
         crate::config::Layout::Tall => match child.element.kind() {
             rnix::SyntaxKind::NODE_SELECT => {
                 steps.push_back(crate::builder::Step::Format(child.element));
-                steps.push_back(crate::builder::Step::Indent);
                 steps.push_back(crate::builder::Step::NewLine);
                 steps.push_back(crate::builder::Step::Pad);
             }
             _ => {
-                steps.push_back(crate::builder::Step::Indent);
                 steps.push_back(crate::builder::Step::FormatWider(
                     child.element,
                 ));
@@ -66,7 +64,6 @@ pub fn rule(
     match layout {
         crate::config::Layout::Tall => {
             steps.push_back(crate::builder::Step::FormatWider(child.element));
-            steps.push_back(crate::builder::Step::Dedent);
         }
         crate::config::Layout::Wide => {
             steps.push_back(crate::builder::Step::Format(child.element));
