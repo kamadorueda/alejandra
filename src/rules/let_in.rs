@@ -6,7 +6,19 @@ pub fn rule(
 
     let mut children = crate::children::Children::new(build_ctx, node);
 
+    let items_count = node
+        .children()
+        .filter(|element| match element.kind() {
+            rnix::SyntaxKind::NODE_KEY_VALUE
+            | rnix::SyntaxKind::NODE_INHERIT
+            | rnix::SyntaxKind::NODE_INHERIT_FROM => true,
+            _ => false,
+        })
+        .count();
+
     let layout = if children.has_comments() {
+        &crate::config::Layout::Tall
+    } else if items_count > 1 {
         &crate::config::Layout::Tall
     } else {
         build_ctx.config.layout()

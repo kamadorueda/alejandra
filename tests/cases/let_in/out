@@ -1,5 +1,12 @@
 let
   /**/
+  a =
+    let
+      b = 2;
+      c = 3;
+    in
+      d;
+  /**/
   a = let c = 1; in f;
   /**/
   a =
