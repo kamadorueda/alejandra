@@ -1,4 +1,7 @@
 [
+  (a: b: /*c*/ d)
+  ({}: b: /*c*/ d)
+  (a: {}: /*c*/ d)
   (a       :       d)
   (a       : /*c*/ d)
   (a /*b*/ :       d)
@@ -7,4 +10,5 @@
     aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
   )
   ( aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa )
+  ({ pkgs ? import ./.. { }, locationsXml }: null)
 ]
