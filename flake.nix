@@ -22,15 +22,15 @@
         let
           nixpkgs = import inputs.nixpkgs { inherit system; };
           cargoToml = builtins.fromTOML (builtins.readFile ./Cargo.toml);
-          treefmt = inputs.treefmt.defaultPackage.${ system };
-          fenix = inputs.fenix.packages.${ system };
+          treefmt = inputs.treefmt.defaultPackage.${system};
+          fenix = inputs.fenix.packages.${system};
           fenixPlatform = nixpkgs.makeRustPlatform { inherit (fenix.latest) cargo rustc; };
         in
           {
-            checks = { defaultPackage = inputs.self.defaultPackage.${ system }; };
+            checks = { defaultPackage = inputs.self.defaultPackage.${system}; };
             defaultApp = {
               type = "app";
-              program = "${inputs.self.defaultPackage.${ system }}/bin/alejandra";
+              program = "${inputs.self.defaultPackage.${system}}/bin/alejandra";
             };
             defaultPackage =
               fenixPlatform.buildRustPackage
