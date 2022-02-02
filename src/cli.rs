@@ -11,7 +11,7 @@ pub fn parse(args: Vec<String>) -> clap::ArgMatches {
         )
         .arg(
             clap::Arg::new("max-width")
-                .default_value("120")
+                .default_value("80")
                 .help("How many characters per line to allow.")
                 .long("max-width")
                 .takes_value(true)
