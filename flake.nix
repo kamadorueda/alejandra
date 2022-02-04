@@ -14,10 +14,8 @@
     treefmt.inputs.nixpkgs.follows = "nixpkgs";
   };
   outputs =
-    inputs:
-    inputs.flakeUtils.lib.eachSystem [ "x86_64-darwin" "x86_64-linux" ] (
-      system:
-      let
+    inputs: inputs.flakeUtils.lib.eachSystem [ "x86_64-darwin" "x86_64-linux" ] (
+      system: let
         nixpkgs = import inputs.nixpkgs { inherit system; };
         cargoToml = builtins.fromTOML (builtins.readFile ./Cargo.toml);
         treefmt = inputs.treefmt.defaultPackage.${system};

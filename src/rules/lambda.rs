@@ -84,8 +84,7 @@ pub fn rule(
             {
                 steps.push_back(crate::builder::Step::Whitespace);
             } else {
-                steps.push_back(crate::builder::Step::NewLine);
-                steps.push_back(crate::builder::Step::Pad);
+                steps.push_back(crate::builder::Step::Whitespace);
             }
             steps.push_back(crate::builder::Step::FormatWider(child.element));
         }
