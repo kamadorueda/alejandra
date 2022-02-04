@@ -24,11 +24,9 @@ pub fn parse(args: Vec<String>) -> clap::ArgMatches {
         .term_width(80)
         .after_help(indoc::indoc!(
             "
-            Created with love by:
+            Shaped with love by:
             - Kevin Amado ~ @kamadorueda on GitHub, matrix.org and Gmail.
             - Thomas Bereknyei ~ @tomberek on GitHub and matrix.org.
-
-            With contributions from:
             - David Arnold ~ @blaggacao on GitHub and matrix.org.
             - Mr Hedgehog ~ @ModdedGamers on GitHub.
             "
