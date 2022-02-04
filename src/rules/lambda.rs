@@ -70,19 +70,6 @@ pub fn rule(
             {
                 steps.push_back(crate::builder::Step::NewLine);
                 steps.push_back(crate::builder::Step::Pad);
-            } else if child.element.kind() == rnix::SyntaxKind::NODE_LAMBDA
-                && child
-                    .element
-                    .clone()
-                    .into_node()
-                    .unwrap()
-                    .children_with_tokens()
-                    .next()
-                    .unwrap()
-                    .kind()
-                    == rnix::SyntaxKind::NODE_IDENT
-            {
-                steps.push_back(crate::builder::Step::Whitespace);
             } else {
                 steps.push_back(crate::builder::Step::Whitespace);
             }
