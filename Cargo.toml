@@ -11,7 +11,7 @@ indoc = "*"
 
 [package]
 authors = ["Kevin Amado <kamadorueda@gmail.com>"]
-description = "The uncompromising Nix formatter"
+description = "The Uncompromising Nix Code Formatter"
 edition = "2021"
 name = "alejandra"
 repository = "https://github.com/kamadorueda/alejandra"

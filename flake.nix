@@ -1,4 +1,5 @@
 {
+  description = "The Uncompromising Nix Code Formatter.";
   inputs = {
     fenix.url = "github:nix-community/fenix";
     fenix.inputs.nixpkgs.follows = "nixpkgs";
