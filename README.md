@@ -150,3 +150,8 @@ Let's get Alejandra on our systems:
 
     Since `./deps.nix` was also formatted
     you get a semantical difference.
+
+    This is something that should be solved on Nixpkgs
+    and not a bug in Alejandra. For example:
+
+    - https://github.com/NixOS/nixpkgs/pull/157760
