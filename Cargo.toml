@@ -1,13 +1,11 @@
 [dependencies]
 clap = "*"
+indoc = "*"
 rand = "*"
 rayon = "*"
 rnix = "*"
 rowan = "*"
 walkdir = "*"
-
-[dev-dependencies]
-indoc = "*"
 
 [package]
 authors = ["Kevin Amado <kamadorueda@gmail.com>"]
