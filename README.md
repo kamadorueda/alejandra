@@ -116,6 +116,10 @@ Let's get Alejandra on our systems:
 - [nixpkgs-fmt](https://github.com/nix-community/nixpkgs-fmt)
 - [nixfmt](https://github.com/serokell/nixfmt)
 
+See why Alejandra was created
+and a comparison between alternatives
+[here](https://discourse.nixos.org/t/the-uncompromising-nix-code-formatter/17385/3?u=kamadorueda)
+
 ## Footnotes
 
 [^benchmark-specs]:
