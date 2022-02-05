@@ -144,8 +144,8 @@ and a comparison between alternatives
         $ nix-env -qaP --json --drv-path > after
         ```
 
-    As of 2022-02-01,
-    there are 89 differences in a set of 34079 derivations
+    As of 2022-02-05,
+    there are 50 differences in a set of 38955 derivations
     because of things like this:
 
     ```
