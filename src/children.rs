@@ -123,7 +123,7 @@ impl Children {
 }
 
 fn dedent_comment(pos: &crate::position::Position, text: &str) -> String {
-    if text.starts_with("#") {
+    if text.starts_with('#') {
         text.to_string()
     } else {
         let mut lines: Vec<String> = text[2..text.len() - 2]
@@ -132,7 +132,7 @@ fn dedent_comment(pos: &crate::position::Position, text: &str) -> String {
             .collect();
 
         // If all lines are whitespace just return a compact comment
-        if lines.iter().all(|line| line.trim().len() == 0) {
+        if lines.iter().all(|line| line.trim().is_empty()) {
             return "/**/".to_string();
         }
 
@@ -143,7 +143,7 @@ fn dedent_comment(pos: &crate::position::Position, text: &str) -> String {
         if lines.len() == 1 {
             lines.insert(0, "".to_string());
             lines[1] = format!("{0:<1$}{2}", "", pos.column + 2, lines[1]);
-        } else if lines[0].trim().len() == 0 {
+        } else if lines[0].trim().is_empty() {
             lines[0] = "".to_string();
         } else {
             lines.insert(0, format!("{0:<1$}", "", pos.column + 1));
@@ -157,7 +157,7 @@ fn dedent_comment(pos: &crate::position::Position, text: &str) -> String {
         let len = lines.len();
         if len == 2 {
             lines.push(format!("{0:<1$}", "", pos.column + 1));
-        } else if lines[len - 1].trim().len() == 0 {
+        } else if lines[len - 1].trim().is_empty() {
             lines[len - 1] = format!("{0:<1$}", "", pos.column + 1)
         } else {
             lines.push(format!("{0:<1$}", "", pos.column + 1));
@@ -172,7 +172,7 @@ fn dedent_comment(pos: &crate::position::Position, text: &str) -> String {
             if index != 0 && index + 1 != lines.len() {
                 let line = line.trim_end();
 
-                if line.len() > 0 {
+                if !line.is_empty() {
                     indentation = usize::min(
                         indentation,
                         line.len() - line.trim_start().len(),
@@ -191,20 +191,17 @@ fn dedent_comment(pos: &crate::position::Position, text: &str) -> String {
             .map(|(index, line)| {
                 if index == 0 || index + 1 == lines.len() {
                     line.to_string()
+                } else if pos.column >= indentation {
+                    format!(
+                        "{0:<1$}{2}",
+                        "",
+                        pos.column - indentation + 1,
+                        line,
+                    )
+                } else if line.len() >= indentation - pos.column {
+                    line[indentation - pos.column - 1..line.len()].to_string()
                 } else {
-                    if pos.column >= indentation {
-                        format!(
-                            "{0:<1$}{2}",
-                            "",
-                            pos.column - indentation + 1,
-                            line,
-                        )
-                    } else if line.len() >= indentation - pos.column {
-                        line[indentation - pos.column - 1..line.len()]
-                            .to_string()
-                    } else {
-                        line.to_string()
-                    }
+                    line.to_string()
                 }
             })
             .collect();
@@ -221,7 +218,7 @@ fn dedent_comment(pos: &crate::position::Position, text: &str) -> String {
             .map(|(index, line)| {
                 if index == 0 {
                     line.to_string()
-                } else if line.len() >= pos.column + 1 {
+                } else if line.len() > pos.column {
                     line[pos.column + 1..line.len()].to_string()
                 } else {
                     line.to_string()

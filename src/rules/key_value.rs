@@ -60,7 +60,6 @@ pub fn rule(
                 | rnix::SyntaxKind::NODE_PAREN
                 | rnix::SyntaxKind::NODE_STRING = next
                     .element
-                    .clone()
                     .into_node()
                     .unwrap()
                     .children()
@@ -81,7 +80,6 @@ pub fn rule(
             } else if let rnix::SyntaxKind::NODE_LAMBDA = next_kind {
                 if let rnix::SyntaxKind::NODE_PATTERN = next
                     .element
-                    .clone()
                     .into_node()
                     .unwrap()
                     .children()

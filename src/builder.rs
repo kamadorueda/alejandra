@@ -131,7 +131,7 @@ fn build_step(
             }
         }
         crate::builder::Step::Token(kind, text) => {
-            add_token(builder, build_ctx, *kind, &text);
+            add_token(builder, build_ctx, *kind, text);
         }
         crate::builder::Step::Whitespace => {
             add_token(

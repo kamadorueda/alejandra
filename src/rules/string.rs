@@ -53,7 +53,7 @@ pub fn rule(
             content.split('\n').map(|line| line.to_string()).collect();
 
         let should_trim_end: bool =
-            lines.len() >= 1 && lines[lines.len() - 1].trim().len() == 0;
+            !lines.is_empty() && lines[lines.len() - 1].trim().is_empty();
 
         let mut lines: Vec<String> = lines
             .iter()
@@ -72,7 +72,7 @@ pub fn rule(
         for line in lines.iter() {
             let line = line.trim_end();
 
-            if line.len() > 0 {
+            if !line.is_empty() {
                 indentation = usize::min(
                     indentation,
                     line.len() - line.trim_start().len(),
@@ -97,12 +97,12 @@ pub fn rule(
 
         // Indent everything 2 spaces
         if lines.len() > 1
-            && lines.iter().filter(|line| line.trim().len() > 0).count() >= 1
+            && lines.iter().filter(|line| !line.trim().is_empty()).count() >= 1
         {
             lines = lines
                 .iter()
                 .map(|line| {
-                    if line.trim().len() > 0 {
+                    if !line.trim().is_empty() {
                         format!("  {}", line)
                     } else {
                         line.to_string()
@@ -121,7 +121,7 @@ pub fn rule(
                 .collect();
 
             if portions.len() == 1 {
-                if portions[0].len() > 0 || index + 1 == lines.len() {
+                if !portions[0].is_empty() || index + 1 == lines.len() {
                     if lines.len() > 1 {
                         steps.push_back(crate::builder::Step::Pad);
                     }
