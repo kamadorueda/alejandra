@@ -48,13 +48,36 @@ pub fn rule(
             let next = children.peek_next().unwrap();
             let next_kind = next.element.kind();
 
-            if let rnix::SyntaxKind::NODE_APPLY
-            | rnix::SyntaxKind::NODE_ATTR_SET
+            if let rnix::SyntaxKind::NODE_ATTR_SET
             | rnix::SyntaxKind::NODE_LIST
             | rnix::SyntaxKind::NODE_PAREN
             | rnix::SyntaxKind::NODE_STRING = next_kind
             {
                 steps.push_back(crate::builder::Step::Whitespace);
+            } else if let rnix::SyntaxKind::NODE_APPLY = next_kind {
+                if let rnix::SyntaxKind::NODE_ATTR_SET
+                | rnix::SyntaxKind::NODE_LIST
+                | rnix::SyntaxKind::NODE_PAREN
+                | rnix::SyntaxKind::NODE_STRING = next
+                    .element
+                    .clone()
+                    .into_node()
+                    .unwrap()
+                    .children()
+                    .collect::<Vec<rnix::SyntaxNode>>()
+                    .iter()
+                    .rev()
+                    .next()
+                    .unwrap()
+                    .kind()
+                {
+                    steps.push_back(crate::builder::Step::Whitespace);
+                } else {
+                    dedent = true;
+                    steps.push_back(crate::builder::Step::Indent);
+                    steps.push_back(crate::builder::Step::NewLine);
+                    steps.push_back(crate::builder::Step::Pad);
+                }
             } else if let rnix::SyntaxKind::NODE_LAMBDA = next_kind {
                 if let rnix::SyntaxKind::NODE_PATTERN = next
                     .element

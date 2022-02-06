@@ -15,4 +15,6 @@
   o = { pkgs
   , ...
   }: { };
+  p = aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa { }
+  a;
 }
