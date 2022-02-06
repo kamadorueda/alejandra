@@ -50,11 +50,7 @@
           name = "Alejandra";
           packages = [
             fenix.rust-analyzer
-            fenix.latest.cargo
-            fenix.latest.clippy
-            fenix.latest.rust-src
-            fenix.latest.rustc
-            fenix.latest.rustfmt
+            fenix.latest.toolchain
             nixpkgs.cargo-tarpaulin
             nixpkgs.jq
             nixpkgs.nodejs
