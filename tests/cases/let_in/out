@@ -8,6 +8,7 @@ let
       d;
   /**/
   a = let c = 1; in f;
+
   /**/
   a =
     let
@@ -27,6 +28,7 @@ let
     in
       f;
   /**/
+
   a =
     let
       c = 1;

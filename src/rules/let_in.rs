@@ -4,7 +4,9 @@ pub fn rule(
 ) -> std::collections::LinkedList<crate::builder::Step> {
     let mut steps = std::collections::LinkedList::new();
 
-    let mut children = crate::children::Children::new(build_ctx, node);
+    let mut children = crate::children::Children::new_with_configuration(
+        build_ctx, node, true,
+    );
 
     let items_count = node
         .children()
@@ -16,9 +18,10 @@ pub fn rule(
         })
         .count();
 
-    let layout = if children.has_comments() {
-        &crate::config::Layout::Tall
-    } else if items_count > 1 {
+    let layout = if items_count > 1
+        || children.has_comments()
+        || children.has_newlines()
+    {
         &crate::config::Layout::Tall
     } else {
         build_ctx.config.layout()
@@ -34,24 +37,30 @@ pub fn rule(
         crate::config::Layout::Wide => {}
     }
 
+    let mut item_index: usize = 0;
+
     loop {
         // /**/
-        children.drain_comments(|text| {
-            steps.push_back(crate::builder::Step::NewLine);
-            steps.push_back(crate::builder::Step::Pad);
-            steps.push_back(crate::builder::Step::Comment(text));
+        children.drain_comments_and_newlines(|element| match element {
+            crate::children::DrainCommentOrNewline::Comment(text) => {
+                steps.push_back(crate::builder::Step::NewLine);
+                steps.push_back(crate::builder::Step::Pad);
+                steps.push_back(crate::builder::Step::Comment(text));
+            }
+            crate::children::DrainCommentOrNewline::Newline(_) => {
+                if item_index > 0 && item_index < items_count {
+                    steps.push_back(crate::builder::Step::NewLine);
+                }
+            }
         });
 
         if let Some(child) = children.peek_next() {
-            let kind = child.element.kind();
-
-            if let rnix::SyntaxKind::TOKEN_COMMENT
-            | rnix::SyntaxKind::TOKEN_IN = kind
-            {
+            if let rnix::SyntaxKind::TOKEN_IN = child.element.kind() {
                 break;
             }
 
             // expr
+            item_index += 1;
             match layout {
                 crate::config::Layout::Tall => {
                     steps.push_back(crate::builder::Step::NewLine);
@@ -72,13 +81,6 @@ pub fn rule(
             break;
         }
     }
-
-    // /**/
-    children.drain_comments(|text| {
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
-        steps.push_back(crate::builder::Step::Comment(text));
-    });
 
     // in
     let child = children.get_next().unwrap();
@@ -104,10 +106,13 @@ pub fn rule(
     }
 
     // /**/
-    children.drain_comments(|text| {
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
-        steps.push_back(crate::builder::Step::Comment(text));
+    children.drain_comments_and_newlines(|element| match element {
+        crate::children::DrainCommentOrNewline::Comment(text) => {
+            steps.push_back(crate::builder::Step::NewLine);
+            steps.push_back(crate::builder::Step::Pad);
+            steps.push_back(crate::builder::Step::Comment(text));
+        }
+        crate::children::DrainCommentOrNewline::Newline(_) => {}
     });
 
     // expr
