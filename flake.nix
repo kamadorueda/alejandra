@@ -23,7 +23,7 @@
       fenixPlatform = nixpkgs.makeRustPlatform { inherit (fenix.latest) cargo rustc; };
     in
       {
-        checks = { defaultPackage = inputs.self.defaultPackage.${system}; };
+        checks.defaultPackage = inputs.self.defaultPackage.${system};
         defaultApp = {
           type = "app";
           program = "${inputs.self.defaultPackage.${system}}/bin/alejandra";
