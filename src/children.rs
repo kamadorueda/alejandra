@@ -9,10 +9,16 @@ pub struct Children {
     current_index: usize,
 }
 
+pub enum DrainCommentOrNewline {
+    Comment(String),
+    Newline(usize),
+}
+
 impl Children {
-    pub fn new(
+    pub fn new_with_configuration(
         build_ctx: &crate::builder::BuildCtx,
         node: &rnix::SyntaxNode,
+        with_newlines: bool,
     ) -> Children {
         let mut children = Vec::new();
 
@@ -29,7 +35,21 @@ impl Children {
                 }
                 rnix::SyntaxElement::Token(token) => {
                     match token.kind() {
-                        rnix::SyntaxKind::TOKEN_WHITESPACE => {}
+                        rnix::SyntaxKind::TOKEN_WHITESPACE => {
+                            if with_newlines
+                                && token
+                                    .text()
+                                    .chars()
+                                    .filter(|c| *c == '\n')
+                                    .count()
+                                    > 0
+                            {
+                                children.push(Child {
+                                    element: token.clone().into(),
+                                    pos:     pos.clone(),
+                                });
+                            }
+                        }
                         _ => {
                             children.push(Child {
                                 element: token.clone().into(),
@@ -44,6 +64,13 @@ impl Children {
         }
 
         Children { children, current_index: 0 }
+    }
+
+    pub fn new(
+        build_ctx: &crate::builder::BuildCtx,
+        node: &rnix::SyntaxNode,
+    ) -> Children {
+        Children::new_with_configuration(build_ctx, node, false)
     }
 
     pub fn get(&mut self, index: usize) -> Option<Child> {
@@ -92,6 +119,47 @@ impl Children {
         })
     }
 
+    pub fn has_newlines(&self) -> bool {
+        self.children.iter().any(|child| {
+            child.element.kind() == rnix::SyntaxKind::TOKEN_WHITESPACE
+                && child
+                    .element
+                    .clone()
+                    .into_token()
+                    .unwrap()
+                    .text()
+                    .chars()
+                    .filter(|c| *c == '\n')
+                    .count()
+                    > 0
+        })
+    }
+
+    pub fn drain_newlines<F: FnMut(usize)>(&mut self, mut callback: F) {
+        let mut newlines = 0;
+
+        while let Some(child) = self.peek_next() {
+            match child.element.kind() {
+                rnix::SyntaxKind::TOKEN_WHITESPACE => {
+                    newlines += child
+                        .element
+                        .into_token()
+                        .unwrap()
+                        .text()
+                        .chars()
+                        .filter(|c| *c == '\n')
+                        .count();
+                    self.move_next();
+                }
+                _ => {
+                    break;
+                }
+            }
+        }
+
+        callback(newlines)
+    }
+
     pub fn drain_comment<F: FnMut(String)>(&mut self, mut callback: F) {
         if let Some(child) = self.peek_next() {
             match child.element.kind() {
@@ -115,6 +183,42 @@ impl Children {
                         &child.pos,
                         child.element.into_token().unwrap().text(),
                     ));
+                    self.move_next();
+                }
+                _ => {
+                    break;
+                }
+            }
+        }
+    }
+
+    pub fn drain_comments_and_newlines<F: FnMut(DrainCommentOrNewline)>(
+        &mut self,
+        mut callback: F,
+    ) {
+        while let Some(child) = self.peek_next() {
+            match child.element.kind() {
+                rnix::SyntaxKind::TOKEN_COMMENT => {
+                    callback(DrainCommentOrNewline::Comment(dedent_comment(
+                        &child.pos,
+                        child.element.into_token().unwrap().text(),
+                    )));
+                    self.move_next();
+                }
+                rnix::SyntaxKind::TOKEN_WHITESPACE => {
+                    let count = child
+                        .element
+                        .clone()
+                        .into_token()
+                        .unwrap()
+                        .text()
+                        .chars()
+                        .filter(|c| *c == '\n')
+                        .count();
+
+                    if count > 1 {
+                        callback(DrainCommentOrNewline::Newline(count));
+                    }
                     self.move_next();
                 }
                 _ => {

@@ -1,6 +1,11 @@
-{
+rec /**/ {
+
   a = {a     =     1     ;};
+
+
   b = {a     =     1/*d*/;};
+
+
   c = {a     =/*c*/1     ;};
   d = {a     =/*c*/1/*d*/;};
   e = {a/*b*/=     1     ;};
@@ -15,6 +20,10 @@
   o = { pkgs
   , ...
   }: { };
+
+
   p = aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa { }
   a;
+
+
 }

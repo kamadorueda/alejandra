@@ -1,5 +1,8 @@
+rec
+/**/
 {
   a = { a = 1; };
+
   b = {
     a =
       1
@@ -8,6 +11,7 @@
        */
       ;
   };
+
   c = {
     a =
       /*
@@ -96,6 +100,7 @@
     , ...
     }:
     { };
+
   p =
     aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa { } a;
 }
