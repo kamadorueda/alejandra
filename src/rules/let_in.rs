@@ -82,7 +82,7 @@ pub fn rule(
 
     // in
     let child = children.get_next().unwrap();
-    let indent = child.pos.column > 1;
+    let indent = build_ctx.pos_new.column > 1;
     match layout {
         crate::config::Layout::Tall => {
             steps.push_back(crate::builder::Step::Dedent);

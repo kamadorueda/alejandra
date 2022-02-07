@@ -20,9 +20,12 @@ impl Children {
 
         for child in node.children_with_tokens() {
             match child {
-                rnix::SyntaxElement::Node(_) => {
-                    children
-                        .push(Child { element: child, pos: pos.clone() });
+                rnix::SyntaxElement::Node(node) => {
+                    children.push(Child {
+                        element: node.clone().into(),
+                        pos:     pos.clone(),
+                    });
+                    pos.update(&node.text().to_string());
                 }
                 rnix::SyntaxElement::Token(token) => {
                     match token.kind() {
