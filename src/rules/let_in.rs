@@ -77,8 +77,6 @@ pub fn rule(
             }
 
             children.move_next();
-        } else {
-            break;
         }
     }
 

@@ -9,13 +9,20 @@ pub fn rule(
     );
 
     let items_count = node
-        .children()
+        .children_with_tokens()
+        .skip_while(|element| {
+            element.kind() != rnix::SyntaxKind::TOKEN_CURLY_B_OPEN
+        })
+        .take_while(|element| {
+            element.kind() != rnix::SyntaxKind::TOKEN_CURLY_B_CLOSE
+        })
         .filter(|element| {
             matches!(
                 element.kind(),
                 rnix::SyntaxKind::NODE_KEY_VALUE
                     | rnix::SyntaxKind::NODE_INHERIT
                     | rnix::SyntaxKind::NODE_INHERIT_FROM
+                    | rnix::SyntaxKind::TOKEN_COMMENT
             )
         })
         .count();
@@ -66,16 +73,6 @@ pub fn rule(
         crate::config::Layout::Wide => {}
     }
 
-    // /**/
-    children.drain_comments_and_newlines(|element| match element {
-        crate::children::DrainCommentOrNewline::Comment(text) => {
-            steps.push_back(crate::builder::Step::NewLine);
-            steps.push_back(crate::builder::Step::Pad);
-            steps.push_back(crate::builder::Step::Comment(text));
-        }
-        crate::children::DrainCommentOrNewline::Newline(_) => {}
-    });
-
     let mut item_index: usize = 0;
 
     loop {
@@ -85,6 +82,7 @@ pub fn rule(
                 steps.push_back(crate::builder::Step::NewLine);
                 steps.push_back(crate::builder::Step::Pad);
                 steps.push_back(crate::builder::Step::Comment(text));
+                item_index += 1;
             }
             crate::children::DrainCommentOrNewline::Newline(_) => {
                 if item_index > 0 && item_index < items_count {
