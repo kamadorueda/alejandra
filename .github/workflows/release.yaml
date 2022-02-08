@@ -17,12 +17,12 @@ jobs:
       with:
         args: >
           bash -ec "
-            nix
-            --extra-experimental-features flakes
-            --extra-experimental-features nix-command
-            --extra-substituters http://172.17.0.1:5000?trusted=1
-            --extra-substituters https://alejandra.cachix.org?trusted=1
-            build
+            nix \
+            --extra-experimental-features flakes \
+            --extra-experimental-features nix-command \
+            --extra-substituters http://172.17.0.1:5000?trusted=1 \
+            --extra-substituters https://alejandra.cachix.org?trusted=1 \
+            build \
             --print-build-logs
 
             nix-env -iA cachix -f https://cachix.org/api/v1/install
