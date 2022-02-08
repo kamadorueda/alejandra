@@ -15,7 +15,7 @@ jobs:
     runs-on: self-hosted
     steps:
     - name: Clone
-      uses: actions/checkout@v2
+      uses: actions/checkout@v1
     - name: Install Nix
       uses: cachix/install-nix-action@v15
     - name: Build
