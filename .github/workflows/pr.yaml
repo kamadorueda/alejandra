@@ -19,10 +19,7 @@ jobs:
       with:
         args: >
           bash -ex -c "
-            nix \
-            --extra-experimental-features flakes \
-            --extra-experimental-features nix-command \
-            profile install direnv
+            nix-env -iA nixpkgs.direnv
 
             direnv allow
 
