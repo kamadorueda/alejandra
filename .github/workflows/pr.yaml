@@ -8,16 +8,33 @@ concurrency:
   cancel-in-progress: true
   group: ${{ github.actor }}
 jobs:
-  test:
+  pr:
+    name: PR
     runs-on: self-hosted
     steps:
     - name: Clone
       uses: actions/checkout@v2
-    - name: Build
+    - name: Coverage
       uses: docker://nixos/nix
       with:
         args:
-          nix build
+          bash -c '
+            nix
+            --extra-experimental-features flakes
+            --extra-experimental-features nix-command
+            profile install direnv;
+
+            direnv allow;
+
+            cargo tarpaulin;
+          '
+
+    - name: Build and Test
+      uses: docker://nixos/nix
+      with:
+        args:
+          nix
           --extra-experimental-features flakes
           --extra-experimental-features nix-command
+          build
           --print-build-logs
