@@ -11,6 +11,7 @@ jobs:
   test:
     container:
       image: ubuntu:latest
+      options: --user 1
     runs-on: self-hosted
     steps:
     - name: Clone
