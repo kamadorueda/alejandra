@@ -4,7 +4,7 @@ on:
     branches: [ main ]
 jobs:
   release:
-    environment:
+    env:
       CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
     name: Release
     runs-on: self-hosted
