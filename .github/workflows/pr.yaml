@@ -17,12 +17,12 @@ jobs:
       with:
         args: >
           bash -ec "
-            nix
-            --extra-experimental-features flakes
-            --extra-experimental-features nix-command
-            --extra-substituters 'http://172.17.0.1:5000?priority=1&trusted=1'
-            --extra-substituters 'https://alejandra.cachix.org?priority=100&trusted=1'
-            build
+            nix \
+            --extra-experimental-features flakes \
+            --extra-experimental-features nix-command \
+            --extra-substituters 'http://172.17.0.1:5000?priority=1&trusted=1' \
+            --extra-substituters 'https://alejandra.cachix.org?priority=100&trusted=1' \
+            build \
             --print-build-logs
           "
 
@@ -31,13 +31,13 @@ jobs:
       with:
         args: >
           bash -ec "
-            nix
-            --extra-experimental-features flakes
-            --extra-experimental-features nix-command
-            --extra-substituters 'http://172.17.0.1:5000?priority=1&trusted=1'
-            --extra-substituters 'https://alejandra.cachix.org?priority=100&trusted=1'
-            flake
-            check
+            nix \
+            --extra-experimental-features flakes \
+            --extra-experimental-features nix-command \
+            --extra-substituters 'http://172.17.0.1:5000?priority=1&trusted=1' \
+            --extra-substituters 'https://alejandra.cachix.org?priority=100&trusted=1' \
+            flake \
+            check \
             --print-build-logs
           "
 
