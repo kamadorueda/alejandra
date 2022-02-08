@@ -9,19 +9,10 @@ concurrency:
   group: ${{ github.actor }}
 jobs:
   test:
-    container:
-      image: ubuntu:latest
-      options: --user 1
     runs-on: self-hosted
     steps:
-    - name: Setup
-      run: |
-        apt update
-        apt install nodejs
-        mkdir -p /__e/node12/bin
-        ln -s $(command -v node) /__e/node12/bin/node
     - name: Clone
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
     - name: Install Nix
       uses: cachix/install-nix-action@v15
     - name: Build
