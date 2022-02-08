@@ -13,8 +13,11 @@ jobs:
     steps:
     - name: Clone
       uses: actions/checkout@v2
-    - name: Install Nix
-      uses: cachix/install-nix-action@v15
     - name: Build
+      uses: docker://nixos/nix
       run: |
-        nix build --print-build-logs -v
+        nix build \
+          --extra-experimental-features flakes \
+          --extra-experimental-features nix-command \
+          --print-build-logs \
+          --verbose
