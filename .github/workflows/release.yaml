@@ -25,16 +25,7 @@ jobs:
             build \
             --print-build-logs
 
-            nix \
-            --extra-experimental-features flakes \
-            --extra-experimental-features nix-command \
-            --extra-substituters 'http://172.17.0.1:5000?priority=1&trusted=1' \
-            --extra-substituters 'https://alejandra.cachix.org?priority=100&trusted=1' \
-            develop \
-            --profile \
-            develop
-
             nix-env -iA cachix -f https://cachix.org/api/v1/install
 
-            cachix push --compression-level 9 alejandra develop result
+            cachix push --compression-level 9 alejandra result
           "
