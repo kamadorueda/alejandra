@@ -10,7 +10,7 @@ concurrency:
 jobs:
   test:
     container:
-      image: ubuntu:latest
+      image: myoung34/github-runner:latest
       options: --user 1
     runs-on: self-hosted
     steps:
