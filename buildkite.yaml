@@ -1,0 +1,4 @@
+steps:
+- label: test
+  command:
+  - nix3 flake check
