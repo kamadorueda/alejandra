@@ -10,11 +10,13 @@ concurrency:
 jobs:
   test:
     container:
-      image: nixos/nix:latest
+      image: ubuntu:latest
     runs-on: self-hosted
     steps:
     - name: Clone
       uses: actions/checkout@v2
+    - name: Install Nix
+      uses: cachix/install-nix-action@v15
     - name: Build
       run: |
         nix build --print-build-logs -v
