@@ -16,6 +16,10 @@ jobs:
     - name: Build
       uses: docker://alpine:latest
       with:
+        args: pwd
+    - name: Build
+      uses: docker://alpine:latest
+      with:
         args: ls
     - name: Build
       uses: docker://nixos/nix
