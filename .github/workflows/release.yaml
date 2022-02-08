@@ -12,7 +12,7 @@ jobs:
     - name: Clone
       uses: actions/checkout@v2
 
-    - name: Build
+    - name: Build and Release
       uses: docker://nixos/nix
       with:
         args: >
@@ -20,8 +20,8 @@ jobs:
             nix \
             --extra-experimental-features flakes \
             --extra-experimental-features nix-command \
-            --extra-substituters http://172.17.0.1:5000?trusted=1 \
-            --extra-substituters https://alejandra.cachix.org?trusted=1 \
+            --extra-substituters http://172.17.0.1:5000?priority=1&trusted=1 \
+            --extra-substituters https://alejandra.cachix.org?priority=100&trusted=1 \
             build \
             --print-build-logs
 
