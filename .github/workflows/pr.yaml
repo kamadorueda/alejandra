@@ -10,10 +10,14 @@ concurrency:
 jobs:
   test:
     container:
-      image: myoung34/github-runner:latest
+      image: ubuntu:latest
       options: --user 1
     runs-on: self-hosted
     steps:
+    - name: Setup
+      run: |
+        node --version
+        ln -s $(command -v node) /__e/node12/bin/node
     - name: Clone
       uses: actions/checkout@v1
     - name: Install Nix
