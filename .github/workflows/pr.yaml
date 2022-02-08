@@ -14,17 +14,6 @@ jobs:
     - name: Clone
       uses: actions/checkout@v2
     - name: Build
-      uses: docker://alpine:latest
-      with:
-        args: pwd
-    - run: |
-        pwd
-        ls
-    - name: Build
-      uses: docker://alpine:latest
-      with:
-        args: ls
-    - name: Build
       uses: docker://nixos/nix
       with:
         args:
@@ -32,4 +21,3 @@ jobs:
           --extra-experimental-features flakes
           --extra-experimental-features nix-command
           --print-build-logs
-          --verbose
