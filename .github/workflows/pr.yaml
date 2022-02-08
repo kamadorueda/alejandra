@@ -23,6 +23,7 @@ jobs:
               nix \
               --extra-experimental-features flakes \
               --extra-experimental-features nix-command \
+              --extra-substituters http://172.17.0.1:5000?trusted=1 \
               print-dev-env \
               --no-update-lock-file \
               --no-write-lock-file \
@@ -38,5 +39,6 @@ jobs:
           nix
           --extra-experimental-features flakes
           --extra-experimental-features nix-command
+          --extra-substituters http://172.17.0.1:5000?trusted=1
           build
           --print-build-logs
