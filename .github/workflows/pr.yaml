@@ -15,9 +15,10 @@ jobs:
       uses: actions/checkout@v2
     - name: Build
       uses: docker://nixos/nix
-      run: |
-        nix build \
-          --extra-experimental-features flakes \
-          --extra-experimental-features nix-command \
-          --print-build-logs \
+      with:
+        args:
+          nix build
+          --extra-experimental-features flakes
+          --extra-experimental-features nix-command
+          --print-build-logs
           --verbose
