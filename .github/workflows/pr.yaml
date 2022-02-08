@@ -1,0 +1,19 @@
+name: PR
+runs-on: self-hosted
+on:
+  pull_request:
+    branches: [ main ]
+concurrency:
+  cancel-in-progress: true
+  group: ${{ github.actor }}
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Clone
+      uses: actions/checkout@v2
+    - name: Install Nix
+      uses: cachix/install-nix-action@v15
+    - name: Build
+      run: |
+        nix build --print-build-logs -v
