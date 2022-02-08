@@ -1,14 +1,15 @@
 name: PR
-runs-on: self-hosted
 on:
   pull_request:
+    branches: [ main ]
+  push:
     branches: [ main ]
 concurrency:
   cancel-in-progress: true
   group: ${{ github.actor }}
 jobs:
+  runs-on: self-hosted
   test:
-    runs-on: ubuntu-latest
     steps:
     - name: Clone
       uses: actions/checkout@v2
