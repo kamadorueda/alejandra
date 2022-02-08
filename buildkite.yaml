@@ -1,4 +1,25 @@
 steps:
-- label: test
+- label: build
+  command:
+  - nix3 build
+
+- label: cache
+  if: build.branch == "main"
+  command:
+  - nix3 build
+  - cachix push alejandra result
+
+  - nix3 develop --profile develop --command true
+  - cachix push alejandra develop
+
+- label: coverage
+  artifact_paths:
+  - tarpaulin-report.html
+  command:
+  - direnv allow
+  - eval "$(direnv export bash)"
+  - cargo tarpaulin -o html
+
+- label: flake check
   command:
   - nix3 flake check
