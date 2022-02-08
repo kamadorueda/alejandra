@@ -19,9 +19,14 @@ jobs:
       with:
         args: >
           bash -ex -c "
-            nix-env -iA nixpkgs.direnv
-
-            direnv allow
+            source <( \
+              nix \
+              --extra-experimental-features flakes \
+              --extra-experimental-features nix-command \
+              print-dev-env \
+              --no-update-lock-file \
+              --no-write-lock-file \
+            )
 
             cargo tarpaulin
           "
