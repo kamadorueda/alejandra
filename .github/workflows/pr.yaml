@@ -17,6 +17,9 @@ jobs:
       uses: docker://alpine:latest
       with:
         args: pwd
+    - run: |
+        pwd
+        ls
     - name: Build
       uses: docker://alpine:latest
       with:
