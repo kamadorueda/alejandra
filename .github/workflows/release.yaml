@@ -1,0 +1,34 @@
+name: Release
+on:
+  push:
+    branches: [ main ]
+concurrency:
+  cancel-in-progress: true
+  group: ${{ github.actor }}
+jobs:
+  release:
+    name: Release
+    runs-on: self-hosted
+    steps:
+    - name: Clone
+      uses: actions/checkout@v2
+
+    - uses: cachix/cachix-action@v10
+      with:
+        name: alejandra
+        authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+
+    - name: Build
+      uses: docker://nixos/nix
+      with:
+        args: >
+          nix
+          --extra-experimental-features flakes
+          --extra-experimental-features nix-command
+          --extra-substituters http://172.17.0.1:5000?trusted=1
+          build
+          --print-build-logs
+
+    - name: Push
+      run: |
+        cachix push result

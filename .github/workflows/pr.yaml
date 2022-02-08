@@ -15,6 +15,10 @@ jobs:
     - name: Clone
       uses: actions/checkout@v2
 
+    - uses: cachix/cachix-action@v10
+      with:
+        name: alejandra
+
     - name: Build
       uses: docker://nixos/nix
       with:
@@ -26,20 +30,33 @@ jobs:
           build
           --print-build-logs
 
-    - name: Test
+    - name: Check
       uses: docker://nixos/nix
       with:
         args: >
-          bash -ec "
-            source <( \
-              nix \
-              --extra-experimental-features flakes \
-              --extra-experimental-features nix-command \
-              --extra-substituters http://172.17.0.1:5000?trusted=1 \
-              print-dev-env \
-              --no-update-lock-file \
-              --no-write-lock-file \
-            )
+          nix
+          --extra-experimental-features flakes
+          --extra-experimental-features nix-command
+          --extra-substituters http://172.17.0.1:5000?trusted=1
+          flake
+          check
+          --print-build-logs
 
-            cargo tarpaulin
-          "
+    # ERROR cargo_tarpaulin: Failed to run tests: ASLR disable failed: EPERM: Operation not permitted
+    # - name: Test
+    #   uses: docker://nixos/nix
+    #   with:
+    #     args: >
+    #       bash -ec "
+    #         source <( \
+    #           nix \
+    #           --extra-experimental-features flakes \
+    #           --extra-experimental-features nix-command \
+    #           --extra-substituters http://172.17.0.1:5000?trusted=1 \
+    #           print-dev-env \
+    #           --no-update-lock-file \
+    #           --no-write-lock-file \
+    #         )
+
+    #         cargo tarpaulin
+    #       "
