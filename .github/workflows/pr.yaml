@@ -8,8 +8,8 @@ concurrency:
   cancel-in-progress: true
   group: ${{ github.actor }}
 jobs:
-  runs-on: self-hosted
   test:
+    runs-on: self-hosted
     steps:
     - name: Clone
       uses: actions/checkout@v2
