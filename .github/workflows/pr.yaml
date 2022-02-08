@@ -14,11 +14,23 @@ jobs:
     steps:
     - name: Clone
       uses: actions/checkout@v2
-    - name: Coverage
+
+    - name: Build
       uses: docker://nixos/nix
       with:
         args: >
-          bash -ex -c "
+          nix
+          --extra-experimental-features flakes
+          --extra-experimental-features nix-command
+          --extra-substituters http://172.17.0.1:5000?trusted=1
+          build
+          --print-build-logs
+
+    - name: Test
+      uses: docker://nixos/nix
+      with:
+        args: >
+          bash -ec "
             source <( \
               nix \
               --extra-experimental-features flakes \
@@ -31,14 +43,3 @@ jobs:
 
             cargo tarpaulin
           "
-
-    - name: Build and Test
-      uses: docker://nixos/nix
-      with:
-        args: >
-          nix
-          --extra-experimental-features flakes
-          --extra-experimental-features nix-command
-          --extra-substituters http://172.17.0.1:5000?trusted=1
-          build
-          --print-build-logs
