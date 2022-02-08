@@ -16,7 +16,9 @@ jobs:
     steps:
     - name: Setup
       run: |
-        node --version
+        apt update
+        apt install nodejs
+        mkdir -p /__e/node12/bin
         ln -s $(command -v node) /__e/node12/bin/node
     - name: Clone
       uses: actions/checkout@v1
