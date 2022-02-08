@@ -18,16 +18,16 @@ jobs:
       uses: docker://nixos/nix
       with:
         args: >
-          bash -c '
-            nix
-            --extra-experimental-features flakes
-            --extra-experimental-features nix-command
-            profile install direnv;
+          bash -ex -c "
+            nix \
+            --extra-experimental-features flakes \
+            --extra-experimental-features nix-command \
+            profile install direnv
 
-            direnv allow;
+            direnv allow
 
-            cargo tarpaulin;
-          '
+            cargo tarpaulin
+          "
 
     - name: Build and Test
       uses: docker://nixos/nix
