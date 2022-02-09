@@ -129,9 +129,7 @@ impl Children {
                     .unwrap()
                     .text()
                     .chars()
-                    .filter(|c| *c == '\n')
-                    .count()
-                    > 0
+                    .any(|c| c == '\n')
         })
     }
 
