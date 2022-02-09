@@ -58,6 +58,9 @@
     [${mkSectionName sectName}]
   ''
   ###
+  ''-couch_ini ${cfg.package}/etc/default.ini ${configFile} ${pkgs.writeText "couchdb-extra.ini"
+    cfg.extraConfig} ${cfg.configFile}''
+  ###
   ''-couch_ini ${cfg.package}/etc/default.ini ${configFile} ${
     pkgs.writeText "couchdb-extra.ini" cfg.extraConfig
   } ${cfg.configFile}''

@@ -4,32 +4,38 @@ pub fn rule(
 ) -> std::collections::LinkedList<crate::builder::Step> {
     let mut steps = std::collections::LinkedList::new();
 
-    let mut children = crate::children::Children::new(build_ctx, node);
+    let mut children = crate::children::Children::new_with_configuration(
+        build_ctx, node, true,
+    );
 
-    let layout = if children.has_comments() {
+    let layout = if children.has_comments() || children.has_newlines() {
         &crate::config::Layout::Tall
     } else {
-        build_ctx.config.layout()
+        &crate::config::Layout::Wide
     };
 
     // ${
     let child = children.get_next().unwrap();
     steps.push_back(crate::builder::Step::Format(child.element));
+    steps.push_back(crate::builder::Step::Indent);
+
     match layout {
         crate::config::Layout::Tall => {
-            steps.push_back(crate::builder::Step::Indent);
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
         }
         crate::config::Layout::Wide => {}
     }
-
     // /**/
-    children.drain_comments(|text| {
-        steps.push_back(crate::builder::Step::Comment(text));
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
+    children.drain_comments_and_newlines(|element| match element {
+        crate::children::DrainCommentOrNewline::Comment(text) => {
+            steps.push_back(crate::builder::Step::Comment(text));
+            steps.push_back(crate::builder::Step::NewLine);
+            steps.push_back(crate::builder::Step::Pad);
+        }
+        crate::children::DrainCommentOrNewline::Newline(_) => {}
     });
+
 
     // expr
     let child = children.get_next().unwrap();
@@ -43,10 +49,13 @@ pub fn rule(
     }
 
     // /**/
-    children.drain_comments(|text| {
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
-        steps.push_back(crate::builder::Step::Comment(text));
+    children.drain_comments_and_newlines(|element| match element {
+        crate::children::DrainCommentOrNewline::Comment(text) => {
+            steps.push_back(crate::builder::Step::NewLine);
+            steps.push_back(crate::builder::Step::Pad);
+            steps.push_back(crate::builder::Step::Comment(text));
+        }
+        crate::children::DrainCommentOrNewline::Newline(_) => {}
     });
 
     // }
