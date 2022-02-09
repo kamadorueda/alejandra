@@ -37,6 +37,8 @@ steps:
   - echo +++ Closure diff
   - git diff --no-index before after || true
   - git diff --no-index before after --shortstat || true
+  - echo +++ Derivations
+  - grep -c drvPath= after
 
 - label: flake check
   command:
