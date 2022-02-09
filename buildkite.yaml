@@ -6,6 +6,7 @@ steps:
 - label: cache
   if: build.branch == "main"
   command:
+  - echo +++
   - nix3 build
   - cachix push alejandra result
 
@@ -16,10 +17,28 @@ steps:
   artifact_paths:
   - tarpaulin-report.html
   command:
+  - echo +++
   - direnv allow
   - eval "$(direnv export bash)"
   - cargo tarpaulin -o html
 
+- label: diff
+  command:
+  - git clone --depth 1 https://github.com/nixos/nixpkgs
+  - echo --- Closure @ before
+  - nix-env --query --available --attr-path --drv-path --file nixpkgs --xml > before
+
+  - echo --- Formatting
+  - nix3 run . -- nixpkgs
+
+  - echo --- Closure @ after
+  - nix-env --query --available --attr-path --drv-path --file nixpkgs --xml > after
+
+  - echo +++ Closure diff
+  - git diff --no-index before after || true
+  - git diff --no-index before after --shortstat || true
+
 - label: flake check
   command:
+  - echo +++
   - nix3 flake check
