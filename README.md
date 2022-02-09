@@ -151,7 +151,7 @@ and a comparison between alternatives
         ```
 
     As of 2022-02-08,
-    there are 47 differences in a set of 38955 derivations
+    there are 47 differences in a set of 36278 derivations
     because of things like this:
 
     ```
