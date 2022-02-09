@@ -4,6 +4,15 @@
 
 <p align="center">
   <a
+    href="https://buildkite.com/kamadorueda/alejandra"
+  >
+    <img
+      alt="CI/CD"
+      src="https://badge.buildkite.com/67d170860f5630bbc776a97fb0be9c88a97c92860c91f77aa0.svg?branch=main"
+    >
+    </img>
+  </a>
+  <a
     href="https://coveralls.io/github/kamadorueda/alejandra?branch=main"
   >
     <img
@@ -141,8 +150,8 @@ and a comparison between alternatives
         $ nix-env -qaP --json --drv-path > after
         ```
 
-    As of 2022-02-05,
-    there are 50 differences in a set of 38955 derivations
+    As of 2022-02-08,
+    there are 47 differences in a set of 38955 derivations
     because of things like this:
 
     ```
