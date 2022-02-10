@@ -133,31 +133,6 @@ impl Children {
         })
     }
 
-    pub fn drain_newlines<F: FnMut(usize)>(&mut self, mut callback: F) {
-        let mut newlines = 0;
-
-        while let Some(child) = self.peek_next() {
-            match child.element.kind() {
-                rnix::SyntaxKind::TOKEN_WHITESPACE => {
-                    newlines += child
-                        .element
-                        .into_token()
-                        .unwrap()
-                        .text()
-                        .chars()
-                        .filter(|c| *c == '\n')
-                        .count();
-                    self.move_next();
-                }
-                _ => {
-                    break;
-                }
-            }
-        }
-
-        callback(newlines)
-    }
-
     pub fn drain_comment<F: FnMut(String)>(&mut self, mut callback: F) {
         if let Some(child) = self.peek_next() {
             match child.element.kind() {
