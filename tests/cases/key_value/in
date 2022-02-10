@@ -21,6 +21,13 @@ rec /**/ {
   , ...
   }: { };
 
+  a
+  /*b*/
+  =
+    /*c*/
+    1
+    /*d*/
+    ;
 
   p = aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa { }
   a;
