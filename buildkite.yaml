@@ -17,9 +17,9 @@ steps:
     if: build.branch == "main"
     command:
       - echo +++ Fetch
-      - git fetch https://github.com/kamadorueda/alejandra "${BUILDKITE_COMMIT}:main"
+      - git branch -D main
+      - git branch main
       - git checkout main
-      - git branch
       - echo --- Load environment
       - direnv allow
       - eval "$(direnv export bash)"
