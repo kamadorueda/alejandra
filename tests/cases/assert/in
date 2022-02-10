@@ -4,5 +4,6 @@
   (assert /*a*/ b;       c)
   (assert /*a*/ b; /*b*/ c)
   ( assert b; cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc )
-  ( assert b; cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc )
+  ( assert b;
+  cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc )
 ]
