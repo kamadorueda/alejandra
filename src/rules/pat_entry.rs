@@ -61,7 +61,8 @@ pub fn rule(
             crate::children::DrainCommentOrNewline::Newline(_) => {}
         });
 
-        if let rnix::SyntaxKind::TOKEN_COMMENT =
+        if let rnix::SyntaxKind::TOKEN_COMMENT
+        | rnix::SyntaxKind::TOKEN_WHITESPACE =
             children.peek_prev().unwrap().element.kind()
         {
             steps.push_back(crate::builder::Step::NewLine);
