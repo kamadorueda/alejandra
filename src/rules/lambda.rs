@@ -4,9 +4,11 @@ pub fn rule(
 ) -> std::collections::LinkedList<crate::builder::Step> {
     let mut steps = std::collections::LinkedList::new();
 
-    let mut children = crate::children::Children::new(build_ctx, node);
+    let mut children = crate::children::Children::new_with_configuration(
+        build_ctx, node, true,
+    );
 
-    let layout = if children.has_comments() {
+    let layout = if children.has_comments() || children.has_newlines() {
         &crate::config::Layout::Tall
     } else {
         build_ctx.config.layout()
@@ -25,7 +27,8 @@ pub fn rule(
         }
     }
 
-    if let rnix::SyntaxKind::TOKEN_COMMENT =
+    if let rnix::SyntaxKind::TOKEN_COMMENT
+    | rnix::SyntaxKind::TOKEN_WHITESPACE =
         children.peek_next().unwrap().element.kind()
     {
         steps.push_back(crate::builder::Step::NewLine);
@@ -33,10 +36,13 @@ pub fn rule(
     }
 
     // /**/
-    children.drain_comments(|text| {
-        steps.push_back(crate::builder::Step::Comment(text));
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
+    children.drain_comments_and_newlines(|element| match element {
+        crate::children::DrainCommentOrNewline::Comment(text) => {
+            steps.push_back(crate::builder::Step::Comment(text));
+            steps.push_back(crate::builder::Step::NewLine);
+            steps.push_back(crate::builder::Step::Pad);
+        }
+        crate::children::DrainCommentOrNewline::Newline(_) => {}
     });
 
     // :
@@ -51,10 +57,13 @@ pub fn rule(
     }
 
     // /**/
-    children.drain_comments(|text| {
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
-        steps.push_back(crate::builder::Step::Comment(text));
+    children.drain_comments_and_newlines(|element| match element {
+        crate::children::DrainCommentOrNewline::Comment(text) => {
+            steps.push_back(crate::builder::Step::NewLine);
+            steps.push_back(crate::builder::Step::Pad);
+            steps.push_back(crate::builder::Step::Comment(text));
+        }
+        crate::children::DrainCommentOrNewline::Newline(_) => {}
     });
 
     // c
@@ -65,7 +74,8 @@ pub fn rule(
             if is_pattern_type {
                 steps.push_back(crate::builder::Step::NewLine);
                 steps.push_back(crate::builder::Step::Pad);
-            } else if let rnix::SyntaxKind::TOKEN_COMMENT =
+            } else if let rnix::SyntaxKind::TOKEN_COMMENT
+            | rnix::SyntaxKind::TOKEN_WHITESPACE =
                 child_prev.element.kind()
             {
                 steps.push_back(crate::builder::Step::NewLine);
