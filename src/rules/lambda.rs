@@ -50,8 +50,10 @@ pub fn rule(
     steps.push_back(crate::builder::Step::Format(child.element));
 
     // /**/
+    let mut comment = false;
     children.drain_comments_and_newlines(|element| match element {
         crate::children::DrainCommentOrNewline::Comment(text) => {
+            comment = true;
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
             steps.push_back(crate::builder::Step::Comment(text));
@@ -60,16 +62,11 @@ pub fn rule(
     });
 
     // c
-    let child_prev = children.peek_prev().unwrap();
     let child = children.get_next().unwrap();
     match layout {
         crate::config::Layout::Tall => {
             if is_pattern_type
-                || matches!(
-                    child_prev.element.kind(),
-                    rnix::SyntaxKind::TOKEN_COMMENT
-                        | rnix::SyntaxKind::TOKEN_WHITESPACE
-                )
+                || comment
                 || (matches!(
                     child.element.kind(),
                     rnix::SyntaxKind::NODE_LAMBDA
@@ -96,7 +93,16 @@ pub fn rule(
                         | rnix::SyntaxKind::NODE_STRING
                 )
             {
-                if build_ctx.pos_new.column > 1 {
+                let should_indent = !matches!(
+                    child.element.kind(),
+                    rnix::SyntaxKind::NODE_ATTR_SET
+                        | rnix::SyntaxKind::NODE_PAREN
+                        | rnix::SyntaxKind::NODE_LET_IN
+                        | rnix::SyntaxKind::NODE_LIST
+                        | rnix::SyntaxKind::NODE_STRING
+                ) && build_ctx.pos_new.column > 1;
+
+                if should_indent {
                     steps.push_back(crate::builder::Step::Indent);
                 }
 
@@ -105,7 +111,7 @@ pub fn rule(
                 steps.push_back(crate::builder::Step::FormatWider(
                     child.element,
                 ));
-                if build_ctx.pos_new.column > 1 {
+                if should_indent {
                     steps.push_back(crate::builder::Step::Dedent);
                 }
             } else {
