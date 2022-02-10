@@ -28,9 +28,15 @@ pub fn file(
     use std::io::Write;
 
     let input = std::fs::read_to_string(&path)?;
-    let output = crate::format::string(config, path.clone(), input);
+    let input_clone = input.clone();
+    let input_bytes = input_clone.as_bytes();
 
-    std::fs::File::create(path)?.write_all(output.as_bytes())?;
+    let output = crate::format::string(config, path.clone(), input);
+    let output_bytes = output.as_bytes();
+
+    if input_bytes != output_bytes {
+        std::fs::File::create(path)?.write_all(output_bytes)?;
+    }
 
     Ok(())
 }
