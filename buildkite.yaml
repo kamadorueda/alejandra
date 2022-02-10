@@ -23,22 +23,41 @@ steps:
 
 - label: diff
   if: build.branch != "main"
+  artifacts:
+  - closure-before.txt
+  - closure-after.txt
+  - closure-before-vs-after.patch.txt
+  - formatting-before-vs-after.patch.txt
+  - formatting-after.patch.txt
   command:
+  - git config --global user.email ci@cd
+  - git config --global user.name CI/CD
   - git clone --depth 1 https://github.com/nixos/nixpkgs
-  - echo --- Closure @ before
-  - nix-env --query --available --attr-path --drv-path --file nixpkgs --xml > before
 
-  - echo --- Formatting
-  - nix3 run . -- nixpkgs
+  - echo --- Formatting @ before
+  - nix3 run github:kamadorueda/alejandra -- nixpkgs 2>/dev/null
+  - git -C nixpkgs add .
+  - git -C nixpkgs commit -m formatting-before -q
+  - git -C nixpkgs branch formatting-before
+  - git -C nixpkgs reset --hard master~1
+
+  - echo --- Closure @ before
+  - nix-env --query --available --attr-path --drv-path --file nixpkgs --xml > closure-before.txt
+
+  - echo --- Formatting @ after
+  - nix3 run . -- nixpkgs 2>/dev/null
+  - git -C nixpkgs diff formatting-before > formatting-before-vs-after.patch.txt
+  - git -C nixpkgs diff > formatting-after.patch.txt
 
   - echo --- Closure @ after
-  - nix-env --query --available --attr-path --drv-path --file nixpkgs --xml > after
+  - nix-env --query --available --attr-path --drv-path --file nixpkgs --xml > closure-after.txt
 
   - echo +++ Closure diff
-  - git diff --no-index before after || true
-  - git diff --no-index before after --shortstat || true
-  - echo +++ Derivations
-  - grep -c drvPath= after
+  - git diff --no-index closure-before.txt closure-after.txt > closure-before-vs-after.patch.txt || true
+  - git diff --no-index closure-before.txt closure-after.txt --shortstat || true
+
+  - echo +++ Derivations count
+  - grep -c drvPath= closure-after.txt
 
 - label: flake check
   command:
