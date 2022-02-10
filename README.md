@@ -48,37 +48,32 @@
   in just a few seconds.
   [^benchmark-specs]
 
-  | Cores | Seconds |
-  | :---: | :-----: |
-  |   1   |   24    |
-  |   2   |   12    |
-  |   4   |    7    |
-  |   8   |    6    |
-  |  16   |    7    |
-
 - ✔️ **Powerful**
 
-  All elements in the Nix grammar have a totally defined style.
+  We define a comprehensive style
+  for all possible combinations of the Nix expression language.
 
 - ✔️ **Reliable**
 
-  Coverage is currently 90%,
-  and we'll have 💯% soon.
+  High coverage, battle tested.
 
-  Plus, after formatting [Nixpkgs](https://github.com/nixos/nixpkgs)
-  no semantically significant changes are made.
   From Nix's eyes, code is _just_ the same.
   [^semantic-changes]
 
-- ✔️ **Reproducible**
-
-  Formatting many times yields the same results.
-
-- 🚧 **Beautiful**
+- ✔️ **Beautiful**
 
   Beauty is subjective, right?
 
-  Style is negotiable at this moment.
+  We optimize for the wisdom of the crowd,
+  which comes in big part
+  from the 2.3 million lines of code of [Nixpkgs](https://github.com/NixOS/nixpkgs).
+
+- ✔️ **Transparent**
+
+  You won't notice the formatter after a while.
+
+  Humans care about the content,
+  machines about the style!
 
 ## Getting started
 
@@ -124,17 +119,27 @@ Let's get Alejandra on our systems:
 
 See why Alejandra was created
 and a comparison between alternatives
-[here](https://discourse.nixos.org/t/the-uncompromising-nix-code-formatter/17385/3?u=kamadorueda)
+[here](https://discourse.nixos.org/t/the-uncompromising-nix-code-formatter/17385/3?u=kamadorueda).
 
 ## Footnotes
 
 [^benchmark-specs]:
     Running on a [machine](https://github.com/kamadorueda/machine) with:
 
-    - CPU: 16 x Intel(R) Core(TM) i7-10700K
+    - CPU: 8 physical x Intel(R) Core(TM) i7-10700K, 16 logical
     - MHz: 3800.00
     - BogoMips: 7599.80
     - Cache Size: 16384 KB
+
+    Results:
+
+    | Logical Cores | Seconds |
+    | :-----------: | :-----: |
+    |       1       |   45    |
+    |       2       |   22    |
+    |       4       |   14    |
+    |       8       |   10    |
+    |      16       |   11    |
 
 [^semantic-changes]: The methodology to claim this is:
 
