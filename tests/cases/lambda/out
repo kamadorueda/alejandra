@@ -4,22 +4,23 @@
     /*
      c
      */
-    d
+      d
   )
   (
     { }:
-    b:
-    /*
-     c
-     */
-    d
+      b:
+      /*
+       c
+       */
+        d
   )
   (
-    a: { }:
-    /*
-     c
-     */
-    d
+    a:
+      { }:
+      /*
+       c
+       */
+        d
   )
   (a: d)
   (
@@ -27,14 +28,15 @@
     /*
      c
      */
-    d
+      d
   )
   (
     a
     /*
      b
      */
-    : d
+    :
+      d
   )
   (
     a
@@ -45,7 +47,7 @@
     /*
      c
      */
-    d
+      d
   )
   (
     aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -57,6 +59,12 @@
     { pkgs ? import ./.. { }
     , locationsXml
     }:
-    null
+      null
+  )
+  (
+    a: b: c:
+      { }:
+        a: b: c:
+          a
   )
 ]
