@@ -92,11 +92,8 @@ pub fn rule(
                     steps.push_back(crate::builder::Step::Pad);
                 }
 
-                children.drain_comments_and_newlines(|element| match element {
-                    crate::children::DrainCommentOrNewline::Comment(text) => {
-                        steps.push_back(crate::builder::Step::Comment(text));
-                    }
-                    crate::children::DrainCommentOrNewline::Newline(_) => {}
+                children.drain_comment(|text| {
+                    steps.push_back(crate::builder::Step::Comment(text));
                 });
 
                 if let rnix::SyntaxKind::TOKEN_COMMA
