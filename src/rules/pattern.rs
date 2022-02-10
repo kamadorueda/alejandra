@@ -4,7 +4,9 @@ pub fn rule(
 ) -> std::collections::LinkedList<crate::builder::Step> {
     let mut steps = std::collections::LinkedList::new();
 
-    let mut children = crate::children::Children::new(build_ctx, node);
+    let mut children = crate::children::Children::new_with_configuration(
+        build_ctx, node, true,
+    );
 
     let has_comments = children.has_comments();
     let has_comments_between_curly_b = node
@@ -26,7 +28,7 @@ pub fn rule(
         })
         .count();
 
-    let layout = if has_comments {
+    let layout = if has_comments || children.has_newlines() {
         &crate::config::Layout::Tall
     } else {
         build_ctx.config.layout()
@@ -55,10 +57,13 @@ pub fn rule(
     }
 
     // /**/
-    children.drain_comments(|text| {
-        steps.push_back(crate::builder::Step::Comment(text));
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
+    children.drain_comments_and_newlines(|element| match element {
+        crate::children::DrainCommentOrNewline::Comment(text) => {
+            steps.push_back(crate::builder::Step::Comment(text));
+            steps.push_back(crate::builder::Step::NewLine);
+            steps.push_back(crate::builder::Step::Pad);
+        }
+        crate::children::DrainCommentOrNewline::Newline(_) => {}
     });
 
     // {
@@ -79,6 +84,7 @@ pub fn rule(
 
                 if let rnix::SyntaxKind::TOKEN_COMMENT
                 | rnix::SyntaxKind::TOKEN_ELLIPSIS
+                | rnix::SyntaxKind::TOKEN_WHITESPACE
                 | rnix::SyntaxKind::NODE_PAT_ENTRY = prev_kind
                 {
                     steps.push_back(crate::builder::Step::Indent);
@@ -94,6 +100,7 @@ pub fn rule(
                 | rnix::SyntaxKind::TOKEN_CURLY_B_OPEN
                 | rnix::SyntaxKind::TOKEN_COMMENT
                 | rnix::SyntaxKind::TOKEN_ELLIPSIS
+                | rnix::SyntaxKind::TOKEN_WHITESPACE
                 | rnix::SyntaxKind::NODE_PAT_ENTRY = prev_kind
                 {
                     steps.push_back(crate::builder::Step::Dedent);
@@ -110,7 +117,9 @@ pub fn rule(
                     steps.push_back(crate::builder::Step::Whitespace);
                 }
 
-                if let rnix::SyntaxKind::TOKEN_COMMENT = prev_kind {
+                if let rnix::SyntaxKind::TOKEN_COMMENT
+                | rnix::SyntaxKind::TOKEN_WHITESPACE = prev_kind
+                {
                     steps.push_back(crate::builder::Step::NewLine);
                     steps.push_back(crate::builder::Step::Pad);
                     steps.push_back(crate::builder::Step::Whitespace);
@@ -143,6 +152,10 @@ pub fn rule(
                 steps.push_back(crate::builder::Step::Format(child.element));
                 children.move_next();
             }
+            // \n
+            rnix::SyntaxKind::TOKEN_WHITESPACE => {
+                children.move_next();
+            }
             _ => {
                 break;
             }
@@ -160,10 +173,13 @@ pub fn rule(
     steps.push_back(crate::builder::Step::Format(child.element));
 
     // /**/
-    children.drain_comments(|text| {
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
-        steps.push_back(crate::builder::Step::Comment(text));
+    children.drain_comments_and_newlines(|element| match element {
+        crate::children::DrainCommentOrNewline::Comment(text) => {
+            steps.push_back(crate::builder::Step::NewLine);
+            steps.push_back(crate::builder::Step::Pad);
+            steps.push_back(crate::builder::Step::Comment(text));
+        }
+        crate::children::DrainCommentOrNewline::Newline(_) => {}
     });
 
     // @ x

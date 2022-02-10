@@ -6,14 +6,13 @@ pub enum Layout {
 
 #[derive(Clone)]
 pub struct Config {
-    debug:     bool,
-    layout:    Layout,
-    max_width: usize,
+    debug:  bool,
+    layout: Layout,
 }
 
 impl Config {
     pub fn new() -> Config {
-        Config { debug: false, layout: Layout::Tall, max_width: 80 }
+        Config { debug: false, layout: Layout::Tall }
     }
 
     pub fn debug(&self) -> bool {
@@ -24,19 +23,11 @@ impl Config {
         &self.layout
     }
 
-    pub fn max_width(&self) -> usize {
-        self.max_width
-    }
-
     pub fn with_debug(&self, debug: bool) -> Config {
-        Config { debug, layout: self.layout.clone(), max_width: self.max_width }
+        Config { debug, layout: self.layout.clone() }
     }
 
     pub fn with_layout(&self, layout: Layout) -> Config {
-        Config { debug: self.debug, layout, max_width: self.max_width }
-    }
-
-    pub fn with_max_width(&self, max_width: usize) -> Config {
-        Config { debug: self.debug, layout: self.layout.clone(), max_width }
+        Config { debug: self.debug, layout }
     }
 }

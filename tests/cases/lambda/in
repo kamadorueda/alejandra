@@ -9,6 +9,11 @@
   (
     aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
   )
-  ( aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa )
+  (
+    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa )
   ({ pkgs ? import ./.. { }, locationsXml }: null)
+  (a: b: c:
+    { }:
+    a: b: c:
+    a)
 ]

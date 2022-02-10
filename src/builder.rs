@@ -296,6 +296,7 @@ pub fn fits_in_single_line(
     build_ctx: &crate::builder::BuildCtx,
     node: rnix::SyntaxElement,
 ) -> bool {
+    let line = build_ctx.pos_new.line;
     let maybe_green_node = build(
         &build_ctx.config.with_layout(crate::config::Layout::Wide),
         node,
@@ -304,10 +305,7 @@ pub fn fits_in_single_line(
     );
 
     match maybe_green_node {
-        Some(finished) => {
-            build_ctx.pos_new.column + finished.to_string().chars().count()
-                <= build_ctx.config.max_width()
-        }
+        Some(_) => build_ctx.pos_new.line == line,
         None => false,
     }
 }

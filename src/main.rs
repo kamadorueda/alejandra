@@ -5,12 +5,7 @@ fn main() -> std::io::Result<()> {
     let matches = alejandra::cli::parse(std::env::args().collect());
 
     let debug: bool = matches.is_present("debug");
-    let max_width: usize =
-        matches.value_of("max-width").unwrap().parse().unwrap();
-
-    let config = alejandra::config::Config::new()
-        .with_debug(debug)
-        .with_max_width(max_width);
+    let config = alejandra::config::Config::new().with_debug(debug);
 
     match matches.values_of("paths") {
         Some(paths) => {

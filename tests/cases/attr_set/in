@@ -19,7 +19,12 @@
   rec /*a*/ { /*b*/ c=1;       }
   rec /*a*/ { /*b*/ c=1; /*d*/ }
 
-  {a=rec {a={a=rec {a={a=rec {a={a=rec {a={a=rec {a={};};};};};};};};};};}
+  {
+    a=rec {
+    a={
+    a=rec {
+    a={
+    a=rec {a={a=rec {a={a=rec {a={};};};};};};};};};};}
 
   rec {
 

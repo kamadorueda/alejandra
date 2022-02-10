@@ -4,5 +4,6 @@
   (with /*a*/ b;       c)
   (with /*a*/ b; /*b*/ c)
   ( with b; cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc )
-  ( with b; cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc )
+  ( with b;
+  cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc )
 ]
