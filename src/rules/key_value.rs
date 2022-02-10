@@ -26,19 +26,17 @@ pub fn rule(
     }
 
     // /**/
+    let mut comment = false;
     children.drain_comments_and_newlines(|element| match element {
         crate::children::DrainCommentOrNewline::Comment(text) => {
+            comment = true;
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
             steps.push_back(crate::builder::Step::Comment(text));
         }
         crate::children::DrainCommentOrNewline::Newline(_) => {}
     });
-
-    if let rnix::SyntaxKind::TOKEN_COMMENT
-    | rnix::SyntaxKind::TOKEN_WHITESPACE =
-        children.peek_prev().unwrap().element.kind()
-    {
+    if comment {
         steps.push_back(crate::builder::Step::NewLine);
         steps.push_back(crate::builder::Step::Pad);
     } else {
@@ -54,52 +52,45 @@ pub fn rule(
             let next = children.peek_next().unwrap();
             let next_kind = next.element.kind();
 
-            if let rnix::SyntaxKind::NODE_ATTR_SET
-            | rnix::SyntaxKind::NODE_LIST
-            | rnix::SyntaxKind::NODE_PAREN
-            | rnix::SyntaxKind::NODE_STRING = next_kind
+            if matches!(
+                next_kind,
+                rnix::SyntaxKind::NODE_ATTR_SET
+                    | rnix::SyntaxKind::NODE_PAREN
+                    | rnix::SyntaxKind::NODE_LET_IN
+                    | rnix::SyntaxKind::NODE_LIST
+                    | rnix::SyntaxKind::NODE_STRING
+            ) || (matches!(next_kind, rnix::SyntaxKind::NODE_LAMBDA)
+                && !matches!(
+                    next.element
+                        .clone()
+                        .into_node()
+                        .unwrap()
+                        .children()
+                        .next()
+                        .unwrap()
+                        .kind(),
+                    rnix::SyntaxKind::NODE_PATTERN
+                ))
+                || (matches!(next_kind, rnix::SyntaxKind::NODE_APPLY)
+                    && matches!(
+                        next.element
+                            .clone()
+                            .into_node()
+                            .unwrap()
+                            .children()
+                            .collect::<Vec<rnix::SyntaxNode>>()
+                            .iter()
+                            .rev()
+                            .next()
+                            .unwrap()
+                            .kind(),
+                        rnix::SyntaxKind::NODE_ATTR_SET
+                            | rnix::SyntaxKind::NODE_PAREN
+                            | rnix::SyntaxKind::NODE_LIST
+                            | rnix::SyntaxKind::NODE_STRING
+                    ))
             {
                 steps.push_back(crate::builder::Step::Whitespace);
-            } else if let rnix::SyntaxKind::NODE_APPLY = next_kind {
-                if let rnix::SyntaxKind::NODE_ATTR_SET
-                | rnix::SyntaxKind::NODE_LIST
-                | rnix::SyntaxKind::NODE_PAREN
-                | rnix::SyntaxKind::NODE_STRING = next
-                    .element
-                    .into_node()
-                    .unwrap()
-                    .children()
-                    .collect::<Vec<rnix::SyntaxNode>>()
-                    .iter()
-                    .rev()
-                    .next()
-                    .unwrap()
-                    .kind()
-                {
-                    steps.push_back(crate::builder::Step::Whitespace);
-                } else {
-                    dedent = true;
-                    steps.push_back(crate::builder::Step::Indent);
-                    steps.push_back(crate::builder::Step::NewLine);
-                    steps.push_back(crate::builder::Step::Pad);
-                }
-            } else if let rnix::SyntaxKind::NODE_LAMBDA = next_kind {
-                if let rnix::SyntaxKind::NODE_PATTERN = next
-                    .element
-                    .into_node()
-                    .unwrap()
-                    .children()
-                    .next()
-                    .unwrap()
-                    .kind()
-                {
-                    dedent = true;
-                    steps.push_back(crate::builder::Step::Indent);
-                    steps.push_back(crate::builder::Step::NewLine);
-                    steps.push_back(crate::builder::Step::Pad);
-                } else {
-                    steps.push_back(crate::builder::Step::Whitespace);
-                }
             } else {
                 dedent = true;
                 steps.push_back(crate::builder::Step::Indent);
@@ -134,19 +125,17 @@ pub fn rule(
     }
 
     // /**/
+    let mut comment = false;
     children.drain_comments_and_newlines(|element| match element {
         crate::children::DrainCommentOrNewline::Comment(text) => {
+            comment = true;
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
             steps.push_back(crate::builder::Step::Comment(text));
         }
         crate::children::DrainCommentOrNewline::Newline(_) => {}
     });
-
-    if let rnix::SyntaxKind::TOKEN_COMMENT
-    | rnix::SyntaxKind::TOKEN_WHITESPACE =
-        children.peek_prev().unwrap().element.kind()
-    {
+    if comment {
         steps.push_back(crate::builder::Step::NewLine);
         steps.push_back(crate::builder::Step::Pad);
     }
