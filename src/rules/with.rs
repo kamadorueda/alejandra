@@ -40,18 +40,6 @@ pub fn rule(
 
     // expr
     let child = children.get_next().unwrap();
-    if let rnix::SyntaxKind::TOKEN_COMMENT =
-        children.peek_prev().unwrap().element.kind()
-    {
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
-    } else {
-        if let rnix::SyntaxKind::NODE_WITH = child.element.kind() {
-            steps.push_back(crate::builder::Step::NewLine);
-            steps.push_back(crate::builder::Step::Pad);
-        } else {
-        }
-    }
 
     match layout {
         crate::config::Layout::Tall => {
@@ -67,7 +55,7 @@ pub fn rule(
     steps.push_back(crate::builder::Step::Format(child.element));
 
     // /**/
-    let mut comment : bool = false;
+    let mut comment: bool = false;
     children.drain_comments_and_newlines(|element| match element {
         crate::children::DrainCommentOrNewline::Comment(text) => {
             steps.push_back(crate::builder::Step::NewLine);
@@ -80,7 +68,7 @@ pub fn rule(
 
     // expr
     let child = children.get_next().unwrap();
-    if comment || matches!(child.element.kind(),rnix::SyntaxKind::NODE_WITH) {
+    if comment || matches!(child.element.kind(), rnix::SyntaxKind::NODE_WITH) {
         steps.push_back(crate::builder::Step::NewLine);
         steps.push_back(crate::builder::Step::Pad);
     } else {
