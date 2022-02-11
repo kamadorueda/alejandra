@@ -3,11 +3,17 @@ steps:
     command:
       - nix3 build
 
+  - label: build-musl
+    command:
+      - nix3 build .#packages.x86_64-linux.musl
+
   - label: cache
     if: build.branch == "main"
     command:
       - echo +++
       - nix3 build
+      - cachix push alejandra result
+      - nix3 build .#packages.x86_64-linux.musl
       - cachix push alejandra result
 
       - nix3 develop --profile develop --command true
