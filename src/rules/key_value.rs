@@ -88,7 +88,6 @@ pub fn rule(
                         rnix::SyntaxKind::NODE_ATTR_SET
                             | rnix::SyntaxKind::NODE_PAREN
                             | rnix::SyntaxKind::NODE_LIST
-                            | rnix::SyntaxKind::NODE_WITH
                             | rnix::SyntaxKind::NODE_STRING
                     ))
             {
