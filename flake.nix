@@ -23,18 +23,29 @@
     inputs.flakeUtils.lib.eachSystem [ "x86_64-darwin" "x86_64-linux" ] (
       system: let
         nixpkgs = import inputs.nixpkgs { inherit system; };
+        nixpkgsMusl = import inputs.nixpkgs {
+          inherit system;
+          crossSystem =
+            nixpkgs.lib.systems.examples.musl64
+            // {
+              rustc.config = "x86_64-unknown-linux-musl";
+            };
+        };
         cargoToml = builtins.fromTOML (builtins.readFile ./Cargo.toml);
         treefmt = inputs.treefmt.defaultPackage.${system};
         fenix = inputs.fenix.packages.${system};
         fenixPlatform = nixpkgs.makeRustPlatform { inherit (fenix.latest) cargo rustc; };
-      in
-        {
-          checks.defaultPackage = inputs.self.defaultPackage.${system};
-          defaultApp = {
-            type = "app";
-            program = "${inputs.self.defaultPackage.${system}}/bin/alejandra";
-          };
-          defaultPackage = fenixPlatform.buildRustPackage {
+        fenixPlatformMusl = nixpkgsMusl.makeRustPlatform {
+          cargo = muslToolchain;
+          rustc = muslToolchain;
+        };
+        muslToolchain = with inputs.fenix.packages.${system}; combine [
+          minimal.rustc
+          minimal.cargo
+          targets.x86_64-unknown-linux-musl.latest.rust-std
+        ];
+        packageWith = platform: target:
+          platform.buildRustPackage {
             pname = cargoToml.package.name;
             version =
               let
@@ -44,6 +55,7 @@
               in
                 "${builtins.substring 0 8 date}_${commit}";
             src = inputs.self.sourceInfo;
+            inherit target;
             cargoLock.lockFile = ./Cargo.lock;
             meta = {
               description = cargoToml.package.description;
@@ -52,6 +64,14 @@
               maintainers = [ nixpkgs.lib.maintainers.kamadorueda ];
             };
           };
+      in
+        {
+          checks.defaultPackage = inputs.self.defaultPackage.${system};
+          defaultApp = {
+            type = "app";
+            program = "${inputs.self.defaultPackage.${system}}/bin/alejandra";
+          };
+          defaultPackage = packageWith fenixPlatform system;
           devShell = nixpkgs.mkShell {
             name = "Alejandra";
             packages = [
@@ -67,5 +87,13 @@
             ];
           };
         }
+        // (
+          if system == "x86_64-linux"
+          then
+            {
+              packages.musl = packageWith fenixPlatformMusl "x86_64-unknown-linux-musl";
+            }
+          else { }
+        )
     );
 }
