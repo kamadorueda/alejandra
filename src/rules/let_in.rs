@@ -90,69 +90,48 @@ pub fn rule(
             steps.push_back(crate::builder::Step::Whitespace);
         }
     }
-
-    // in
-    let child_in = children.get_next().unwrap();
-    let top_level = build_ctx.pos_new.column <= 1;
+    steps.push_back(crate::builder::Step::Format(child.element));
 
     // /**/
-    let mut child_comments = std::collections::LinkedList::new();
+    let mut comment: bool = false;
     children.drain_comments_and_newlines(|element| match element {
         crate::children::DrainCommentOrNewline::Comment(text) => {
-            child_comments.push_back(crate::builder::Step::Comment(text))
+            steps.push_back(crate::builder::Step::NewLine);
+            steps.push_back(crate::builder::Step::Pad);
+            steps.push_back(crate::builder::Step::Comment(text));
+            comment = true;
         }
         crate::children::DrainCommentOrNewline::Newline(_) => {}
     });
 
     // expr
-    let child_expr = children.get_next().unwrap();
-
-    // in
-    steps.push_back(crate::builder::Step::Format(child_in.element));
-    match layout {
-        crate::config::Layout::Tall => {
-            if child_comments.is_empty()
-                && matches!(
-                    child_expr.element.kind(),
-                    rnix::SyntaxKind::NODE_ATTR_SET
-                        | rnix::SyntaxKind::NODE_LET_IN
-                        | rnix::SyntaxKind::NODE_LIST
-                        | rnix::SyntaxKind::NODE_PAREN
-                        | rnix::SyntaxKind::NODE_STRING
-                )
-            {
-                steps.push_back(crate::builder::Step::Whitespace);
-            } else {
-                if !top_level {
-                    steps.push_back(crate::builder::Step::Indent);
-                }
-                steps.push_back(crate::builder::Step::NewLine);
-                steps.push_back(crate::builder::Step::Pad);
-            }
-        }
-        crate::config::Layout::Wide => {}
-    }
-
-    // /**/
-    for comment in child_comments {
-        steps.push_back(comment);
+    let child = children.get_next().unwrap();
+    if comment
+        || !matches!(
+            child.element.kind(),
+            rnix::SyntaxKind::NODE_ATTR_SET
+                | rnix::SyntaxKind::NODE_PAREN
+                | rnix::SyntaxKind::NODE_LET_IN
+                | rnix::SyntaxKind::NODE_LIST
+                | rnix::SyntaxKind::NODE_LITERAL
+                | rnix::SyntaxKind::NODE_IDENT
+                | rnix::SyntaxKind::NODE_STRING
+        )
+    {
         steps.push_back(crate::builder::Step::NewLine);
         steps.push_back(crate::builder::Step::Pad);
+    } else {
+        steps.push_back(crate::builder::Step::Whitespace);
     }
-
-    // expr
     match layout {
         crate::config::Layout::Tall => {
-            steps.push_back(crate::builder::Step::FormatWider(
-                child_expr.element,
-            ));
-            if !top_level {
+            steps.push_back(crate::builder::Step::FormatWider(child.element));
+            if indent {
                 steps.push_back(crate::builder::Step::Dedent);
             }
         }
         crate::config::Layout::Wide => {
-            steps.push_back(crate::builder::Step::Whitespace);
-            steps.push_back(crate::builder::Step::Format(child_expr.element));
+            steps.push_back(crate::builder::Step::Format(child.element));
         }
     }
 

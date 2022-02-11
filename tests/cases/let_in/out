@@ -3,8 +3,7 @@ let
   a = let
     b = 2;
     c = 3;
-  in
-    d;
+  in d;
   /**/
   a = let c = 1; in f;
 
@@ -12,18 +11,17 @@ let
   a = let
     c = 1;
   in
-    /*
-     e
-     */
-    f;
+  /*
+   e
+   */
+  f;
   /**/
   a = let
     c = 1;
     /*
      d
      */
-  in
-    f;
+  in f;
   /**/
 
   a = let
@@ -32,10 +30,17 @@ let
      d
      */
   in
+  /*
+   e
+   */
+  f;
+  /**/
+  a = let
     /*
-     e
+     b
      */
-    f;
+    c = 1;
+  in f;
   /**/
   a = let
     /*
@@ -43,18 +48,20 @@ let
      */
     c = 1;
   in
-    f;
+  /*
+   e
+   */
+  f;
   /**/
   a = let
     /*
      b
      */
     c = 1;
-  in
     /*
-     e
+     d
      */
-    f;
+  in f;
   /**/
   a = let
     /*
@@ -65,21 +72,10 @@ let
      d
      */
   in
-    f;
-  /**/
-  a = let
-    /*
-     b
-     */
-    c = 1;
-    /*
-     d
-     */
-  in
-    /*
-     e
-     */
-    f;
+  /*
+   e
+   */
+  f;
   /**/
 
   a = let
