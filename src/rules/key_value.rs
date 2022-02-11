@@ -56,6 +56,7 @@ pub fn rule(
                 next_kind,
                 rnix::SyntaxKind::NODE_ATTR_SET
                     | rnix::SyntaxKind::NODE_PAREN
+                    | rnix::SyntaxKind::NODE_WITH
                     | rnix::SyntaxKind::NODE_LET_IN
                     | rnix::SyntaxKind::NODE_LIST
                     | rnix::SyntaxKind::NODE_STRING
@@ -87,6 +88,7 @@ pub fn rule(
                         rnix::SyntaxKind::NODE_ATTR_SET
                             | rnix::SyntaxKind::NODE_PAREN
                             | rnix::SyntaxKind::NODE_LIST
+                            | rnix::SyntaxKind::NODE_WITH
                             | rnix::SyntaxKind::NODE_STRING
                     ))
             {

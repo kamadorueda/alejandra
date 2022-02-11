@@ -12,8 +12,7 @@
     /*
      a
      */
-    b;
-    c
+    b; c
   )
   (
     with
@@ -27,8 +26,48 @@
     c
   )
   (with b; cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc)
+  (with b; cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc)
+  { a = with b; 1; }
+  { a = with b; 1 + 1; }
+  { a = with b; { c = 1; }; }
+  {
+    a = with b; {
+      c = 1;
+      d = 2;
+      e = 3;
+    };
+  }
+  {
+    a = with b;
+    # comment
+    1;
+  }
+  {
+    a = with b; 1;
+    # comment
+  }
   (
+    with a;
     with b;
-    cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+    with c; { a = 1; }
+  )
+  (
+    with a;
+    with b;
+    with c; {
+      a = 1;
+      b = 2;
+    }
+  )
+  (
+    with a;
+    /*
+     comment
+     */
+    with b;
+    with c; {
+      a = 1;
+      b = 2;
+    }
   )
 ]
