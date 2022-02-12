@@ -90,6 +90,8 @@ Let's get Alejandra on our systems:
   Pick one depending on your platform:
 
   ```bash
+  $ nix-env -ivA aarch64-darwin -f https://github.com/kamadorueda/alejandra/tarball/main
+  $ nix-env -ivA aarch64-linux -f https://github.com/kamadorueda/alejandra/tarball/main
   $ nix-env -ivA x86_64-darwin -f https://github.com/kamadorueda/alejandra/tarball/main
   $ nix-env -ivA x86_64-linux -f https://github.com/kamadorueda/alejandra/tarball/main
   ```
