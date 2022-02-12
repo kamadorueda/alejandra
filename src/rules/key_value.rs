@@ -91,27 +91,29 @@ pub fn rule(
                             .kind(),
                         rnix::SyntaxKind::NODE_PATTERN
                     ))
-                || (matches!(next_kind, rnix::SyntaxKind::NODE_WITH)
-                    && matches!(
-                        next.element
-                            .clone()
-                            .into_node()
-                            .unwrap()
-                            .children()
-                            .collect::<Vec<rnix::SyntaxNode>>()
-                            .iter()
-                            .rev()
-                            .next()
-                            .unwrap()
-                            .kind(),
-                        rnix::SyntaxKind::NODE_ATTR_SET
-                            | rnix::SyntaxKind::NODE_IDENT
-                            | rnix::SyntaxKind::NODE_PAREN
-                            | rnix::SyntaxKind::NODE_LET_IN
-                            | rnix::SyntaxKind::NODE_LIST
-                            | rnix::SyntaxKind::NODE_LITERAL
-                            | rnix::SyntaxKind::NODE_STRING
-                    ))
+                || (matches!(
+                    next_kind,
+                    rnix::SyntaxKind::NODE_ASSERT | rnix::SyntaxKind::NODE_WITH
+                ) && matches!(
+                    next.element
+                        .clone()
+                        .into_node()
+                        .unwrap()
+                        .children()
+                        .collect::<Vec<rnix::SyntaxNode>>()
+                        .iter()
+                        .rev()
+                        .next()
+                        .unwrap()
+                        .kind(),
+                    rnix::SyntaxKind::NODE_ATTR_SET
+                        | rnix::SyntaxKind::NODE_IDENT
+                        | rnix::SyntaxKind::NODE_PAREN
+                        | rnix::SyntaxKind::NODE_LET_IN
+                        | rnix::SyntaxKind::NODE_LIST
+                        | rnix::SyntaxKind::NODE_LITERAL
+                        | rnix::SyntaxKind::NODE_STRING
+                ))
             {
                 steps.push_back(crate::builder::Step::Whitespace);
             } else {

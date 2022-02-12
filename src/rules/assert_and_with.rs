@@ -69,7 +69,10 @@ pub fn rule(
     match layout {
         crate::config::Layout::Tall => {
             if comment
-                || matches!(child.element.kind(), rnix::SyntaxKind::NODE_WITH)
+                || matches!(
+                    child.element.kind(),
+                    rnix::SyntaxKind::NODE_ASSERT | rnix::SyntaxKind::NODE_WITH
+                )
                 || !matches!(
                     child.element.kind(),
                     rnix::SyntaxKind::NODE_ATTR_SET
