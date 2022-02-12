@@ -4,12 +4,18 @@ steps:
       - nix3 build
 
   - label: cache
+    artifacts:
+    - aarch64-unknown-linux-musl
+    - x86_64-unknown-linux-gnu
+    - x86_64-unknown-linux-musl
     if: build.branch == "main"
     command:
       - echo +++
-      - nix3 build
+      - nix3 build --out-link aarch64-unknown-linux-musl .#aarch64-unknown-linux-musl
       - cachix push alejandra result
-      - nix3 build .#packages.x86_64-linux.musl
+      - nix3 build --out-link x86_64-unknown-linux-gnu .#x86_64-unknown-linux-gnu
+      - cachix push alejandra result
+      - nix3 build --out-link x86_64-unknown-linux-musl .#x86_64-unknown-linux-musl
       - cachix push alejandra result
 
       - nix3 develop --profile develop --command true

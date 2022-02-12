@@ -1,5 +1,6 @@
 {
   description = "The Uncompromising Nix Code Formatter";
+
   inputs = {
     fenix.url = "github:nix-community/fenix";
     fenix.inputs.nixpkgs.follows = "nixpkgs";
@@ -9,6 +10,7 @@
 
     nixpkgs.url = "github:nixos/nixpkgs";
   };
+
   outputs = inputs: let
     build = host: target: let
       nixpkgs = import inputs.nixpkgs {
@@ -17,7 +19,7 @@
           "aarch64-apple-darwin" = inputs.nixpkgs.lib.systems.examples.aarch64-darwin;
           "aarch64-unknown-linux-musl".config = "aarch64-unknown-linux-musl";
           "x86_64-apple-darwin" = null;
-          "x86_64-unknown-linux-gnu".config = "x86_64-unknown-linux-gnu";
+          "x86_64-unknown-linux-gnu" = null;
           "x86_64-unknown-linux-musl".config = "x86_64-unknown-linux-musl";
         };
       };
