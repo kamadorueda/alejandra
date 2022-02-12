@@ -1,10 +1,5 @@
 [formatter]
 
-[formatter.json]
-command = "jq"
-includes = ["*.json"]
-options = ["-S"]
-
 [formatter.nix]
 command = "cargo"
 includes = ["*.nix"]
@@ -12,7 +7,7 @@ options = ["run", "--"]
 
 [formatter.prettier]
 command = "prettier"
-includes = ["*.md", "*.toml", "*.yaml"]
+includes = ["*.json", "*.md", "*.toml", "*.yaml"]
 options = ["--plugin", "prettier-plugin-toml", "--write"]
 
 [formatter.rust]

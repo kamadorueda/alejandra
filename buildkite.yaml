@@ -8,9 +8,9 @@ steps:
     agents:
       queue: private
     artifacts:
-    - aarch64-unknown-linux-musl
-    - x86_64-unknown-linux-gnu
-    - x86_64-unknown-linux-musl
+      - aarch64-unknown-linux-musl
+      - x86_64-unknown-linux-gnu
+      - x86_64-unknown-linux-musl
     command:
       - echo +++
       - nix build --out-link aarch64-unknown-linux-musl .#aarch64-unknown-linux-musl
@@ -87,6 +87,13 @@ steps:
 
       - echo +++ Derivations count
       - grep -c drvPath= closure-after.txt
+
+  - label: integrations-vscode
+    if: build.branch != "main"
+    artifacts:
+      - alejandra.vsix
+    command:
+      - nix build --out-link alejandra.vsix .#integrations-vscode
 
   - label: flake check
     command:
