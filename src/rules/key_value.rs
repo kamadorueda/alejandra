@@ -52,26 +52,15 @@ pub fn rule(
             let next = children.peek_next().unwrap();
             let next_kind = next.element.kind();
 
-            if matches!(
-                next_kind,
-                rnix::SyntaxKind::NODE_ATTR_SET
-                    | rnix::SyntaxKind::NODE_PAREN
-                    | rnix::SyntaxKind::NODE_WITH
-                    | rnix::SyntaxKind::NODE_LET_IN
-                    | rnix::SyntaxKind::NODE_LIST
-                    | rnix::SyntaxKind::NODE_STRING
-            ) || (matches!(next_kind, rnix::SyntaxKind::NODE_LAMBDA)
-                && !matches!(
-                    next.element
-                        .clone()
-                        .into_node()
-                        .unwrap()
-                        .children()
-                        .next()
-                        .unwrap()
-                        .kind(),
-                    rnix::SyntaxKind::NODE_PATTERN
-                ))
+            if false
+                || matches!(
+                    next_kind,
+                    rnix::SyntaxKind::NODE_ATTR_SET
+                        | rnix::SyntaxKind::NODE_PAREN
+                        | rnix::SyntaxKind::NODE_LET_IN
+                        | rnix::SyntaxKind::NODE_LIST
+                        | rnix::SyntaxKind::NODE_STRING
+                )
                 || (matches!(next_kind, rnix::SyntaxKind::NODE_APPLY)
                     && matches!(
                         next.element
@@ -88,6 +77,39 @@ pub fn rule(
                         rnix::SyntaxKind::NODE_ATTR_SET
                             | rnix::SyntaxKind::NODE_PAREN
                             | rnix::SyntaxKind::NODE_LIST
+                            | rnix::SyntaxKind::NODE_STRING
+                    ))
+                || (matches!(next_kind, rnix::SyntaxKind::NODE_LAMBDA)
+                    && !matches!(
+                        next.element
+                            .clone()
+                            .into_node()
+                            .unwrap()
+                            .children()
+                            .next()
+                            .unwrap()
+                            .kind(),
+                        rnix::SyntaxKind::NODE_PATTERN
+                    ))
+                || (matches!(next_kind, rnix::SyntaxKind::NODE_WITH)
+                    && matches!(
+                        next.element
+                            .clone()
+                            .into_node()
+                            .unwrap()
+                            .children()
+                            .collect::<Vec<rnix::SyntaxNode>>()
+                            .iter()
+                            .rev()
+                            .next()
+                            .unwrap()
+                            .kind(),
+                        rnix::SyntaxKind::NODE_ATTR_SET
+                            | rnix::SyntaxKind::NODE_IDENT
+                            | rnix::SyntaxKind::NODE_PAREN
+                            | rnix::SyntaxKind::NODE_LET_IN
+                            | rnix::SyntaxKind::NODE_LIST
+                            | rnix::SyntaxKind::NODE_LITERAL
                             | rnix::SyntaxKind::NODE_STRING
                     ))
             {
