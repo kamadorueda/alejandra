@@ -12,8 +12,7 @@
     /*
      a
      */
-    b;
-    c
+    b; c
   )
   (
     assert
@@ -27,8 +26,5 @@
     c
   )
   (assert b; cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc)
-  (
-    assert b;
-    cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-  )
+  (assert b; cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc)
 ]

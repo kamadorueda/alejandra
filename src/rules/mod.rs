@@ -1,5 +1,5 @@
 pub mod apply;
-pub mod assert;
+pub mod assert_and_with;
 pub mod attr_set;
 pub mod bin_op;
 pub mod dynamic;
@@ -18,7 +18,6 @@ pub mod root;
 pub mod select;
 pub mod string;
 pub mod string_interpol;
-pub mod with;
 
 pub fn default(
     build_ctx: &crate::builder::BuildCtx,
