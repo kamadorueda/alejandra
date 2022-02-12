@@ -1,0 +1,53 @@
+{
+  "activationEvents": [
+    "onLanguage:nix"
+  ],
+  "author": {
+    "email": "kamadorueda@gmail.com",
+    "name": "Kevin Amado",
+    "url": "https://github.com/kamadorueda"
+  },
+  "categories": [
+    "Formatters"
+  ],
+  "configuration": {
+    "languages": [
+      {
+        "extensions": [
+          ".nix"
+        ],
+        "id": "nix"
+      }
+    ],
+    "properties": {
+      "alejandra.program": {
+        "default": "alejandra",
+        "description": "Specifies an alternative full path to the Alejandra executable.",
+        "type": [
+          "string"
+        ]
+      }
+    },
+    "title": "Alejandra"
+  },
+  "description": "The Uncompromising Nix Code Formatter",
+  "devDependencies": {
+    "vsce": "^2.6.7"
+  },
+  "displayName": "Alejandra 💅",
+  "engines": {
+    "vscode": "^1.64.0"
+  },
+  "funding": {
+    "type": "patreon",
+    "url": "https://www.patreon.com/kamadorueda"
+  },
+  "license": "Unlicense",
+  "main": "./extension.js",
+  "name": "alejandra",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kamadorueda/alejandra"
+  },
+  "version": "1.0.0"
+}

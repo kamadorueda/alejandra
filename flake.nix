@@ -33,7 +33,7 @@
         ];
       };
     in
-      {
+      rec {
         bin = rustPlatform.buildRustPackage {
           pname = "alejandra";
           version =
@@ -52,6 +52,25 @@
             maintainers = [ nixpkgs.lib.maintainers.kamadorueda ];
           };
         };
+        integrations.vscode-env = nixpkgs.mkYarnPackage {
+          name = "alejandra";
+          src = ./integrations/vscode;
+          packageJSON = ./integrations/vscode/package.json;
+          yarnLock = ./integrations/vscode/yarn.lock;
+          yarnNix = ./integrations/vscode/yarn.lock.nix;
+        };
+        integrations.vscode = nixpkgs.stdenv.mkDerivation {
+          name = "alejandra";
+          src = ./integrations/vscode;
+          env = integrations.vscode-env;
+          buildInputs = [ nixpkgs.yarn ];
+          builder = builtins.toFile "builder.sh" ''
+            source $stdenv/setup
+
+            cd $src
+            $env/libexec/alejandra/node_modules/.bin/vsce package --out $out
+          '';
+        };
         shell = nixpkgs.mkShell {
           name = "alejandra";
           packages = [
@@ -63,6 +82,8 @@
             nixpkgs.nodePackages.prettier-plugin-toml
             nixpkgs.shfmt
             nixpkgs.treefmt
+            nixpkgs.yarn
+            nixpkgs.yarn2nix
           ];
         };
       };
@@ -96,6 +117,9 @@
 
       packages."x86_64-darwin"."x86_64-apple-darwin" =
         (build "x86_64-darwin" "x86_64-apple-darwin").bin;
+
+      packages."x86_64-linux"."integrations-vscode" =
+        (build "x86_64-linux" "x86_64-unknown-linux-gnu").integrations.vscode;
 
       packages."x86_64-linux"."aarch64-unknown-linux-musl" =
         (build "x86_64-linux" "aarch64-unknown-linux-musl").bin;
