@@ -3,10 +3,6 @@ steps:
     command:
       - nix3 build
 
-  - label: build-musl
-    command:
-      - nix3 build .#packages.x86_64-linux.musl
-
   - label: cache
     if: build.branch == "main"
     command:
@@ -64,6 +60,9 @@ steps:
 
       - echo --- Closure @ before
       - nix-env --query --available --attr-path --drv-path --file nixpkgs --xml > closure-before.txt
+
+      - echo --- Formatting
+      - nix3 run . -- nixpkgs 2>/dev/null
 
       - echo --- Closure @ after
       - nix-env --query --available --attr-path --drv-path --file nixpkgs --xml > closure-after.txt
