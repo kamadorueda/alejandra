@@ -19,19 +19,18 @@ pub fn rule(
     steps.push_back(crate::builder::Step::Format(child.element));
 
     // /**/
+    let mut comment = false;
     children.drain_comments_and_newlines(|element| match element {
         crate::children::DrainCommentOrNewline::Comment(text) => {
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
             steps.push_back(crate::builder::Step::Comment(text));
+            comment = true;
         }
         crate::children::DrainCommentOrNewline::Newline(_) => {}
     });
 
-    if let rnix::SyntaxKind::TOKEN_COMMENT
-    | rnix::SyntaxKind::TOKEN_WHITESPACE =
-        children.peek_prev().unwrap().element.kind()
-    {
+    if comment {
         steps.push_back(crate::builder::Step::NewLine);
         steps.push_back(crate::builder::Step::Pad);
     } else {
@@ -40,7 +39,6 @@ pub fn rule(
 
     // expr
     let child = children.get_next().unwrap();
-
     match layout {
         crate::config::Layout::Tall => {
             steps.push_back(crate::builder::Step::FormatWider(child.element));
@@ -68,17 +66,35 @@ pub fn rule(
 
     // expr
     let child = children.get_next().unwrap();
-    if comment || matches!(child.element.kind(), rnix::SyntaxKind::NODE_WITH) {
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
-    } else {
-        steps.push_back(crate::builder::Step::Whitespace);
-    }
     match layout {
         crate::config::Layout::Tall => {
-            steps.push_back(crate::builder::Step::FormatWider(child.element));
+            if comment
+                || matches!(child.element.kind(), rnix::SyntaxKind::NODE_WITH)
+                || !matches!(
+                    child.element.kind(),
+                    rnix::SyntaxKind::NODE_ATTR_SET
+                        | rnix::SyntaxKind::NODE_IDENT
+                        | rnix::SyntaxKind::NODE_PAREN
+                        | rnix::SyntaxKind::NODE_LET_IN
+                        | rnix::SyntaxKind::NODE_LIST
+                        | rnix::SyntaxKind::NODE_LITERAL
+                        | rnix::SyntaxKind::NODE_STRING
+                )
+            {
+                steps.push_back(crate::builder::Step::NewLine);
+                steps.push_back(crate::builder::Step::Pad);
+                steps.push_back(crate::builder::Step::FormatWider(
+                    child.element,
+                ));
+            } else {
+                steps.push_back(crate::builder::Step::Whitespace);
+                steps.push_back(crate::builder::Step::FormatWider(
+                    child.element,
+                ));
+            }
         }
         crate::config::Layout::Wide => {
+            steps.push_back(crate::builder::Step::Whitespace);
             steps.push_back(crate::builder::Step::Format(child.element));
         }
     }

@@ -46,9 +46,9 @@ steps:
       - formatting-before-vs-after.patch.txt
       - formatting-after.patch.txt
     command:
-      - git config --global user.email ci@cd
+      - git config --global user.email CI/CD
       - git config --global user.name CI/CD
-      - git clone --depth 1 https://github.com/nixos/nixpkgs
+      - git clone --branch=master --depth 1 --origin=upstream file:///data/nixpkgs
 
       - echo --- Formatting - before
       - nix run github:kamadorueda/alejandra -- nixpkgs 2>/dev/null
@@ -68,7 +68,9 @@ steps:
       - closure-after.txt
       - closure-before-vs-after.patch.txt
     command:
-      - git clone --depth 1 https://github.com/nixos/nixpkgs
+      - git config --global user.email CI/CD
+      - git config --global user.name CI/CD
+      - git clone --branch=master --depth 1 --origin=upstream file:///data/nixpkgs
 
       - echo --- Closure @ before
       - nix-env --query --available --attr-path --drv-path --file nixpkgs --xml > closure-before.txt
