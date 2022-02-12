@@ -12,11 +12,13 @@ steps:
     command:
       - echo +++
       - nix3 build --out-link aarch64-unknown-linux-musl .#aarch64-unknown-linux-musl
-      - cachix push alejandra result
+      - cachix push alejandra aarch64-unknown-linux-musl
+
       - nix3 build --out-link x86_64-unknown-linux-gnu .#x86_64-unknown-linux-gnu
-      - cachix push alejandra result
+      - cachix push alejandra x86_64-unknown-linux-gnu
+
       - nix3 build --out-link x86_64-unknown-linux-musl .#x86_64-unknown-linux-musl
-      - cachix push alejandra result
+      - cachix push alejandra x86_64-unknown-linux-musl
 
       - nix3 develop --profile develop --command true
       - cachix push alejandra develop
