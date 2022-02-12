@@ -1,30 +1,34 @@
 steps:
   - label: build
     command:
-      - nix3 build
+      - nix build
 
   - label: cache
+    if: build.branch == "main"
+    agents:
+      queue: private
     artifacts:
     - aarch64-unknown-linux-musl
     - x86_64-unknown-linux-gnu
     - x86_64-unknown-linux-musl
-    if: build.branch == "main"
     command:
       - echo +++
-      - nix3 build --out-link aarch64-unknown-linux-musl .#aarch64-unknown-linux-musl
+      - nix build --out-link aarch64-unknown-linux-musl .#aarch64-unknown-linux-musl
       - cachix push alejandra aarch64-unknown-linux-musl
 
-      - nix3 build --out-link x86_64-unknown-linux-gnu .#x86_64-unknown-linux-gnu
+      - nix build --out-link x86_64-unknown-linux-gnu .#x86_64-unknown-linux-gnu
       - cachix push alejandra x86_64-unknown-linux-gnu
 
-      - nix3 build --out-link x86_64-unknown-linux-musl .#x86_64-unknown-linux-musl
+      - nix build --out-link x86_64-unknown-linux-musl .#x86_64-unknown-linux-musl
       - cachix push alejandra x86_64-unknown-linux-musl
 
-      - nix3 develop --profile develop --command true
+      - nix develop --profile develop --command true
       - cachix push alejandra develop
 
   - label: coverage
     if: build.branch == "main"
+    agents:
+      queue: private
     command:
       - echo +++ Fetch
       - git branch -D main
@@ -47,14 +51,14 @@ steps:
       - git clone --depth 1 https://github.com/nixos/nixpkgs
 
       - echo --- Formatting - before
-      - nix3 run github:kamadorueda/alejandra -- nixpkgs 2>/dev/null
+      - nix run github:kamadorueda/alejandra -- nixpkgs 2>/dev/null
       - git -C nixpkgs add .
       - git -C nixpkgs commit -m formatting-before -q
       - git -C nixpkgs branch formatting-before
       - git -C nixpkgs reset --hard master~1
 
       - echo --- Formatting - after
-      - nix3 run . -- nixpkgs 2>/dev/null
+      - nix run . -- nixpkgs 2>/dev/null
       - git -C nixpkgs diff formatting-before > formatting-before-vs-after.patch.txt
 
   - label: closure diff
@@ -70,7 +74,7 @@ steps:
       - nix-env --query --available --attr-path --drv-path --file nixpkgs --xml > closure-before.txt
 
       - echo --- Formatting
-      - nix3 run . -- nixpkgs 2>/dev/null
+      - nix run . -- nixpkgs 2>/dev/null
 
       - echo --- Closure @ after
       - nix-env --query --available --attr-path --drv-path --file nixpkgs --xml > closure-after.txt
@@ -85,4 +89,4 @@ steps:
   - label: flake check
     command:
       - echo +++
-      - nix3 flake check
+      - nix flake check
