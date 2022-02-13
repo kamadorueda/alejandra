@@ -1,9 +1,13 @@
 {
   "compilerOptions": {
-    "checkJs": false,
-    "lib": ["ES2020"],
-    "module": "commonjs",
+    "checkJs": true,
+    "lib": [
+      "ES2020"
+    ],
+    "module": "CommonJS",
     "target": "ES2020"
   },
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }
