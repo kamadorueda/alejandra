@@ -37,6 +37,15 @@
       src="https://img.shields.io/badge/code%20style-Alejandra-green.svg"
     >
   </a>
+
+</p>
+<p align="center">
+  Try it on your browser!
+  <a
+    href="https://kamadorueda.github.io/alejandra/"
+  >
+    here
+  </a>
 </p>
 
 ## Features
