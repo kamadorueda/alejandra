@@ -25,7 +25,7 @@ with [Alejandra](https://github.com/kamadorueda/alejandra).
 
 Enjoy!
 
-# Troubleshooting
+## Troubleshooting
 
 If you encounter a problem
 please let us know in the

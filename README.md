@@ -75,6 +75,12 @@
   Humans care about the content,
   machines about the style!
 
+- ✔️ **Native**
+
+  We integrate with common code editors:
+
+  - [Alejandra extension for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=kamadorueda.alejandra)
+
 ## Getting started
 
 Let's get Alejandra on our systems:
