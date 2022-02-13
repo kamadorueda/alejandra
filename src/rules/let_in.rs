@@ -91,6 +91,14 @@ pub fn rule(
         }
     }
     steps.push_back(crate::builder::Step::Format(child.element));
+    match layout {
+        crate::config::Layout::Tall => {
+            if indent {
+                steps.push_back(crate::builder::Step::Indent);
+            }
+        }
+        crate::config::Layout::Wide => {}
+    }
 
     // /**/
     let mut comment: bool = false;
