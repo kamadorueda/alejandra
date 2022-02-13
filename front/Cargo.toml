@@ -1,0 +1,17 @@
+[dependencies]
+alejandra = { "path" = "../." }
+console_error_panic_hook = "*"
+getrandom = { version = "*", features = ["js"] }
+wasm-bindgen = "*"
+wee_alloc = "*"
+
+[lib]
+crate-type = ["cdylib"]
+
+[package]
+authors = ["Kevin Amado <kamadorueda@gmail.com>"]
+description = "The Uncompromising Nix Code Formatter"
+edition = "2021"
+name = "alejandra-front"
+repository = "https://github.com/kamadorueda/alejandra"
+version = "0.0.0"

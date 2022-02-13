@@ -1,6 +1,6 @@
 /**/*.vsix
 /**/node_modules/
 /**/result*
+/**/target/
 /.direnv
-/target/
 /tarpaulin*
