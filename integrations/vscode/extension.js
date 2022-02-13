@@ -1,31 +1,72 @@
-const vscode = require('vscode');
-const { execFileSync } = require("child_process");
+const { execFile } = require("child_process");
+const vscode = require("vscode");
 
-function activate(context) {
-	const config = vscode.workspace.getConfiguration("alejandra");
+const activate = (_) => {
+  const outputChannel = vscode.window.createOutputChannel("Alejandra");
 
-  context.subscriptions.push(
-    vscode.languages.registerDocumentFormattingEditProvider("nix", {
-      provideDocumentFormattingEdits: (document, _, _) => {
-        const range = new vscode.Range(0, 0, document.lineCount, 0);
+  vscode.languages.registerDocumentFormattingEditProvider("nix", {
+    provideDocumentFormattingEdits(document, _) {
+      const config = {
+        alejandra: vscode.workspace.getConfiguration("alejandra"),
+      };
 
+      return new Promise((resolve, reject) => {
         try {
-          const formattedText = execFileSync(config.path, { input: document.getText() });
-          return [vscode.TextEdit.replace(range, formattedText.toString())];
-        }
-        catch (e) {
-          vscode.window.showErrorMessage(`alejandra failed: ${e}`);
-        }
+          outputChannel.appendLine(
+            `Running Alejandra with settings: ${JSON.stringify(config)}`
+          );
 
-        return;
-      }
-    })
-  );
-}
+          const process = execFile(
+            config.alejandra.program,
+            [],
+            {},
+            (error, stdout, stderr) => {
+              if (error) {
+                outputChannel.appendLine(`error: ${error}`);
+                outputChannel.appendLine(`stderr: ${stderr}`);
+                vscode.window.showErrorMessage(
+                  `While executing Alejandra with settings: ` +
+                    `${JSON.stringify(config)}, ` +
+                    `${error}`
+                );
+                reject(error);
+              }
 
-function deactivate() {}
+              const documentRange = new vscode.Range(
+                document.lineAt(0).range.start,
+                document.lineAt(
+                  document.lineCount - 1
+                ).rangeIncludingLineBreak.end
+              );
+
+              resolve([new vscode.TextEdit(documentRange, stdout)]);
+            }
+          );
+
+          const documentText = document.getText();
+
+          outputChannel.appendLine(
+            `Feeding ${documentText.length} of input to stdin`
+          );
+
+          process.stdin.write(documentText);
+          process.stdin.end();
+        } catch (error) {
+          vscode.window.showErrorMessage(
+            `While executing Alejandra with settings: ` +
+              `${JSON.stringify(config)} ` +
+              `${error}`
+          );
+          reject(error);
+        }
+      });
+    },
+  });
+};
+
+const deactivate = () => {};
 
 module.exports = {
-	activate,
-	deactivate
-}
+  activate,
+  deactivate,
+};

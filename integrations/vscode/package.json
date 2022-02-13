@@ -10,25 +10,40 @@
   "categories": [
     "Formatters"
   ],
-  "configuration": {
+  "contributes": {
+    "configuration": {
+      "properties": {
+        "alejandra.program": {
+          "default": "alejandra",
+          "description": "Specifies an alternative full path to the Alejandra executable.",
+          "type": [
+            "string"
+          ]
+        }
+      },
+      "title": "Alejandra"
+    },
+    "configurationDefaults": {
+      "[nix]": {
+        "editor.defaultFormatter": "kamadorueda.alejandra",
+        "editor.formatOnPaste": true,
+        "editor.formatOnSave": true,
+        "editor.formatOnType": false
+      },
+      "alejandra.program": "alejandra"
+    },
     "languages": [
       {
+        "aliases": [
+          "nix",
+          "Nix"
+        ],
         "extensions": [
           ".nix"
         ],
         "id": "nix"
       }
-    ],
-    "properties": {
-      "alejandra.program": {
-        "default": "alejandra",
-        "description": "Specifies an alternative full path to the Alejandra executable.",
-        "type": [
-          "string"
-        ]
-      }
-    },
-    "title": "Alejandra"
+    ]
   },
   "description": "The Uncompromising Nix Code Formatter",
   "devDependencies": {
@@ -45,6 +60,7 @@
   "license": "Unlicense",
   "main": "./extension.js",
   "name": "alejandra",
+  "publisher": "kamadorueda",
   "repository": {
     "type": "git",
     "url": "https://github.com/kamadorueda/alejandra"

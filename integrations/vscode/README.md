@@ -4,18 +4,52 @@
 
 ## Features
 
-This extension adds support
-for formatting Nix files
+This extension adds built-in editor support
+for formatting Nix files automatically
 with [Alejandra](https://github.com/kamadorueda/alejandra).
 
-## Requirements
+## Getting started
 
-Make sure to install [Alejandra](https://github.com/kamadorueda/alejandra) in your system first.
+1.  Make sure to install
+    [Alejandra](https://github.com/kamadorueda/alejandra)
+    in your system first
+    as explained [here](https://github.com/kamadorueda/alejandra).
 
-## Settings
+1.  Install the vscode extension and reload the window (just close and open again).
 
-This extension contributes the following settings:
+1.  Open a Nix file,
+    do a right click
+    and you should be able to see "Format Document" in the menu.
 
-- `alejandra.path`: Specifies an alternative full path to the Alejandra executable.
+    Alternatively, it will be formatted automatically when you save the file.
 
-  By default we will use the Alejandra installed in your system.
+Enjoy!
+
+# Troubleshooting
+
+If you encounter a problem
+please let us know in the
+[issues section](https://github.com/kamadorueda/alejandra/issues).
+
+The most probable causes of failure are:
+
+- Not having Alejandra installed in your system.
+
+  In this case please follow the instructions
+  [here](https://github.com/kamadorueda/alejandra).
+
+- A misconfiguration.
+
+  In this case please make sure that your config contains the following values:
+
+  ```json
+  {
+    "[nix]": {
+      "editor.defaultFormatter": "kamadorueda.alejandra",
+      "editor.formatOnPaste": true,
+      "editor.formatOnSave": true,
+      "editor.formatOnType": false
+    },
+    "alejandra.program": "alejandra"
+  }
+  ```
