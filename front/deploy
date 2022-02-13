@@ -1,0 +1,15 @@
+#! /usr/bin/env bash
+
+set -euo pipefail
+
+wasm-pack build --target web
+yarn build
+
+git worktree remove worktree || true
+git worktree add -B front worktree
+git -C worktree reset --hard 6adfbe8516bf6d9e896534e01118e1bc41f65425
+cp -rT ./build/ ./worktree/
+
+git -C worktree add .
+git -C worktree commit -m "feat: deploy website"
+git -C worktree push --force origin HEAD:front
