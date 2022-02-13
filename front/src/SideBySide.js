@@ -4,10 +4,38 @@ import * as wasm from "alejandra-front";
 import { Editor } from "./Editor";
 import { get, randomPath } from "./nixpkgs";
 
+const getPermalink = (before, path) => {
+  const searchParams = new URLSearchParams();
+
+  if (path !== undefined) {
+    searchParams.append("path", path);
+  } else {
+    searchParams.append("before", before);
+  }
+
+  return (
+    window.location.origin +
+    window.location.pathname +
+    `?${searchParams.toString()}`
+  );
+};
+
 export const SideBySide = () => {
-  const [path, setPath] = react.useState(randomPath());
+  const [path, setPath] = react.useState(undefined);
   const [loading, setLoading] = react.useState(true);
-  const [before, setBefore] = react.useState("let x = 123; in\n x");
+  const [before, setBefore] = react.useState("");
+
+  react.useEffect(async () => {
+    const searchParams = new URLSearchParams(window.location.search);
+
+    if (searchParams.has("path")) {
+      setPath(searchParams.get("path"));
+    } else if (searchParams.has("before")) {
+      setBefore(searchParams.get("before"));
+    } else {
+      setPath(randomPath());
+    }
+  }, []);
 
   react.useEffect(async () => {
     await wasm.default();
@@ -15,8 +43,10 @@ export const SideBySide = () => {
   }, [wasm]);
 
   react.useEffect(async () => {
-    const content = await get(path);
-    setBefore(content);
+    if (path !== undefined) {
+      const content = await get(path);
+      setBefore(content);
+    }
   }, [path]);
 
   if (loading) {
@@ -28,6 +58,8 @@ export const SideBySide = () => {
   }
 
   const after = wasm.format(before, "before.nix");
+
+  const permalink = getPermalink(before, path);
 
   return (
     <react.Fragment>
@@ -48,7 +80,23 @@ export const SideBySide = () => {
       </div>
       <div className="flex items-center justify-center pt1">
         <div className="f6 fl w-40">
-          <Editor code={before} onChange={setBefore} />
+          <Editor
+            code={before}
+            onChange={(code) => {
+              setBefore(code);
+              setPath(undefined);
+            }}
+          />
+          <div className="flex items-center justify-center">
+            <span>Permalink:&nbsp;</span>
+            {permalink.length > 2048 ? (
+              "not available, exceeds 2048 characters"
+            ) : (
+              <a className="blue underline" href={permalink}>
+                here
+              </a>
+            )}
+          </div>
         </div>
         <div className="w-10" />
         <div className="f6 fl w-40">
