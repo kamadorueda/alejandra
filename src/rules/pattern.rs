@@ -69,6 +69,7 @@ pub fn rule(
     // {
     let child = children.get_next().unwrap();
     steps.push_back(crate::builder::Step::Format(child.element));
+    steps.push_back(crate::builder::Step::Indent);
 
     let mut last_kind = rnix::SyntaxKind::TOKEN_CURLY_B_OPEN;
 
@@ -78,17 +79,11 @@ pub fn rule(
             // /**/
             rnix::SyntaxKind::TOKEN_COMMENT => {
                 if let rnix::SyntaxKind::TOKEN_COMMA
-                | rnix::SyntaxKind::TOKEN_CURLY_B_OPEN = last_kind
-                {
-                    steps.push_back(crate::builder::Step::Whitespace);
-                    steps.push_back(crate::builder::Step::Indent);
-                }
-
-                if let rnix::SyntaxKind::TOKEN_COMMENT
+                | rnix::SyntaxKind::TOKEN_COMMENT
+                | rnix::SyntaxKind::TOKEN_CURLY_B_OPEN
                 | rnix::SyntaxKind::TOKEN_ELLIPSIS
                 | rnix::SyntaxKind::NODE_PAT_ENTRY = last_kind
                 {
-                    steps.push_back(crate::builder::Step::Indent);
                     steps.push_back(crate::builder::Step::NewLine);
                     steps.push_back(crate::builder::Step::Pad);
                 }
@@ -97,34 +92,25 @@ pub fn rule(
                     steps.push_back(crate::builder::Step::Comment(text));
                 });
 
-                if let rnix::SyntaxKind::TOKEN_COMMA
-                | rnix::SyntaxKind::TOKEN_CURLY_B_OPEN
-                | rnix::SyntaxKind::TOKEN_COMMENT
-                | rnix::SyntaxKind::TOKEN_ELLIPSIS
-                | rnix::SyntaxKind::TOKEN_WHITESPACE
-                | rnix::SyntaxKind::NODE_PAT_ENTRY = last_kind
-                {
-                    steps.push_back(crate::builder::Step::Dedent);
-                }
-
                 last_kind = kind;
             }
             // item
             rnix::SyntaxKind::TOKEN_ELLIPSIS
             | rnix::SyntaxKind::NODE_PAT_ENTRY => {
-                if let rnix::SyntaxKind::TOKEN_COMMA
-                | rnix::SyntaxKind::TOKEN_CURLY_B_OPEN = last_kind
-                {
-                    steps.push_back(crate::builder::Step::Whitespace);
+                if let rnix::SyntaxKind::TOKEN_CURLY_B_OPEN = last_kind {
+                    if items_count > 1 {
+                        steps.push_back(crate::builder::Step::NewLine);
+                        steps.push_back(crate::builder::Step::Pad);
+                    } else {
+                        steps.push_back(crate::builder::Step::Whitespace);
+                    }
                 }
 
-                if let rnix::SyntaxKind::TOKEN_COMMENT
-                | rnix::SyntaxKind::TOKEN_WHITESPACE = last_kind
+                if let rnix::SyntaxKind::TOKEN_COMMA
+                | rnix::SyntaxKind::TOKEN_COMMENT = last_kind
                 {
                     steps.push_back(crate::builder::Step::NewLine);
                     steps.push_back(crate::builder::Step::Pad);
-                    steps.push_back(crate::builder::Step::Whitespace);
-                    steps.push_back(crate::builder::Step::Whitespace);
                 }
 
                 match layout {
@@ -144,13 +130,12 @@ pub fn rule(
             }
             // ,
             rnix::SyntaxKind::TOKEN_COMMA => {
-                match layout {
-                    crate::config::Layout::Tall => {
-                        steps.push_back(crate::builder::Step::NewLine);
-                        steps.push_back(crate::builder::Step::Pad);
-                    }
-                    crate::config::Layout::Wide => {}
-                };
+                if let rnix::SyntaxKind::TOKEN_COMMA
+                | rnix::SyntaxKind::TOKEN_COMMENT = last_kind
+                {
+                    steps.push_back(crate::builder::Step::NewLine);
+                    steps.push_back(crate::builder::Step::Pad);
+                }
                 steps.push_back(crate::builder::Step::Format(child.element));
                 children.move_next();
                 last_kind = kind;
@@ -167,9 +152,16 @@ pub fn rule(
 
     // }
     let child = children.get_next().unwrap();
+    steps.push_back(crate::builder::Step::Dedent);
     if !has_comments_between_curly_b && items_count <= 1 {
         steps.push_back(crate::builder::Step::Whitespace);
     } else {
+        if let rnix::SyntaxKind::NODE_PAT_ENTRY = last_kind {
+            steps.push_back(crate::builder::Step::Token(
+                rnix::SyntaxKind::TOKEN_COMMA,
+                ",".to_string(),
+            ))
+        }
         steps.push_back(crate::builder::Step::NewLine);
         steps.push_back(crate::builder::Step::Pad);
     }

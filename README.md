@@ -73,9 +73,11 @@
 
   Beauty is subjective, right?
 
-  We optimize for the wisdom of the crowd,
+  We started from the wisdom of the crowd,
   which comes in big part
   from the 2.3 million lines of code of [Nixpkgs](https://github.com/NixOS/nixpkgs).
+  Then we applied the feedback of developers
+  who have used [Nix](https://nixos.org) on a day to day basis for several years.
 
 - ✔️ **Transparent**
 
