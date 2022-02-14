@@ -3,9 +3,10 @@
 set -euo pipefail
 
 wasm-pack build --target web
+yarn install
 yarn build
 
-git worktree remove worktree || true
+git worktree remove --force worktree || true
 git worktree add -B front worktree
 git -C worktree reset --hard 6adfbe8516bf6d9e896534e01118e1bc41f65425
 cp -rT ./build/ ./worktree/
