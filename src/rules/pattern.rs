@@ -70,13 +70,15 @@ pub fn rule(
     let child = children.get_next().unwrap();
     steps.push_back(crate::builder::Step::Format(child.element));
 
+    let mut last_kind = rnix::SyntaxKind::TOKEN_CURLY_B_OPEN;
+
     while let Some(child) = children.peek_next() {
-        match child.element.kind() {
+        let kind = child.element.kind();
+        match kind {
             // /**/
             rnix::SyntaxKind::TOKEN_COMMENT => {
-                let prev_kind = children.peek_prev().unwrap().element.kind();
                 if let rnix::SyntaxKind::TOKEN_COMMA
-                | rnix::SyntaxKind::TOKEN_CURLY_B_OPEN = prev_kind
+                | rnix::SyntaxKind::TOKEN_CURLY_B_OPEN = last_kind
                 {
                     steps.push_back(crate::builder::Step::Whitespace);
                     steps.push_back(crate::builder::Step::Indent);
@@ -84,8 +86,7 @@ pub fn rule(
 
                 if let rnix::SyntaxKind::TOKEN_COMMENT
                 | rnix::SyntaxKind::TOKEN_ELLIPSIS
-                | rnix::SyntaxKind::TOKEN_WHITESPACE
-                | rnix::SyntaxKind::NODE_PAT_ENTRY = prev_kind
+                | rnix::SyntaxKind::NODE_PAT_ENTRY = last_kind
                 {
                     steps.push_back(crate::builder::Step::Indent);
                     steps.push_back(crate::builder::Step::NewLine);
@@ -101,24 +102,24 @@ pub fn rule(
                 | rnix::SyntaxKind::TOKEN_COMMENT
                 | rnix::SyntaxKind::TOKEN_ELLIPSIS
                 | rnix::SyntaxKind::TOKEN_WHITESPACE
-                | rnix::SyntaxKind::NODE_PAT_ENTRY = prev_kind
+                | rnix::SyntaxKind::NODE_PAT_ENTRY = last_kind
                 {
                     steps.push_back(crate::builder::Step::Dedent);
                 }
+
+                last_kind = kind;
             }
             // item
             rnix::SyntaxKind::TOKEN_ELLIPSIS
             | rnix::SyntaxKind::NODE_PAT_ENTRY => {
-                let prev_kind = children.peek_prev().unwrap().element.kind();
-
                 if let rnix::SyntaxKind::TOKEN_COMMA
-                | rnix::SyntaxKind::TOKEN_CURLY_B_OPEN = prev_kind
+                | rnix::SyntaxKind::TOKEN_CURLY_B_OPEN = last_kind
                 {
                     steps.push_back(crate::builder::Step::Whitespace);
                 }
 
                 if let rnix::SyntaxKind::TOKEN_COMMENT
-                | rnix::SyntaxKind::TOKEN_WHITESPACE = prev_kind
+                | rnix::SyntaxKind::TOKEN_WHITESPACE = last_kind
                 {
                     steps.push_back(crate::builder::Step::NewLine);
                     steps.push_back(crate::builder::Step::Pad);
@@ -139,6 +140,7 @@ pub fn rule(
                     }
                 };
                 children.move_next();
+                last_kind = kind;
             }
             // ,
             rnix::SyntaxKind::TOKEN_COMMA => {
@@ -151,6 +153,7 @@ pub fn rule(
                 };
                 steps.push_back(crate::builder::Step::Format(child.element));
                 children.move_next();
+                last_kind = kind;
             }
             // \n
             rnix::SyntaxKind::TOKEN_WHITESPACE => {
