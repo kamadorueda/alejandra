@@ -80,6 +80,8 @@ pub fn rule(
         }
     }
 
+    // in
+    let child = children.get_next().unwrap();
     match layout {
         crate::config::Layout::Tall => {
             steps.push_back(crate::builder::Step::Dedent);
@@ -91,14 +93,7 @@ pub fn rule(
         }
     }
     steps.push_back(crate::builder::Step::Format(child.element));
-    match layout {
-        crate::config::Layout::Tall => {
-            if indent {
-                steps.push_back(crate::builder::Step::Indent);
-            }
-        }
-        crate::config::Layout::Wide => {}
-    }
+    steps.push_back(crate::builder::Step::Indent);
 
     // /**/
     let mut comment: bool = false;
@@ -131,12 +126,10 @@ pub fn rule(
     } else {
         steps.push_back(crate::builder::Step::Whitespace);
     }
+    steps.push_back(crate::builder::Step::Dedent);
     match layout {
         crate::config::Layout::Tall => {
             steps.push_back(crate::builder::Step::FormatWider(child.element));
-            if indent {
-                steps.push_back(crate::builder::Step::Dedent);
-            }
         }
         crate::config::Layout::Wide => {
             steps.push_back(crate::builder::Step::Format(child.element));
