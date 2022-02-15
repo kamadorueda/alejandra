@@ -140,6 +140,18 @@ See why Alejandra was created
 and a comparison between alternatives
 [here](https://discourse.nixos.org/t/the-uncompromising-nix-code-formatter/17385/3?u=kamadorueda).
 
+## Versioning
+
+We use [semver](https://semver.org/) to version Alejandra.
+
+Our public API consists of:
+
+- The formatting rules (a.k.a. the style).
+- The CLI tool (`$ alejandra`),
+  command line flags,
+  positional arguments,
+  and stdout.
+
 ## Footnotes
 
 [^benchmark-specs]:
