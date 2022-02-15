@@ -99,7 +99,7 @@ Let's get Alejandra on our systems:
 - Nix with Flakes:
 
   ```bash
-  $ nix run github:kamadorueda/alejandra -- --help
+  $ nix profile install github:kamadorueda/alejandra
   ```
 
 - Nix stable:
@@ -113,11 +113,11 @@ Let's get Alejandra on our systems:
   $ nix-env -ivA x86_64-linux -f https://github.com/kamadorueda/alejandra/tarball/main
   ```
 
-  Then run with:
+Then run with:
 
-  ```bash
-  $ alejandra --help
-  ```
+```bash
+$ alejandra --help
+```
 
 ## Do I need to configure anything?
 
