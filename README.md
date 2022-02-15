@@ -94,9 +94,41 @@
 
 ## Getting started
 
-Let's get Alejandra on our systems:
+### On the web editor
 
-- Nix with Flakes:
+Please visit:
+[kamadorueda.github.io/alejandra](https://kamadorueda.github.io/alejandra/)
+
+### Prebuilt binaries
+
+Requirements:
+[curl](https://curl.se/),
+[sh](https://www.gnu.org/software/bash/) and
+[chmod](https://www.gnu.org/software/coreutils/).
+
+Steps:
+
+- On any x86_64 Linux:
+
+  ```bash
+  $ curl https://raw.githubusercontent.com/kamadorueda/alejandra/main/installers/x86_64-linux.sh | sh
+  ```
+
+- On any AArch64/ARM64 Linux:
+
+  ```bash
+  $ curl https://raw.githubusercontent.com/kamadorueda/alejandra/main/installers/aarch64-linux.sh | sh
+  ```
+
+Then run Alejandra with:
+
+```bash
+$ alejandra --help
+```
+
+### Nix installation
+
+- Nix with [Flakes](https://nixos.wiki/wiki/Flakes):
 
   ```bash
   $ nix profile install github:kamadorueda/alejandra
@@ -113,7 +145,7 @@ Let's get Alejandra on our systems:
   $ nix-env -ivA x86_64-linux -f https://github.com/kamadorueda/alejandra/tarball/main
   ```
 
-Then run with:
+Then run Alejandra with:
 
 ```bash
 $ alejandra --help
@@ -151,6 +183,10 @@ Our public API consists of:
   command line flags,
   positional arguments,
   and stdout.
+
+## Changelog
+
+Please see: [CHANGELOG.md](./CHANGELOG.md).
 
 ## Footnotes
 

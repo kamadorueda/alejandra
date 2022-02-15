@@ -8,8 +8,22 @@ steps:
     agents:
       queue: private
     artifacts:
+      # Builds on: aarch64-darwin
+      # - aarch64-apple-darwin
+
+      # Builds on: aarch64-linux
+      # - aarch64-unknown-linux-musl
+
+      # Builds on: x86_64-linux
       - alejandra-aarch64-unknown-linux-musl
+
+      # Builds on: x86_64-darwin
+      # - alejandra-x86_64-apple-darwin
+
+      # Builds on: x86_64-linux
       - alejandra-x86_64-unknown-linux-gnu
+
+      # Builds on: x86_64-linux
       - alejandra-x86_64-unknown-linux-musl
     command:
       - echo +++

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Pre-built binaries for x86_64-linux and aarch64-linux
+
 ## [0.1.0] - 2022-02-14
 
 ### Added
