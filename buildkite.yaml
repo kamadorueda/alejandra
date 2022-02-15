@@ -8,19 +8,22 @@ steps:
     agents:
       queue: private
     artifacts:
-      - aarch64-unknown-linux-musl
-      - x86_64-unknown-linux-gnu
-      - x86_64-unknown-linux-musl
+      - alejandra-aarch64-unknown-linux-musl
+      - alejandra-x86_64-unknown-linux-gnu
+      - alejandra-x86_64-unknown-linux-musl
     command:
       - echo +++
-      - nix build --out-link aarch64-unknown-linux-musl .#aarch64-unknown-linux-musl
-      - cachix push alejandra aarch64-unknown-linux-musl
+      - nix build .#aarch64-unknown-linux-musl
+      - cachix push alejandra result
+      - cp -L result/bin/alejandra alejandra-aarch64-unknown-linux-musl
 
-      - nix build --out-link x86_64-unknown-linux-gnu .#x86_64-unknown-linux-gnu
-      - cachix push alejandra x86_64-unknown-linux-gnu
+      - nix build .#x86_64-unknown-linux-gnu
+      - cachix push alejandra result
+      - cp -L result/bin/alejandra alejandra-x86_64-unknown-linux-gnu
 
-      - nix build --out-link x86_64-unknown-linux-musl .#x86_64-unknown-linux-musl
-      - cachix push alejandra x86_64-unknown-linux-musl
+      - nix build .#x86_64-unknown-linux-musl
+      - cachix push alejandra result
+      - cp -L result/bin/alejandra alejandra-x86_64-unknown-linux-musl
 
       - nix develop --profile develop --command true
       - cachix push alejandra develop
