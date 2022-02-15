@@ -101,12 +101,17 @@ Please visit:
 
 ### Prebuilt binaries
 
-Requirements:
+You can download a binary for your platform
+from the
+[releases section](https://github.com/kamadorueda/alejandra/releases/),
+make it executable
+and have fun!
+
+Alternatively there is an automated method.
+It needs:
 [curl](https://curl.se/),
 [sh](https://www.gnu.org/software/bash/) and
-[chmod](https://www.gnu.org/software/coreutils/).
-
-Steps:
+[chmod](https://www.gnu.org/software/coreutils/):
 
 - On any x86_64 Linux:
 
