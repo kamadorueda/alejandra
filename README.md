@@ -128,7 +128,13 @@ It needs:
 Then run Alejandra with:
 
 ```bash
-$ alejandra --help
+$ ./alejandra --help
+```
+
+or:
+
+```bash
+$ /path/to/alejandra --help
 ```
 
 ### Nix installation
