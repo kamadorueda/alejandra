@@ -25,19 +25,18 @@ pub fn rule(
     }
 
     // /**/
+    let mut comment = false;
     children.drain_comments_and_newlines(|element| match element {
         crate::children::DrainCommentOrNewline::Comment(text) => {
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
             steps.push_back(crate::builder::Step::Comment(text));
+            comment = true;
         }
         crate::children::DrainCommentOrNewline::Newline(_) => {}
     });
 
-    if let rnix::SyntaxKind::TOKEN_COMMENT
-    | rnix::SyntaxKind::TOKEN_WHITESPACE =
-        children.peek_prev().unwrap().element.kind()
-    {
+    if comment {
         steps.push_back(crate::builder::Step::NewLine);
         steps.push_back(crate::builder::Step::Pad);
     } else {
