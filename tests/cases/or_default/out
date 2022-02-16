@@ -1,64 +1,67 @@
 [
   (a or a)
   (
-    a or
-      /**/
+    a
+    or
+    /**/
+    a
+  )
+  (
+    a
+    /**/
+    or a
+  )
+  (
+    a
+    /**/
+    or
+    /**/
+    a
+  )
+  (
+    a
+    /**/
+    or
+    /**/
+    (
       a
-  )
-  (
-    a
-      /**/
-      or a
-  )
-  (
-    a
-      /**/
-      or
-      /**/
-      a
-  )
-  (
-    a
       /**/
       or
       /**/
       (
         a
-          /**/
-          or
-          /**/
-          (
-            a
-              /**/
-              or
-              /**/
-              a
-          )
+        /**/
+        or
+        /**/
+        a
       )
+    )
   )
   (
     a
+    /**/
+    or
+    /**/
+    (
+      a
       /**/
       or
       /**/
       (
         a
-          /**/
-          or
-          /**/
-          (
-            a
-              /**/
-              or
-              /**/
-              a
-          )
+        /**/
+        or
+        /**/
+        a
       )
+    )
   )
   (a or a or a or a or a or a or a or a or a or a or a or a or a or a or a or a or a or a or a)
   (
-    a or a
-        or a
-          or a or a or a or a or a or a or a or a or a or a or a or a or a or a or a or a or a
+    a
+    or a
+    or a
+    or a
+    or a or a or a or a or a or a or a or a or a or a or a or a or a or a or a or a
   )
 ]

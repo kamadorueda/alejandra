@@ -175,7 +175,9 @@ fn format(
                 // { }
                 rnix::SyntaxKind::NODE_ATTR_SET => crate::rules::attr_set::rule,
                 // a $op b
-                rnix::SyntaxKind::NODE_BIN_OP => crate::rules::bin_op::rule,
+                rnix::SyntaxKind::NODE_BIN_OP => {
+                    crate::rules::bin_op_and_or_default::rule
+                }
                 // ${a} (interpolation but for NODE_SELECT)
                 rnix::SyntaxKind::NODE_DYNAMIC => crate::rules::dynamic::rule,
                 // implementation detail of rnix-parser
@@ -219,7 +221,7 @@ fn format(
                 }
                 // a or b
                 rnix::SyntaxKind::NODE_OR_DEFAULT => {
-                    crate::rules::or_default::rule
+                    crate::rules::bin_op_and_or_default::rule
                 }
                 // ( a )
                 rnix::SyntaxKind::NODE_PAREN => crate::rules::paren::rule,

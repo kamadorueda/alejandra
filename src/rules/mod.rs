@@ -1,7 +1,7 @@
 pub mod apply;
 pub mod assert_and_with;
 pub mod attr_set;
-pub mod bin_op;
+pub mod bin_op_and_or_default;
 pub mod dynamic;
 pub mod if_else;
 pub mod inherit;
@@ -9,7 +9,6 @@ pub mod key_value;
 pub mod lambda;
 pub mod let_in;
 pub mod list;
-pub mod or_default;
 pub mod paren;
 pub mod pat_bind;
 pub mod pat_entry;
