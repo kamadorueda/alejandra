@@ -9,12 +9,9 @@ steps:
       queue: private
     artifacts:
       # Builds on: aarch64-darwin
-      # - aarch64-apple-darwin
+      # - alejandra-aarch64-apple-darwin
 
-      # Builds on: aarch64-linux
-      # - aarch64-unknown-linux-musl
-
-      # Builds on: x86_64-linux
+      # Builds on: aarch64-linux, x86_64-linux
       - alejandra-aarch64-unknown-linux-musl
 
       # Builds on: x86_64-darwin
@@ -68,7 +65,7 @@ steps:
       - git clone --branch=master --depth 1 --origin=upstream file:///data/nixpkgs
 
       - echo --- Formatting - before
-      - nix run github:kamadorueda/alejandra -- nixpkgs 2>/dev/null
+      - nix --tarball-ttl 1 run github:kamadorueda/alejandra -- nixpkgs 2>/dev/null
       - git -C nixpkgs add .
       - git -C nixpkgs commit -m formatting-before -q
       - git -C nixpkgs branch formatting-before
