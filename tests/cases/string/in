@@ -78,4 +78,14 @@
         <plist version="1.0">
         ${ expr "" v }
         </plist>''
+
+  ''
+    --${
+    "test"
+  }
+  ''
+
+  "--${
+    "test"
+  }"
 ]
