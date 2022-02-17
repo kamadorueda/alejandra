@@ -102,7 +102,6 @@ pub fn rule(
 
     // in
     let child_in = children.get_next().unwrap();
-    let top_level = build_ctx.pos_new.column <= 1;
 
     // /**/
     let mut child_comments = std::collections::LinkedList::new();
@@ -132,9 +131,7 @@ pub fn rule(
             {
                 steps.push_back(crate::builder::Step::Whitespace);
             } else {
-                if !top_level {
-                    steps.push_back(crate::builder::Step::Indent);
-                }
+                steps.push_back(crate::builder::Step::Indent);
                 steps.push_back(crate::builder::Step::NewLine);
                 steps.push_back(crate::builder::Step::Pad);
             }
@@ -155,9 +152,7 @@ pub fn rule(
             steps.push_back(crate::builder::Step::FormatWider(
                 child_expr.element,
             ));
-            if !top_level {
-                steps.push_back(crate::builder::Step::Dedent);
-            }
+            steps.push_back(crate::builder::Step::Dedent);
         }
         crate::config::Layout::Wide => {
             steps.push_back(crate::builder::Step::Whitespace);

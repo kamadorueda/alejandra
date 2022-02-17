@@ -7,28 +7,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+<!--
+Types of changes
+- Added for new features.
+- Changed for changes in existing functionality.
+- Deprecated for soon-to-be removed features.
+- Removed for now removed features.
+- Fixed for any bug fixes.
+- Security in case of vulnerabilities.
+-->
+
+### Changed
+
+- Let-in expressions are now indented in the top-level of a file.
+
 ## [0.2.0] - 2022-02-17
 
 ### Added
 
+- A `--version` flag to the CLI.
 - Pre-built binaries for x86_64-linux and aarch64-linux.
+- Support for inline comments on lists, attr-sets, and let-in expressions.
+
+### Changed
+
 - Made the logic of the `or-default` (`a or b`) node
   to be equal to the binary operator (`a $operator b`).
   This increases consistency across the same family of elements.
-- Remove users freedom to insert newlines
+- Reduce 1 indentation level in `let-in` expressions,
+  when the target expression is a parenthesis, attr-set, list, or string.
+- String interpolations in multi-line strings
+  now have a nice-looking indentation.
+
+### Removed
+
+- Users freedom to insert newlines
   before the `?` in pattern bindings (`a ? b`).
 
   Inserting a newline after the `?` is still possible.
 
   This increases consistency on where to break a long pattern binding.
 
-- Remove space on empty containers (`[]`, `{}`).
-- Add a `--version` flag to the CLI.
-- Reduce 1 indentation level in `let-in` expressions,
-  when the target expression is a parenthesis, attr-set, list, or string.
-- Support inline comments on lists, attr-sets, and let-in expressions.
-- String interpolations in multi-line strings
-  now have a nice-looking indentation.
+- Space on empty containers (`[]`, `{}`).
 
 ### Fixed
 
