@@ -39,7 +39,7 @@
           let
             commit = inputs.self.shortRev or "dirty";
             date = inputs.self.lastModifiedDate or inputs.self.lastModified or "19700101";
-          in "0.1.0+${builtins.substring 0 8 date}.${commit}";
+          in "0.2.0+${builtins.substring 0 8 date}.${commit}";
         src = ./.;
         inherit target;
         cargoLock.lockFile = ./Cargo.lock;
