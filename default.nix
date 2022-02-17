@@ -8,4 +8,4 @@ let
   };
   flake = import flakeCompatSrc { src = ./.; };
 in
-flake.defaultNix.defaultPackage
+  flake.defaultNix.defaultPackage

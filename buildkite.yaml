@@ -24,15 +24,15 @@ steps:
       - alejandra-x86_64-unknown-linux-musl
     command:
       - echo +++
-      - nix build .#aarch64-unknown-linux-musl
+      - nix build .#alejandra-aarch64-unknown-linux-musl
       - cachix push alejandra result
       - cp -L result/bin/alejandra alejandra-aarch64-unknown-linux-musl
 
-      - nix build .#x86_64-unknown-linux-gnu
+      - nix build .#alejandra-x86_64-unknown-linux-gnu
       - cachix push alejandra result
       - cp -L result/bin/alejandra alejandra-x86_64-unknown-linux-gnu
 
-      - nix build .#x86_64-unknown-linux-musl
+      - nix build .#alejandra-x86_64-unknown-linux-musl
       - cachix push alejandra result
       - cp -L result/bin/alejandra alejandra-x86_64-unknown-linux-musl
 
@@ -107,7 +107,7 @@ steps:
     artifacts:
       - alejandra.vsix
     command:
-      - nix build --out-link alejandra.vsix .#integrations-vscode
+      - nix build --out-link alejandra.vsix .#alejandra-vscode-vsix
 
   - label: flake check
     command:
