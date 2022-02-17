@@ -127,7 +127,9 @@ pub fn rule(
             steps.push_back(crate::builder::Step::Pad);
         }
         crate::config::Layout::Wide => {
-            steps.push_back(crate::builder::Step::Whitespace);
+            if items_count > 0 {
+                steps.push_back(crate::builder::Step::Whitespace);
+            }
         }
     }
     steps.push_back(crate::builder::Step::Format(child.element));

@@ -153,8 +153,9 @@ pub fn rule(
     // }
     let child = children.get_next().unwrap();
     steps.push_back(crate::builder::Step::Dedent);
-    if !has_comments_between_curly_b && items_count <= 1 {
+    if !has_comments_between_curly_b && items_count == 1 {
         steps.push_back(crate::builder::Step::Whitespace);
+    } else if !has_comments_between_curly_b && items_count == 0 {
     } else {
         if let rnix::SyntaxKind::NODE_PAT_ENTRY = last_kind {
             steps.push_back(crate::builder::Step::Token(
