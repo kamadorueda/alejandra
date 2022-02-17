@@ -1,5 +1,5 @@
 pub fn parse(args: Vec<String>) -> clap::ArgMatches {
-    clap::App::new("Alejandra")
+    clap::Command::new("Alejandra")
         .about("The Uncompromising Nix Code Formatter.")
         .version(clap::crate_version!())
         .arg(
