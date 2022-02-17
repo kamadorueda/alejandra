@@ -38,19 +38,27 @@ pub fn rule(
     }
 
     let mut item_index: usize = 0;
+    let mut inline_next_comment = false;
 
     loop {
         // /**/
         children.drain_comments_and_newlines(|element| match element {
             crate::children::DrainCommentOrNewline::Comment(text) => {
-                steps.push_back(crate::builder::Step::NewLine);
-                steps.push_back(crate::builder::Step::Pad);
+                if inline_next_comment && text.starts_with("#") {
+                    steps.push_back(crate::builder::Step::Whitespace);
+                } else {
+                    steps.push_back(crate::builder::Step::NewLine);
+                    steps.push_back(crate::builder::Step::Pad);
+                }
                 steps.push_back(crate::builder::Step::Comment(text));
+                inline_next_comment = false;
             }
             crate::children::DrainCommentOrNewline::Newline(newlines) => {
                 if newlines > 1 && item_index > 0 && item_index < items_count {
                     steps.push_back(crate::builder::Step::NewLine);
                 }
+
+                inline_next_comment = newlines == 0;
             }
         });
 
@@ -77,6 +85,7 @@ pub fn rule(
             }
 
             children.move_next();
+            inline_next_comment = true;
         }
     }
 
