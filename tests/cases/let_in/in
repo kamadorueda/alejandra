@@ -25,6 +25,11 @@ let
   a = let /*b*/ c=1; /*d*/ in /*e*/ f;
   /**/
 
+  a = let
+  in [
+    1
+    2
+  ];
 
 in
 
