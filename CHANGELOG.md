@@ -52,6 +52,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 [unreleased]: https://github.com/kamadorueda/alejandra/compare/0.2.0...HEAD
-[0.1.0]: https://github.com/kamadorueda/alejandra/compare/0.1.0...0.2.0
+[0.2.0]: https://github.com/kamadorueda/alejandra/compare/0.1.0...0.2.0
 [0.1.0]: https://github.com/kamadorueda/alejandra/compare/0.0.0...0.1.0
 [0.0.0]: https://github.com/kamadorueda/alejandra/compare/6adfbe8516bf6d9e896534e01118e1bc41f65425...0.0.0
