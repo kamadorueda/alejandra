@@ -141,9 +141,11 @@ pub fn rule(
                     ));
 
                     if index + 1 != portions.len() {
+                        steps.push_back(crate::builder::Step::Indent);
                         steps.push_back(crate::builder::Step::FormatWider(
                             interpolations.next().unwrap().clone(),
                         ));
+                        steps.push_back(crate::builder::Step::Dedent);
                     }
                 }
             }
