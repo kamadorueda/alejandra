@@ -8,7 +8,10 @@ pub fn rule(
         build_ctx, node, true,
     );
 
-    let layout = if children.has_comments() || children.has_newlines() {
+    let has_comments_or_newlines =
+        children.has_comments() || children.has_newlines();
+
+    let layout = if has_comments_or_newlines {
         &crate::config::Layout::Tall
     } else {
         build_ctx.config.layout()
@@ -19,7 +22,9 @@ pub fn rule(
     steps.push_back(crate::builder::Step::Format(child.element));
     match layout {
         crate::config::Layout::Tall => {
-            steps.push_back(crate::builder::Step::Indent);
+            if has_comments_or_newlines {
+                steps.push_back(crate::builder::Step::Indent);
+            }
         }
         crate::config::Layout::Wide => {}
     }
@@ -38,8 +43,10 @@ pub fn rule(
     let child = children.get_next().unwrap();
     match layout {
         crate::config::Layout::Tall => {
-            steps.push_back(crate::builder::Step::NewLine);
-            steps.push_back(crate::builder::Step::Pad);
+            if has_comments_or_newlines {
+                steps.push_back(crate::builder::Step::NewLine);
+                steps.push_back(crate::builder::Step::Pad);
+            }
             steps.push_back(crate::builder::Step::FormatWider(child.element));
         }
         crate::config::Layout::Wide => {
@@ -61,9 +68,11 @@ pub fn rule(
     let child = children.get_next().unwrap();
     match layout {
         crate::config::Layout::Tall => {
-            steps.push_back(crate::builder::Step::Dedent);
-            steps.push_back(crate::builder::Step::NewLine);
-            steps.push_back(crate::builder::Step::Pad);
+            if has_comments_or_newlines {
+                steps.push_back(crate::builder::Step::Dedent);
+                steps.push_back(crate::builder::Step::NewLine);
+                steps.push_back(crate::builder::Step::Pad);
+            }
         }
         crate::config::Layout::Wide => {}
     }
