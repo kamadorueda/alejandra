@@ -41,4 +41,17 @@
  /* test
   * test
   */
+
+  [
+    a   # comment
+  ]
+
+  {
+    a = 123;   # comment
+  }
+
+  ({
+    a,    # comment
+    b ? 2,# comment
+  }: _)
 ]
