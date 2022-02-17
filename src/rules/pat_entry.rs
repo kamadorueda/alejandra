@@ -19,7 +19,6 @@ pub fn rule(
     match layout {
         crate::config::Layout::Tall => {
             steps.push_back(crate::builder::Step::FormatWider(child.element));
-            steps.push_back(crate::builder::Step::Indent);
         }
         crate::config::Layout::Wide => {
             steps.push_back(crate::builder::Step::Format(child.element));
@@ -28,19 +27,18 @@ pub fn rule(
 
     if children.has_next() {
         // /**/
+        let mut comment = false;
         children.drain_comments_and_newlines(|element| match element {
             crate::children::DrainCommentOrNewline::Comment(text) => {
                 steps.push_back(crate::builder::Step::NewLine);
                 steps.push_back(crate::builder::Step::Pad);
                 steps.push_back(crate::builder::Step::Comment(text));
+                comment = true;
             }
             crate::children::DrainCommentOrNewline::Newline(_) => {}
         });
 
-        if let rnix::SyntaxKind::TOKEN_COMMENT
-        | rnix::SyntaxKind::TOKEN_WHITESPACE =
-            children.peek_prev().unwrap().element.kind()
-        {
+        if comment {
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
         } else {
@@ -52,37 +50,48 @@ pub fn rule(
         steps.push_back(crate::builder::Step::Format(child.element));
 
         // /**/
+        let mut comment = false;
         children.drain_comments_and_newlines(|element| match element {
             crate::children::DrainCommentOrNewline::Comment(text) => {
                 steps.push_back(crate::builder::Step::NewLine);
                 steps.push_back(crate::builder::Step::Pad);
                 steps.push_back(crate::builder::Step::Comment(text));
+                comment = true;
             }
             crate::children::DrainCommentOrNewline::Newline(_) => {}
         });
 
-        if let rnix::SyntaxKind::TOKEN_COMMENT
-        | rnix::SyntaxKind::TOKEN_WHITESPACE =
-            children.peek_prev().unwrap().element.kind()
-        {
-            steps.push_back(crate::builder::Step::NewLine);
-            steps.push_back(crate::builder::Step::Pad);
-        } else {
-            steps.push_back(crate::builder::Step::Whitespace);
-        }
-
         // expr
         let child = children.get_next().unwrap();
+        let single_line = crate::builder::fits_in_single_line(
+            build_ctx,
+            child.element.clone(),
+        );
+
+        if single_line {
+            if comment {
+                steps.push_back(crate::builder::Step::NewLine);
+                steps.push_back(crate::builder::Step::Pad);
+            } else {
+                steps.push_back(crate::builder::Step::Whitespace);
+            }
+        } else {
+            steps.push_back(crate::builder::Step::Indent);
+            steps.push_back(crate::builder::Step::NewLine);
+            steps.push_back(crate::builder::Step::Pad);
+        }
         match layout {
             crate::config::Layout::Tall => {
                 steps.push_back(crate::builder::Step::FormatWider(
                     child.element,
                 ));
-                steps.push_back(crate::builder::Step::Dedent);
             }
             crate::config::Layout::Wide => {
                 steps.push_back(crate::builder::Step::Format(child.element));
             }
+        }
+        if !single_line {
+            steps.push_back(crate::builder::Step::Dedent);
         }
     }
 
