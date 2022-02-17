@@ -69,7 +69,9 @@ pub fn rule(
                     ));
                 }
                 crate::config::Layout::Wide => {
-                    steps.push_back(crate::builder::Step::Whitespace);
+                    if item_index > 1 {
+                        steps.push_back(crate::builder::Step::Whitespace);
+                    }
                     steps
                         .push_back(crate::builder::Step::Format(child.element));
                 }
@@ -87,9 +89,7 @@ pub fn rule(
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
         }
-        crate::config::Layout::Wide => {
-            steps.push_back(crate::builder::Step::Whitespace);
-        }
+        crate::config::Layout::Wide => {}
     }
     steps.push_back(crate::builder::Step::Format(child.element));
 
