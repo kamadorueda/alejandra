@@ -17,7 +17,7 @@ impl Position {
             self.column = 0
         }
         self.column += match chars.iter().rposition(|c| *c == '\n') {
-            Some(pos) => chars.len() - pos,
+            Some(pos) => chars.len() - pos - 1,
             None => chars.len(),
         };
     }

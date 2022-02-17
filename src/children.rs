@@ -225,7 +225,7 @@ fn dedent_comment(pos: &crate::position::Position, text: &str) -> String {
             lines[0] = "".to_string();
         } else {
             lines.insert(0, format!("{0:<1$}", "", pos.column + 1));
-            lines[1] = format!("{0:<1$}{2}", "", pos.column + 1, lines[1]);
+            lines[1] = format!("{0:<1$}{2}", "", pos.column + 2, lines[1]);
         }
 
         // println!("{:?}", lines);
