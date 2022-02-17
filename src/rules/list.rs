@@ -44,8 +44,11 @@ pub fn rule(
                     steps.push_back(crate::builder::Step::Comment(text));
                     item_index += 1;
                 }
-                crate::children::DrainCommentOrNewline::Newline(_) => {
-                    if item_index > 0 && item_index < items_count {
+                crate::children::DrainCommentOrNewline::Newline(newlines) => {
+                    if newlines > 1
+                        && item_index > 0
+                        && item_index < items_count
+                    {
                         steps.push_back(crate::builder::Step::NewLine);
                     }
                 }
