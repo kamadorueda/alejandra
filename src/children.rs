@@ -189,9 +189,7 @@ impl Children {
                         .filter(|c| *c == '\n')
                         .count();
 
-                    if count > 1 {
-                        callback(DrainCommentOrNewline::Newline(count));
-                    }
+                    callback(DrainCommentOrNewline::Newline(count));
                     self.move_next();
                 }
                 _ => {
