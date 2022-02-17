@@ -1,5 +1,5 @@
 [dependencies]
-clap = "*"
+clap = { version = "*", features = ["cargo"] }
 indoc = "*"
 rand = "*"
 rayon = "*"
