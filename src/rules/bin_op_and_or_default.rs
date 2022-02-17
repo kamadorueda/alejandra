@@ -2,6 +2,14 @@ pub fn rule(
     build_ctx: &crate::builder::BuildCtx,
     node: &rnix::SyntaxNode,
 ) -> std::collections::LinkedList<crate::builder::Step> {
+    rule_with_configuration(build_ctx, node, "bin_op_and_or_default")
+}
+
+pub fn rule_with_configuration(
+    build_ctx: &crate::builder::BuildCtx,
+    node: &rnix::SyntaxNode,
+    parent_kind: &str,
+) -> std::collections::LinkedList<crate::builder::Step> {
     let mut steps = std::collections::LinkedList::new();
 
     let mut children = crate::children::Children::new_with_configuration(
@@ -18,17 +26,24 @@ pub fn rule(
     let child = children.get_next().unwrap();
     match layout {
         crate::config::Layout::Tall => {
-            match child.element.kind() {
-                rnix::SyntaxKind::NODE_BIN_OP
-                | rnix::SyntaxKind::NODE_OR_DEFAULT => {
-                    steps
-                        .push_back(crate::builder::Step::Format(child.element));
-                }
-                _ => {
-                    steps.push_back(crate::builder::Step::FormatWider(
-                        child.element,
-                    ));
-                }
+            let kind = child.element.kind();
+
+            if parent_kind == "bin_op_and_or_default"
+                && matches!(
+                    kind,
+                    rnix::SyntaxKind::NODE_BIN_OP
+                        | rnix::SyntaxKind::NODE_OR_DEFAULT
+                )
+            {
+                steps.push_back(crate::builder::Step::Format(child.element));
+            } else if parent_kind == "select"
+                && matches!(kind, rnix::SyntaxKind::NODE_SELECT)
+            {
+                steps.push_back(crate::builder::Step::Format(child.element));
+            } else {
+                steps.push_back(crate::builder::Step::FormatWider(
+                    child.element,
+                ));
             }
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
@@ -53,7 +68,9 @@ pub fn rule(
     match layout {
         crate::config::Layout::Tall => {}
         crate::config::Layout::Wide => {
-            steps.push_back(crate::builder::Step::Whitespace);
+            if parent_kind == "bin_op_and_or_default" {
+                steps.push_back(crate::builder::Step::Whitespace);
+            }
         }
     }
     steps.push_back(crate::builder::Step::Format(child.element));
@@ -73,7 +90,7 @@ pub fn rule(
     if comment {
         steps.push_back(crate::builder::Step::NewLine);
         steps.push_back(crate::builder::Step::Pad);
-    } else {
+    } else if parent_kind == "bin_op_and_or_default" {
         steps.push_back(crate::builder::Step::Whitespace);
     }
 
