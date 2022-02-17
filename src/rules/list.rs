@@ -33,16 +33,23 @@ pub fn rule(
     }
 
     let mut item_index: usize = 0;
+    let mut inline_next_comment = false;
 
     loop {
         // /**/
         children.drain_comments_and_newlines(|element| {
             match element {
                 crate::children::DrainCommentOrNewline::Comment(text) => {
-                    steps.push_back(crate::builder::Step::NewLine);
-                    steps.push_back(crate::builder::Step::Pad);
+                    if inline_next_comment && text.starts_with("#") {
+                        steps.push_back(crate::builder::Step::Whitespace);
+                    } else {
+                        steps.push_back(crate::builder::Step::NewLine);
+                        steps.push_back(crate::builder::Step::Pad);
+                    }
+
                     steps.push_back(crate::builder::Step::Comment(text));
                     item_index += 1;
+                    inline_next_comment = false;
                 }
                 crate::children::DrainCommentOrNewline::Newline(newlines) => {
                     if newlines > 1
@@ -51,13 +58,16 @@ pub fn rule(
                     {
                         steps.push_back(crate::builder::Step::NewLine);
                     }
+
+                    inline_next_comment = newlines == 0;
                 }
             };
         });
 
         if let Some(child) = children.peek_next() {
-            if let rnix::SyntaxKind::TOKEN_SQUARE_B_CLOSE = child.element.kind()
-            {
+            let child_kind = child.element.kind();
+
+            if let rnix::SyntaxKind::TOKEN_SQUARE_B_CLOSE = child_kind {
                 break;
             }
 
@@ -81,6 +91,7 @@ pub fn rule(
             }
 
             children.move_next();
+            inline_next_comment = true;
         }
     }
 
