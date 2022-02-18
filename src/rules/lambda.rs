@@ -83,7 +83,7 @@ pub fn rule(
                         | rnix::SyntaxKind::NODE_LET_IN
                         | rnix::SyntaxKind::NODE_LIST
                         | rnix::SyntaxKind::NODE_STRING
-                );
+                ) && build_ctx.pos_new.column > 1;
 
                 if should_indent {
                     steps.push_back(crate::builder::Step::Indent);
