@@ -7,7 +7,15 @@ options = ["run", "--"]
 
 [formatter.prettier]
 command = "prettier"
-includes = ["*.html", "*.js", "*.json", "*.md", "*.toml", "*.yaml"]
+includes = [
+  "*.html",
+  "*.js",
+  "*.json",
+  "*.md",
+  "*.toml",
+  "*.yaml",
+  "Cargo.lock",
+]
 options = ["--plugin", "prettier-plugin-toml", "--write"]
 
 [formatter.rust]
