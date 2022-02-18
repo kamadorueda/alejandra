@@ -28,6 +28,15 @@ pub fn rule(
         })
         .count();
 
+    let max_items = if node
+        .children_with_tokens()
+        .any(|element| element.kind() == rnix::SyntaxKind::TOKEN_ELLIPSIS)
+    {
+        2
+    } else {
+        1
+    };
+
     let layout = if has_comments || children.has_newlines() {
         &crate::config::Layout::Tall
     } else {
@@ -103,19 +112,22 @@ pub fn rule(
             rnix::SyntaxKind::TOKEN_ELLIPSIS
             | rnix::SyntaxKind::NODE_PAT_ENTRY => {
                 if let rnix::SyntaxKind::TOKEN_CURLY_B_OPEN = last_kind {
-                    if items_count > 1 {
+                    if has_comments_between_curly_b || items_count > max_items {
                         steps.push_back(crate::builder::Step::NewLine);
                         steps.push_back(crate::builder::Step::Pad);
-                    } else {
-                        steps.push_back(crate::builder::Step::Whitespace);
                     }
                 }
 
                 if let rnix::SyntaxKind::TOKEN_COMMA
                 | rnix::SyntaxKind::TOKEN_COMMENT = last_kind
                 {
-                    steps.push_back(crate::builder::Step::NewLine);
-                    steps.push_back(crate::builder::Step::Pad);
+                    if !has_comments_between_curly_b && items_count <= max_items
+                    {
+                        steps.push_back(crate::builder::Step::Whitespace);
+                    } else {
+                        steps.push_back(crate::builder::Step::NewLine);
+                        steps.push_back(crate::builder::Step::Pad);
+                    }
                 }
 
                 match layout {
@@ -135,9 +147,7 @@ pub fn rule(
             }
             // ,
             rnix::SyntaxKind::TOKEN_COMMA => {
-                if let rnix::SyntaxKind::TOKEN_COMMA
-                | rnix::SyntaxKind::TOKEN_COMMENT = last_kind
-                {
+                if let rnix::SyntaxKind::TOKEN_COMMENT = last_kind {
                     steps.push_back(crate::builder::Step::NewLine);
                     steps.push_back(crate::builder::Step::Pad);
                 }
@@ -158,10 +168,7 @@ pub fn rule(
     // }
     let child = children.get_next().unwrap();
     steps.push_back(crate::builder::Step::Dedent);
-    if !has_comments_between_curly_b && items_count == 1 {
-        steps.push_back(crate::builder::Step::Whitespace);
-    } else if !has_comments_between_curly_b && items_count == 0 {
-    } else {
+    if has_comments_between_curly_b || items_count > max_items {
         if let rnix::SyntaxKind::NODE_PAT_ENTRY = last_kind {
             steps.push_back(crate::builder::Step::Token(
                 rnix::SyntaxKind::TOKEN_COMMA,
