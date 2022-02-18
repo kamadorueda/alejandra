@@ -1,4 +1,9 @@
 [
+  (a@{
+    self,
+    gomod2nix,
+    mach-nix,
+  }: _)
   ({
     self,
     gomod2nix,
