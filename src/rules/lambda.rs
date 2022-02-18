@@ -16,8 +16,6 @@ pub fn rule(
 
     // a
     let child = children.get_next().unwrap();
-    let is_pattern_type =
-        child.element.kind() == rnix::SyntaxKind::NODE_PATTERN;
     match layout {
         crate::config::Layout::Tall => {
             steps.push_back(crate::builder::Step::FormatWider(child.element));
