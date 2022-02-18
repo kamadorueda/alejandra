@@ -4,7 +4,7 @@
   /*
    b
    */
-  c)
+    c)
   (assert
   /*
    a
@@ -18,7 +18,7 @@
   /*
    b
    */
-  c)
+    c)
   (assert b; cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc)
   (assert b; cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc)
 ]

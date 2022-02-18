@@ -72,6 +72,12 @@ Types of changes
   +    value,
   +  }:
   ```
+- `with` expressions now indent the new scope and follow the equal sign:
+  ```diff
+  -    binPath =
+  -      with pkgs;
+  +    binPath = with pkgs;
+  ```
 
 ## [0.2.0] - 2022-02-17
 
