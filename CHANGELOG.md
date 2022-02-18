@@ -78,6 +78,18 @@ Types of changes
   -      with pkgs;
   +    binPath = with pkgs;
   ```
+- Nested lambdas are now not indented:
+
+  ```diff
+    # comment
+    a:
+  -   # comment
+  -   b:
+  -     _
+  + # comment
+  + b:
+  +   _
+  ```
 
 ## [0.2.0] - 2022-02-17
 

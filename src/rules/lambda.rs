@@ -79,10 +79,11 @@ pub fn rule(
                     child.element.kind(),
                     rnix::SyntaxKind::NODE_ATTR_SET
                         | rnix::SyntaxKind::NODE_PAREN
+                        | rnix::SyntaxKind::NODE_LAMBDA
                         | rnix::SyntaxKind::NODE_LET_IN
                         | rnix::SyntaxKind::NODE_LIST
                         | rnix::SyntaxKind::NODE_STRING
-                ) && build_ctx.pos_new.column > 1;
+                );
 
                 if should_indent {
                     steps.push_back(crate::builder::Step::Indent);
