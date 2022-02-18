@@ -11,7 +11,7 @@
   outputs = inputs: let
     commit = inputs.self.shortRev or "dirty";
     date = inputs.self.lastModifiedDate or inputs.self.lastModified or "19700101";
-    version = "0.2.0+${builtins.substring 0 8 date}.${commit}";
+    version = "0.3.0+${builtins.substring 0 8 date}.${commit}";
 
     nixpkgsForHost = host:
       import inputs.nixpkgs {
@@ -57,8 +57,7 @@
     defaultPackage."x86_64-darwin" = packages."x86_64-darwin"."alejandra-x86_64-apple-darwin";
     defaultPackage."x86_64-linux" = packages."x86_64-linux"."alejandra-x86_64-unknown-linux-gnu";
 
-    devShell."x86_64-linux" =
-      with nixpkgs."x86_64-linux";
+    devShell."x86_64-linux" = with nixpkgs."x86_64-linux";
       mkShell {
         name = "alejandra";
         packages = [

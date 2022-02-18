@@ -30,6 +30,7 @@
       ];
       shellHook = ''
         export LD_LIBRARY_PATH=${nixpkgs.gcc.cc.lib}/lib:$LD_LIBRARY_PATH
+        export LD_LIBRARY_PATH=${nixpkgs.zlib}/lib:$LD_LIBRARY_PATH
       '';
     };
   };
