@@ -24,7 +24,8 @@
   { a = with b;with b;with b;
       1;
       }
-    {binPath = with pkgs;
+    {binPath =
+    with pkgs;
     makeBinPath (
        [
          rsync

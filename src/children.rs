@@ -37,11 +37,7 @@ impl Children {
                     match token.kind() {
                         rnix::SyntaxKind::TOKEN_WHITESPACE => {
                             if with_newlines
-                                && token
-                                    .text()
-                                    .chars()
-                                    .filter(|c| *c == '\n')
-                                    .count()
+                                && crate::utils::count_newlines(token.text())
                                     > 0
                             {
                                 children.push(Child {
@@ -122,14 +118,9 @@ impl Children {
     pub fn has_newlines(&self) -> bool {
         self.children.iter().any(|child| {
             child.element.kind() == rnix::SyntaxKind::TOKEN_WHITESPACE
-                && child
-                    .element
-                    .clone()
-                    .into_token()
-                    .unwrap()
-                    .text()
-                    .chars()
-                    .any(|c| c == '\n')
+                && crate::utils::has_newlines(
+                    child.element.clone().into_token().unwrap().text(),
+                )
         })
     }
 
@@ -179,17 +170,11 @@ impl Children {
                     self.move_next();
                 }
                 rnix::SyntaxKind::TOKEN_WHITESPACE => {
-                    let count = child
-                        .element
-                        .clone()
-                        .into_token()
-                        .unwrap()
-                        .text()
-                        .chars()
-                        .filter(|c| *c == '\n')
-                        .count();
+                    let newlines_count = crate::utils::count_newlines(
+                        child.element.clone().into_token().unwrap().text(),
+                    );
 
-                    callback(DrainCommentOrNewline::Newline(count));
+                    callback(DrainCommentOrNewline::Newline(newlines_count));
                     self.move_next();
                 }
                 _ => {

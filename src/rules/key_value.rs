@@ -43,77 +43,62 @@ pub fn rule(
         steps.push_back(crate::builder::Step::Whitespace);
     }
 
+    // peek: =
+    let child_equal = children.get_next().unwrap();
+
+    // peek: /**/
+    let mut comments_before = std::collections::LinkedList::new();
+    let mut newlines = false;
+    children.drain_comments_and_newlines(|element| match element {
+        crate::children::DrainCommentOrNewline::Comment(text) => {
+            comments_before.push_back(crate::builder::Step::Comment(text))
+        }
+        crate::children::DrainCommentOrNewline::Newline(newlines_count) => {
+            if newlines_count > 0 {
+                newlines = true;
+            }
+        }
+    });
+
+    // peek: expr
+    let child_expr = children.get_next().unwrap();
+
+    // peek: /**/
+    let mut comments_after = std::collections::LinkedList::new();
+    children.drain_comments_and_newlines(|element| match element {
+        crate::children::DrainCommentOrNewline::Comment(text) => {
+            comments_after.push_back(crate::builder::Step::Comment(text))
+        }
+        crate::children::DrainCommentOrNewline::Newline(_) => {}
+    });
+
     // =
     let mut dedent = false;
-    let child = children.get_next().unwrap();
-    steps.push_back(crate::builder::Step::Format(child.element));
+    steps.push_back(crate::builder::Step::Format(child_equal.element));
+
     match layout {
         crate::config::Layout::Tall => {
-            let next = children.peek_next().unwrap();
-            let next_kind = next.element.kind();
-
-            if false
+            if !comments_before.is_empty() || !comments_after.is_empty() {
+                dedent = true;
+                steps.push_back(crate::builder::Step::Indent);
+                steps.push_back(crate::builder::Step::NewLine);
+                steps.push_back(crate::builder::Step::Pad);
+            } else if false
                 || matches!(
-                    next_kind,
+                    child_expr.element.kind(),
                     rnix::SyntaxKind::NODE_ATTR_SET
                         | rnix::SyntaxKind::NODE_PAREN
+                        | rnix::SyntaxKind::NODE_LAMBDA
                         | rnix::SyntaxKind::NODE_LET_IN
                         | rnix::SyntaxKind::NODE_LIST
                         | rnix::SyntaxKind::NODE_STRING
                 )
-                || (matches!(next_kind, rnix::SyntaxKind::NODE_APPLY)
-                    && matches!(
-                        next.element
-                            .clone()
-                            .into_node()
-                            .unwrap()
-                            .children()
-                            .collect::<Vec<rnix::SyntaxNode>>()
-                            .iter()
-                            .rev()
-                            .next()
-                            .unwrap()
-                            .kind(),
-                        rnix::SyntaxKind::NODE_ATTR_SET
-                            | rnix::SyntaxKind::NODE_PAREN
-                            | rnix::SyntaxKind::NODE_LIST
-                            | rnix::SyntaxKind::NODE_STRING
-                    ))
-                || (matches!(next_kind, rnix::SyntaxKind::NODE_LAMBDA)
-                    && !matches!(
-                        next.element
-                            .clone()
-                            .into_node()
-                            .unwrap()
-                            .children()
-                            .next()
-                            .unwrap()
-                            .kind(),
-                        rnix::SyntaxKind::NODE_PATTERN
-                    ))
                 || (matches!(
-                    next_kind,
-                    rnix::SyntaxKind::NODE_ASSERT | rnix::SyntaxKind::NODE_WITH
-                ) && matches!(
-                    next.element
-                        .clone()
-                        .into_node()
-                        .unwrap()
-                        .children()
-                        .collect::<Vec<rnix::SyntaxNode>>()
-                        .iter()
-                        .rev()
-                        .next()
-                        .unwrap()
-                        .kind(),
-                    rnix::SyntaxKind::NODE_ATTR_SET
-                        | rnix::SyntaxKind::NODE_IDENT
-                        | rnix::SyntaxKind::NODE_PAREN
-                        | rnix::SyntaxKind::NODE_LET_IN
-                        | rnix::SyntaxKind::NODE_LIST
-                        | rnix::SyntaxKind::NODE_LITERAL
-                        | rnix::SyntaxKind::NODE_STRING
-                ))
+                    child_expr.element.kind(),
+                    rnix::SyntaxKind::NODE_ASSERT
+                        | rnix::SyntaxKind::NODE_APPLY
+                        | rnix::SyntaxKind::NODE_WITH
+                ) && !newlines)
             {
                 steps.push_back(crate::builder::Step::Whitespace);
             } else {
@@ -129,38 +114,31 @@ pub fn rule(
     }
 
     // /**/
-    children.drain_comments_and_newlines(|element| match element {
-        crate::children::DrainCommentOrNewline::Comment(text) => {
-            steps.push_back(crate::builder::Step::Comment(text));
-            steps.push_back(crate::builder::Step::NewLine);
-            steps.push_back(crate::builder::Step::Pad);
-        }
-        crate::children::DrainCommentOrNewline::Newline(_) => {}
-    });
+    for comment in comments_before {
+        steps.push_back(comment);
+        steps.push_back(crate::builder::Step::NewLine);
+        steps.push_back(crate::builder::Step::Pad);
+    }
 
-    // b
-    let child = children.get_next().unwrap();
+    // expr
     match layout {
         crate::config::Layout::Tall => {
-            steps.push_back(crate::builder::Step::FormatWider(child.element));
+            steps.push_back(crate::builder::Step::FormatWider(
+                child_expr.element,
+            ));
+            if !comments_after.is_empty() {
+                steps.push_back(crate::builder::Step::NewLine);
+                steps.push_back(crate::builder::Step::Pad);
+            }
         }
         crate::config::Layout::Wide => {
-            steps.push_back(crate::builder::Step::Format(child.element));
+            steps.push_back(crate::builder::Step::Format(child_expr.element));
         }
     }
 
     // /**/
-    let mut comment = false;
-    children.drain_comments_and_newlines(|element| match element {
-        crate::children::DrainCommentOrNewline::Comment(text) => {
-            comment = true;
-            steps.push_back(crate::builder::Step::NewLine);
-            steps.push_back(crate::builder::Step::Pad);
-            steps.push_back(crate::builder::Step::Comment(text));
-        }
-        crate::children::DrainCommentOrNewline::Newline(_) => {}
-    });
-    if comment {
+    for comment in comments_after {
+        steps.push_back(comment);
         steps.push_back(crate::builder::Step::NewLine);
         steps.push_back(crate::builder::Step::Pad);
     }

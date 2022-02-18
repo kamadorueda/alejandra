@@ -26,7 +26,7 @@
                 cargoLock.lockFile = ./Cargo.lock;
 
                 passthru.tests = {
-                  version = nixpkgs.testVersion { package = super.alejandra; };
+                  version = nixpkgs.testVersion {package = super.alejandra;};
                 };
 
                 meta = {
