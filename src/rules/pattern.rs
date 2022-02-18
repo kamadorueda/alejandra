@@ -174,11 +174,13 @@ pub fn rule(
     steps.push_back(crate::builder::Step::Format(child.element));
 
     // /**/
+    let mut comment = false;
     children.drain_comments_and_newlines(|element| match element {
         crate::children::DrainCommentOrNewline::Comment(text) => {
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
             steps.push_back(crate::builder::Step::Comment(text));
+            comment = true;
         }
         crate::children::DrainCommentOrNewline::Newline(_) => {}
     });
@@ -186,11 +188,11 @@ pub fn rule(
     // @ x
     if let Some(child) = children.peek_next() {
         if let rnix::SyntaxKind::NODE_PAT_BIND = child.element.kind() {
-            if !has_comments && items_count <= 1 {
-                steps.push_back(crate::builder::Step::Whitespace);
-            } else {
+            if comment {
                 steps.push_back(crate::builder::Step::NewLine);
                 steps.push_back(crate::builder::Step::Pad);
+            } else {
+                steps.push_back(crate::builder::Step::Whitespace);
             }
             match layout {
                 crate::config::Layout::Tall => {
