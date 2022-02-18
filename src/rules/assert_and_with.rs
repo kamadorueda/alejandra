@@ -68,11 +68,18 @@ pub fn rule(
     let child = children.get_next().unwrap();
     match layout {
         crate::config::Layout::Tall => {
-            if comment
-                || matches!(
+            if {
+                matches!(
                     child.element.kind(),
                     rnix::SyntaxKind::NODE_ASSERT | rnix::SyntaxKind::NODE_WITH
                 )
+            } {
+                steps.push_back(crate::builder::Step::NewLine);
+                steps.push_back(crate::builder::Step::Pad);
+                steps.push_back(crate::builder::Step::FormatWider(
+                    child.element,
+                ));
+            } else if comment
                 || !matches!(
                     child.element.kind(),
                     rnix::SyntaxKind::NODE_ATTR_SET
@@ -84,11 +91,13 @@ pub fn rule(
                         | rnix::SyntaxKind::NODE_STRING
                 )
             {
+                steps.push_back(crate::builder::Step::Indent);
                 steps.push_back(crate::builder::Step::NewLine);
                 steps.push_back(crate::builder::Step::Pad);
                 steps.push_back(crate::builder::Step::FormatWider(
                     child.element,
                 ));
+                steps.push_back(crate::builder::Step::Dedent);
             } else {
                 steps.push_back(crate::builder::Step::Whitespace);
                 steps.push_back(crate::builder::Step::FormatWider(
