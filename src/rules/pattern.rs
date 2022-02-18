@@ -35,8 +35,10 @@ pub fn rule(
     };
 
     // x @
+    let mut at = false;
     let child = children.peek_next().unwrap();
     if let rnix::SyntaxKind::NODE_PAT_BIND = child.element.kind() {
+        at = true;
         match layout {
             crate::config::Layout::Tall => {
                 steps.push_back(crate::builder::Step::FormatWider(
@@ -47,24 +49,27 @@ pub fn rule(
                 steps.push_back(crate::builder::Step::Format(child.element));
             }
         }
-        if !has_comments && items_count <= 1 {
-            steps.push_back(crate::builder::Step::Whitespace);
-        } else {
-            steps.push_back(crate::builder::Step::NewLine);
-            steps.push_back(crate::builder::Step::Pad);
-        }
         children.move_next();
     }
 
     // /**/
+    let mut comment = false;
     children.drain_comments_and_newlines(|element| match element {
         crate::children::DrainCommentOrNewline::Comment(text) => {
-            steps.push_back(crate::builder::Step::Comment(text));
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
+            steps.push_back(crate::builder::Step::Comment(text));
+            comment = true;
         }
         crate::children::DrainCommentOrNewline::Newline(_) => {}
     });
+
+    if comment {
+        steps.push_back(crate::builder::Step::NewLine);
+        steps.push_back(crate::builder::Step::Pad);
+    } else if at {
+        steps.push_back(crate::builder::Step::Whitespace);
+    }
 
     // {
     let child = children.get_next().unwrap();
