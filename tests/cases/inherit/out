@@ -7,7 +7,7 @@
       aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
       ;
   }
-  { inherit b d; }
+  {inherit b d;}
   {
     inherit
       b
