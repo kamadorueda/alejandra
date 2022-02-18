@@ -91,6 +91,18 @@ Types of changes
   +   _
   ```
 
+- Brace-like elements after a pattern entry now follow the exclamation mark:
+
+  ```diff
+  -  rootPoolProperties ?
+  -    {
+  -      autoexpand = "on";
+  -    },
+  +  rootPoolProperties ? {
+  +    autoexpand = "on";
+  +  },
+  ```
+
 ## [0.2.0] - 2022-02-17
 
 ### Added
