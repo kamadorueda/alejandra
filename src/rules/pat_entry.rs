@@ -63,23 +63,33 @@ pub fn rule(
 
         // expr
         let child = children.get_next().unwrap();
-        let single_line = crate::builder::fits_in_single_line(
+        let mut dedent = false;
+
+        if comment {
+            steps.push_back(crate::builder::Step::NewLine);
+            steps.push_back(crate::builder::Step::Pad);
+        } else if matches!(
+            child.element.kind(),
+            rnix::SyntaxKind::NODE_ATTR_SET
+                | rnix::SyntaxKind::NODE_IDENT
+                | rnix::SyntaxKind::NODE_PAREN
+                | rnix::SyntaxKind::NODE_LAMBDA
+                | rnix::SyntaxKind::NODE_LET_IN
+                | rnix::SyntaxKind::NODE_LIST
+                | rnix::SyntaxKind::NODE_LITERAL
+                | rnix::SyntaxKind::NODE_STRING,
+        ) || crate::builder::fits_in_single_line(
             build_ctx,
             child.element.clone(),
-        );
-
-        if single_line {
-            if comment {
-                steps.push_back(crate::builder::Step::NewLine);
-                steps.push_back(crate::builder::Step::Pad);
-            } else {
-                steps.push_back(crate::builder::Step::Whitespace);
-            }
+        ) {
+            steps.push_back(crate::builder::Step::Whitespace);
         } else {
+            dedent = true;
             steps.push_back(crate::builder::Step::Indent);
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
         }
+
         match layout {
             crate::config::Layout::Tall => {
                 steps.push_back(crate::builder::Step::FormatWider(
@@ -90,7 +100,7 @@ pub fn rule(
                 steps.push_back(crate::builder::Step::Format(child.element));
             }
         }
-        if !single_line {
+        if dedent {
             steps.push_back(crate::builder::Step::Dedent);
         }
     }
