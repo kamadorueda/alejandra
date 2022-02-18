@@ -65,23 +65,7 @@ pub fn rule(
     let child = children.get_next().unwrap();
     match layout {
         crate::config::Layout::Tall => {
-            if is_pattern_type
-                || comment
-                || (matches!(
-                    child.element.kind(),
-                    rnix::SyntaxKind::NODE_LAMBDA
-                ) && matches!(
-                    child
-                        .element
-                        .clone()
-                        .into_node()
-                        .unwrap()
-                        .children()
-                        .next()
-                        .unwrap()
-                        .kind(),
-                    rnix::SyntaxKind::NODE_PATTERN
-                ))
+            if comment
                 || !matches!(
                     child.element.kind(),
                     rnix::SyntaxKind::NODE_ATTR_SET

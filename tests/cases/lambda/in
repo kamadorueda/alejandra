@@ -16,4 +16,21 @@
     { }:
     a: b: c:
     a)
+
+  ({pkgs, ...}: {
+    # Stuff
+  })
+
+  ({pkgs, ...}: let
+  in pkgs)
+
+  (a: {b,
+  ...}: c: {
+    # Stuff
+  })
+
+  (a: {b, c,
+  ...}: d: {
+    # Stuff
+  })
 ]

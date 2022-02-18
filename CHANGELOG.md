@@ -60,6 +60,19 @@ Types of changes
   +  {pkgs, ...}:
   ```
 
+- Pattern matching lambdas now follow the equal sign:
+  ```diff
+  -  fnLocationRelative =
+  -    {
+  -      name,
+  -      value,
+  -    }:
+  +  fnLocationRelative = {
+  +    name,
+  +    value,
+  +  }:
+  ```
+
 ## [0.2.0] - 2022-02-17
 
 ### Added
