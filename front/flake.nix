@@ -10,7 +10,7 @@
     system = "x86_64-linux";
 
     fenix = inputs.fenix.packages.${system};
-    nixpkgs = import inputs.nixpkgs { inherit system; };
+    nixpkgs = import inputs.nixpkgs {inherit system;};
   in {
     devShell.${system} = nixpkgs.mkShell {
       name = "alejandra";
