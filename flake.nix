@@ -62,6 +62,7 @@
       mkShell {
         name = "alejandra";
         packages = [
+          cargo
           cargo-tarpaulin
           jq
           nodejs
