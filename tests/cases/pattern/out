@@ -9,8 +9,7 @@
     self,
     gomod2nix,
     mach-nix,
-  }
-  @ inp:
+  } @ inp:
     _)
   ({}: _)
   ({ a }: _)

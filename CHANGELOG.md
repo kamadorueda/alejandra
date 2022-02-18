@@ -20,6 +20,19 @@ Types of changes
 ### Changed
 
 - Let-in expressions are now indented in the top-level of a file.
+- Patterns avoid a new line after `@`:
+
+  ```nix
+  -        args @
+  -        {
+  +        args @ {
+  ```
+
+  ```nix
+  -  }
+  -  @ inp:
+  +  } @ inp:
+  ```
 
 ## [0.2.0] - 2022-02-17
 
