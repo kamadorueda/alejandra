@@ -22,16 +22,42 @@ Types of changes
 - Let-in expressions are now indented in the top-level of a file.
 - Patterns avoid a new line after `@`:
 
-  ```nix
+  ```diff
   -        args @
   -        {
   +        args @ {
   ```
 
-  ```nix
+  ```diff
   -  }
   -  @ inp:
   +  } @ inp:
+  ```
+
+- Attribute sets no longer have spaces
+  before the first element or after the last:
+
+  ```diff
+  - { b = 1; }
+  + {b = 1;}
+  ```
+
+- Pattern matching lambdas no longer have spaces
+  before the first or after the last element:
+
+  ```diff
+  - ({ ... }: _)
+  + ({...}: _)
+  ```
+
+- Ellipsis is no longer count as an element when spreading pattern matching lambdas:
+
+  ```diff
+  -  {
+  -    pkgs,
+  -    ...
+  -  }:
+  +  {pkgs, ...}:
   ```
 
 ## [0.2.0] - 2022-02-17
