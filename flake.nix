@@ -46,6 +46,7 @@
                   homepage = "https://github.com/kamadorueda/alejandra";
                   license = self.lib.licenses.unlicense;
                   maintainers = [self.lib.maintainers.kamadorueda];
+                  platforms = self.lib.systems.doubles.all;
                 };
               };
             }
