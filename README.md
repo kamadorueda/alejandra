@@ -101,13 +101,17 @@ Please visit:
 
 ### Prebuilt binaries
 
-You can download a binary for your platform
-from the
-[releases section](https://github.com/kamadorueda/alejandra/releases/),
-make it executable
+You can download a binary for your platform,
+make it executable (`$ chmod +x`)
 and have fun!
 
-Alternatively there is an automated method.
+- [aarch64-unknown-linux-musl](https://github.com/kamadorueda/alejandra/releases/download/0.3.0/alejandra-aarch64-unknown-linux-musl)
+- [armv6l-unknown-linux-musleabihf](https://github.com/kamadorueda/alejandra/releases/download/0.3.0/alejandra-armv6l-unknown-linux-musleabihf)
+- [armv7l-unknown-linux-musleabihf](https://github.com/kamadorueda/alejandra/releases/download/0.3.0/alejandra-armv7l-unknown-linux-musleabihf)
+- [i686-unknown-linux-musl](https://github.com/kamadorueda/alejandra/releases/download/0.3.0/alejandra-i686-unknown-linux-musl)
+- [x86_64-unknown-linux-musl](https://github.com/kamadorueda/alejandra/releases/download/0.3.0/alejandra-x86_64-unknown-linux-musl)
+
+Alternatively there is an automated method for some platforms.
 It needs:
 [curl](https://curl.se/),
 [sh](https://www.gnu.org/software/bash/) and
