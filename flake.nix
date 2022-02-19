@@ -133,16 +133,12 @@
           alejandra
           pkgsStatic.alejandra
 
-          pkgsCross.aarch64-multiplatform.alejandra
           pkgsCross.aarch64-multiplatform.pkgsStatic.alejandra
 
-          pkgsCross.armv7l-hf-multiplatform.alejandra
           pkgsCross.armv7l-hf-multiplatform.pkgsStatic.alejandra
 
-          pkgsCross.gnu32.alejandra
           pkgsCross.gnu32.pkgsStatic.alejandra
 
-          pkgsCross.raspberryPi.alejandra
           pkgsCross.raspberryPi.pkgsStatic.alejandra
         ]
       )
