@@ -148,10 +148,10 @@ $ /path/to/alejandra --help
   Pick one depending on your platform:
 
   ```bash
-  $ nix-env -ivA aarch64-darwin -f https://github.com/kamadorueda/alejandra/tarball/main
-  $ nix-env -ivA aarch64-linux -f https://github.com/kamadorueda/alejandra/tarball/main
-  $ nix-env -ivA x86_64-darwin -f https://github.com/kamadorueda/alejandra/tarball/main
-  $ nix-env -ivA x86_64-linux -f https://github.com/kamadorueda/alejandra/tarball/main
+  $ nix-env -ivA aarch64-darwin -f https://github.com/kamadorueda/alejandra/tarball/0.3.0
+  $ nix-env -ivA aarch64-linux -f https://github.com/kamadorueda/alejandra/tarball/0.3.0
+  $ nix-env -ivA x86_64-darwin -f https://github.com/kamadorueda/alejandra/tarball/0.3.0
+  $ nix-env -ivA x86_64-linux -f https://github.com/kamadorueda/alejandra/tarball/0.3.0
   ```
 
 Then run Alejandra with:
