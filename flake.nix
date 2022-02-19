@@ -70,6 +70,8 @@
         name = "alejandra";
         packages = [
           cargo
+          cargo-bloat
+          cargo-license
           cargo-tarpaulin
           jq
           nodejs
@@ -97,19 +99,37 @@
       "alejandra-x86_64-apple-darwin" = alejandra;
     };
     packages."x86_64-linux" = with nixpkgs."x86_64-linux"; let
-      binaries = with pkgsCross; {
-        "alejandra-aarch64-unknown-linux-gnu" = aarch64-multiplatform.alejandra;
-        "alejandra-aarch64-unknown-linux-musl" = aarch64-multiplatform-musl.alejandra;
-        "alejandra-armv6l-unknown-linux-musleabihf" = muslpi.alejandra;
-        "alejandra-armv6l-unknown-linux-gnueabihf" = raspberryPi.alejandra;
-        "alejandra-armv7l-unknown-linux-gnueabihf" = armv7l-hf-multiplatform.alejandra;
-        "alejandra-i686-unknown-linux-gnu" = gnu32.alejandra;
-        "alejandra-i686-unknown-linux-musl" = musl32.alejandra;
-        # "alejandra-mipsel-unknown-linux-uclibc" = ben-nanonote.alejandra;
-        # "alejandra-mipsel-unknown-linux-gnu" = fuloongminipc.alejandra;
-        "alejandra-x86_64-unknown-linux-gnu" = alejandra;
-        "alejandra-x86_64-unknown-linux-musl" = musl64.alejandra;
-      };
+      binaries = with pkgsCross; (
+        builtins.listToAttrs
+        (
+          builtins.map
+          (
+            pkg: {
+              name = "alejandra-${pkg.stdenv.targetPlatform.config}";
+              value = pkg;
+            }
+          )
+          [
+            aarch64-multiplatform.alejandra
+            aarch64-multiplatform.pkgsStatic.alejandra
+
+            alejandra
+            pkgsStatic.alejandra
+
+            armv7l-hf-multiplatform.alejandra
+            armv7l-hf-multiplatform.pkgsStatic.alejandra
+
+            gnu32.alejandra
+            gnu32.pkgsStatic.alejandra
+
+            raspberryPi.alejandra
+            raspberryPi.pkgsStatic.alejandra
+
+            #  ben-nanonote.alejandra
+            #  fuloongminipc.alejandra
+          ]
+        )
+      );
     in
       binaries
       // {
