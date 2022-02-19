@@ -54,6 +54,36 @@
         ];
         system = host;
       };
+
+    nixpkgs."aarch64-darwin" = nixpkgsForHost "aarch64-darwin";
+    nixpkgs."aarch64-linux" = nixpkgsForHost "aarch64-linux";
+    nixpkgs."x86_64-darwin" = nixpkgsForHost "x86_64-darwin";
+    nixpkgs."x86_64-linux" = nixpkgsForHost "x86_64-linux";
+
+    buildBinariesForHost = host: pkgs: let
+      binaries = builtins.listToAttrs (
+        builtins.map (
+          pkg: {
+            name = "alejandra-${pkg.stdenv.targetPlatform.config}";
+            value = pkg;
+          }
+        )
+        pkgs
+      );
+    in
+      binaries
+      // {
+        "alejandra-binaries" = nixpkgs.${host}.linkFarm "alejandra-binaries" (
+          nixpkgs.${host}.lib.mapAttrsToList
+          (
+            name: binary: {
+              inherit name;
+              path = "${binary}/bin/alejandra";
+            }
+          )
+          binaries
+        );
+      };
   in rec {
     checks."aarch64-darwin" = packages."aarch64-darwin";
     checks."aarch64-linux" = packages."aarch64-linux";
@@ -61,7 +91,7 @@
     checks."x86_64-linux" = packages."x86_64-linux";
 
     defaultPackage."aarch64-darwin" = packages."aarch64-darwin"."alejandra-aarch64-apple-darwin";
-    defaultPackage."aarch64-linux" = packages."aarch64-linux"."alejandra-aarch64-unknown-linux-musl";
+    defaultPackage."aarch64-linux" = packages."aarch64-linux"."alejandra-aarch64-unknown-linux-gnu";
     defaultPackage."x86_64-darwin" = packages."x86_64-darwin"."alejandra-x86_64-apple-darwin";
     defaultPackage."x86_64-linux" = packages."x86_64-linux"."alejandra-x86_64-unknown-linux-gnu";
 
@@ -84,65 +114,39 @@
         ];
       };
 
-    nixpkgs."aarch64-darwin" = nixpkgsForHost "aarch64-darwin";
-    nixpkgs."aarch64-linux" = nixpkgsForHost "aarch64-linux";
-    nixpkgs."x86_64-darwin" = nixpkgsForHost "x86_64-darwin";
-    nixpkgs."x86_64-linux" = nixpkgsForHost "x86_64-linux";
+    packages."aarch64-darwin" = with nixpkgs."aarch64-darwin";
+      buildBinariesForHost "aarch64-darwin" [
+        alejandra
+      ];
+    packages."aarch64-linux" = with nixpkgs."aarch64-linux";
+      buildBinariesForHost "aarch64-linux" [
+        alejandra
+        pkgsStatic.alejandra
+      ];
+    packages."x86_64-darwin" = with nixpkgs."x86_64-darwin";
+      buildBinariesForHost "x86_64-darwin" [
+        alejandra
+      ];
+    packages."x86_64-linux" = with nixpkgs."x86_64-linux";
+      (
+        buildBinariesForHost "x86_64-linux" [
+          alejandra
+          pkgsStatic.alejandra
 
-    packages."aarch64-darwin" = with nixpkgs."aarch64-darwin"; {
-      "alejandra-aarch64-apple-darwin" = alejandra;
-    };
-    packages."aarch64-linux" = with nixpkgs."aarch64-linux"; {
-      "alejandra-aarch64-unknown-linux-musl" = alejandra;
-    };
-    packages."x86_64-darwin" = with nixpkgs."x86_64-darwin"; {
-      "alejandra-x86_64-apple-darwin" = alejandra;
-    };
-    packages."x86_64-linux" = with nixpkgs."x86_64-linux"; let
-      binaries = with pkgsCross; (
-        builtins.listToAttrs
-        (
-          builtins.map
-          (
-            pkg: {
-              name = "alejandra-${pkg.stdenv.targetPlatform.config}";
-              value = pkg;
-            }
-          )
-          [
-            aarch64-multiplatform.alejandra
-            aarch64-multiplatform.pkgsStatic.alejandra
+          pkgsCross.aarch64-multiplatform.alejandra
+          pkgsCross.aarch64-multiplatform.pkgsStatic.alejandra
 
-            alejandra
-            pkgsStatic.alejandra
+          pkgsCross.armv7l-hf-multiplatform.alejandra
+          pkgsCross.armv7l-hf-multiplatform.pkgsStatic.alejandra
 
-            armv7l-hf-multiplatform.alejandra
-            armv7l-hf-multiplatform.pkgsStatic.alejandra
+          pkgsCross.gnu32.alejandra
+          pkgsCross.gnu32.pkgsStatic.alejandra
 
-            gnu32.alejandra
-            gnu32.pkgsStatic.alejandra
-
-            raspberryPi.alejandra
-            raspberryPi.pkgsStatic.alejandra
-
-            #  ben-nanonote.alejandra
-            #  fuloongminipc.alejandra
-          ]
-        )
-      );
-    in
-      binaries
+          pkgsCross.raspberryPi.alejandra
+          pkgsCross.raspberryPi.pkgsStatic.alejandra
+        ]
+      )
       // {
-        "alejandra-binaries" = linkFarm "alejandra-binaries" (
-          lib.mapAttrsToList
-          (
-            name: path: {
-              inherit name;
-              path = "${path}/bin/alejandra";
-            }
-          )
-          binaries
-        );
         "alejandra-vscode-vsix" = mkYarnPackage {
           name = "alejandra";
           src = ./integrations/vscode;

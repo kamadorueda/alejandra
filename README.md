@@ -113,17 +113,11 @@ It needs:
 [sh](https://www.gnu.org/software/bash/) and
 [chmod](https://www.gnu.org/software/coreutils/):
 
-- On any x86_64 Linux:
+- aarch64-linux:
+  `$ curl https://raw.githubusercontent.com/kamadorueda/alejandra/main/installers/aarch64-linux.sh | sh`
 
-  ```bash
-  $ curl https://raw.githubusercontent.com/kamadorueda/alejandra/main/installers/x86_64-linux.sh | sh
-  ```
-
-- On any AArch64/ARM64 Linux:
-
-  ```bash
-  $ curl https://raw.githubusercontent.com/kamadorueda/alejandra/main/installers/aarch64-linux.sh | sh
-  ```
+- x86_64-linux:
+  `$ curl https://raw.githubusercontent.com/kamadorueda/alejandra/main/installers/x86_64-linux.sh | sh`
 
 Then run Alejandra with:
 
