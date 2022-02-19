@@ -17,6 +17,19 @@ Types of changes
 - Security in case of vulnerabilities.
 -->
 
+### Added
+
+- Prebuilt binaries for armv6l-linux, armv7l-linux, i686-linux.
+
+### Changed
+
+- Native aarch64-linux now use GNU libc instead of musl,
+  this makes the binary run faster on multi-threaded hardware.
+
+### Fixed
+
+- All prebuilt binaries are now fully statically linked.
+
 ## [0.3.0] - 2022-02-18
 
 ### Changed
