@@ -1,43 +1,15 @@
 steps:
   - label: build
-    command:
-      - nix build
-
-  - label: cache
     if: build.branch == "main"
     agents:
       queue: private
     artifacts:
-      # Builds on: aarch64-darwin
-      # - alejandra-aarch64-apple-darwin
-
-      # Builds on: aarch64-linux, x86_64-linux
-      - alejandra-aarch64-unknown-linux-musl
-
-      # Builds on: x86_64-darwin
-      # - alejandra-x86_64-apple-darwin
-
-      # Builds on: x86_64-linux
-      - alejandra-x86_64-unknown-linux-gnu
-
-      # Builds on: x86_64-linux
-      - alejandra-x86_64-unknown-linux-musl
+      - alejandra-*
     command:
       - echo +++
-      - nix build .#alejandra-aarch64-unknown-linux-musl
+      - nix build .#alejandra-binaries
       - cachix push alejandra result
-      - cp -L result/bin/alejandra alejandra-aarch64-unknown-linux-musl
-
-      - nix build .#alejandra-x86_64-unknown-linux-gnu
-      - cachix push alejandra result
-      - cp -L result/bin/alejandra alejandra-x86_64-unknown-linux-gnu
-
-      - nix build .#alejandra-x86_64-unknown-linux-musl
-      - cachix push alejandra result
-      - cp -L result/bin/alejandra alejandra-x86_64-unknown-linux-musl
-
-      - nix develop --profile develop --command true
-      - cachix push alejandra develop
+      - cp -L result/* .
 
   - label: coverage
     if: build.branch == "main"
@@ -101,13 +73,6 @@ steps:
 
       - echo +++ Derivations count
       - grep -c drvPath= closure-after.txt
-
-  - label: integrations-vscode
-    if: build.branch != "main"
-    artifacts:
-      - alejandra.vsix
-    command:
-      - nix build --out-link alejandra.vsix .#alejandra-vscode-vsix
 
   - label: flake check
     command:

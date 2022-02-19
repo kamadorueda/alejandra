@@ -17,6 +17,8 @@ Types of changes
 - Security in case of vulnerabilities.
 -->
 
+## [0.3.0] - 2022-02-18
+
 ### Changed
 
 - Let-in expressions are now indented in the top-level of a file.
@@ -153,7 +155,8 @@ Types of changes
 
 ---
 
-[unreleased]: https://github.com/kamadorueda/alejandra/compare/0.2.0...HEAD
+[unreleased]: https://github.com/kamadorueda/alejandra/compare/0.3.0...HEAD
+[0.2.0]: https://github.com/kamadorueda/alejandra/compare/0.2.0...0.3.0
 [0.2.0]: https://github.com/kamadorueda/alejandra/compare/0.1.0...0.2.0
 [0.1.0]: https://github.com/kamadorueda/alejandra/compare/0.0.0...0.1.0
 [0.0.0]: https://github.com/kamadorueda/alejandra/compare/6adfbe8516bf6d9e896534e01118e1bc41f65425...0.0.0
