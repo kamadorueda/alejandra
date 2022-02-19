@@ -21,8 +21,20 @@
               alejandra = self.rustPlatform.buildRustPackage {
                 pname = "alejandra";
                 inherit version;
-                src = ./.;
+                src = self.stdenv.mkDerivation {
+                  name = "src";
+                  builder = builtins.toFile "builder.sh" ''
+                    source $stdenv/setup
 
+                    mkdir $out
+                    cp -rT --no-preserve=mode,ownership $src $out/src/
+                    cp $cargoLock $out/Cargo.lock
+                    cp $cargoToml $out/Cargo.toml
+                  '';
+                  cargoLock = ./Cargo.lock;
+                  cargoToml = ./Cargo.toml;
+                  src = ./src;
+                };
                 cargoLock.lockFile = ./Cargo.lock;
 
                 passthru.tests = {
