@@ -17,6 +17,8 @@ Types of changes
 - Security in case of vulnerabilities.
 -->
 
+## [0.3.1] - 2022-02-20
+
 ### Added
 
 - Prebuilt binaries for armv6l-linux, armv7l-linux, i686-linux.
@@ -29,7 +31,7 @@ Types of changes
 ### Fixed
 
 - All prebuilt binaries are now fully statically linked.
-- An attempt to subtract with overflow in some scenarios of a `let-in` expression
+- An attempt to subtract with overflow in some scenarios of a `let-in` expression.
 
 ## [0.3.0] - 2022-02-18
 
@@ -169,7 +171,8 @@ Types of changes
 
 ---
 
-[unreleased]: https://github.com/kamadorueda/alejandra/compare/0.3.0...HEAD
+[unreleased]: https://github.com/kamadorueda/alejandra/compare/0.3.1...HEAD
+[0.2.0]: https://github.com/kamadorueda/alejandra/compare/0.3.0...0.3.1
 [0.2.0]: https://github.com/kamadorueda/alejandra/compare/0.2.0...0.3.0
 [0.2.0]: https://github.com/kamadorueda/alejandra/compare/0.1.0...0.2.0
 [0.1.0]: https://github.com/kamadorueda/alejandra/compare/0.0.0...0.1.0
