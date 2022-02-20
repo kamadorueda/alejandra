@@ -116,6 +116,7 @@ pub fn rule(
     let child_expr = children.get_next().unwrap();
 
     // in
+    let mut dedent = false;
     steps.push_back(crate::builder::Step::Format(child_in.element));
     match layout {
         crate::config::Layout::Tall => {
@@ -131,6 +132,7 @@ pub fn rule(
             {
                 steps.push_back(crate::builder::Step::Whitespace);
             } else {
+                dedent = true;
                 steps.push_back(crate::builder::Step::Indent);
                 steps.push_back(crate::builder::Step::NewLine);
                 steps.push_back(crate::builder::Step::Pad);
@@ -152,7 +154,9 @@ pub fn rule(
             steps.push_back(crate::builder::Step::FormatWider(
                 child_expr.element,
             ));
-            steps.push_back(crate::builder::Step::Dedent);
+            if dedent {
+                steps.push_back(crate::builder::Step::Dedent);
+            }
         }
         crate::config::Layout::Wide => {
             steps.push_back(crate::builder::Step::Whitespace);
