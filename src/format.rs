@@ -24,7 +24,7 @@ pub fn string(
 pub fn file(
     config: &crate::config::Config,
     path: String,
-) -> std::io::Result<()> {
+) -> std::io::Result<bool> {
     use std::io::Write;
 
     let input = std::fs::read_to_string(&path)?;
@@ -34,9 +34,10 @@ pub fn file(
     let output = crate::format::string(config, path.clone(), input);
     let output_bytes = output.as_bytes();
 
-    if input_bytes != output_bytes {
+    let changed = input_bytes != output_bytes;
+    if changed {
         std::fs::File::create(path)?.write_all(output_bytes)?;
     }
 
-    Ok(())
+    Ok(changed)
 }

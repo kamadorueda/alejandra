@@ -14,17 +14,25 @@ fn main() -> std::io::Result<()> {
 
             eprintln!("Formatting {} files.", paths.len());
 
-            for result in paths
+            let (results, errors): (Vec<_>, Vec<_>) = paths
                 .par_iter()
-                .map(|path| -> std::io::Result<()> {
-                    eprintln!("Formatting: {}", &path);
-                    alejandra::format::file(&config, path.to_string())?;
-                    Ok(())
+                .map(|path| -> std::io::Result<bool> {
+                    alejandra::format::file(&config, path.to_string()).map(
+                        |changed| {
+                            if changed {
+                                eprintln!("Formatted: {}", &path);
+                            }
+                            changed
+                        },
+                    )
                 })
-                .collect::<Vec<std::io::Result<()>>>()
-            {
-                result?;
-            }
+                .partition(Result::is_ok);
+            eprintln!(
+                "Errors/Changed/Formatted: {}/{}/{}",
+                errors.len(),
+                results.into_iter().map(Result::unwrap).filter(|&x| x).count(),
+                paths.len()
+            );
         }
         None => {
             eprintln!("Formatting stdin.");
