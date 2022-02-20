@@ -29,6 +29,7 @@ Types of changes
 ### Fixed
 
 - All prebuilt binaries are now fully statically linked.
+- An attempt to subtract with overflow in some scenarios of a `let-in` expression
 
 ## [0.3.0] - 2022-02-18
 
