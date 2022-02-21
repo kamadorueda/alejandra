@@ -3,10 +3,16 @@ fn main() -> std::io::Result<()> {
 
     let config = alejandra_engine::config::Config::default();
 
-    match matches.values_of("paths") {
-        Some(paths) => {
+    match matches.values_of("include") {
+        Some(include) => {
+            let include = include.collect();
+            let exclude = match matches.values_of("exclude") {
+                Some(exclude) => exclude.collect(),
+                None => vec![],
+            };
+
             let paths: Vec<String> =
-                alejandra_cli::find::nix_files(paths.collect());
+                alejandra_cli::find::nix_files(include, exclude);
 
             if atty::is(atty::Stream::Stderr)
                 && atty::is(atty::Stream::Stdin)

@@ -1,11 +1,17 @@
-pub fn nix_files(paths: Vec<&str>) -> Vec<String> {
+pub fn nix_files(include: Vec<&str>, exclude: Vec<&str>) -> Vec<String> {
+    let include: std::collections::HashSet<String> =
+        include.iter().flat_map(nix_files_in_path).collect();
+    let exclude: std::collections::HashSet<String> =
+        exclude.iter().flat_map(nix_files_in_path).collect();
+
     let mut paths: Vec<String> =
-        paths.iter().flat_map(nix_files_in_path).collect();
+        include.difference(&exclude).map(|path| path.clone()).collect();
+
     paths.sort();
     paths
 }
 
-fn nix_files_in_path(path: &&str) -> Vec<String> {
+fn nix_files_in_path(path: &&str) -> std::collections::HashSet<String> {
     walkdir::WalkDir::new(path)
         .into_iter()
         .filter_entry(is_nix_file_or_dir)
