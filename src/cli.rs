@@ -33,7 +33,9 @@ pub fn stdin(config: crate::config::Config) -> std::io::Result<()> {
     eprintln!("Formatting stdin, run with --help to see all options.");
     let mut stdin = String::new();
     std::io::stdin().read_to_string(&mut stdin).unwrap();
-    print!("{}", crate::format::string(&config, "stdin".to_string(), stdin));
+
+    let stdout = crate::format::string(&config, "stdin".to_string(), stdin)?;
+    print!("{}", stdout);
 
     Ok(())
 }
