@@ -80,7 +80,7 @@ pub fn rule(
         // /**/
         children.drain_comments_and_newlines(|element| match element {
             crate::children::DrainCommentOrNewline::Comment(text) => {
-                if inline_next_comment && text.starts_with("#") {
+                if inline_next_comment && text.starts_with('#') {
                     steps.push_back(crate::builder::Step::Whitespace);
                 } else {
                     steps.push_back(crate::builder::Step::NewLine);

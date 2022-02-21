@@ -25,7 +25,7 @@ pub fn string_or_passthrough(
     path: String,
     before: String,
 ) -> String {
-    match crate::format::string(&config, path, before.clone()) {
+    match crate::format::string(config, path, before.clone()) {
         Ok(after) => after,
         Err(_) => before,
     }
