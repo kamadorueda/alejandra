@@ -16,8 +16,11 @@ fn cases() {
         let path_in = format!("tests/cases/{}/in", case);
         let path_out = format!("tests/cases/{}/out", case);
         let content_in = std::fs::read_to_string(path_in.clone()).unwrap();
-        let content_got =
-            alejandra::format::string(&config, path_in, content_in.clone());
+        let content_got = alejandra::format::string_or_passthrough(
+            &config,
+            path_in,
+            content_in.clone(),
+        );
 
         if should_update {
             std::fs::File::create(&path_out)
