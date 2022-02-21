@@ -180,14 +180,6 @@ fn format(
                 }
                 // ${a} (interpolation but for NODE_SELECT)
                 rnix::SyntaxKind::NODE_DYNAMIC => crate::rules::dynamic::rule,
-                // implementation detail of rnix-parser
-                rnix::SyntaxKind::NODE_ERROR => {
-                    eprintln!(
-                        "Warning: found an error node at: {}",
-                        build_ctx.path
-                    );
-                    crate::rules::default
-                }
                 // $identifier
                 rnix::SyntaxKind::NODE_IDENT => crate::rules::default,
                 // if a then b else c
@@ -212,13 +204,7 @@ fn format(
                 // 1 | true | null
                 rnix::SyntaxKind::NODE_LITERAL => crate::rules::default,
                 // let { }
-                rnix::SyntaxKind::NODE_LEGACY_LET => {
-                    eprintln!(
-                        "Warning: found a `legacy let` expression at: {}",
-                        build_ctx.path
-                    );
-                    crate::rules::default
-                }
+                rnix::SyntaxKind::NODE_LEGACY_LET => crate::rules::default,
                 // a or b
                 rnix::SyntaxKind::NODE_OR_DEFAULT => {
                     crate::rules::bin_op_and_or_default::rule

@@ -66,8 +66,6 @@ pub fn rule(
             })
             .collect();
 
-        // eprintln!("0: {:?}", lines);
-
         let mut indentation: usize = usize::MAX;
         for line in lines.iter() {
             let line = line.trim_end();
@@ -110,9 +108,6 @@ pub fn rule(
                 })
                 .collect();
         }
-
-        // eprintln!("1: ''{}''", lines.join("\n"));
-        // eprintln!("indentation={}, placeholder={}", indentation, placeholder);
 
         for (index, line) in lines.iter().enumerate() {
             let portions: Vec<String> = line
