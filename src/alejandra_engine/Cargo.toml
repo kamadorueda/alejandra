@@ -1,0 +1,13 @@
+[dependencies]
+clap = { version = "*", features = ["cargo"] }
+rand = "*"
+rnix = "*"
+rowan = "0.12.6" # follows rnix
+
+[package]
+authors = ["Kevin Amado <kamadorueda@gmail.com>"]
+description = "The Uncompromising Nix Code Formatter"
+edition = "2021"
+name = "alejandra_engine"
+repository = "https://github.com/kamadorueda/alejandra"
+version = "0.3.1"

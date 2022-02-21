@@ -1,5 +1,5 @@
 [dependencies]
-alejandra = { "path" = "../." }
+alejandra_engine = { "path" = "../src/alejandra_engine" }
 console_error_panic_hook = "*"
 getrandom = { version = "*", features = ["js"] }
 wasm-bindgen = "*"
@@ -12,6 +12,8 @@ crate-type = ["cdylib"]
 authors = ["Kevin Amado <kamadorueda@gmail.com>"]
 description = "The Uncompromising Nix Code Formatter"
 edition = "2021"
-name = "alejandra-front"
+name = "alejandra_front"
 repository = "https://github.com/kamadorueda/alejandra"
 version = "0.3.1"
+
+[workspace]

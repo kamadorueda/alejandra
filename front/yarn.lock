@@ -2245,7 +2245,7 @@ ajv@^8.0.0, ajv@^8.6.0, ajv@^8.8.0:
     require-from-string "^2.0.2"
     uri-js "^4.2.2"
 
-"alejandra-front@file:pkg":
+"alejandra_front@file:pkg":
   version "0.1.0"
 
 ansi-escapes@^4.2.1, ansi-escapes@^4.3.1:

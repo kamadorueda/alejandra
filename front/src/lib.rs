@@ -12,7 +12,7 @@ pub fn main() -> Result<(), JsValue> {
 
 #[wasm_bindgen]
 pub fn format(before: String, path: String) -> String {
-    let config = alejandra::config::Config::new();
+    let config = alejandra_engine::config::Config::default();
 
-    alejandra::format::string_or_passthrough(&config, path, before)
+    alejandra_engine::format::string_or_passthrough(&config, path, before)
 }

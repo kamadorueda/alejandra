@@ -12,7 +12,7 @@
     ]
   },
   "dependencies": {
-    "alejandra-front": "file:pkg/",
+    "alejandra_front": "file:pkg/",
     "codemirror": "*",
     "react": "*",
     "react-codemirror2": "*",

@@ -1,24 +1,24 @@
 fn main() -> std::io::Result<()> {
-    let matches = alejandra::cli::parse(std::env::args().collect());
+    let matches = alejandra_cli::cli::parse(std::env::args().collect());
 
-    let config = alejandra::config::Config::default();
+    let config = alejandra_engine::config::Config::default();
 
     match matches.values_of("paths") {
         Some(paths) => {
             let paths: Vec<String> =
-                alejandra::find::nix_files(paths.collect());
+                alejandra_cli::find::nix_files(paths.collect());
 
             if atty::is(atty::Stream::Stderr)
                 && atty::is(atty::Stream::Stdin)
                 && atty::is(atty::Stream::Stdout)
             {
-                alejandra::cli::tui(config, paths)?;
+                alejandra_cli::cli::tui(config, paths)?;
             } else {
-                alejandra::cli::simple(config, paths)?;
+                alejandra_cli::cli::simple(config, paths)?;
             }
         }
         None => {
-            alejandra::cli::stdin(config)?;
+            alejandra_cli::cli::stdin(config)?;
         }
     }
 
