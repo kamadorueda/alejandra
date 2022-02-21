@@ -8,3 +8,4 @@ pub mod format;
 pub mod position;
 pub mod rules;
 pub mod utils;
+pub mod version;

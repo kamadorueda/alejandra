@@ -17,6 +17,10 @@ Types of changes
 - Security in case of vulnerabilities.
 -->
 
+### Added
+
+- A text user interface with progress-bars and modern output (requires a TTY).
+
 ## [0.3.1] - 2022-02-20
 
 ### Added

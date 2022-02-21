@@ -48,6 +48,10 @@
   </a>
 </p>
 
+<a href="https://asciinema.org/a/470438" target="_blank">
+  <img src="https://asciinema.org/a/470438.svg" />
+</a>
+
 ## Features
 
 - ✔️ **Fast**
