@@ -123,7 +123,7 @@ pub fn tui(
 
     // Listen to the processed items
     let sender_paths = sender.clone();
-    let sender_finished = sender.clone();
+    let sender_finished = sender;
     std::thread::spawn(move || {
         paths.into_par_iter().for_each_with(sender_paths, |sender, path| {
             let result = crate::format::file(&config, path.clone());
