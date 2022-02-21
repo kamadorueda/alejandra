@@ -199,9 +199,6 @@ fn dedent_comment(pos: &crate::position::Position, text: &str) -> String {
             return "/**/".to_string();
         }
 
-        // println!("{:?}", lines);
-        // println!("0\n{0:<1$}/*{2}*/\n", "", pos.column, lines.join("\n"));
-
         // Make sure it starts with empty line
         if lines.len() == 1 {
             lines.insert(0, "".to_string());
@@ -213,9 +210,6 @@ fn dedent_comment(pos: &crate::position::Position, text: &str) -> String {
             lines[1] = format!("{0:<1$}{2}", "", pos.column + 2, lines[1]);
         }
 
-        // println!("{:?}", lines);
-        // println!("1\n{0:<1$}/*{2}*/\n", "", pos.column, lines.join("\n"));
-
         // Make sure it ends with empty line
         let len = lines.len();
         if len == 2 {
@@ -225,9 +219,6 @@ fn dedent_comment(pos: &crate::position::Position, text: &str) -> String {
         } else {
             lines.push(format!("{0:<1$}", "", pos.column + 1));
         }
-
-        // println!("{:?}", lines);
-        // println!("2\n{0:<1$}/*{2}*/\n", "", pos.column, lines.join("\n"));
 
         // Compute the distance to the first character from the left
         let mut indentation: usize = usize::MAX;
@@ -269,10 +260,6 @@ fn dedent_comment(pos: &crate::position::Position, text: &str) -> String {
             })
             .collect();
 
-        // println!("{:?}", lines);
-        // println!("3\n{0:<1$}/*{2}*/\n", "", pos.column, lines.join("\n"));
-        // println!("indentation={} pos.column{}", indentation, pos.column);
-
         // Dedent everything as much as possible so that upstream components
         // can indent as they see convenient
         lines = lines
@@ -288,9 +275,6 @@ fn dedent_comment(pos: &crate::position::Position, text: &str) -> String {
                 }
             })
             .collect();
-
-        // println!("{:?}", lines);
-        // println!("4\n{0:<1$}/*{2}*/\n", "", pos.column, lines.join("\n"));
 
         format!("/*{}*/", lines.join("\n"))
     }
