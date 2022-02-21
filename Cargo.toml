@@ -1,2 +1,5 @@
+[profile.release]
+lto = true
+
 [workspace]
 members = ["src/*"]

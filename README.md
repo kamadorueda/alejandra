@@ -215,11 +215,11 @@ Please see: [CHANGELOG.md](./CHANGELOG.md).
 
     | Logical Cores | Seconds |
     | :-----------: | :-----: |
-    |       1       |   45    |
-    |       2       |   22    |
-    |       4       |   14    |
+    |       1       |   35    |
+    |       2       |   18    |
+    |       4       |   10    |
     |       8       |   10    |
-    |      16       |   11    |
+    |      16       |   10    |
 
 [^semantic-changes]: The methodology to claim this is:
 
