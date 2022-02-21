@@ -235,8 +235,8 @@ Please see: [CHANGELOG.md](./CHANGELOG.md).
         $ nix-env -qaP --json --drv-path > after
         ```
 
-    As of 2022-02-08,
-    there are 47 differences in a set of 36278 derivations
+    As of 2022-02-21,
+    there are 46 differences in a set of 36314 derivations
     because of things like this:
 
     ```
