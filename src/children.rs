@@ -126,15 +126,12 @@ impl Children {
 
     pub fn drain_comment<F: FnMut(String)>(&mut self, mut callback: F) {
         if let Some(child) = self.peek_next() {
-            match child.element.kind() {
-                rnix::SyntaxKind::TOKEN_COMMENT => {
-                    callback(dedent_comment(
-                        &child.pos,
-                        child.element.into_token().unwrap().text(),
-                    ));
-                    self.move_next();
-                }
-                _ => {}
+            if let rnix::SyntaxKind::TOKEN_COMMENT = child.element.kind() {
+                callback(dedent_comment(
+                    &child.pos,
+                    child.element.into_token().unwrap().text(),
+                ));
+                self.move_next();
             }
         }
     }

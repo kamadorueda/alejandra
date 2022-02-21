@@ -4,11 +4,13 @@ pub struct Position {
     pub line:   usize,
 }
 
-impl Position {
-    pub fn new() -> Position {
+impl Default for Position {
+    fn default() -> Position {
         Position { column: 0, line: 1 }
     }
+}
 
+impl Position {
     pub fn update(&mut self, text: &str) {
         let chars: Vec<char> = text.chars().collect();
         let newlines = chars.iter().filter(|&c| *c == '\n').count();

@@ -9,11 +9,13 @@ pub struct Config {
     layout: Layout,
 }
 
-impl Config {
-    pub fn new() -> Config {
+impl Default for Config {
+    fn default() -> Config {
         Config { layout: Layout::Tall }
     }
+}
 
+impl Config {
     pub fn layout(&self) -> &Layout {
         &self.layout
     }

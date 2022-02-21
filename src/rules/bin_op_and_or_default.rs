@@ -28,16 +28,14 @@ pub fn rule_with_configuration(
         crate::config::Layout::Tall => {
             let kind = child.element.kind();
 
-            if parent_kind == "bin_op_and_or_default"
+            if (parent_kind == "bin_op_and_or_default"
                 && matches!(
                     kind,
                     rnix::SyntaxKind::NODE_BIN_OP
                         | rnix::SyntaxKind::NODE_OR_DEFAULT
-                )
-            {
-                steps.push_back(crate::builder::Step::Format(child.element));
-            } else if parent_kind == "select"
-                && matches!(kind, rnix::SyntaxKind::NODE_SELECT)
+                ))
+                || (parent_kind == "select"
+                    && matches!(kind, rnix::SyntaxKind::NODE_SELECT))
             {
                 steps.push_back(crate::builder::Step::Format(child.element));
             } else {

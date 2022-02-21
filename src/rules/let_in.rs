@@ -10,11 +10,13 @@ pub fn rule(
 
     let items_count = node
         .children()
-        .filter(|element| match element.kind() {
-            rnix::SyntaxKind::NODE_KEY_VALUE
-            | rnix::SyntaxKind::NODE_INHERIT
-            | rnix::SyntaxKind::NODE_INHERIT_FROM => true,
-            _ => false,
+        .filter(|element| {
+            matches!(
+                element.kind(),
+                rnix::SyntaxKind::NODE_KEY_VALUE
+                    | rnix::SyntaxKind::NODE_INHERIT
+                    | rnix::SyntaxKind::NODE_INHERIT_FROM
+            )
         })
         .count();
 
