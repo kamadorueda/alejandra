@@ -44,8 +44,8 @@ pub fn build(
         config.clone(),
         force_wide,
         path,
-        crate::position::Position::new(),
-        crate::position::Position::new(),
+        crate::position::Position::default(),
+        crate::position::Position::default(),
     );
 
     build_step(

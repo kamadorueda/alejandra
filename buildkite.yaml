@@ -78,3 +78,12 @@ steps:
     command:
       - echo +++
       - nix flake check
+
+  - label: lint
+    if: build.branch != "main"
+    command:
+      - echo --- Load environment
+      - direnv allow
+      - eval "$(direnv export bash)"
+      - echo +++ Run Linter
+      - cargo clippy

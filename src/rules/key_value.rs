@@ -83,22 +83,20 @@ pub fn rule(
                 steps.push_back(crate::builder::Step::Indent);
                 steps.push_back(crate::builder::Step::NewLine);
                 steps.push_back(crate::builder::Step::Pad);
-            } else if false
-                || matches!(
-                    child_expr.element.kind(),
-                    rnix::SyntaxKind::NODE_ASSERT
-                        | rnix::SyntaxKind::NODE_ATTR_SET
-                        | rnix::SyntaxKind::NODE_PAREN
-                        | rnix::SyntaxKind::NODE_LAMBDA
-                        | rnix::SyntaxKind::NODE_LET_IN
-                        | rnix::SyntaxKind::NODE_LIST
-                        | rnix::SyntaxKind::NODE_STRING
-                        | rnix::SyntaxKind::NODE_WITH
-                )
-                || (matches!(
-                    child_expr.element.kind(),
-                    rnix::SyntaxKind::NODE_APPLY
-                ) && !newlines)
+            } else if matches!(
+                child_expr.element.kind(),
+                rnix::SyntaxKind::NODE_ASSERT
+                    | rnix::SyntaxKind::NODE_ATTR_SET
+                    | rnix::SyntaxKind::NODE_PAREN
+                    | rnix::SyntaxKind::NODE_LAMBDA
+                    | rnix::SyntaxKind::NODE_LET_IN
+                    | rnix::SyntaxKind::NODE_LIST
+                    | rnix::SyntaxKind::NODE_STRING
+                    | rnix::SyntaxKind::NODE_WITH
+            ) || (matches!(
+                child_expr.element.kind(),
+                rnix::SyntaxKind::NODE_APPLY
+            ) && !newlines)
             {
                 steps.push_back(crate::builder::Step::Whitespace);
             } else {

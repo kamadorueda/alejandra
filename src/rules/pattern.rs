@@ -21,10 +21,12 @@ pub fn rule(
 
     let items_count = node
         .children_with_tokens()
-        .filter(|element| match element.kind() {
-            rnix::SyntaxKind::TOKEN_ELLIPSIS
-            | rnix::SyntaxKind::NODE_PAT_ENTRY => true,
-            _ => false,
+        .filter(|element| {
+            matches!(
+                element.kind(),
+                rnix::SyntaxKind::TOKEN_ELLIPSIS
+                    | rnix::SyntaxKind::NODE_PAT_ENTRY
+            )
         })
         .count();
 

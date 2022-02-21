@@ -150,8 +150,8 @@ pub fn tui(
 
     while !finished {
         loop {
-            match receiver.try_recv() {
-                Ok(event) => match event {
+            if let Ok(event) = receiver.try_recv() {
+                match event {
                     Event::FormattedPath(formatted_path) => {
                         match formatted_path.result {
                             Ok(changed) => {
@@ -175,20 +175,14 @@ pub fn tui(
                         finished = true;
                     }
                     Event::Input(key) => {
-                        match key {
-                            termion::event::Key::Ctrl('c') => {
-                                return Err(
-                                    std::io::ErrorKind::Interrupted.into()
-                                );
-                            }
-                            _ => {}
-                        };
+                        if let termion::event::Key::Ctrl('c') = key {
+                            return Err(std::io::ErrorKind::Interrupted.into());
+                        }
                     }
                     Event::Tick => {
                         break;
                     }
-                },
-                Err(_) => {}
+                }
             }
         }
 

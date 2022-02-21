@@ -36,13 +36,8 @@ pub fn rule(
             if crate::builder::fits_in_single_line(
                 build_ctx,
                 child.element.clone(),
-            ) {
-                steps.push_back(crate::builder::Step::Whitespace);
-                steps.push_back(crate::builder::Step::FormatWider(
-                    child.element,
-                ));
-            } else if branch == "else"
-                && child.element.kind() == rnix::SyntaxKind::NODE_IF_ELSE
+            ) || (branch == "else"
+                && child.element.kind() == rnix::SyntaxKind::NODE_IF_ELSE)
             {
                 steps.push_back(crate::builder::Step::Whitespace);
                 steps.push_back(crate::builder::Step::FormatWider(
