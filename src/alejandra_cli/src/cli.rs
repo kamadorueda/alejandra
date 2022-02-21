@@ -1,7 +1,7 @@
 pub fn parse(args: Vec<String>) -> clap::ArgMatches {
     clap::Command::new("Alejandra")
         .about("The Uncompromising Nix Code Formatter.")
-        .version(crate::version::VERSION)
+        .version(alejandra_engine::version::VERSION)
         .arg(
             clap::Arg::new("paths")
                 .help("Files or directories, or none to format stdin.")
@@ -27,21 +27,22 @@ pub fn parse(args: Vec<String>) -> clap::ArgMatches {
         .get_matches_from(args)
 }
 
-pub fn stdin(config: crate::config::Config) -> std::io::Result<()> {
+pub fn stdin(config: alejandra_engine::config::Config) -> std::io::Result<()> {
     use std::io::Read;
 
     eprintln!("Formatting stdin, run with --help to see all options.");
     let mut stdin = String::new();
     std::io::stdin().read_to_string(&mut stdin).unwrap();
 
-    let stdout = crate::format::string(&config, "stdin".to_string(), stdin)?;
+    let stdout =
+        alejandra_engine::format::string(&config, "stdin".to_string(), stdin)?;
     print!("{}", stdout);
 
     Ok(())
 }
 
 pub fn simple(
-    config: crate::config::Config,
+    config: alejandra_engine::config::Config,
     paths: Vec<String>,
 ) -> std::io::Result<()> {
     use rayon::prelude::*;
@@ -51,12 +52,14 @@ pub fn simple(
     let (results, errors): (Vec<_>, Vec<_>) = paths
         .par_iter()
         .map(|path| -> std::io::Result<bool> {
-            crate::format::file(&config, path.to_string()).map(|changed| {
-                if changed {
-                    eprintln!("Formatted: {}", &path);
-                }
-                changed
-            })
+            alejandra_engine::format::file(&config, path.to_string()).map(
+                |changed| {
+                    if changed {
+                        eprintln!("Formatted: {}", &path);
+                    }
+                    changed
+                },
+            )
         })
         .partition(Result::is_ok);
 
@@ -70,7 +73,7 @@ pub fn simple(
 }
 
 pub fn tui(
-    config: crate::config::Config,
+    config: alejandra_engine::config::Config,
     paths: Vec<String>,
 ) -> std::io::Result<()> {
     use rayon::prelude::*;
@@ -126,7 +129,7 @@ pub fn tui(
     let sender_finished = sender;
     std::thread::spawn(move || {
         paths.into_par_iter().for_each_with(sender_paths, |sender, path| {
-            let result = crate::format::file(&config, path.clone());
+            let result = alejandra_engine::format::file(&config, path.clone());
 
             if let Err(error) = sender
                 .send(Event::FormattedPath(FormattedPath { path, result }))
@@ -208,7 +211,7 @@ pub fn tui(
                             .fg(tui::style::Color::Green),
                     ),
                     tui::text::Span::raw(" "),
-                    tui::text::Span::raw(crate::version::VERSION),
+                    tui::text::Span::raw(alejandra_engine::version::VERSION),
                 ]),
                 tui::text::Spans::from(vec![tui::text::Span::raw(
                     "The Uncompromising Nix Code Formatter",

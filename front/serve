@@ -1,0 +1,8 @@
+#! /usr/bin/env bash
+
+set -euo pipefail
+
+wasm-pack build --target web
+rm -rf node_modules/
+yarn install
+yarn start

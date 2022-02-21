@@ -3,19 +3,27 @@
 version = 3
 
 [[package]]
-name = "alejandra"
+name = "alejandra_cli"
 version = "0.3.1"
 dependencies = [
+ "alejandra_engine",
  "atty",
  "clap",
  "indoc",
- "rand",
  "rayon",
- "rnix",
- "rowan",
  "termion",
  "tui",
  "walkdir",
+]
+
+[[package]]
+name = "alejandra_engine"
+version = "0.3.1"
+dependencies = [
+ "clap",
+ "rand",
+ "rnix",
+ "rowan",
 ]
 
 [[package]]

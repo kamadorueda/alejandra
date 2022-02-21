@@ -4,7 +4,7 @@ use std::io::Write;
 fn cases() {
     let should_update = std::env::var("UPDATE").is_ok();
 
-    let config = alejandra::config::Config::new();
+    let config = alejandra_engine::config::Config::default();
 
     let cases: std::collections::HashSet<String> =
         std::fs::read_dir("tests/cases")
@@ -16,7 +16,7 @@ fn cases() {
         let path_in = format!("tests/cases/{}/in", case);
         let path_out = format!("tests/cases/{}/out", case);
         let content_in = std::fs::read_to_string(path_in.clone()).unwrap();
-        let content_got = alejandra::format::string_or_passthrough(
+        let content_got = alejandra_engine::format::string_or_passthrough(
             &config,
             path_in,
             content_in.clone(),

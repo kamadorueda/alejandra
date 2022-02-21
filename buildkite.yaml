@@ -74,11 +74,6 @@ steps:
       - echo +++ Derivations count
       - grep -c drvPath= closure-after.txt
 
-  - label: flake check
-    command:
-      - echo +++
-      - nix flake check
-
   - label: lint
     if: build.branch != "main"
     command:
@@ -87,3 +82,8 @@ steps:
       - eval "$(direnv export bash)"
       - echo +++ Run Linter
       - cargo clippy
+
+  - label: flake check
+    command:
+      - echo +++
+      - nix flake check

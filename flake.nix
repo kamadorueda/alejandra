@@ -103,6 +103,7 @@
           cargo-bloat
           cargo-license
           cargo-tarpaulin
+          clippy
           jq
           nodejs
           nodePackages.prettier

@@ -1,6 +1,6 @@
 import react from "react";
 import ReactDiffViewer from "react-diff-viewer";
-import * as wasm from "alejandra-front";
+import * as wasm from "alejandra_front";
 import { Editor } from "./Editor";
 import { get, randomPath } from "./nixpkgs";
 

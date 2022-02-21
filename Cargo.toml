@@ -1,19 +1,2 @@
-[dependencies]
-atty = "*"
-clap = { version = "*", features = ["cargo"] }
-indoc = "*"
-rand = "*"
-rayon = "*"
-rnix = "*"
-termion = "*"
-tui = { version = "*", default-features = false, features = ["termion"] }
-rowan = "0.12.6" # follows rnix
-walkdir = "*"
-
-[package]
-authors = ["Kevin Amado <kamadorueda@gmail.com>"]
-description = "The Uncompromising Nix Code Formatter"
-edition = "2021"
-name = "alejandra"
-repository = "https://github.com/kamadorueda/alejandra"
-version = "0.3.1"
+[workspace]
+members = ["src/*"]
