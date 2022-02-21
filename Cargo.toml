@@ -1,9 +1,12 @@
 [dependencies]
+atty = "*"
 clap = { version = "*", features = ["cargo"] }
 indoc = "*"
 rand = "*"
 rayon = "*"
 rnix = "*"
+termion = "*"
+tui = { version = "*", default-features = false, features = ["termion"] }
 rowan = "*"
 walkdir = "*"
 
