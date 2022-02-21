@@ -3,13 +3,6 @@ pub fn parse(args: Vec<String>) -> clap::ArgMatches {
         .about("The Uncompromising Nix Code Formatter.")
         .version(crate::version::VERSION)
         .arg(
-            clap::Arg::new("debug")
-                .help("Enable debug mode.")
-                .long("debug")
-                .short('d')
-                .takes_value(false),
-        )
-        .arg(
             clap::Arg::new("paths")
                 .help("Files or directories, or none to format stdin.")
                 .multiple_values(true),

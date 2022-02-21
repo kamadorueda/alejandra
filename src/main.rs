@@ -1,8 +1,7 @@
 fn main() -> std::io::Result<()> {
     let matches = alejandra::cli::parse(std::env::args().collect());
 
-    let debug: bool = matches.is_present("debug");
-    let config = alejandra::config::Config::new().with_debug(debug);
+    let config = alejandra::config::Config::new();
 
     match matches.values_of("paths") {
         Some(paths) => {
