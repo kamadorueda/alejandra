@@ -3,9 +3,17 @@ pub fn parse(args: Vec<String>) -> clap::ArgMatches {
         .about("The Uncompromising Nix Code Formatter.")
         .version(alejandra_engine::version::VERSION)
         .arg(
-            clap::Arg::new("paths")
+            clap::Arg::new("include")
                 .help("Files or directories, or none to format stdin.")
                 .multiple_values(true),
+        )
+        .arg(
+            clap::Arg::new("exclude")
+                .short('e')
+                .help("Files or directories to exclude from formatting.")
+                .long("exclude")
+                .multiple_occurrences(true)
+                .takes_value(true),
         )
         .term_width(80)
         .after_help(indoc::indoc!(
@@ -240,12 +248,12 @@ pub fn tui(
                         .bg(tui::style::Color::Black)
                         .add_modifier(tui::style::Modifier::ITALIC),
                 )
-                .percent(
-                    (100 * (paths_changed
-                        + paths_unchanged
-                        + paths_with_errors)
-                        / paths_to_format) as u16,
-                )
+                .percent(if paths_to_format == 0 {
+                    100
+                } else {
+                    100 * (paths_changed + paths_unchanged + paths_with_errors)
+                        / paths_to_format
+                } as u16)
                 .style(
                     tui::style::Style::default()
                         .bg(tui::style::Color::Black)
