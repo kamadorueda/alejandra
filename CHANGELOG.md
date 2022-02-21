@@ -17,9 +17,40 @@ Types of changes
 - Security in case of vulnerabilities.
 -->
 
+## [0.4.0] - 2022-02-21
+
 ### Added
 
-- A text user interface with progress-bars and modern output (requires a TTY).
+- A text user interface with a progress-bar
+  and modern, colorful output (requires a tty).
+
+  When no tty is available
+  or in non-interactive environments like a CI/CD
+  or when piping alejandra to other commands (`$ alejandra 2> file`, `$ alejandra | cat`)
+  the old school program output will be used.
+
+- A `--exclude` option to the CLI.
+
+- Refactors to the codebase. We now comply with `clippy`, a Rust linter.
+
+- A new structure to the codebase and link time optimizations.
+
+  Binaries were reduced in size by 15%
+  with respect to the previous release
+  (even with the added features),
+  performance was improved in the reference machine
+  from 45 seconds to 35 while formatting Nixpkgs on a single core.
+
+### Changed
+
+- The old school program output is now less verbose.
+
+  It prints only the path of files that were changed,
+  and a summary of the number of errors and files changed during formatting.
+
+### Removed
+
+- The `--debug` flag in the CLI.
 
 ## [0.3.1] - 2022-02-20
 
@@ -175,7 +206,8 @@ Types of changes
 
 ---
 
-[unreleased]: https://github.com/kamadorueda/alejandra/compare/0.3.1...HEAD
+[unreleased]: https://github.com/kamadorueda/alejandra/compare/0.4.0...HEAD
+[0.4.0]: https://github.com/kamadorueda/alejandra/compare/0.3.1...0.4.0
 [0.3.1]: https://github.com/kamadorueda/alejandra/compare/0.3.0...0.3.1
 [0.3.0]: https://github.com/kamadorueda/alejandra/compare/0.2.0...0.3.0
 [0.2.0]: https://github.com/kamadorueda/alejandra/compare/0.1.0...0.2.0
