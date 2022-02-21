@@ -7,7 +7,7 @@ rayon = "*"
 rnix = "*"
 termion = "*"
 tui = { version = "*", default-features = false, features = ["termion"] }
-rowan = "*"
+rowan = "0.12.6" # follows rnix
 walkdir = "*"
 
 [package]

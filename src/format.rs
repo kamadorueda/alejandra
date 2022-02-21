@@ -14,10 +14,6 @@ pub fn string(
     let green_node =
         crate::builder::build(config, ast.node().into(), false, path).unwrap();
 
-    if config.debug() {
-        crate::debug::display(&(&green_node).into());
-    }
-
     green_node.to_string()
 }
 
