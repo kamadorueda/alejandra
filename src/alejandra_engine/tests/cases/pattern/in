@@ -1,4 +1,12 @@
 [
+  ({ foo
+    , bar
+    # Some comment
+    , baz
+    }: {})
+  ({ foo
+    , bar # Some comment
+    }: {})
   (a@{
     self,
     gomod2nix,
