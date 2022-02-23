@@ -132,14 +132,6 @@ pub fn parse(
         pattern.arguments.push_back(argument);
     }
 
-    // /**/
-    children.drain_trivia(|element| match element {
-        crate::children::Trivia::Comment(text) => {
-            pattern.comments_before_curly_b_close.push_back(text);
-        }
-        crate::children::Trivia::Whitespace(_) => {}
-    });
-
     // }
     children.move_next();
 
