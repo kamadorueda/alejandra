@@ -13,13 +13,13 @@ pub fn rule(
         || build_ctx.vertical;
 
     while children.has_next() {
-        children.drain_comments_and_newlines(|element| match element {
-            crate::children::DrainCommentOrNewline::Comment(text) => {
+        children.drain_trivia(|element| match element {
+            crate::children::Trivia::Comment(text) => {
                 steps.push_back(crate::builder::Step::Comment(text));
                 steps.push_back(crate::builder::Step::NewLine);
                 steps.push_back(crate::builder::Step::Pad);
             }
-            crate::children::DrainCommentOrNewline::Newline(_) => {}
+            crate::children::Trivia::Whitespace(_) => {}
         });
 
         if let Some(child) = children.get_next() {

@@ -35,11 +35,11 @@ pub fn parse(
     }
 
     // /**/
-    children.drain_comments_and_newlines(|element| match element {
-        crate::children::DrainCommentOrNewline::Comment(text) => {
+    children.drain_trivia(|element| match element {
+        crate::children::Trivia::Comment(text) => {
             pattern.comments_after_initial_at.push_back(text);
         }
-        crate::children::DrainCommentOrNewline::Newline(_) => {}
+        crate::children::Trivia::Whitespace(_) => {}
     });
 
     // {
@@ -133,22 +133,22 @@ pub fn parse(
     }
 
     // /**/
-    children.drain_comments_and_newlines(|element| match element {
-        crate::children::DrainCommentOrNewline::Comment(text) => {
+    children.drain_trivia(|element| match element {
+        crate::children::Trivia::Comment(text) => {
             pattern.comments_before_curly_b_close.push_back(text);
         }
-        crate::children::DrainCommentOrNewline::Newline(_) => {}
+        crate::children::Trivia::Whitespace(_) => {}
     });
 
     // }
     children.move_next();
 
     // /**/
-    children.drain_comments_and_newlines(|element| match element {
-        crate::children::DrainCommentOrNewline::Comment(text) => {
+    children.drain_trivia(|element| match element {
+        crate::children::Trivia::Comment(text) => {
             pattern.comments_before_end_at.push_back(text);
         }
-        crate::children::DrainCommentOrNewline::Newline(_) => {}
+        crate::children::Trivia::Whitespace(_) => {}
     });
 
     // @ x

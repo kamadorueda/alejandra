@@ -22,14 +22,14 @@ pub fn rule(
 
     // /**/
     let mut comment = false;
-    children.drain_comments_and_newlines(|element| match element {
-        crate::children::DrainCommentOrNewline::Comment(text) => {
+    children.drain_trivia(|element| match element {
+        crate::children::Trivia::Comment(text) => {
             comment = true;
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
             steps.push_back(crate::builder::Step::Comment(text));
         }
-        crate::children::DrainCommentOrNewline::Newline(_) => {}
+        crate::children::Trivia::Whitespace(_) => {}
     });
     if comment {
         steps.push_back(crate::builder::Step::NewLine);
@@ -44,12 +44,12 @@ pub fn rule(
     // peek: /**/
     let mut comments_before = std::collections::LinkedList::new();
     let mut newlines = false;
-    children.drain_comments_and_newlines(|element| match element {
-        crate::children::DrainCommentOrNewline::Comment(text) => {
+    children.drain_trivia(|element| match element {
+        crate::children::Trivia::Comment(text) => {
             comments_before.push_back(crate::builder::Step::Comment(text))
         }
-        crate::children::DrainCommentOrNewline::Newline(newlines_count) => {
-            if newlines_count > 0 {
+        crate::children::Trivia::Whitespace(text) => {
+            if crate::utils::count_newlines(&text) > 0 {
                 newlines = true;
             }
         }
@@ -60,11 +60,11 @@ pub fn rule(
 
     // peek: /**/
     let mut comments_after = std::collections::LinkedList::new();
-    children.drain_comments_and_newlines(|element| match element {
-        crate::children::DrainCommentOrNewline::Comment(text) => {
+    children.drain_trivia(|element| match element {
+        crate::children::Trivia::Comment(text) => {
             comments_after.push_back(crate::builder::Step::Comment(text))
         }
-        crate::children::DrainCommentOrNewline::Newline(_) => {}
+        crate::children::Trivia::Whitespace(_) => {}
     });
 
     // =
