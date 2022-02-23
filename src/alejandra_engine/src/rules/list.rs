@@ -16,20 +16,15 @@ pub fn rule(
         .count()
         - 2;
 
-    let layout = if children.has_comments() || children.has_newlines() {
-        &crate::config::Layout::Tall
-    } else {
-        build_ctx.config.layout()
-    };
+    let vertical = children.has_comments()
+        || children.has_newlines()
+        || build_ctx.vertical;
 
     // [
     let child = children.get_next().unwrap();
     steps.push_back(crate::builder::Step::Format(child.element));
-    match layout {
-        crate::config::Layout::Tall => {
-            steps.push_back(crate::builder::Step::Indent);
-        }
-        crate::config::Layout::Wide => {}
+    if vertical {
+        steps.push_back(crate::builder::Step::Indent);
     }
 
     let mut item_index: usize = 0;
@@ -73,21 +68,17 @@ pub fn rule(
 
             // item
             item_index += 1;
-            match layout {
-                crate::config::Layout::Tall => {
-                    steps.push_back(crate::builder::Step::NewLine);
-                    steps.push_back(crate::builder::Step::Pad);
-                    steps.push_back(crate::builder::Step::FormatWider(
-                        child.element,
-                    ));
+            if vertical {
+                steps.push_back(crate::builder::Step::NewLine);
+                steps.push_back(crate::builder::Step::Pad);
+                steps.push_back(crate::builder::Step::FormatWider(
+                    child.element,
+                ));
+            } else {
+                if item_index > 1 {
+                    steps.push_back(crate::builder::Step::Whitespace);
                 }
-                crate::config::Layout::Wide => {
-                    if item_index > 1 {
-                        steps.push_back(crate::builder::Step::Whitespace);
-                    }
-                    steps
-                        .push_back(crate::builder::Step::Format(child.element));
-                }
+                steps.push_back(crate::builder::Step::Format(child.element));
             }
 
             children.move_next();
@@ -97,13 +88,10 @@ pub fn rule(
 
     // ]
     let child = children.get_next().unwrap();
-    match layout {
-        crate::config::Layout::Tall => {
-            steps.push_back(crate::builder::Step::Dedent);
-            steps.push_back(crate::builder::Step::NewLine);
-            steps.push_back(crate::builder::Step::Pad);
-        }
-        crate::config::Layout::Wide => {}
+    if vertical {
+        steps.push_back(crate::builder::Step::Dedent);
+        steps.push_back(crate::builder::Step::NewLine);
+        steps.push_back(crate::builder::Step::Pad);
     }
     steps.push_back(crate::builder::Step::Format(child.element));
 

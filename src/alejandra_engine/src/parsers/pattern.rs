@@ -1,23 +1,13 @@
 use std::collections::LinkedList;
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct Argument {
     pub comments_before: LinkedList<String>,
     pub item:            Option<rnix::SyntaxElement>,
     pub comment_after:   Option<String>,
 }
 
-impl Default for Argument {
-    fn default() -> Argument {
-        Argument {
-            comments_before: LinkedList::new(),
-            item:            None,
-            comment_after:   None,
-        }
-    }
-}
-
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct Pattern {
     pub initial_at:                    Option<rnix::SyntaxElement>,
     pub comments_after_initial_at:     LinkedList<String>,
@@ -25,19 +15,6 @@ pub struct Pattern {
     pub comments_before_curly_b_close: LinkedList<String>,
     pub comments_before_end_at:        LinkedList<String>,
     pub end_at:                        Option<rnix::SyntaxElement>,
-}
-
-impl Default for Pattern {
-    fn default() -> Pattern {
-        Pattern {
-            initial_at:                    None,
-            comments_after_initial_at:     LinkedList::new(),
-            arguments:                     LinkedList::new(),
-            comments_before_curly_b_close: LinkedList::new(),
-            comments_before_end_at:        LinkedList::new(),
-            end_at:                        None,
-        }
-    }
 }
 
 pub fn parse(

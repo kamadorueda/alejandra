@@ -8,21 +8,16 @@ pub fn rule(
         build_ctx, node, true,
     );
 
-    let layout = if children.has_comments() || children.has_newlines() {
-        &crate::config::Layout::Tall
-    } else {
-        build_ctx.config.layout()
-    };
+    let vertical = children.has_comments()
+        || children.has_newlines()
+        || build_ctx.vertical;
 
     // expr
     let child = children.get_next().unwrap();
-    match layout {
-        crate::config::Layout::Tall => {
-            steps.push_back(crate::builder::Step::FormatWider(child.element));
-        }
-        crate::config::Layout::Wide => {
-            steps.push_back(crate::builder::Step::Format(child.element));
-        }
+    if vertical {
+        steps.push_back(crate::builder::Step::FormatWider(child.element));
+    } else {
+        steps.push_back(crate::builder::Step::Format(child.element));
     }
 
     if children.has_next() {
@@ -90,15 +85,10 @@ pub fn rule(
             steps.push_back(crate::builder::Step::Pad);
         }
 
-        match layout {
-            crate::config::Layout::Tall => {
-                steps.push_back(crate::builder::Step::FormatWider(
-                    child.element,
-                ));
-            }
-            crate::config::Layout::Wide => {
-                steps.push_back(crate::builder::Step::Format(child.element));
-            }
+        if vertical {
+            steps.push_back(crate::builder::Step::FormatWider(child.element));
+        } else {
+            steps.push_back(crate::builder::Step::Format(child.element));
         }
         if dedent {
             steps.push_back(crate::builder::Step::Dedent);

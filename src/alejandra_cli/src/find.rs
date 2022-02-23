@@ -5,7 +5,7 @@ pub fn nix_files(include: Vec<&str>, exclude: Vec<&str>) -> Vec<String> {
         exclude.iter().flat_map(nix_files_in_path).collect();
 
     let mut paths: Vec<String> =
-        include.difference(&exclude).map(|path| path.clone()).collect();
+        include.difference(&exclude).cloned().collect();
 
     paths.sort();
     paths

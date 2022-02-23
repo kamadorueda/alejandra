@@ -27,10 +27,8 @@ pub fn default(
     let mut children = crate::children::Children::new(build_ctx, node);
 
     while let Some(child) = children.get_next() {
-        let step = match build_ctx.config.layout() {
-            crate::config::Layout::Tall => {
-                crate::builder::Step::FormatWider(child.element)
-            }
+        let step = match build_ctx.vertical {
+            true => crate::builder::Step::FormatWider(child.element),
             _ => crate::builder::Step::Format(child.element),
         };
         steps.push_back(step);

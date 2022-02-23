@@ -8,11 +8,9 @@ pub fn rule(
         build_ctx, node, true,
     );
 
-    let layout = if children.has_comments() || children.has_newlines() {
-        &crate::config::Layout::Tall
-    } else {
-        build_ctx.config.layout()
-    };
+    let vertical = children.has_comments()
+        || children.has_newlines()
+        || build_ctx.vertical;
 
     while children.has_next() {
         children.drain_comments_and_newlines(|element| match element {
@@ -25,17 +23,13 @@ pub fn rule(
         });
 
         if let Some(child) = children.get_next() {
-            match layout {
-                crate::config::Layout::Tall => {
-                    steps.push_back(crate::builder::Step::FormatWider(
-                        child.element,
-                    ));
-                    steps.push_back(crate::builder::Step::NewLine);
-                }
-                crate::config::Layout::Wide => {
-                    steps
-                        .push_back(crate::builder::Step::Format(child.element));
-                }
+            if vertical {
+                steps.push_back(crate::builder::Step::FormatWider(
+                    child.element,
+                ));
+                steps.push_back(crate::builder::Step::NewLine);
+            } else {
+                steps.push_back(crate::builder::Step::Format(child.element));
             }
         }
     }

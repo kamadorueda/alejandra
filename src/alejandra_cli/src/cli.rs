@@ -35,24 +35,20 @@ pub fn parse(args: Vec<String>) -> clap::ArgMatches {
         .get_matches_from(args)
 }
 
-pub fn stdin(config: alejandra_engine::config::Config) -> std::io::Result<()> {
+pub fn stdin() -> std::io::Result<()> {
     use std::io::Read;
 
     eprintln!("Formatting stdin, run with --help to see all options.");
     let mut stdin = String::new();
     std::io::stdin().read_to_string(&mut stdin).unwrap();
 
-    let stdout =
-        alejandra_engine::format::string(&config, "stdin".to_string(), stdin)?;
+    let stdout = alejandra_engine::format::string("stdin".to_string(), stdin)?;
     print!("{}", stdout);
 
     Ok(())
 }
 
-pub fn simple(
-    config: alejandra_engine::config::Config,
-    paths: Vec<String>,
-) -> std::io::Result<()> {
+pub fn simple(paths: Vec<String>) -> std::io::Result<()> {
     use rayon::prelude::*;
 
     eprintln!("Formatting {} files.", paths.len());
@@ -60,14 +56,12 @@ pub fn simple(
     let (results, errors): (Vec<_>, Vec<_>) = paths
         .par_iter()
         .map(|path| -> std::io::Result<bool> {
-            alejandra_engine::format::file(&config, path.to_string()).map(
-                |changed| {
-                    if changed {
-                        eprintln!("Formatted: {}", &path);
-                    }
-                    changed
-                },
-            )
+            alejandra_engine::format::file(path.to_string()).map(|changed| {
+                if changed {
+                    eprintln!("Formatted: {}", &path);
+                }
+                changed
+            })
         })
         .partition(Result::is_ok);
 
@@ -80,10 +74,7 @@ pub fn simple(
     Ok(())
 }
 
-pub fn tui(
-    config: alejandra_engine::config::Config,
-    paths: Vec<String>,
-) -> std::io::Result<()> {
+pub fn tui(paths: Vec<String>) -> std::io::Result<()> {
     use rayon::prelude::*;
     use termion::{input::TermRead, raw::IntoRawMode};
 
@@ -137,7 +128,7 @@ pub fn tui(
     let sender_finished = sender;
     std::thread::spawn(move || {
         paths.into_par_iter().for_each_with(sender_paths, |sender, path| {
-            let result = alejandra_engine::format::file(&config, path.clone());
+            let result = alejandra_engine::format::file(path.clone());
 
             if let Err(error) = sender
                 .send(Event::FormattedPath(FormattedPath { path, result }))

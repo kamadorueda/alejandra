@@ -8,20 +8,15 @@ pub fn rule(
         build_ctx, node, true,
     );
 
-    let layout = if children.has_comments() || children.has_newlines() {
-        &crate::config::Layout::Tall
-    } else {
-        build_ctx.config.layout()
-    };
+    let vertical = children.has_comments()
+        || children.has_newlines()
+        || build_ctx.vertical;
 
     let child = children.get_next().unwrap();
-    match layout {
-        crate::config::Layout::Tall => {
-            steps.push_back(crate::builder::Step::FormatWider(child.element));
-        }
-        crate::config::Layout::Wide => {
-            steps.push_back(crate::builder::Step::Format(child.element));
-        }
+    if vertical {
+        steps.push_back(crate::builder::Step::FormatWider(child.element));
+    } else {
+        steps.push_back(crate::builder::Step::Format(child.element));
     }
 
     // /**/
@@ -44,13 +39,10 @@ pub fn rule(
     }
 
     let child = children.get_next().unwrap();
-    match layout {
-        crate::config::Layout::Tall => {
-            steps.push_back(crate::builder::Step::FormatWider(child.element));
-        }
-        crate::config::Layout::Wide => {
-            steps.push_back(crate::builder::Step::Format(child.element));
-        }
+    if vertical {
+        steps.push_back(crate::builder::Step::FormatWider(child.element));
+    } else {
+        steps.push_back(crate::builder::Step::Format(child.element));
     }
     children.move_prev();
 

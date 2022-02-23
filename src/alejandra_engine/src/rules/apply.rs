@@ -8,21 +8,17 @@ pub fn rule(
         build_ctx, node, true,
     );
 
-    let layout = if children.has_comments() || children.has_newlines() {
-        &crate::config::Layout::Tall
-    } else {
-        build_ctx.config.layout()
-    };
+    let vertical = children.has_comments()
+        || children.has_newlines()
+        || build_ctx.vertical;
 
     // left
     let child = children.get_next().unwrap();
-    match layout {
-        crate::config::Layout::Tall => {
-            steps.push_back(crate::builder::Step::FormatWider(child.element));
-        }
-        crate::config::Layout::Wide => {
-            steps.push_back(crate::builder::Step::Format(child.element));
-        }
+
+    if vertical {
+        steps.push_back(crate::builder::Step::FormatWider(child.element));
+    } else {
+        steps.push_back(crate::builder::Step::Format(child.element));
     }
 
     // /**/
@@ -39,29 +35,26 @@ pub fn rule(
 
     // right
     let child = children.get_next().unwrap();
-    match layout {
-        crate::config::Layout::Tall => {
-            if let rnix::SyntaxKind::TOKEN_COMMENT
-            | rnix::SyntaxKind::TOKEN_WHITESPACE = child_prev.element.kind()
-            {
-                steps.push_back(crate::builder::Step::NewLine);
-                steps.push_back(crate::builder::Step::Pad);
-            } else if let rnix::SyntaxKind::NODE_ATTR_SET
-            | rnix::SyntaxKind::NODE_LIST
-            | rnix::SyntaxKind::NODE_PAREN
-            | rnix::SyntaxKind::NODE_STRING = child.element.kind()
-            {
-                steps.push_back(crate::builder::Step::Whitespace);
-            } else {
-                steps.push_back(crate::builder::Step::NewLine);
-                steps.push_back(crate::builder::Step::Pad);
-            };
-            steps.push_back(crate::builder::Step::FormatWider(child.element));
-        }
-        crate::config::Layout::Wide => {
+    if vertical {
+        if let rnix::SyntaxKind::TOKEN_COMMENT
+        | rnix::SyntaxKind::TOKEN_WHITESPACE = child_prev.element.kind()
+        {
+            steps.push_back(crate::builder::Step::NewLine);
+            steps.push_back(crate::builder::Step::Pad);
+        } else if let rnix::SyntaxKind::NODE_ATTR_SET
+        | rnix::SyntaxKind::NODE_LIST
+        | rnix::SyntaxKind::NODE_PAREN
+        | rnix::SyntaxKind::NODE_STRING = child.element.kind()
+        {
             steps.push_back(crate::builder::Step::Whitespace);
-            steps.push_back(crate::builder::Step::Format(child.element));
-        }
+        } else {
+            steps.push_back(crate::builder::Step::NewLine);
+            steps.push_back(crate::builder::Step::Pad);
+        };
+        steps.push_back(crate::builder::Step::FormatWider(child.element));
+    } else {
+        steps.push_back(crate::builder::Step::Whitespace);
+        steps.push_back(crate::builder::Step::Format(child.element));
     }
 
     steps

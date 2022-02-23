@@ -13,39 +13,46 @@ pub enum Step {
 
 #[derive(Clone)]
 pub struct BuildCtx {
-    pub config:      crate::config::Config,
     pub force_wide:  bool,
     pub indentation: usize,
     pub pos_new:     crate::position::Position,
     pub pos_old:     crate::position::Position,
     pub path:        String,
+    pub vertical:    bool,
 }
 
 impl BuildCtx {
     pub fn new(
-        config: crate::config::Config,
         force_wide: bool,
         path: String,
         pos_new: crate::position::Position,
         pos_old: crate::position::Position,
+        vertical: bool,
     ) -> BuildCtx {
-        BuildCtx { config, force_wide, indentation: 0, path, pos_new, pos_old }
+        BuildCtx {
+            force_wide,
+            indentation: 0,
+            path,
+            pos_new,
+            pos_old,
+            vertical,
+        }
     }
 }
 
 pub fn build(
-    config: &crate::config::Config,
     element: rnix::SyntaxElement,
     force_wide: bool,
     path: String,
+    vertical: bool,
 ) -> Option<rowan::GreenNode> {
     let mut builder = rowan::GreenNodeBuilder::new();
     let mut build_ctx = BuildCtx::new(
-        config.clone(),
         force_wide,
         path,
         crate::position::Position::default(),
         crate::position::Position::default(),
+        vertical,
     );
 
     build_step(
@@ -267,15 +274,10 @@ fn format_wider(
 ) {
     match element {
         rnix::SyntaxElement::Node(node) => {
-            let layout = if fits_in_single_line(build_ctx, node.clone().into())
-            {
-                crate::config::Layout::Wide
-            } else {
-                crate::config::Layout::Tall
-            };
-
             let mut build_ctx_clone = build_ctx.clone();
-            build_ctx_clone.config = build_ctx.config.with_layout(layout);
+            build_ctx_clone.vertical =
+                !fits_in_single_line(build_ctx, node.clone().into());
+
             format(builder, &mut build_ctx_clone, element);
         }
         rnix::SyntaxElement::Token(_) => {
@@ -289,12 +291,7 @@ pub fn fits_in_single_line(
     node: rnix::SyntaxElement,
 ) -> bool {
     let line = build_ctx.pos_new.line;
-    let maybe_green_node = build(
-        &build_ctx.config.with_layout(crate::config::Layout::Wide),
-        node,
-        true,
-        build_ctx.path.clone(),
-    );
+    let maybe_green_node = build(node, true, build_ctx.path.clone(), false);
 
     match maybe_green_node {
         Some(_) => build_ctx.pos_new.line == line,
