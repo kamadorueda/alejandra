@@ -35,6 +35,16 @@ impl Children {
                 }
                 rnix::SyntaxElement::Token(token) => {
                     match token.kind() {
+                        rnix::SyntaxKind::TOKEN_COMMENT => {
+                            children.push(Child {
+                                element: crate::builder::make_isolated_token(
+                                    rnix::SyntaxKind::TOKEN_COMMENT,
+                                    &dedent_comment(&pos, token.text()),
+                                )
+                                .into(),
+                                pos:     pos.clone(),
+                            });
+                        }
                         rnix::SyntaxKind::TOKEN_WHITESPACE => {
                             if with_newlines
                                 && crate::utils::count_newlines(token.text())
@@ -127,10 +137,9 @@ impl Children {
     pub fn drain_comment<F: FnMut(String)>(&mut self, mut callback: F) {
         if let Some(child) = self.peek_next() {
             if let rnix::SyntaxKind::TOKEN_COMMENT = child.element.kind() {
-                callback(dedent_comment(
-                    &child.pos,
-                    child.element.into_token().unwrap().text(),
-                ));
+                callback(
+                    child.element.into_token().unwrap().text().to_string(),
+                );
                 self.move_next();
             }
         }
@@ -140,10 +149,9 @@ impl Children {
         while let Some(child) = self.peek_next() {
             match child.element.kind() {
                 rnix::SyntaxKind::TOKEN_COMMENT => {
-                    callback(dedent_comment(
-                        &child.pos,
-                        child.element.into_token().unwrap().text(),
-                    ));
+                    callback(
+                        child.element.into_token().unwrap().text().to_string(),
+                    );
                     self.move_next();
                 }
                 _ => {
@@ -160,10 +168,9 @@ impl Children {
         while let Some(child) = self.peek_next() {
             match child.element.kind() {
                 rnix::SyntaxKind::TOKEN_COMMENT => {
-                    callback(DrainCommentOrNewline::Comment(dedent_comment(
-                        &child.pos,
-                        child.element.into_token().unwrap().text(),
-                    )));
+                    callback(DrainCommentOrNewline::Comment(
+                        child.element.into_token().unwrap().text().to_string(),
+                    ));
                     self.move_next();
                 }
                 rnix::SyntaxKind::TOKEN_WHITESPACE => {
