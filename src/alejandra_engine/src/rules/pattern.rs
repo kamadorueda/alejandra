@@ -1,195 +1,175 @@
-pub fn rule(
+use std::collections::LinkedList;
+
+#[derive(Debug)]
+struct Argument {
+    comments_before: LinkedList<String>,
+    item:            Option<rnix::SyntaxElement>,
+    comment_after:   Option<String>,
+}
+
+impl Default for Argument {
+    fn default() -> Argument {
+        Argument {
+            comments_before: LinkedList::new(),
+            item:            None,
+            comment_after:   None,
+        }
+    }
+}
+
+#[derive(Debug)]
+struct Pattern {
+    initial_at:                    Option<rnix::SyntaxElement>,
+    comments_after_initial_at:     LinkedList<String>,
+    arguments:                     LinkedList<Argument>,
+    comments_before_curly_b_close: LinkedList<String>,
+    comments_before_end_at:        LinkedList<String>,
+    end_at:                        Option<rnix::SyntaxElement>,
+}
+
+impl Default for Pattern {
+    fn default() -> Pattern {
+        Pattern {
+            initial_at:                    None,
+            comments_after_initial_at:     LinkedList::new(),
+            arguments:                     LinkedList::new(),
+            comments_before_curly_b_close: LinkedList::new(),
+            comments_before_end_at:        LinkedList::new(),
+            end_at:                        None,
+        }
+    }
+}
+
+fn parse(
     build_ctx: &crate::builder::BuildCtx,
     node: &rnix::SyntaxNode,
-) -> std::collections::LinkedList<crate::builder::Step> {
-    let mut steps = std::collections::LinkedList::new();
+) -> Pattern {
+    let mut pattern = Pattern::default();
 
     let mut children = crate::children::Children::new_with_configuration(
         build_ctx, node, true,
     );
 
-    let has_comments = children.has_comments();
-    let has_comments_between_curly_b = node
-        .children_with_tokens()
-        .skip_while(|element| {
-            element.kind() != rnix::SyntaxKind::TOKEN_CURLY_B_OPEN
-        })
-        .take_while(|element| {
-            element.kind() != rnix::SyntaxKind::TOKEN_CURLY_B_CLOSE
-        })
-        .any(|element| element.kind() == rnix::SyntaxKind::TOKEN_COMMENT);
-
-    let items_count = node
-        .children_with_tokens()
-        .filter(|element| {
-            matches!(
-                element.kind(),
-                rnix::SyntaxKind::TOKEN_ELLIPSIS
-                    | rnix::SyntaxKind::NODE_PAT_ENTRY
-            )
-        })
-        .count();
-
-    let max_items = if node
-        .children_with_tokens()
-        .any(|element| element.kind() == rnix::SyntaxKind::TOKEN_ELLIPSIS)
-    {
-        2
-    } else {
-        1
-    };
-
-    let layout = if has_comments || children.has_newlines() {
-        &crate::config::Layout::Tall
-    } else {
-        build_ctx.config.layout()
-    };
-
     // x @
-    let mut at = false;
     let child = children.peek_next().unwrap();
     if let rnix::SyntaxKind::NODE_PAT_BIND = child.element.kind() {
-        at = true;
-        match layout {
-            crate::config::Layout::Tall => {
-                steps.push_back(crate::builder::Step::FormatWider(
-                    child.element,
-                ));
-            }
-            crate::config::Layout::Wide => {
-                steps.push_back(crate::builder::Step::Format(child.element));
-            }
-        }
+        pattern.initial_at = Some(child.element);
         children.move_next();
     }
 
     // /**/
-    let mut comment = false;
     children.drain_comments_and_newlines(|element| match element {
         crate::children::DrainCommentOrNewline::Comment(text) => {
-            steps.push_back(crate::builder::Step::NewLine);
-            steps.push_back(crate::builder::Step::Pad);
-            steps.push_back(crate::builder::Step::Comment(text));
-            comment = true;
+            pattern.comments_after_initial_at.push_back(text);
         }
         crate::children::DrainCommentOrNewline::Newline(_) => {}
     });
 
-    if comment {
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
-    } else if at {
-        steps.push_back(crate::builder::Step::Whitespace);
-    }
-
     // {
-    let child = children.get_next().unwrap();
-    steps.push_back(crate::builder::Step::Format(child.element));
-    steps.push_back(crate::builder::Step::Indent);
+    children.move_next();
 
-    let mut last_kind = rnix::SyntaxKind::TOKEN_CURLY_B_OPEN;
+    // arguments
+    loop {
+        let mut argument = Argument::default();
 
-    while let Some(child) = children.peek_next() {
-        let kind = child.element.kind();
-        match kind {
-            // /**/
-            rnix::SyntaxKind::TOKEN_COMMENT => {
-                if let rnix::SyntaxKind::TOKEN_COMMA
-                | rnix::SyntaxKind::TOKEN_COMMENT
-                | rnix::SyntaxKind::TOKEN_CURLY_B_OPEN
-                | rnix::SyntaxKind::TOKEN_ELLIPSIS
-                | rnix::SyntaxKind::NODE_PAT_ENTRY = last_kind
-                {
-                    steps.push_back(crate::builder::Step::NewLine);
-                    steps.push_back(crate::builder::Step::Pad);
+        // Before an item we can have: comma, comments, whitespace
+        loop {
+            let child = children.peek_next().unwrap();
+            // eprintln!("before item {:?}", child.element.kind());
+
+            match child.element.kind() {
+                rnix::SyntaxKind::NODE_PAT_ENTRY
+                | rnix::SyntaxKind::TOKEN_CURLY_B_CLOSE
+                | rnix::SyntaxKind::TOKEN_ELLIPSIS => {
+                    break;
                 }
-
-                children.drain_comment(|text| {
-                    steps.push_back(crate::builder::Step::Comment(text));
-                });
-
-                last_kind = kind;
-            }
-            // item
-            rnix::SyntaxKind::TOKEN_ELLIPSIS
-            | rnix::SyntaxKind::NODE_PAT_ENTRY => {
-                if let rnix::SyntaxKind::TOKEN_CURLY_B_OPEN = last_kind {
-                    if has_comments_between_curly_b || items_count > max_items {
-                        steps.push_back(crate::builder::Step::NewLine);
-                        steps.push_back(crate::builder::Step::Pad);
-                    }
+                rnix::SyntaxKind::TOKEN_COMMA => {
+                    children.move_next();
                 }
+                rnix::SyntaxKind::TOKEN_COMMENT => {
+                    let content =
+                        child.element.into_token().unwrap().to_string();
 
-                if let rnix::SyntaxKind::TOKEN_COMMA
-                | rnix::SyntaxKind::TOKEN_COMMENT = last_kind
-                {
-                    if !has_comments_between_curly_b && items_count <= max_items
-                    {
-                        steps.push_back(crate::builder::Step::Whitespace);
-                    } else {
-                        steps.push_back(crate::builder::Step::NewLine);
-                        steps.push_back(crate::builder::Step::Pad);
-                    }
+                    argument.comments_before.push_back(content);
+                    children.move_next();
                 }
+                rnix::SyntaxKind::TOKEN_WHITESPACE => {
+                    children.move_next();
+                }
+                _ => {}
+            }
+        }
 
-                match layout {
-                    crate::config::Layout::Tall => {
-                        steps.push_back(crate::builder::Step::FormatWider(
-                            child.element,
-                        ));
-                    }
-                    crate::config::Layout::Wide => {
-                        steps.push_back(crate::builder::Step::Format(
-                            child.element,
-                        ));
-                    }
-                };
-                children.move_next();
-                last_kind = kind;
-            }
-            // ,
-            rnix::SyntaxKind::TOKEN_COMMA => {
-                if let rnix::SyntaxKind::TOKEN_COMMENT = last_kind {
-                    steps.push_back(crate::builder::Step::NewLine);
-                    steps.push_back(crate::builder::Step::Pad);
-                }
-                steps.push_back(crate::builder::Step::Format(child.element));
-                children.move_next();
-                last_kind = kind;
-            }
-            // \n
-            rnix::SyntaxKind::TOKEN_WHITESPACE => {
-                children.move_next();
-            }
-            _ => {
+        // item
+        let child = children.peek_next().unwrap();
+        // eprintln!("item {:?}", child.element.kind());
+        match child.element.kind() {
+            rnix::SyntaxKind::TOKEN_CURLY_B_CLOSE => {
+                pattern.comments_before_curly_b_close =
+                    argument.comments_before;
                 break;
             }
+            rnix::SyntaxKind::TOKEN_ELLIPSIS
+            | rnix::SyntaxKind::NODE_PAT_ENTRY => {
+                argument.item = Some(child.element);
+                children.move_next();
+            }
+            _ => {}
         }
-    }
 
-    // }
-    let child = children.get_next().unwrap();
-    steps.push_back(crate::builder::Step::Dedent);
-    if has_comments_between_curly_b || items_count > max_items {
-        if let rnix::SyntaxKind::NODE_PAT_ENTRY = last_kind {
-            steps.push_back(crate::builder::Step::Token(
-                rnix::SyntaxKind::TOKEN_COMMA,
-                ",".to_string(),
-            ))
+        // After an item we can have: comma, comments, whitespace
+        loop {
+            let child = children.peek_next().unwrap();
+            // eprintln!("after item {:?}", child.element.kind());
+
+            match child.element.kind() {
+                rnix::SyntaxKind::NODE_PAT_ENTRY
+                | rnix::SyntaxKind::TOKEN_ELLIPSIS
+                | rnix::SyntaxKind::TOKEN_CURLY_B_CLOSE => {
+                    break;
+                }
+                rnix::SyntaxKind::TOKEN_COMMA => {
+                    children.move_next();
+                }
+                rnix::SyntaxKind::TOKEN_COMMENT => {
+                    let content =
+                        child.element.into_token().unwrap().to_string();
+
+                    children.move_next();
+                    argument.comment_after = Some(content);
+                    break;
+                }
+                rnix::SyntaxKind::TOKEN_WHITESPACE => {
+                    let content =
+                        child.element.into_token().unwrap().to_string();
+
+                    children.move_next();
+                    if crate::utils::count_newlines(&content) > 0 {
+                        break;
+                    }
+                }
+                _ => {}
+            }
         }
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
+
+        pattern.arguments.push_back(argument);
     }
-    steps.push_back(crate::builder::Step::Format(child.element));
 
     // /**/
-    let mut comment = false;
     children.drain_comments_and_newlines(|element| match element {
         crate::children::DrainCommentOrNewline::Comment(text) => {
-            steps.push_back(crate::builder::Step::NewLine);
-            steps.push_back(crate::builder::Step::Pad);
-            steps.push_back(crate::builder::Step::Comment(text));
-            comment = true;
+            pattern.comments_before_curly_b_close.push_back(text);
+        }
+        crate::children::DrainCommentOrNewline::Newline(_) => {}
+    });
+
+    // }
+    children.move_next();
+
+    // /**/
+    children.drain_comments_and_newlines(|element| match element {
+        crate::children::DrainCommentOrNewline::Comment(text) => {
+            pattern.comments_before_end_at.push_back(text);
         }
         crate::children::DrainCommentOrNewline::Newline(_) => {}
     });
@@ -197,22 +177,209 @@ pub fn rule(
     // @ x
     if let Some(child) = children.peek_next() {
         if let rnix::SyntaxKind::NODE_PAT_BIND = child.element.kind() {
-            if comment {
+            pattern.end_at = Some(child.element);
+        }
+    }
+
+    pattern
+}
+
+pub fn rule(
+    build_ctx: &crate::builder::BuildCtx,
+    node: &rnix::SyntaxNode,
+) -> std::collections::LinkedList<crate::builder::Step> {
+    let mut steps = std::collections::LinkedList::new();
+
+    let pattern = parse(build_ctx, node);
+
+    let has_comments_between_curly_b =
+        pattern.arguments.iter().any(|argument| {
+            argument.comment_after.is_some()
+                || !argument.comments_before.is_empty()
+        });
+
+    let has_comments = has_comments_between_curly_b
+        || !pattern.comments_after_initial_at.is_empty()
+        || !pattern.comments_before_end_at.is_empty();
+
+    let has_ellipsis = pattern.arguments.iter().any(|argument| {
+        if argument.item.is_some() {
+            argument.item.as_ref().unwrap().kind()
+                == rnix::SyntaxKind::TOKEN_ELLIPSIS
+        } else {
+            false
+        }
+    });
+
+    let arguments_count = pattern.arguments.len();
+
+    let arguments_count_for_tall = if has_ellipsis { 2 } else { 1 };
+
+    let layout = if has_comments
+        || arguments_count > arguments_count_for_tall
+        || (arguments_count > 0 && has_comments_between_curly_b)
+    {
+        &crate::config::Layout::Tall
+    } else {
+        build_ctx.config.layout()
+    };
+
+    // x @
+    if let Some(element) = &pattern.initial_at {
+        let element = element.clone();
+        match layout {
+            crate::config::Layout::Tall => {
+                steps.push_back(crate::builder::Step::FormatWider(element));
+            }
+            crate::config::Layout::Wide => {
+                steps.push_back(crate::builder::Step::Format(element));
+            }
+        }
+    }
+
+    // /**/
+    if !pattern.comments_after_initial_at.is_empty() {
+        steps.push_back(crate::builder::Step::NewLine);
+        steps.push_back(crate::builder::Step::Pad);
+        for text in pattern.comments_after_initial_at {
+            steps.push_back(crate::builder::Step::Comment(text));
+            steps.push_back(crate::builder::Step::NewLine);
+            steps.push_back(crate::builder::Step::Pad);
+        }
+    } else if pattern.initial_at.is_some() {
+        steps.push_back(crate::builder::Step::Whitespace);
+    }
+
+    // {
+    steps.push_back(crate::builder::Step::Token(
+        rnix::SyntaxKind::TOKEN_CURLY_B_OPEN,
+        "{".to_string(),
+    ));
+    match layout {
+        crate::config::Layout::Tall => {
+            steps.push_back(crate::builder::Step::Indent);
+        }
+        crate::config::Layout::Wide => {}
+    };
+
+    // arguments
+    let mut index = 0;
+    for argument in pattern.arguments {
+        match layout {
+            crate::config::Layout::Tall => {
                 steps.push_back(crate::builder::Step::NewLine);
                 steps.push_back(crate::builder::Step::Pad);
-            } else {
-                steps.push_back(crate::builder::Step::Whitespace);
             }
-            match layout {
-                crate::config::Layout::Tall => {
-                    steps.push_back(crate::builder::Step::FormatWider(
-                        child.element,
+            crate::config::Layout::Wide => {
+                if index > 0 {
+                    steps.push_back(crate::builder::Step::Whitespace);
+                }
+            }
+        }
+
+        // /**/
+        if !argument.comments_before.is_empty() {
+            for text in argument.comments_before {
+                steps.push_back(crate::builder::Step::Comment(text));
+                steps.push_back(crate::builder::Step::NewLine);
+                steps.push_back(crate::builder::Step::Pad);
+            }
+        }
+
+        // argument
+        let element = argument.item.unwrap();
+        let element_kind = element.kind();
+        match layout {
+            crate::config::Layout::Tall => {
+                steps.push_back(crate::builder::Step::FormatWider(element));
+            }
+            crate::config::Layout::Wide => {
+                steps.push_back(crate::builder::Step::Format(element));
+            }
+        };
+
+        // ,
+        match layout {
+            crate::config::Layout::Tall => {
+                if !matches!(element_kind, rnix::SyntaxKind::TOKEN_ELLIPSIS) {
+                    steps.push_back(crate::builder::Step::Token(
+                        rnix::SyntaxKind::TOKEN_COMMA,
+                        ",".to_string(),
                     ));
                 }
-                crate::config::Layout::Wide => {
-                    steps
-                        .push_back(crate::builder::Step::Format(child.element));
+            }
+            crate::config::Layout::Wide => {
+                if index + 1 < arguments_count {
+                    steps.push_back(crate::builder::Step::Token(
+                        rnix::SyntaxKind::TOKEN_COMMA,
+                        ",".to_string(),
+                    ));
                 }
+            }
+        };
+
+        // possible inline comment
+        if let Some(text) = argument.comment_after {
+            if text.starts_with('#') {
+                steps.push_back(crate::builder::Step::Whitespace);
+            } else {
+                steps.push_back(crate::builder::Step::NewLine);
+                steps.push_back(crate::builder::Step::Pad);
+            }
+            steps.push_back(crate::builder::Step::Comment(text));
+        }
+
+        index += 1;
+    }
+
+    // /**/
+    let has_comments_before_curly_b_close =
+        !pattern.comments_before_curly_b_close.is_empty();
+    for text in pattern.comments_before_curly_b_close {
+        steps.push_back(crate::builder::Step::NewLine);
+        steps.push_back(crate::builder::Step::Pad);
+        steps.push_back(crate::builder::Step::Comment(text));
+    }
+
+    // }
+    match layout {
+        crate::config::Layout::Tall => {
+            steps.push_back(crate::builder::Step::Dedent);
+            if arguments_count > 0 || has_comments_before_curly_b_close {
+                steps.push_back(crate::builder::Step::NewLine);
+                steps.push_back(crate::builder::Step::Pad);
+            }
+        }
+        crate::config::Layout::Wide => {}
+    };
+    steps.push_back(crate::builder::Step::Token(
+        rnix::SyntaxKind::TOKEN_CURLY_B_OPEN,
+        "}".to_string(),
+    ));
+
+    // /**/
+    if pattern.comments_before_end_at.is_empty() {
+        if pattern.end_at.is_some() {
+            steps.push_back(crate::builder::Step::Whitespace);
+        }
+    } else {
+        steps.push_back(crate::builder::Step::NewLine);
+        steps.push_back(crate::builder::Step::Pad);
+        for text in pattern.comments_before_end_at {
+            steps.push_back(crate::builder::Step::Comment(text));
+            steps.push_back(crate::builder::Step::NewLine);
+            steps.push_back(crate::builder::Step::Pad);
+        }
+    }
+
+    // @ x
+    if let Some(element) = pattern.end_at {
+        match layout {
+            crate::config::Layout::Tall => {
+                steps.push_back(crate::builder::Step::FormatWider(element));
+            }
+            crate::config::Layout::Wide => {
+                steps.push_back(crate::builder::Step::Format(element));
             }
         }
     }
