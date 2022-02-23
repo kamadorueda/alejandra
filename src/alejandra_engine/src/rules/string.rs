@@ -1,3 +1,9 @@
+const PLACEHOLDER: &str = "\
+    4d13159079d76c1398db5f3ab0c62325\
+    f884b545e63226f7ec8aad96c52e13e8\
+    6b219abc9462c41b87e47344752e9940\
+    abf9353565f69a5db5c672b89372b84c";
+
 pub fn rule(
     build_ctx: &crate::builder::BuildCtx,
     node: &rnix::SyntaxNode,
@@ -26,8 +32,6 @@ pub fn rule(
             }
         }
     } else {
-        let placeholder = get_placeholder();
-
         let elements: Vec<rnix::SyntaxElement> = children
             .get_remaining()
             .iter()
@@ -45,7 +49,7 @@ pub fn rule(
                     let token = element.clone().into_token().unwrap();
                     token.text().to_string()
                 }
-                _ => placeholder.to_string(),
+                _ => PLACEHOLDER.to_string(),
             })
             .collect();
 
@@ -111,7 +115,7 @@ pub fn rule(
 
         for (index, line) in lines.iter().enumerate() {
             let portions: Vec<String> = line
-                .split(&placeholder)
+                .split(PLACEHOLDER)
                 .map(|portion| portion.to_string())
                 .collect();
 
@@ -158,14 +162,4 @@ pub fn rule(
     }
 
     steps
-}
-
-fn get_placeholder() -> String {
-    use rand::RngCore;
-
-    let mut bytes = [0u8; 32];
-
-    rand::thread_rng().fill_bytes(&mut bytes);
-
-    bytes.iter().map(|byte| format!("{:02X}", byte)).collect()
 }
