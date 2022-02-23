@@ -16,39 +16,32 @@ pub fn rule_with_configuration(
         build_ctx, node, true,
     );
 
-    let layout = if children.has_comments() || children.has_newlines() {
-        &crate::config::Layout::Tall
-    } else {
-        build_ctx.config.layout()
-    };
+    let vertical = children.has_comments()
+        || children.has_newlines()
+        || build_ctx.vertical;
 
     // expr
     let child = children.get_next().unwrap();
-    match layout {
-        crate::config::Layout::Tall => {
-            let kind = child.element.kind();
+    if vertical {
+        let kind = child.element.kind();
 
-            if (parent_kind == "bin_op_and_or_default"
-                && matches!(
-                    kind,
-                    rnix::SyntaxKind::NODE_BIN_OP
-                        | rnix::SyntaxKind::NODE_OR_DEFAULT
-                ))
-                || (parent_kind == "select"
-                    && matches!(kind, rnix::SyntaxKind::NODE_SELECT))
-            {
-                steps.push_back(crate::builder::Step::Format(child.element));
-            } else {
-                steps.push_back(crate::builder::Step::FormatWider(
-                    child.element,
-                ));
-            }
-            steps.push_back(crate::builder::Step::NewLine);
-            steps.push_back(crate::builder::Step::Pad);
-        }
-        crate::config::Layout::Wide => {
+        if (parent_kind == "bin_op_and_or_default"
+            && matches!(
+                kind,
+                rnix::SyntaxKind::NODE_BIN_OP
+                    | rnix::SyntaxKind::NODE_OR_DEFAULT
+            ))
+            || (parent_kind == "select"
+                && matches!(kind, rnix::SyntaxKind::NODE_SELECT))
+        {
             steps.push_back(crate::builder::Step::Format(child.element));
+        } else {
+            steps.push_back(crate::builder::Step::FormatWider(child.element));
         }
+        steps.push_back(crate::builder::Step::NewLine);
+        steps.push_back(crate::builder::Step::Pad);
+    } else {
+        steps.push_back(crate::builder::Step::Format(child.element));
     }
 
     // /**/
@@ -63,13 +56,9 @@ pub fn rule_with_configuration(
 
     // operator
     let child = children.get_next().unwrap();
-    match layout {
-        crate::config::Layout::Tall => {}
-        crate::config::Layout::Wide => {
-            if parent_kind == "bin_op_and_or_default" {
-                steps.push_back(crate::builder::Step::Whitespace);
-            }
-        }
+    if vertical {
+    } else if parent_kind == "bin_op_and_or_default" {
+        steps.push_back(crate::builder::Step::Whitespace);
     }
     steps.push_back(crate::builder::Step::Format(child.element));
 
@@ -94,13 +83,10 @@ pub fn rule_with_configuration(
 
     // expr
     let child = children.get_next().unwrap();
-    match layout {
-        crate::config::Layout::Tall => {
-            steps.push_back(crate::builder::Step::FormatWider(child.element));
-        }
-        crate::config::Layout::Wide => {
-            steps.push_back(crate::builder::Step::Format(child.element));
-        }
+    if vertical {
+        steps.push_back(crate::builder::Step::FormatWider(child.element));
+    } else {
+        steps.push_back(crate::builder::Step::Format(child.element));
     }
 
     steps

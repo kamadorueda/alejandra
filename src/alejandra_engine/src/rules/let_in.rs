@@ -20,23 +20,16 @@ pub fn rule(
         })
         .count();
 
-    let layout = if items_count > 1
+    let vertical = items_count > 1
         || children.has_comments()
         || children.has_newlines()
-    {
-        &crate::config::Layout::Tall
-    } else {
-        build_ctx.config.layout()
-    };
+        || build_ctx.vertical;
 
     // let
     let child = children.get_next().unwrap();
     steps.push_back(crate::builder::Step::Format(child.element));
-    match layout {
-        crate::config::Layout::Tall => {
-            steps.push_back(crate::builder::Step::Indent);
-        }
-        crate::config::Layout::Wide => {}
+    if vertical {
+        steps.push_back(crate::builder::Step::Indent);
     }
 
     let mut item_index: usize = 0;
@@ -71,19 +64,15 @@ pub fn rule(
 
             // expr
             item_index += 1;
-            match layout {
-                crate::config::Layout::Tall => {
-                    steps.push_back(crate::builder::Step::NewLine);
-                    steps.push_back(crate::builder::Step::Pad);
-                    steps.push_back(crate::builder::Step::FormatWider(
-                        child.element,
-                    ));
-                }
-                crate::config::Layout::Wide => {
-                    steps.push_back(crate::builder::Step::Whitespace);
-                    steps
-                        .push_back(crate::builder::Step::Format(child.element));
-                }
+            if vertical {
+                steps.push_back(crate::builder::Step::NewLine);
+                steps.push_back(crate::builder::Step::Pad);
+                steps.push_back(crate::builder::Step::FormatWider(
+                    child.element,
+                ));
+            } else {
+                steps.push_back(crate::builder::Step::Whitespace);
+                steps.push_back(crate::builder::Step::Format(child.element));
             }
 
             children.move_next();
@@ -91,15 +80,12 @@ pub fn rule(
         }
     }
 
-    match layout {
-        crate::config::Layout::Tall => {
-            steps.push_back(crate::builder::Step::Dedent);
-            steps.push_back(crate::builder::Step::NewLine);
-            steps.push_back(crate::builder::Step::Pad);
-        }
-        crate::config::Layout::Wide => {
-            steps.push_back(crate::builder::Step::Whitespace);
-        }
+    if vertical {
+        steps.push_back(crate::builder::Step::Dedent);
+        steps.push_back(crate::builder::Step::NewLine);
+        steps.push_back(crate::builder::Step::Pad);
+    } else {
+        steps.push_back(crate::builder::Step::Whitespace);
     }
 
     // in
@@ -120,27 +106,24 @@ pub fn rule(
     // in
     let mut dedent = false;
     steps.push_back(crate::builder::Step::Format(child_in.element));
-    match layout {
-        crate::config::Layout::Tall => {
-            if child_comments.is_empty()
-                && matches!(
-                    child_expr.element.kind(),
-                    rnix::SyntaxKind::NODE_ATTR_SET
-                        | rnix::SyntaxKind::NODE_LET_IN
-                        | rnix::SyntaxKind::NODE_LIST
-                        | rnix::SyntaxKind::NODE_PAREN
-                        | rnix::SyntaxKind::NODE_STRING
-                )
-            {
-                steps.push_back(crate::builder::Step::Whitespace);
-            } else {
-                dedent = true;
-                steps.push_back(crate::builder::Step::Indent);
-                steps.push_back(crate::builder::Step::NewLine);
-                steps.push_back(crate::builder::Step::Pad);
-            }
+    if vertical {
+        if child_comments.is_empty()
+            && matches!(
+                child_expr.element.kind(),
+                rnix::SyntaxKind::NODE_ATTR_SET
+                    | rnix::SyntaxKind::NODE_LET_IN
+                    | rnix::SyntaxKind::NODE_LIST
+                    | rnix::SyntaxKind::NODE_PAREN
+                    | rnix::SyntaxKind::NODE_STRING
+            )
+        {
+            steps.push_back(crate::builder::Step::Whitespace);
+        } else {
+            dedent = true;
+            steps.push_back(crate::builder::Step::Indent);
+            steps.push_back(crate::builder::Step::NewLine);
+            steps.push_back(crate::builder::Step::Pad);
         }
-        crate::config::Layout::Wide => {}
     }
 
     // /**/
@@ -151,19 +134,14 @@ pub fn rule(
     }
 
     // expr
-    match layout {
-        crate::config::Layout::Tall => {
-            steps.push_back(crate::builder::Step::FormatWider(
-                child_expr.element,
-            ));
-            if dedent {
-                steps.push_back(crate::builder::Step::Dedent);
-            }
+    if vertical {
+        steps.push_back(crate::builder::Step::FormatWider(child_expr.element));
+        if dedent {
+            steps.push_back(crate::builder::Step::Dedent);
         }
-        crate::config::Layout::Wide => {
-            steps.push_back(crate::builder::Step::Whitespace);
-            steps.push_back(crate::builder::Step::Format(child_expr.element));
-        }
+    } else {
+        steps.push_back(crate::builder::Step::Whitespace);
+        steps.push_back(crate::builder::Step::Format(child_expr.element));
     }
 
     steps

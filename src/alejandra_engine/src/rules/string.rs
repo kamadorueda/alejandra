@@ -19,16 +19,12 @@ pub fn rule(
 
     if text == "\"" {
         while let Some(child) = children.get_next() {
-            match build_ctx.config.layout() {
-                crate::config::Layout::Tall => {
-                    steps.push_back(crate::builder::Step::FormatWider(
-                        child.element,
-                    ));
-                }
-                crate::config::Layout::Wide => {
-                    steps
-                        .push_back(crate::builder::Step::Format(child.element));
-                }
+            if build_ctx.vertical {
+                steps.push_back(crate::builder::Step::FormatWider(
+                    child.element,
+                ));
+            } else {
+                steps.push_back(crate::builder::Step::Format(child.element));
             }
         }
     } else {

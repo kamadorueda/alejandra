@@ -1,8 +1,6 @@
 fn main() -> std::io::Result<()> {
     let matches = alejandra_cli::cli::parse(std::env::args().collect());
 
-    let config = alejandra_engine::config::Config::default();
-
     match matches.values_of("include") {
         Some(include) => {
             let include = include.collect();
@@ -18,13 +16,13 @@ fn main() -> std::io::Result<()> {
                 && atty::is(atty::Stream::Stdin)
                 && atty::is(atty::Stream::Stdout)
             {
-                alejandra_cli::cli::tui(config, paths)?;
+                alejandra_cli::cli::tui(paths)?;
             } else {
-                alejandra_cli::cli::simple(config, paths)?;
+                alejandra_cli::cli::simple(paths)?;
             }
         }
         None => {
-            alejandra_cli::cli::stdin(config)?;
+            alejandra_cli::cli::stdin()?;
         }
     }
 

@@ -11,22 +11,13 @@ pub fn rule(
     let has_comments_or_newlines =
         children.has_comments() || children.has_newlines();
 
-    let layout = if has_comments_or_newlines {
-        &crate::config::Layout::Tall
-    } else {
-        build_ctx.config.layout()
-    };
+    let vertical = has_comments_or_newlines || build_ctx.vertical;
 
     // (
     let child = children.get_next().unwrap();
     steps.push_back(crate::builder::Step::Format(child.element));
-    match layout {
-        crate::config::Layout::Tall => {
-            if has_comments_or_newlines {
-                steps.push_back(crate::builder::Step::Indent);
-            }
-        }
-        crate::config::Layout::Wide => {}
+    if vertical && has_comments_or_newlines {
+        steps.push_back(crate::builder::Step::Indent);
     }
 
     // /**/
@@ -41,17 +32,14 @@ pub fn rule(
 
     // expr
     let child = children.get_next().unwrap();
-    match layout {
-        crate::config::Layout::Tall => {
-            if has_comments_or_newlines {
-                steps.push_back(crate::builder::Step::NewLine);
-                steps.push_back(crate::builder::Step::Pad);
-            }
-            steps.push_back(crate::builder::Step::FormatWider(child.element));
+    if vertical {
+        if has_comments_or_newlines {
+            steps.push_back(crate::builder::Step::NewLine);
+            steps.push_back(crate::builder::Step::Pad);
         }
-        crate::config::Layout::Wide => {
-            steps.push_back(crate::builder::Step::Format(child.element));
-        }
+        steps.push_back(crate::builder::Step::FormatWider(child.element));
+    } else {
+        steps.push_back(crate::builder::Step::Format(child.element));
     }
 
     // /**/
@@ -66,15 +54,10 @@ pub fn rule(
 
     // )
     let child = children.get_next().unwrap();
-    match layout {
-        crate::config::Layout::Tall => {
-            if has_comments_or_newlines {
-                steps.push_back(crate::builder::Step::Dedent);
-                steps.push_back(crate::builder::Step::NewLine);
-                steps.push_back(crate::builder::Step::Pad);
-            }
-        }
-        crate::config::Layout::Wide => {}
+    if vertical && has_comments_or_newlines {
+        steps.push_back(crate::builder::Step::Dedent);
+        steps.push_back(crate::builder::Step::NewLine);
+        steps.push_back(crate::builder::Step::Pad);
     }
     steps.push_back(crate::builder::Step::Format(child.element));
 

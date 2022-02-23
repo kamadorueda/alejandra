@@ -1,8 +1,4 @@
-pub fn string(
-    config: &crate::config::Config,
-    path: String,
-    string: String,
-) -> std::io::Result<String> {
+pub fn string(path: String, string: String) -> std::io::Result<String> {
     let tokens = rnix::tokenizer::Tokenizer::new(&string);
     let ast = rnix::parser::parse(tokens);
 
@@ -15,33 +11,26 @@ pub fn string(
     }
 
     let green_node =
-        crate::builder::build(config, ast.node().into(), false, path).unwrap();
+        crate::builder::build(ast.node().into(), false, path, true).unwrap();
 
     Ok(green_node.to_string())
 }
 
-pub fn string_or_passthrough(
-    config: &crate::config::Config,
-    path: String,
-    before: String,
-) -> String {
-    match crate::format::string(config, path, before.clone()) {
+pub fn string_or_passthrough(path: String, before: String) -> String {
+    match crate::format::string(path, before.clone()) {
         Ok(after) => after,
         Err(_) => before,
     }
 }
 
-pub fn file(
-    config: &crate::config::Config,
-    path: String,
-) -> std::io::Result<bool> {
+pub fn file(path: String) -> std::io::Result<bool> {
     use std::io::Write;
 
     let input = std::fs::read_to_string(&path)?;
     let input_clone = input.clone();
     let input_bytes = input_clone.as_bytes();
 
-    let output = crate::format::string(config, path.clone(), input)?;
+    let output = crate::format::string(path.clone(), input)?;
     let output_bytes = output.as_bytes();
 
     let changed = input_bytes != output_bytes;
