@@ -1,4 +1,18 @@
 [
+  (if true
+  then {
+    version = "1.2.3";
+  }
+  else {
+    version = "3.2.1";
+  })
+  (if true
+  then ''
+    some text
+  ''
+  else ''
+    other text
+  '')
   (if ./a then b else c)
   (if /**/ a /**/ then /**/ b /**/ else /**/ c)
   (if if a then b else c then b else if a then b else if a then b else c)
