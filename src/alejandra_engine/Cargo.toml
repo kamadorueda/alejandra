@@ -1,6 +1,5 @@
 [dependencies]
 clap = { version = "*", features = ["cargo"] }
-rand = "*"
 rnix = "*"
 rowan = "0.12.6" # follows rnix
 

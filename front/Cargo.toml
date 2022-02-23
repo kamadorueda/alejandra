@@ -1,7 +1,6 @@
 [dependencies]
 alejandra_engine = { "path" = "../src/alejandra_engine" }
 console_error_panic_hook = "*"
-getrandom = { version = "*", features = ["js"] }
 wasm-bindgen = "*"
 wee_alloc = "*"
 
