@@ -301,3 +301,21 @@ pub fn fits_in_single_line(
         None => false,
     }
 }
+
+pub fn make_isolated_token(
+    kind: rnix::SyntaxKind,
+    text: &str,
+) -> rnix::SyntaxToken {
+    use rowan::Language;
+
+    let mut builder = rowan::GreenNodeBuilder::new();
+    builder.start_node(rnix::NixLanguage::kind_to_raw(
+        rnix::SyntaxKind::NODE_ROOT,
+    ));
+    builder.token(rnix::NixLanguage::kind_to_raw(kind), text);
+    builder.finish_node();
+
+    let node = builder.finish();
+
+    rnix::SyntaxNode::new_root(node).first_token().unwrap()
+}
