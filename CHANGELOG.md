@@ -17,6 +17,27 @@ Types of changes
 - Security in case of vulnerabilities.
 -->
 
+### Changed
+
+- Pattern matching lambdas now always have the comma after the argument:
+
+  ```diff
+  -    depthLimit
+  +    depthLimit,
+      /*
+        If this option is true, an error will be thrown, if a certain given depth is exceeded
+        */
+  -    ,
+  ```
+
+- Pattern matching lambdas now support inline comments:
+
+  ```diff
+  -  revision ? ""
+  -  # Specify revision for the options
+  +  revision ? "", # Specify revision for the options
+  ```
+
 ## [0.4.0] - 2022-02-21
 
 ### Added
