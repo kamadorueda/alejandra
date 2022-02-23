@@ -64,7 +64,14 @@ pub fn rule(
     if if_else.comments_before_then_expr.is_empty() {
         // expr
         let element = if_else.then_expr.unwrap();
-        if crate::builder::fits_in_single_line(build_ctx, element.clone()) {
+        if matches!(
+            element.kind(),
+            rnix::SyntaxKind::NODE_ATTR_SET
+                | rnix::SyntaxKind::NODE_LET_IN
+                | rnix::SyntaxKind::NODE_LIST
+                | rnix::SyntaxKind::NODE_STRING
+        ) || crate::builder::fits_in_single_line(build_ctx, element.clone())
+        {
             steps.push_back(crate::builder::Step::Whitespace);
             steps.push_back(crate::builder::Step::FormatWider(element));
         } else {
@@ -113,8 +120,14 @@ pub fn rule(
     if if_else.comments_before_else_expr.is_empty() {
         // expr
         let element = if_else.else_expr.unwrap();
-        if matches!(element.kind(), rnix::SyntaxKind::NODE_IF_ELSE)
-            || crate::builder::fits_in_single_line(build_ctx, element.clone())
+        if matches!(
+            element.kind(),
+            rnix::SyntaxKind::NODE_ATTR_SET
+                | rnix::SyntaxKind::NODE_IF_ELSE
+                | rnix::SyntaxKind::NODE_LET_IN
+                | rnix::SyntaxKind::NODE_LIST
+                | rnix::SyntaxKind::NODE_STRING
+        ) || crate::builder::fits_in_single_line(build_ctx, element.clone())
         {
             steps.push_back(crate::builder::Step::Whitespace);
             steps.push_back(crate::builder::Step::FormatWider(element));
