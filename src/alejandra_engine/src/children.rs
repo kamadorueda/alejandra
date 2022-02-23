@@ -134,23 +134,7 @@ impl Children {
         })
     }
 
-    pub fn drain_comment<F: FnMut(String)>(&mut self, mut callback: F) {
-        if let Some(child) = self.peek_next() {
-            if let rnix::SyntaxKind::TOKEN_COMMENT = child.element.kind() {
-                callback(
-                    child
-                        .element
-                        .as_token()
-                        .as_ref()
-                        .unwrap()
-                        .text()
-                        .to_string(),
-                );
-                self.move_next();
-            }
-        }
-    }
-
+    // #[deprecated]
     pub fn drain_comments<F: FnMut(String)>(&mut self, mut callback: F) {
         while let Some(child) = self.peek_next() {
             match child.element.kind() {
