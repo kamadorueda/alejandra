@@ -17,6 +17,8 @@ Types of changes
 - Security in case of vulnerabilities.
 -->
 
+## [0.5.0] - 2022-02-23
+
 ### Changed
 
 - Pattern matching lambdas now always have the comma after the argument:
@@ -37,6 +39,24 @@ Types of changes
   -  # Specify revision for the options
   +  revision ? "", # Specify revision for the options
   ```
+
+- If-then-else expressions are indented only when necessary:
+
+  ```diff
+  -      then
+  -        {
+  -          crossDrv = overrideDerivation drv.crossDrv f;
+  -          nativeDrv = overrideDerivation drv.nativeDrv f;
+  -        }
+  +      then {
+  +        crossDrv = overrideDerivation drv.crossDrv f;
+  +        nativeDrv = overrideDerivation drv.nativeDrv f;
+  +      }
+  ```
+
+- All inputs and dependencies were updated to their latest version
+
+- A lot of code was refactored to improve maintainability
 
 ## [0.4.0] - 2022-02-21
 
@@ -227,7 +247,8 @@ Types of changes
 
 ---
 
-[unreleased]: https://github.com/kamadorueda/alejandra/compare/0.4.0...HEAD
+[unreleased]: https://github.com/kamadorueda/alejandra/compare/0.5.0...HEAD
+[0.5.0]: https://github.com/kamadorueda/alejandra/compare/0.4.0...0.5.0
 [0.4.0]: https://github.com/kamadorueda/alejandra/compare/0.3.1...0.4.0
 [0.3.1]: https://github.com/kamadorueda/alejandra/compare/0.3.0...0.3.1
 [0.3.0]: https://github.com/kamadorueda/alejandra/compare/0.2.0...0.3.0
