@@ -37,8 +37,8 @@ pub fn rule(
 
     loop {
         // /**/
-        children.drain_comments_and_newlines(|element| match element {
-            crate::children::DrainCommentOrNewline::Comment(text) => {
+        children.drain_trivia(|element| match element {
+            crate::children::Trivia::Comment(text) => {
                 if inline_next_comment && text.starts_with('#') {
                     steps.push_back(crate::builder::Step::Whitespace);
                 } else {
@@ -48,7 +48,9 @@ pub fn rule(
                 steps.push_back(crate::builder::Step::Comment(text));
                 inline_next_comment = false;
             }
-            crate::children::DrainCommentOrNewline::Newline(newlines) => {
+            crate::children::Trivia::Whitespace(text) => {
+                let newlines = crate::utils::count_newlines(&text);
+
                 if newlines > 1 && item_index > 0 && item_index < items_count {
                     steps.push_back(crate::builder::Step::NewLine);
                 }
@@ -93,11 +95,11 @@ pub fn rule(
 
     // /**/
     let mut child_comments = std::collections::LinkedList::new();
-    children.drain_comments_and_newlines(|element| match element {
-        crate::children::DrainCommentOrNewline::Comment(text) => {
+    children.drain_trivia(|element| match element {
+        crate::children::Trivia::Comment(text) => {
             child_comments.push_back(crate::builder::Step::Comment(text))
         }
-        crate::children::DrainCommentOrNewline::Newline(_) => {}
+        crate::children::Trivia::Whitespace(_) => {}
     });
 
     // expr

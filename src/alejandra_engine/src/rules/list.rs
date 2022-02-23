@@ -32,9 +32,9 @@ pub fn rule(
 
     loop {
         // /**/
-        children.drain_comments_and_newlines(|element| {
+        children.drain_trivia(|element| {
             match element {
-                crate::children::DrainCommentOrNewline::Comment(text) => {
+                crate::children::Trivia::Comment(text) => {
                     if inline_next_comment && text.starts_with('#') {
                         steps.push_back(crate::builder::Step::Whitespace);
                     } else {
@@ -46,7 +46,9 @@ pub fn rule(
                     item_index += 1;
                     inline_next_comment = false;
                 }
-                crate::children::DrainCommentOrNewline::Newline(newlines) => {
+                crate::children::Trivia::Whitespace(text) => {
+                    let newlines = crate::utils::count_newlines(&text);
+
                     if newlines > 1
                         && item_index > 0
                         && item_index < items_count

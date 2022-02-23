@@ -9,9 +9,9 @@ pub struct Children {
     current_index: usize,
 }
 
-pub enum DrainCommentOrNewline {
+pub enum Trivia {
     Comment(String),
-    Newline(usize),
+    Whitespace(String),
 }
 
 impl Children {
@@ -129,7 +129,7 @@ impl Children {
         self.children.iter().any(|child| {
             child.element.kind() == rnix::SyntaxKind::TOKEN_WHITESPACE
                 && crate::utils::has_newlines(
-                    child.element.clone().into_token().unwrap().text(),
+                    child.element.as_token().as_ref().unwrap().text(),
                 )
         })
     }
@@ -138,7 +138,13 @@ impl Children {
         if let Some(child) = self.peek_next() {
             if let rnix::SyntaxKind::TOKEN_COMMENT = child.element.kind() {
                 callback(
-                    child.element.into_token().unwrap().text().to_string(),
+                    child
+                        .element
+                        .as_token()
+                        .as_ref()
+                        .unwrap()
+                        .text()
+                        .to_string(),
                 );
                 self.move_next();
             }
@@ -150,7 +156,13 @@ impl Children {
             match child.element.kind() {
                 rnix::SyntaxKind::TOKEN_COMMENT => {
                     callback(
-                        child.element.into_token().unwrap().text().to_string(),
+                        child
+                            .element
+                            .as_token()
+                            .as_ref()
+                            .unwrap()
+                            .text()
+                            .to_string(),
                     );
                     self.move_next();
                 }
@@ -161,24 +173,25 @@ impl Children {
         }
     }
 
-    pub fn drain_comments_and_newlines<F: FnMut(DrainCommentOrNewline)>(
-        &mut self,
-        mut callback: F,
-    ) {
+    pub fn drain_trivia<F: FnMut(Trivia)>(&mut self, mut callback: F) {
         while let Some(child) = self.peek_next() {
             match child.element.kind() {
                 rnix::SyntaxKind::TOKEN_COMMENT => {
-                    callback(DrainCommentOrNewline::Comment(
+                    callback(Trivia::Comment(
                         child.element.into_token().unwrap().text().to_string(),
                     ));
                     self.move_next();
                 }
                 rnix::SyntaxKind::TOKEN_WHITESPACE => {
-                    let newlines_count = crate::utils::count_newlines(
-                        child.element.clone().into_token().unwrap().text(),
-                    );
-
-                    callback(DrainCommentOrNewline::Newline(newlines_count));
+                    callback(Trivia::Whitespace(
+                        child
+                            .element
+                            .as_token()
+                            .as_ref()
+                            .unwrap()
+                            .text()
+                            .to_string(),
+                    ));
                     self.move_next();
                 }
                 _ => {

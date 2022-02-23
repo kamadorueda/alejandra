@@ -22,13 +22,13 @@ pub fn rule(
     }
 
     // /**/
-    children.drain_comments_and_newlines(|element| match element {
-        crate::children::DrainCommentOrNewline::Comment(text) => {
+    children.drain_trivia(|element| match element {
+        crate::children::Trivia::Comment(text) => {
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
             steps.push_back(crate::builder::Step::Comment(text));
         }
-        crate::children::DrainCommentOrNewline::Newline(_) => {}
+        crate::children::Trivia::Whitespace(_) => {}
     });
 
     let child_prev = children.peek_prev().unwrap();

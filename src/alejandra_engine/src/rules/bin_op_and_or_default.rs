@@ -45,33 +45,32 @@ pub fn rule_with_configuration(
     }
 
     // /**/
-    children.drain_comments_and_newlines(|element| match element {
-        crate::children::DrainCommentOrNewline::Comment(text) => {
+    children.drain_trivia(|element| match element {
+        crate::children::Trivia::Comment(text) => {
             steps.push_back(crate::builder::Step::Comment(text));
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
         }
-        crate::children::DrainCommentOrNewline::Newline(_) => {}
+        crate::children::Trivia::Whitespace(_) => {}
     });
 
     // operator
     let child = children.get_next().unwrap();
-    if vertical {
-    } else if parent_kind == "bin_op_and_or_default" {
+    if !vertical && parent_kind == "bin_op_and_or_default" {
         steps.push_back(crate::builder::Step::Whitespace);
     }
     steps.push_back(crate::builder::Step::Format(child.element));
 
     // /**/
     let mut comment = false;
-    children.drain_comments_and_newlines(|element| match element {
-        crate::children::DrainCommentOrNewline::Comment(text) => {
+    children.drain_trivia(|element| match element {
+        crate::children::Trivia::Comment(text) => {
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
             steps.push_back(crate::builder::Step::Comment(text));
             comment = true;
         }
-        crate::children::DrainCommentOrNewline::Newline(_) => {}
+        crate::children::Trivia::Whitespace(_) => {}
     });
 
     if comment {
