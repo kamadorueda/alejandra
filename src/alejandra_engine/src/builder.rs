@@ -288,10 +288,10 @@ fn format_wider(
 
 pub fn fits_in_single_line(
     build_ctx: &crate::builder::BuildCtx,
-    node: rnix::SyntaxElement,
+    element: rnix::SyntaxElement,
 ) -> bool {
     let line = build_ctx.pos_new.line;
-    let maybe_green_node = build(node, true, build_ctx.path.clone(), false);
+    let maybe_green_node = build(element, true, build_ctx.path.clone(), false);
 
     match maybe_green_node {
         Some(_) => build_ctx.pos_new.line == line,

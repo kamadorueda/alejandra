@@ -134,29 +134,6 @@ impl Children {
         })
     }
 
-    // #[deprecated]
-    pub fn drain_comments<F: FnMut(String)>(&mut self, mut callback: F) {
-        while let Some(child) = self.peek_next() {
-            match child.element.kind() {
-                rnix::SyntaxKind::TOKEN_COMMENT => {
-                    callback(
-                        child
-                            .element
-                            .as_token()
-                            .as_ref()
-                            .unwrap()
-                            .text()
-                            .to_string(),
-                    );
-                    self.move_next();
-                }
-                _ => {
-                    break;
-                }
-            }
-        }
-    }
-
     pub fn drain_trivia<F: FnMut(Trivia)>(&mut self, mut callback: F) {
         while let Some(child) = self.peek_next() {
             match child.element.kind() {
