@@ -17,6 +17,18 @@ Types of changes
 - Security in case of vulnerabilities.
 -->
 
+### Fixed
+
+- Multiline strings are handled as utf-8 correctly, preventing panics
+  on utf-8 whitespace like:
+
+  ```nix
+    ''
+    foo
+  \u{2002}bar
+  ''
+  ```
+
 ## [0.5.0] - 2022-02-23
 
 ### Changed
