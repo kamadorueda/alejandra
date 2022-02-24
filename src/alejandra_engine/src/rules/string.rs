@@ -73,7 +73,7 @@ pub fn rule(
             if !line.is_empty() {
                 indentation = usize::min(
                     indentation,
-                    line.len() - line.trim_start().len(),
+                    line.chars().count() - line.trim_start().chars().count(),
                 );
             }
         }
@@ -85,8 +85,8 @@ pub fn rule(
         lines = lines
             .iter()
             .map(|line| {
-                if indentation < line.len() {
-                    line[indentation..line.len()].to_string()
+                if indentation < line.chars().count() {
+                    line.chars().skip(indentation).collect::<String>()
                 } else {
                     line.to_string()
                 }
