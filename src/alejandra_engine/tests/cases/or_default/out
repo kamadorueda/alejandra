@@ -1,47 +1,47 @@
 [
-  (a or a)
-  (a
+  (a.b or c)
+  (a.b
   or
   /**/
-  a)
-  (a
+  c)
+  (a.b
   /**/
-  or a)
-  (a
-  /**/
-  or
-  /**/
-  a)
-  (a
+  or c)
+  (a.b
   /**/
   or
   /**/
-  (a
+  c)
+  (a.b
   /**/
   or
   /**/
-  (a
+  (a.b
   /**/
   or
   /**/
-  a)))
-  (a
+  (a.b
   /**/
   or
   /**/
-  (a
+  c)))
+  (a.b
   /**/
   or
   /**/
-  (a
+  (a.b
   /**/
   or
   /**/
-  a)))
-  (a or a or a or a or a or a or a or a or a or a or a or a or a or a or a or a or a or a or a)
-  (a
-  or a
-  or a
-  or a
-  or a or a or a or a or a or a or a or a or a or a or a or a or a or a or a or a)
+  (a.b
+  /**/
+  or
+  /**/
+  c)))
+  (a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a)
+  (a.a
+  or a.a
+  or a.a
+  or a.a
+  or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a)
 ]

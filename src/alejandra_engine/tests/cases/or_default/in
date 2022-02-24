@@ -1,14 +1,14 @@
 [
-  (a    or    a)
-  (a    or/**/a)
-  (a/**/or    a)
-  (a/**/or/**/a)
-  (a/**/or/**/(a/**/or/**/(a/**/or/**/a)))
-  (a/**/or/**/(a/**/or/**/(a/**/or/**/a)))
-  ( a or a or a or a or a or a or a or a or a or a or a or a or a or a or a or a or a or a or a )
-  ( a or a
-      or a
+  (a.b    or    c)
+  (a.b    or/**/c)
+  (a.b/**/or    c)
+  (a.b/**/or/**/c)
+  (a.b/**/or/**/(a.b/**/or/**/(a.b/**/or/**/c)))
+  (a.b/**/or/**/(a.b/**/or/**/(a.b/**/or/**/c)))
+  ( a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a )
+  ( a.a or a.a
+      or a.a
       or
-      a or
-      a or a or a or a or a or a or a or a or a or a or a or a or a or a or a or a)
+      a.a or
+      a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a or a.a)
 ]
