@@ -17,6 +17,8 @@ Types of changes
 - Security in case of vulnerabilities.
 -->
 
+## [0.6.0] - 2022-02-25
+
 ### Added
 
 - A `--check` flag, which makes Alejandra emit an exit code of 2
@@ -269,7 +271,8 @@ Types of changes
 
 ---
 
-[unreleased]: https://github.com/kamadorueda/alejandra/compare/0.5.0...HEAD
+[unreleased]: https://github.com/kamadorueda/alejandra/compare/0.6.0...HEAD
+[0.6.0]: https://github.com/kamadorueda/alejandra/compare/0.5.0...0.6.0
 [0.5.0]: https://github.com/kamadorueda/alejandra/compare/0.4.0...0.5.0
 [0.4.0]: https://github.com/kamadorueda/alejandra/compare/0.3.1...0.4.0
 [0.3.1]: https://github.com/kamadorueda/alejandra/compare/0.3.0...0.3.1
