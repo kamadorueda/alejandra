@@ -33,6 +33,10 @@ steps:
       - formatting-before-vs-after.patch.txt
       - formatting-after.patch.txt
     command:
+      - echo +++ Formatting - demo
+      - nix run . -- flake.nix
+
+      - echo --- Cloning nixpkgs
       - git config --global user.email CI/CD
       - git config --global user.name CI/CD
       - git clone --branch=master --depth 1 --origin=upstream file:///data/nixpkgs

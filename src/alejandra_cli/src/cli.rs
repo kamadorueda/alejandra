@@ -1,3 +1,9 @@
+#[derive(Clone)]
+pub struct FormattedPath {
+    pub path:   String,
+    pub status: alejandra_engine::format::Status,
+}
+
 pub fn parse(args: Vec<String>) -> clap::ArgMatches {
     clap::Command::new("Alejandra")
         .about("The Uncompromising Nix Code Formatter.")
@@ -15,6 +21,11 @@ pub fn parse(args: Vec<String>) -> clap::ArgMatches {
                 .multiple_occurrences(true)
                 .takes_value(true),
         )
+        .arg(
+            clap::Arg::new("check")
+                .help("Check if the input is already formatted.")
+                .long("--check"),
+        )
         .term_width(80)
         .after_help(indoc::indoc!(
             // Let's just use the same sorting as on GitHub
@@ -24,64 +35,64 @@ pub fn parse(args: Vec<String>) -> clap::ArgMatches {
             //
             // Feel free to add here your contact/blog/links if you want
             "
+            The program will exit with status code:
+              1, if any error occurs.
+              2, if --check was used and any file was changed.
+              0, otherwise.
+
             Shaped with love by:
-            - Kevin Amado ~ @kamadorueda on GitHub, matrix.org and Gmail.
-            - Thomas Bereknyei ~ @tomberek on GitHub and matrix.org.
-            - David Arnold ~ @blaggacao on GitHub and matrix.org.
-            - Vincent Ambo ~ @tazjin on GitHub.
-            - Mr Hedgehog ~ @ModdedGamers on GitHub.
+              Kevin Amado ~ @kamadorueda on GitHub, matrix.org and Gmail.
+              Thomas Bereknyei ~ @tomberek on GitHub and matrix.org.
+              David Arnold ~ @blaggacao on GitHub and matrix.org.
+              Vincent Ambo ~ @tazjin on GitHub.
+              Mr Hedgehog ~ @ModdedGamers on GitHub.
             "
         ))
         .get_matches_from(args)
 }
 
-pub fn stdin() -> std::io::Result<()> {
+pub fn stdin() -> FormattedPath {
     use std::io::Read;
 
+    let mut before = String::new();
+    let path = "<anonymous file on stdin>".to_string();
+
     eprintln!("Formatting stdin, run with --help to see all options.");
-    let mut stdin = String::new();
-    std::io::stdin().read_to_string(&mut stdin).unwrap();
 
-    let stdout = alejandra_engine::format::string("stdin".to_string(), stdin)?;
-    print!("{}", stdout);
+    std::io::stdin().read_to_string(&mut before).unwrap();
 
-    Ok(())
+    let (status, data) =
+        alejandra_engine::format::in_memory(path.clone(), before.clone());
+
+    print!("{}", data);
+
+    FormattedPath { path, status }
 }
 
-pub fn simple(paths: Vec<String>) -> std::io::Result<()> {
+pub fn simple(paths: Vec<String>) -> Vec<FormattedPath> {
     use rayon::prelude::*;
 
-    eprintln!("Formatting {} files.", paths.len());
+    eprintln!("Formatting: {} files", paths.len());
 
-    let (results, errors): (Vec<_>, Vec<_>) = paths
+    paths
         .par_iter()
-        .map(|path| -> std::io::Result<bool> {
-            alejandra_engine::format::file(path.to_string()).map(|changed| {
+        .map(|path| {
+            let status = alejandra_engine::format::in_place(path.clone());
+
+            if let alejandra_engine::format::Status::Changed(changed) = status {
                 if changed {
-                    eprintln!("Formatted: {}", &path);
+                    eprintln!("Changed: {}", &path);
                 }
-                changed
-            })
+            }
+
+            FormattedPath { path: path.clone(), status }
         })
-        .partition(Result::is_ok);
-
-    eprintln!(
-        "Changed: {}",
-        results.into_iter().map(Result::unwrap).filter(|&x| x).count(),
-    );
-    eprintln!("Errors: {}", errors.len(),);
-
-    Ok(())
+        .collect()
 }
 
-pub fn tui(paths: Vec<String>) -> std::io::Result<()> {
+pub fn tui(paths: Vec<String>) -> std::io::Result<Vec<FormattedPath>> {
     use rayon::prelude::*;
     use termion::{input::TermRead, raw::IntoRawMode};
-
-    struct FormattedPath {
-        path:   String,
-        result: std::io::Result<bool>,
-    }
 
     enum Event {
         FormattedPath(FormattedPath),
@@ -91,11 +102,12 @@ pub fn tui(paths: Vec<String>) -> std::io::Result<()> {
     }
 
     let paths_to_format = paths.len();
+    let mut formatted_paths = std::collections::LinkedList::new();
 
     let stdout = std::io::stderr().into_raw_mode()?;
-    // let stdout = termion::screen::AlternateScreen::from(stdout);
     let backend = tui::backend::TermionBackend::new(stdout);
     let mut terminal = tui::Terminal::new(backend)?;
+    terminal.clear()?;
 
     let (sender, receiver) = std::sync::mpsc::channel();
 
@@ -128,10 +140,10 @@ pub fn tui(paths: Vec<String>) -> std::io::Result<()> {
     let sender_finished = sender;
     std::thread::spawn(move || {
         paths.into_par_iter().for_each_with(sender_paths, |sender, path| {
-            let result = alejandra_engine::format::file(path.clone());
+            let status = alejandra_engine::format::in_place(path.clone());
 
             if let Err(error) = sender
-                .send(Event::FormattedPath(FormattedPath { path, result }))
+                .send(Event::FormattedPath(FormattedPath { path, status }))
             {
                 eprintln!("{}", error);
             }
@@ -142,36 +154,32 @@ pub fn tui(paths: Vec<String>) -> std::io::Result<()> {
         }
     });
 
-    terminal.clear()?;
-
     let mut finished = false;
     let mut paths_with_errors: usize = 0;
     let mut paths_changed: usize = 0;
     let mut paths_unchanged: usize = 0;
-    let mut formatted_paths = std::collections::LinkedList::new();
 
     while !finished {
         loop {
             if let Ok(event) = receiver.try_recv() {
                 match event {
                     Event::FormattedPath(formatted_path) => {
-                        match formatted_path.result {
-                            Ok(changed) => {
-                                if changed {
+                        match &formatted_path.status {
+                            alejandra_engine::format::Status::Changed(
+                                changed,
+                            ) => {
+                                if *changed {
                                     paths_changed += 1;
                                 } else {
                                     paths_unchanged += 1;
                                 }
                             }
-                            Err(_) => {
+                            alejandra_engine::format::Status::Error(_) => {
                                 paths_with_errors += 1;
                             }
                         };
 
                         formatted_paths.push_back(formatted_path);
-                        if formatted_paths.len() > 8 {
-                            formatted_paths.pop_front();
-                        }
                     }
                     Event::FormattingFinished => {
                         finished = true;
@@ -253,23 +261,29 @@ pub fn tui(paths: Vec<String>) -> std::io::Result<()> {
             let logger = tui::widgets::Paragraph::new(
                 formatted_paths
                     .iter()
+                    .rev()
+                    .take(8)
                     .map(|formatted_path| {
                         tui::text::Spans::from(vec![
-                            match &formatted_path.result {
-                                Ok(changed) => tui::text::Span::styled(
-                                    if *changed {
-                                        "CHANGED   "
+                            match formatted_path.status {
+                                alejandra_engine::format::Status::Changed(
+                                    changed,
+                                ) => tui::text::Span::styled(
+                                    if changed {
+                                        "CHANGED "
                                     } else {
-                                        "UNCHANGED "
+                                        "OK      "
                                     },
                                     tui::style::Style::default()
                                         .fg(tui::style::Color::Green),
                                 ),
-                                Err(_) => tui::text::Span::styled(
-                                    "ERROR     ",
-                                    tui::style::Style::default()
-                                        .fg(tui::style::Color::Red),
-                                ),
+                                alejandra_engine::format::Status::Error(_) => {
+                                    tui::text::Span::styled(
+                                        "ERROR   ",
+                                        tui::style::Style::default()
+                                            .fg(tui::style::Color::Red),
+                                    )
+                                }
                             },
                             tui::text::Span::raw(formatted_path.path.clone()),
                         ])
@@ -289,5 +303,5 @@ pub fn tui(paths: Vec<String>) -> std::io::Result<()> {
         })?;
     }
 
-    Ok(())
+    Ok(formatted_paths.iter().cloned().collect())
 }

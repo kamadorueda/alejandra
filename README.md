@@ -195,6 +195,7 @@ Our public API consists of:
 - The CLI tool (`$ alejandra`),
   command line flags,
   positional arguments,
+  exit codes,
   and stdout.
 
 ## Changelog
