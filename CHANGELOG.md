@@ -17,6 +17,14 @@ Types of changes
 - Security in case of vulnerabilities.
 -->
 
+### Added
+
+- A `--check` flag, which makes Alejandra emit an exit code of 2
+  if any file was changed during formatting.
+
+  This means you can now use Alejandra in your CI/CD
+  to ensure your code complies the Alejandra style.
+
 ### Fixed
 
 - Multiline strings are handled as utf-8 correctly, preventing panics
@@ -28,6 +36,8 @@ Types of changes
   \u{2002}bar
   ''
   ```
+
+- All inputs and dependencies were updated to their latest version
 
 ## [0.5.0] - 2022-02-23
 
@@ -66,9 +76,9 @@ Types of changes
   +      }
   ```
 
-- All inputs and dependencies were updated to their latest version
+- All inputs and dependencies were updated to their latest version.
 
-- A lot of code was refactored to improve maintainability
+- A lot of code was refactored to improve maintainability.
 
 ## [0.4.0] - 2022-02-21
 
