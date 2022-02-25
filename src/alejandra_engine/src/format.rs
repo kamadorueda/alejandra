@@ -1,42 +1,56 @@
-pub fn string(path: String, string: String) -> std::io::Result<String> {
-    let tokens = rnix::tokenizer::Tokenizer::new(&string);
+#[derive(Clone)]
+pub enum Status {
+    Error(String),
+    Changed(bool),
+}
+
+impl From<std::io::Error> for Status {
+    fn from(error: std::io::Error) -> Status {
+        Status::Error(error.to_string())
+    }
+}
+
+pub fn in_memory(path: String, before: String) -> (Status, String) {
+    let tokens = rnix::tokenizer::Tokenizer::new(&before);
     let ast = rnix::parser::parse(tokens);
 
     let errors = ast.errors();
     if !errors.is_empty() {
-        return Err(std::io::Error::new(
-            std::io::ErrorKind::InvalidInput,
-            errors[0].to_string(),
-        ));
+        return (Status::Error(errors[0].to_string()), before);
     }
 
-    let green_node =
-        crate::builder::build(ast.node().into(), false, path, true).unwrap();
+    let after = crate::builder::build(ast.node().into(), false, path, true)
+        .unwrap()
+        .to_string();
 
-    Ok(green_node.to_string())
-}
-
-pub fn string_or_passthrough(path: String, before: String) -> String {
-    match crate::format::string(path, before.clone()) {
-        Ok(after) => after,
-        Err(_) => before,
+    if before == after {
+        (Status::Changed(false), after)
+    } else {
+        (Status::Changed(true), after)
     }
 }
 
-pub fn file(path: String) -> std::io::Result<bool> {
+pub fn in_place(path: String) -> Status {
     use std::io::Write;
 
-    let input = std::fs::read_to_string(&path)?;
-    let input_clone = input.clone();
-    let input_bytes = input_clone.as_bytes();
+    match std::fs::read_to_string(&path) {
+        Ok(before) => {
+            let (status, data) = crate::format::in_memory(path.clone(), before);
 
-    let output = crate::format::string(path.clone(), input)?;
-    let output_bytes = output.as_bytes();
+            if let Status::Changed(changed) = status {
+                if changed {
+                    return match std::fs::File::create(path) {
+                        Ok(mut file) => match file.write_all(data.as_bytes()) {
+                            Ok(_) => status,
+                            Err(error) => Status::from(error),
+                        },
+                        Err(error) => Status::from(error),
+                    };
+                }
+            }
 
-    let changed = input_bytes != output_bytes;
-    if changed {
-        std::fs::File::create(path)?.write_all(output_bytes)?;
+            status
+        }
+        Err(error) => Status::from(error),
     }
-
-    Ok(changed)
 }
