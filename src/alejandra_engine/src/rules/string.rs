@@ -13,25 +13,23 @@ pub(crate) fn rule(
     let mut children = crate::children::Children::new(build_ctx, node);
 
     let child = children.get_next().unwrap();
-    let child_token = child.element.clone().into_token().unwrap();
+    let child_token = child.clone().into_token().unwrap();
     let text = child_token.text();
-    steps.push_back(crate::builder::Step::Format(child.element));
+    steps.push_back(crate::builder::Step::Format(child));
 
     if text == "\"" {
         while let Some(child) = children.get_next() {
             if build_ctx.vertical {
-                steps.push_back(crate::builder::Step::FormatWider(
-                    child.element,
-                ));
+                steps.push_back(crate::builder::Step::FormatWider(child));
             } else {
-                steps.push_back(crate::builder::Step::Format(child.element));
+                steps.push_back(crate::builder::Step::Format(child));
             }
         }
     } else {
         let elements: Vec<rnix::SyntaxElement> = children
             .get_remaining()
             .iter()
-            .map(|child| child.element.clone())
+            .map(|child| child.clone())
             .collect();
 
         let mut interpolations = elements

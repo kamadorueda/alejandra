@@ -1,12 +1,5 @@
-#[derive(Clone)]
-pub(crate) struct Child {
-    pub element: rnix::SyntaxElement,
-    #[allow(dead_code)]
-    pub pos:     crate::position::Position,
-}
-
 pub(crate) struct Children {
-    children:      Vec<Child>,
+    children:      Vec<rnix::SyntaxElement>,
     current_index: usize,
 }
 
@@ -20,44 +13,34 @@ impl Children {
         build_ctx: &crate::builder::BuildCtx,
         node: &rnix::SyntaxNode,
     ) -> Children {
-        let mut children = Vec::new();
+        let mut children: Vec<rnix::SyntaxElement> = Vec::new();
 
         let mut pos = build_ctx.pos_old.clone();
 
         for child in node.children_with_tokens() {
             match child {
                 rnix::SyntaxElement::Node(node) => {
-                    children.push(Child {
-                        element: node.clone().into(),
-                        pos:     pos.clone(),
-                    });
+                    children.push(node.clone().into());
                     pos.update(&node.text().to_string());
                 }
                 rnix::SyntaxElement::Token(token) => {
                     match token.kind() {
                         rnix::SyntaxKind::TOKEN_COMMENT => {
-                            children.push(Child {
-                                element: crate::builder::make_isolated_token(
+                            children.push(
+                                crate::builder::make_isolated_token(
                                     rnix::SyntaxKind::TOKEN_COMMENT,
                                     &dedent_comment(&pos, token.text()),
                                 )
                                 .into(),
-                                pos:     pos.clone(),
-                            });
+                            );
                         }
                         rnix::SyntaxKind::TOKEN_WHITESPACE => {
                             if crate::utils::count_newlines(token.text()) > 0 {
-                                children.push(Child {
-                                    element: token.clone().into(),
-                                    pos:     pos.clone(),
-                                });
+                                children.push(token.clone().into());
                             }
                         }
                         _ => {
-                            children.push(Child {
-                                element: token.clone().into(),
-                                pos:     pos.clone(),
-                            });
+                            children.push(token.clone().into());
                         }
                     }
 
@@ -69,7 +52,7 @@ impl Children {
         Children { children, current_index: 0 }
     }
 
-    pub fn get(&mut self, index: usize) -> Option<Child> {
+    pub fn get(&mut self, index: usize) -> Option<rnix::SyntaxElement> {
         if index + 1 > self.children.len() {
             None
         } else {
@@ -77,13 +60,13 @@ impl Children {
         }
     }
 
-    pub fn get_next(&mut self) -> Option<Child> {
+    pub fn get_next(&mut self) -> Option<rnix::SyntaxElement> {
         let child = self.get(self.current_index);
         self.move_next();
         child
     }
 
-    pub fn get_remaining(&mut self) -> Vec<Child> {
+    pub fn get_remaining(&mut self) -> Vec<rnix::SyntaxElement> {
         let remaining = &self.children[self.current_index..self.children.len()];
         self.current_index = self.children.len();
         remaining.to_vec()
@@ -93,11 +76,11 @@ impl Children {
         self.current_index < self.children.len()
     }
 
-    pub fn peek_next(&mut self) -> Option<Child> {
+    pub fn peek_next(&mut self) -> Option<rnix::SyntaxElement> {
         self.get(self.current_index)
     }
 
-    pub fn peek_prev(&mut self) -> Option<Child> {
+    pub fn peek_prev(&mut self) -> Option<rnix::SyntaxElement> {
         self.get(self.current_index - 1)
     }
 
@@ -110,38 +93,32 @@ impl Children {
     }
 
     pub fn has_comments(&self) -> bool {
-        self.children.iter().any(|child| {
-            child.element.kind() == rnix::SyntaxKind::TOKEN_COMMENT
-        })
+        self.children
+            .iter()
+            .any(|child| child.kind() == rnix::SyntaxKind::TOKEN_COMMENT)
     }
 
     pub fn has_newlines(&self) -> bool {
         self.children.iter().any(|child| {
-            child.element.kind() == rnix::SyntaxKind::TOKEN_WHITESPACE
+            child.kind() == rnix::SyntaxKind::TOKEN_WHITESPACE
                 && crate::utils::has_newlines(
-                    child.element.as_token().as_ref().unwrap().text(),
+                    child.as_token().as_ref().unwrap().text(),
                 )
         })
     }
 
     pub fn drain_trivia<F: FnMut(Trivia)>(&mut self, mut callback: F) {
         while let Some(child) = self.peek_next() {
-            match child.element.kind() {
+            match child.kind() {
                 rnix::SyntaxKind::TOKEN_COMMENT => {
                     callback(Trivia::Comment(
-                        child.element.into_token().unwrap().text().to_string(),
+                        child.into_token().unwrap().text().to_string(),
                     ));
                     self.move_next();
                 }
                 rnix::SyntaxKind::TOKEN_WHITESPACE => {
                     callback(Trivia::Whitespace(
-                        child
-                            .element
-                            .as_token()
-                            .as_ref()
-                            .unwrap()
-                            .text()
-                            .to_string(),
+                        child.as_token().as_ref().unwrap().text().to_string(),
                     ));
                     self.move_next();
                 }

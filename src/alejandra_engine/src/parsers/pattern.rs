@@ -27,8 +27,8 @@ pub(crate) fn parse(
 
     // x @
     let child = children.peek_next().unwrap();
-    if let rnix::SyntaxKind::NODE_PAT_BIND = child.element.kind() {
-        pattern.initial_at = Some(child.element);
+    if let rnix::SyntaxKind::NODE_PAT_BIND = child.kind() {
+        pattern.initial_at = Some(child);
         children.move_next();
     }
 
@@ -50,9 +50,9 @@ pub(crate) fn parse(
         // Before an item we can have: comma, comments, whitespace
         loop {
             let child = children.peek_next().unwrap();
-            // eprintln!("before item {:?}", child.element.kind());
+            // eprintln!("before item {:?}", child.kind());
 
-            match child.element.kind() {
+            match child.kind() {
                 rnix::SyntaxKind::NODE_PAT_ENTRY
                 | rnix::SyntaxKind::TOKEN_CURLY_B_CLOSE
                 | rnix::SyntaxKind::TOKEN_ELLIPSIS => {
@@ -62,8 +62,7 @@ pub(crate) fn parse(
                     children.move_next();
                 }
                 rnix::SyntaxKind::TOKEN_COMMENT => {
-                    let content =
-                        child.element.into_token().unwrap().to_string();
+                    let content = child.into_token().unwrap().to_string();
 
                     argument.comments_before.push_back(content);
                     children.move_next();
@@ -77,8 +76,8 @@ pub(crate) fn parse(
 
         // item
         let child = children.peek_next().unwrap();
-        // eprintln!("item {:?}", child.element.kind());
-        match child.element.kind() {
+        // eprintln!("item {:?}", child.kind());
+        match child.kind() {
             rnix::SyntaxKind::TOKEN_CURLY_B_CLOSE => {
                 pattern.comments_before_curly_b_close =
                     argument.comments_before;
@@ -86,7 +85,7 @@ pub(crate) fn parse(
             }
             rnix::SyntaxKind::TOKEN_ELLIPSIS
             | rnix::SyntaxKind::NODE_PAT_ENTRY => {
-                argument.item = Some(child.element);
+                argument.item = Some(child);
                 children.move_next();
             }
             _ => {}
@@ -95,9 +94,9 @@ pub(crate) fn parse(
         // After an item we can have: comma, comments, whitespace
         loop {
             let child = children.peek_next().unwrap();
-            // eprintln!("after item {:?}", child.element.kind());
+            // eprintln!("after item {:?}", child.kind());
 
-            match child.element.kind() {
+            match child.kind() {
                 rnix::SyntaxKind::NODE_PAT_ENTRY
                 | rnix::SyntaxKind::TOKEN_ELLIPSIS
                 | rnix::SyntaxKind::TOKEN_CURLY_B_CLOSE => {
@@ -107,16 +106,14 @@ pub(crate) fn parse(
                     children.move_next();
                 }
                 rnix::SyntaxKind::TOKEN_COMMENT => {
-                    let content =
-                        child.element.into_token().unwrap().to_string();
+                    let content = child.into_token().unwrap().to_string();
 
                     children.move_next();
                     argument.comment_after = Some(content);
                     break;
                 }
                 rnix::SyntaxKind::TOKEN_WHITESPACE => {
-                    let content =
-                        child.element.into_token().unwrap().to_string();
+                    let content = child.into_token().unwrap().to_string();
 
                     children.move_next();
                     if crate::utils::count_newlines(&content) > 0 {
@@ -143,8 +140,8 @@ pub(crate) fn parse(
 
     // @ x
     if let Some(child) = children.peek_next() {
-        if let rnix::SyntaxKind::NODE_PAT_BIND = child.element.kind() {
-            pattern.end_at = Some(child.element);
+        if let rnix::SyntaxKind::NODE_PAT_BIND = child.kind() {
+            pattern.end_at = Some(child);
         }
     }
 

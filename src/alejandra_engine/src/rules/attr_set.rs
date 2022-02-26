@@ -32,13 +32,13 @@ pub(crate) fn rule(
 
     // rec
     let child = children.peek_next().unwrap();
-    if let rnix::SyntaxKind::TOKEN_REC = child.element.kind() {
-        steps.push_back(crate::builder::Step::Format(child.element));
+    if let rnix::SyntaxKind::TOKEN_REC = child.kind() {
+        steps.push_back(crate::builder::Step::Format(child));
         children.move_next();
 
         if let rnix::SyntaxKind::TOKEN_COMMENT
         | rnix::SyntaxKind::TOKEN_WHITESPACE =
-            children.peek_next().unwrap().element.kind()
+            children.peek_next().unwrap().kind()
         {
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
@@ -59,7 +59,7 @@ pub(crate) fn rule(
 
     // {
     let child = children.get_next().unwrap();
-    steps.push_back(crate::builder::Step::Format(child.element));
+    steps.push_back(crate::builder::Step::Format(child));
     if vertical {
         steps.push_back(crate::builder::Step::Indent);
     }
@@ -93,8 +93,7 @@ pub(crate) fn rule(
         });
 
         if let Some(child) = children.peek_next() {
-            if let rnix::SyntaxKind::TOKEN_CURLY_B_CLOSE = child.element.kind()
-            {
+            if let rnix::SyntaxKind::TOKEN_CURLY_B_CLOSE = child.kind() {
                 break;
             }
 
@@ -103,14 +102,12 @@ pub(crate) fn rule(
             if vertical {
                 steps.push_back(crate::builder::Step::NewLine);
                 steps.push_back(crate::builder::Step::Pad);
-                steps.push_back(crate::builder::Step::FormatWider(
-                    child.element,
-                ));
+                steps.push_back(crate::builder::Step::FormatWider(child));
             } else {
                 if item_index > 1 {
                     steps.push_back(crate::builder::Step::Whitespace);
                 }
-                steps.push_back(crate::builder::Step::Format(child.element));
+                steps.push_back(crate::builder::Step::Format(child));
             }
             children.move_next();
             inline_next_comment = true;
@@ -124,7 +121,7 @@ pub(crate) fn rule(
         steps.push_back(crate::builder::Step::NewLine);
         steps.push_back(crate::builder::Step::Pad);
     }
-    steps.push_back(crate::builder::Step::Format(child.element));
+    steps.push_back(crate::builder::Step::Format(child));
 
     steps
 }

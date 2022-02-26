@@ -12,9 +12,9 @@ pub(crate) fn rule(
 
     let child = children.get_next().unwrap();
     if vertical {
-        steps.push_back(crate::builder::Step::FormatWider(child.element));
+        steps.push_back(crate::builder::Step::FormatWider(child));
     } else {
-        steps.push_back(crate::builder::Step::Format(child.element));
+        steps.push_back(crate::builder::Step::Format(child));
     }
 
     // /**/
@@ -38,9 +38,9 @@ pub(crate) fn rule(
 
     let child = children.get_next().unwrap();
     if vertical {
-        steps.push_back(crate::builder::Step::FormatWider(child.element));
+        steps.push_back(crate::builder::Step::FormatWider(child));
     } else {
-        steps.push_back(crate::builder::Step::Format(child.element));
+        steps.push_back(crate::builder::Step::Format(child));
     }
     children.move_prev();
 

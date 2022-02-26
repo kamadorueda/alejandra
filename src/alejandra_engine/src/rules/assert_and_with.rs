@@ -12,7 +12,7 @@ pub(crate) fn rule(
 
     // with
     let child = children.get_next().unwrap();
-    steps.push_back(crate::builder::Step::Format(child.element));
+    steps.push_back(crate::builder::Step::Format(child));
 
     // /**/
     let mut comment = false;
@@ -36,14 +36,14 @@ pub(crate) fn rule(
     // expr
     let child = children.get_next().unwrap();
     if vertical {
-        steps.push_back(crate::builder::Step::FormatWider(child.element));
+        steps.push_back(crate::builder::Step::FormatWider(child));
     } else {
-        steps.push_back(crate::builder::Step::Format(child.element));
+        steps.push_back(crate::builder::Step::Format(child));
     }
 
     // ;
     let child = children.get_next().unwrap();
-    steps.push_back(crate::builder::Step::Format(child.element));
+    steps.push_back(crate::builder::Step::Format(child));
 
     // /**/
     let mut comment: bool = false;
@@ -62,16 +62,16 @@ pub(crate) fn rule(
     if vertical {
         if {
             matches!(
-                child.element.kind(),
+                child.kind(),
                 rnix::SyntaxKind::NODE_ASSERT | rnix::SyntaxKind::NODE_WITH
             )
         } {
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
-            steps.push_back(crate::builder::Step::FormatWider(child.element));
+            steps.push_back(crate::builder::Step::FormatWider(child));
         } else if comment
             || !matches!(
-                child.element.kind(),
+                child.kind(),
                 rnix::SyntaxKind::NODE_ATTR_SET
                     | rnix::SyntaxKind::NODE_IDENT
                     | rnix::SyntaxKind::NODE_PAREN
@@ -84,15 +84,15 @@ pub(crate) fn rule(
             steps.push_back(crate::builder::Step::Indent);
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
-            steps.push_back(crate::builder::Step::FormatWider(child.element));
+            steps.push_back(crate::builder::Step::FormatWider(child));
             steps.push_back(crate::builder::Step::Dedent);
         } else {
             steps.push_back(crate::builder::Step::Whitespace);
-            steps.push_back(crate::builder::Step::FormatWider(child.element));
+            steps.push_back(crate::builder::Step::FormatWider(child));
         }
     } else {
         steps.push_back(crate::builder::Step::Whitespace);
-        steps.push_back(crate::builder::Step::Format(child.element));
+        steps.push_back(crate::builder::Step::Format(child));
     }
 
     steps

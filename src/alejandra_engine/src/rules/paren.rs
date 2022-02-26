@@ -13,7 +13,7 @@ pub(crate) fn rule(
 
     // (
     let child = children.get_next().unwrap();
-    steps.push_back(crate::builder::Step::Format(child.element));
+    steps.push_back(crate::builder::Step::Format(child));
     if vertical && has_comments_or_newlines {
         steps.push_back(crate::builder::Step::Indent);
     }
@@ -35,9 +35,9 @@ pub(crate) fn rule(
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
         }
-        steps.push_back(crate::builder::Step::FormatWider(child.element));
+        steps.push_back(crate::builder::Step::FormatWider(child));
     } else {
-        steps.push_back(crate::builder::Step::Format(child.element));
+        steps.push_back(crate::builder::Step::Format(child));
     }
 
     // /**/
@@ -57,7 +57,7 @@ pub(crate) fn rule(
         steps.push_back(crate::builder::Step::NewLine);
         steps.push_back(crate::builder::Step::Pad);
     }
-    steps.push_back(crate::builder::Step::Format(child.element));
+    steps.push_back(crate::builder::Step::Format(child));
 
     steps
 }

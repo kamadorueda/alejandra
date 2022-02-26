@@ -20,7 +20,7 @@ pub(crate) fn rule(
 
     // [
     let child = children.get_next().unwrap();
-    steps.push_back(crate::builder::Step::Format(child.element));
+    steps.push_back(crate::builder::Step::Format(child));
     if vertical {
         steps.push_back(crate::builder::Step::Indent);
     }
@@ -60,7 +60,7 @@ pub(crate) fn rule(
         });
 
         if let Some(child) = children.peek_next() {
-            let child_kind = child.element.kind();
+            let child_kind = child.kind();
 
             if let rnix::SyntaxKind::TOKEN_SQUARE_B_CLOSE = child_kind {
                 break;
@@ -71,14 +71,12 @@ pub(crate) fn rule(
             if vertical {
                 steps.push_back(crate::builder::Step::NewLine);
                 steps.push_back(crate::builder::Step::Pad);
-                steps.push_back(crate::builder::Step::FormatWider(
-                    child.element,
-                ));
+                steps.push_back(crate::builder::Step::FormatWider(child));
             } else {
                 if item_index > 1 {
                     steps.push_back(crate::builder::Step::Whitespace);
                 }
-                steps.push_back(crate::builder::Step::Format(child.element));
+                steps.push_back(crate::builder::Step::Format(child));
             }
 
             children.move_next();
@@ -93,7 +91,7 @@ pub(crate) fn rule(
         steps.push_back(crate::builder::Step::NewLine);
         steps.push_back(crate::builder::Step::Pad);
     }
-    steps.push_back(crate::builder::Step::Format(child.element));
+    steps.push_back(crate::builder::Step::Format(child));
 
     steps
 }
