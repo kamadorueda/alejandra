@@ -1,4 +1,4 @@
-pub fn nix_files(include: Vec<&str>, exclude: Vec<&str>) -> Vec<String> {
+pub(crate) fn nix_files(include: Vec<&str>, exclude: Vec<&str>) -> Vec<String> {
     let include: std::collections::HashSet<String> =
         include.iter().flat_map(nix_files_in_path).collect();
     let exclude: std::collections::HashSet<String> =
