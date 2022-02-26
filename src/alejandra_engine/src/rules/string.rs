@@ -4,7 +4,7 @@ const PLACEHOLDER: &str = "\
     6b219abc9462c41b87e47344752e9940\
     abf9353565f69a5db5c672b89372b84c";
 
-pub fn rule(
+pub(crate) fn rule(
     build_ctx: &crate::builder::BuildCtx,
     node: &rnix::SyntaxNode,
 ) -> std::collections::LinkedList<crate::builder::Step> {

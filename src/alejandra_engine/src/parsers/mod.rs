@@ -1,2 +1,2 @@
-pub mod if_else;
-pub mod pattern;
+pub(crate) mod if_else;
+pub(crate) mod pattern;

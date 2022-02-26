@@ -1,14 +1,14 @@
 use std::collections::LinkedList;
 
 #[derive(Debug, Default)]
-pub struct Argument {
+pub(crate) struct Argument {
     pub comments_before: LinkedList<String>,
     pub item:            Option<rnix::SyntaxElement>,
     pub comment_after:   Option<String>,
 }
 
 #[derive(Debug, Default)]
-pub struct Pattern {
+pub(crate) struct Pattern {
     pub initial_at:                    Option<rnix::SyntaxElement>,
     pub comments_after_initial_at:     LinkedList<String>,
     pub arguments:                     LinkedList<Argument>,
@@ -17,7 +17,7 @@ pub struct Pattern {
     pub end_at:                        Option<rnix::SyntaxElement>,
 }
 
-pub fn parse(
+pub(crate) fn parse(
     build_ctx: &crate::builder::BuildCtx,
     node: &rnix::SyntaxNode,
 ) -> Pattern {

@@ -1,5 +1,5 @@
 #[derive(PartialEq)]
-pub enum Step {
+pub(crate) enum Step {
     Comment(String),
     Dedent,
     Format(rnix::SyntaxElement),
@@ -12,7 +12,7 @@ pub enum Step {
 }
 
 #[derive(Clone)]
-pub struct BuildCtx {
+pub(crate) struct BuildCtx {
     pub force_wide:  bool,
     pub indentation: usize,
     pub pos_new:     crate::position::Position,
@@ -40,7 +40,7 @@ impl BuildCtx {
     }
 }
 
-pub fn build(
+pub(crate) fn build(
     element: rnix::SyntaxElement,
     force_wide: bool,
     path: String,
@@ -286,7 +286,7 @@ fn format_wider(
     };
 }
 
-pub fn fits_in_single_line(
+pub(crate) fn fits_in_single_line(
     build_ctx: &crate::builder::BuildCtx,
     element: rnix::SyntaxElement,
 ) -> bool {
@@ -299,7 +299,7 @@ pub fn fits_in_single_line(
     }
 }
 
-pub fn make_isolated_token(
+pub(crate) fn make_isolated_token(
     kind: rnix::SyntaxKind,
     text: &str,
 ) -> rnix::SyntaxToken {
