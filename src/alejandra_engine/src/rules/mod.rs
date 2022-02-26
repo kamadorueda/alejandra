@@ -19,20 +19,10 @@ pub mod string;
 pub mod string_interpol;
 
 pub fn default(
-    build_ctx: &crate::builder::BuildCtx,
+    _: &crate::builder::BuildCtx,
     node: &rnix::SyntaxNode,
 ) -> std::collections::LinkedList<crate::builder::Step> {
-    let mut steps = std::collections::LinkedList::new();
-
-    let mut children = crate::children::Children::new(build_ctx, node);
-
-    while let Some(child) = children.get_next() {
-        let step = match build_ctx.vertical {
-            true => crate::builder::Step::FormatWider(child.element),
-            _ => crate::builder::Step::Format(child.element),
-        };
-        steps.push_back(step);
-    }
-
-    steps
+    node.children_with_tokens()
+        .map(|child| crate::builder::Step::Format(child.into()))
+        .collect()
 }
