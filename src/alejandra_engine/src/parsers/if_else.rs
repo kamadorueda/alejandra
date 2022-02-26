@@ -18,9 +18,7 @@ pub fn parse(
 ) -> IfElse {
     let mut if_else = IfElse::default();
 
-    let mut children = crate::children::Children::new_with_configuration(
-        build_ctx, node, true,
-    );
+    let mut children = crate::children::Children::new(build_ctx, node);
 
     // if
     children.get_next().unwrap();

@@ -4,9 +4,7 @@ pub fn rule(
 ) -> std::collections::LinkedList<crate::builder::Step> {
     let mut steps = std::collections::LinkedList::new();
 
-    let mut children = crate::children::Children::new_with_configuration(
-        build_ctx, node, true,
-    );
+    let mut children = crate::children::Children::new(build_ctx, node);
 
     let items_count = node
         .children_with_tokens()

@@ -15,10 +15,9 @@ pub enum Trivia {
 }
 
 impl Children {
-    pub fn new_with_configuration(
+    pub fn new(
         build_ctx: &crate::builder::BuildCtx,
         node: &rnix::SyntaxNode,
-        with_newlines: bool,
     ) -> Children {
         let mut children = Vec::new();
 
@@ -46,10 +45,7 @@ impl Children {
                             });
                         }
                         rnix::SyntaxKind::TOKEN_WHITESPACE => {
-                            if with_newlines
-                                && crate::utils::count_newlines(token.text())
-                                    > 0
-                            {
+                            if crate::utils::count_newlines(token.text()) > 0 {
                                 children.push(Child {
                                     element: token.clone().into(),
                                     pos:     pos.clone(),
@@ -70,13 +66,6 @@ impl Children {
         }
 
         Children { children, current_index: 0 }
-    }
-
-    pub fn new(
-        build_ctx: &crate::builder::BuildCtx,
-        node: &rnix::SyntaxNode,
-    ) -> Children {
-        Children::new_with_configuration(build_ctx, node, false)
     }
 
     pub fn get(&mut self, index: usize) -> Option<Child> {

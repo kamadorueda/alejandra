@@ -23,9 +23,7 @@ pub fn parse(
 ) -> Pattern {
     let mut pattern = Pattern::default();
 
-    let mut children = crate::children::Children::new_with_configuration(
-        build_ctx, node, true,
-    );
+    let mut children = crate::children::Children::new(build_ctx, node);
 
     // x @
     let child = children.peek_next().unwrap();
