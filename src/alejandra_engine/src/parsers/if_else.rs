@@ -1,7 +1,7 @@
 use std::collections::LinkedList;
 
 #[derive(Debug, Default)]
-pub struct IfElse {
+pub(crate) struct IfElse {
     pub comments_before_if_expr:   LinkedList<String>,
     pub if_expr:                   Option<rnix::SyntaxElement>,
     pub comments_after_if_expr:    LinkedList<String>,
@@ -12,7 +12,7 @@ pub struct IfElse {
     pub else_expr:                 Option<rnix::SyntaxElement>,
 }
 
-pub fn parse(
+pub(crate) fn parse(
     build_ctx: &crate::builder::BuildCtx,
     node: &rnix::SyntaxNode,
 ) -> IfElse {

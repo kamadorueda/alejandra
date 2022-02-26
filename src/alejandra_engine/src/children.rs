@@ -1,15 +1,16 @@
 #[derive(Clone)]
-pub struct Child {
+pub(crate) struct Child {
     pub element: rnix::SyntaxElement,
+    #[allow(dead_code)]
     pub pos:     crate::position::Position,
 }
 
-pub struct Children {
+pub(crate) struct Children {
     children:      Vec<Child>,
     current_index: usize,
 }
 
-pub enum Trivia {
+pub(crate) enum Trivia {
     Comment(String),
     Whitespace(String),
 }

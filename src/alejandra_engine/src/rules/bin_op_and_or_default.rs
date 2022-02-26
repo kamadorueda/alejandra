@@ -1,11 +1,11 @@
-pub fn rule(
+pub(crate) fn rule(
     build_ctx: &crate::builder::BuildCtx,
     node: &rnix::SyntaxNode,
 ) -> std::collections::LinkedList<crate::builder::Step> {
     rule_with_configuration(build_ctx, node, "bin_op_and_or_default")
 }
 
-pub fn rule_with_configuration(
+pub(crate) fn rule_with_configuration(
     build_ctx: &crate::builder::BuildCtx,
     node: &rnix::SyntaxNode,
     parent_kind: &str,
