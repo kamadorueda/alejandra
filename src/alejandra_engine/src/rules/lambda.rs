@@ -13,14 +13,14 @@ pub(crate) fn rule(
     // a
     let child = children.get_next().unwrap();
     if vertical {
-        steps.push_back(crate::builder::Step::FormatWider(child.element));
+        steps.push_back(crate::builder::Step::FormatWider(child));
     } else {
-        steps.push_back(crate::builder::Step::Format(child.element));
+        steps.push_back(crate::builder::Step::Format(child));
     }
 
     if let rnix::SyntaxKind::TOKEN_COMMENT
     | rnix::SyntaxKind::TOKEN_WHITESPACE =
-        children.peek_next().unwrap().element.kind()
+        children.peek_next().unwrap().kind()
     {
         steps.push_back(crate::builder::Step::NewLine);
         steps.push_back(crate::builder::Step::Pad);
@@ -38,7 +38,7 @@ pub(crate) fn rule(
 
     // :
     let child = children.get_next().unwrap();
-    steps.push_back(crate::builder::Step::Format(child.element));
+    steps.push_back(crate::builder::Step::Format(child));
 
     // /**/
     let mut comment = false;
@@ -57,7 +57,7 @@ pub(crate) fn rule(
     if vertical {
         if comment
             || !matches!(
-                child.element.kind(),
+                child.kind(),
                 rnix::SyntaxKind::NODE_ATTR_SET
                     | rnix::SyntaxKind::NODE_PAREN
                     | rnix::SyntaxKind::NODE_LAMBDA
@@ -68,7 +68,7 @@ pub(crate) fn rule(
             )
         {
             let should_indent = !matches!(
-                child.element.kind(),
+                child.kind(),
                 rnix::SyntaxKind::NODE_ATTR_SET
                     | rnix::SyntaxKind::NODE_PAREN
                     | rnix::SyntaxKind::NODE_LAMBDA
@@ -83,17 +83,17 @@ pub(crate) fn rule(
 
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
-            steps.push_back(crate::builder::Step::FormatWider(child.element));
+            steps.push_back(crate::builder::Step::FormatWider(child));
             if should_indent {
                 steps.push_back(crate::builder::Step::Dedent);
             }
         } else {
             steps.push_back(crate::builder::Step::Whitespace);
-            steps.push_back(crate::builder::Step::FormatWider(child.element));
+            steps.push_back(crate::builder::Step::FormatWider(child));
         }
     } else {
         steps.push_back(crate::builder::Step::Whitespace);
-        steps.push_back(crate::builder::Step::Format(child.element));
+        steps.push_back(crate::builder::Step::Format(child));
     }
 
     steps

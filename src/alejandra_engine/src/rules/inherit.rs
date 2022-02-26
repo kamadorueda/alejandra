@@ -12,7 +12,7 @@ pub(crate) fn rule(
 
     // inherit
     let child = children.get_next().unwrap();
-    steps.push_back(crate::builder::Step::Format(child.element));
+    steps.push_back(crate::builder::Step::Format(child));
     if vertical {
         steps.push_back(crate::builder::Step::Indent);
     }
@@ -33,16 +33,13 @@ pub(crate) fn rule(
             if vertical {
                 steps.push_back(crate::builder::Step::NewLine);
                 steps.push_back(crate::builder::Step::Pad);
-                steps.push_back(crate::builder::Step::FormatWider(
-                    child.element,
-                ));
+                steps.push_back(crate::builder::Step::FormatWider(child));
             } else {
-                if let rnix::SyntaxKind::TOKEN_SEMICOLON = child.element.kind()
-                {
+                if let rnix::SyntaxKind::TOKEN_SEMICOLON = child.kind() {
                 } else {
                     steps.push_back(crate::builder::Step::Whitespace);
                 }
-                steps.push_back(crate::builder::Step::Format(child.element));
+                steps.push_back(crate::builder::Step::Format(child));
             }
         } else {
             break;

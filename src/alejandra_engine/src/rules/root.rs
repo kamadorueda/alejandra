@@ -22,12 +22,10 @@ pub(crate) fn rule(
 
         if let Some(child) = children.get_next() {
             if vertical {
-                steps.push_back(crate::builder::Step::FormatWider(
-                    child.element,
-                ));
+                steps.push_back(crate::builder::Step::FormatWider(child));
                 steps.push_back(crate::builder::Step::NewLine);
             } else {
-                steps.push_back(crate::builder::Step::Format(child.element));
+                steps.push_back(crate::builder::Step::Format(child));
             }
         }
     }

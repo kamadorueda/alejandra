@@ -13,9 +13,9 @@ pub(crate) fn rule(
     // a
     let child = children.get_next().unwrap();
     if vertical {
-        steps.push_back(crate::builder::Step::FormatWider(child.element));
+        steps.push_back(crate::builder::Step::FormatWider(child));
     } else {
-        steps.push_back(crate::builder::Step::Format(child.element));
+        steps.push_back(crate::builder::Step::Format(child));
     }
 
     // /**/
@@ -67,7 +67,7 @@ pub(crate) fn rule(
 
     // =
     let mut dedent = false;
-    steps.push_back(crate::builder::Step::Format(child_equal.element));
+    steps.push_back(crate::builder::Step::Format(child_equal));
 
     if vertical {
         if !comments_before.is_empty() || !comments_after.is_empty() {
@@ -76,7 +76,7 @@ pub(crate) fn rule(
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
         } else if matches!(
-            child_expr.element.kind(),
+            child_expr.kind(),
             rnix::SyntaxKind::NODE_ASSERT
                 | rnix::SyntaxKind::NODE_ATTR_SET
                 | rnix::SyntaxKind::NODE_PAREN
@@ -86,7 +86,7 @@ pub(crate) fn rule(
                 | rnix::SyntaxKind::NODE_STRING
                 | rnix::SyntaxKind::NODE_WITH
         ) || (matches!(
-            child_expr.element.kind(),
+            child_expr.kind(),
             rnix::SyntaxKind::NODE_APPLY
         ) && !newlines)
         {
@@ -110,13 +110,13 @@ pub(crate) fn rule(
 
     // expr
     if vertical {
-        steps.push_back(crate::builder::Step::FormatWider(child_expr.element));
+        steps.push_back(crate::builder::Step::FormatWider(child_expr));
         if !comments_after.is_empty() {
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
         }
     } else {
-        steps.push_back(crate::builder::Step::Format(child_expr.element));
+        steps.push_back(crate::builder::Step::Format(child_expr));
     }
 
     // /**/
@@ -128,7 +128,7 @@ pub(crate) fn rule(
 
     // ;
     let child = children.get_next().unwrap();
-    steps.push_back(crate::builder::Step::Format(child.element));
+    steps.push_back(crate::builder::Step::Format(child));
     if dedent {
         steps.push_back(crate::builder::Step::Dedent);
     }

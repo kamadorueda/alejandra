@@ -14,9 +14,9 @@ pub(crate) fn rule(
     let child = children.get_next().unwrap();
 
     if vertical {
-        steps.push_back(crate::builder::Step::FormatWider(child.element));
+        steps.push_back(crate::builder::Step::FormatWider(child));
     } else {
-        steps.push_back(crate::builder::Step::Format(child.element));
+        steps.push_back(crate::builder::Step::Format(child));
     }
 
     // /**/
@@ -35,24 +35,24 @@ pub(crate) fn rule(
     let child = children.get_next().unwrap();
     if vertical {
         if let rnix::SyntaxKind::TOKEN_COMMENT
-        | rnix::SyntaxKind::TOKEN_WHITESPACE = child_prev.element.kind()
+        | rnix::SyntaxKind::TOKEN_WHITESPACE = child_prev.kind()
         {
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
         } else if let rnix::SyntaxKind::NODE_ATTR_SET
         | rnix::SyntaxKind::NODE_LIST
         | rnix::SyntaxKind::NODE_PAREN
-        | rnix::SyntaxKind::NODE_STRING = child.element.kind()
+        | rnix::SyntaxKind::NODE_STRING = child.kind()
         {
             steps.push_back(crate::builder::Step::Whitespace);
         } else {
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
         };
-        steps.push_back(crate::builder::Step::FormatWider(child.element));
+        steps.push_back(crate::builder::Step::FormatWider(child));
     } else {
         steps.push_back(crate::builder::Step::Whitespace);
-        steps.push_back(crate::builder::Step::Format(child.element));
+        steps.push_back(crate::builder::Step::Format(child));
     }
 
     steps

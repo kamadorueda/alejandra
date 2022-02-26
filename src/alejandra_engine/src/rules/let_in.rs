@@ -25,7 +25,7 @@ pub(crate) fn rule(
 
     // let
     let child = children.get_next().unwrap();
-    steps.push_back(crate::builder::Step::Format(child.element));
+    steps.push_back(crate::builder::Step::Format(child));
     if vertical {
         steps.push_back(crate::builder::Step::Indent);
     }
@@ -58,7 +58,7 @@ pub(crate) fn rule(
         });
 
         if let Some(child) = children.peek_next() {
-            if let rnix::SyntaxKind::TOKEN_IN = child.element.kind() {
+            if let rnix::SyntaxKind::TOKEN_IN = child.kind() {
                 break;
             }
 
@@ -67,12 +67,10 @@ pub(crate) fn rule(
             if vertical {
                 steps.push_back(crate::builder::Step::NewLine);
                 steps.push_back(crate::builder::Step::Pad);
-                steps.push_back(crate::builder::Step::FormatWider(
-                    child.element,
-                ));
+                steps.push_back(crate::builder::Step::FormatWider(child));
             } else {
                 steps.push_back(crate::builder::Step::Whitespace);
-                steps.push_back(crate::builder::Step::Format(child.element));
+                steps.push_back(crate::builder::Step::Format(child));
             }
 
             children.move_next();
@@ -105,11 +103,11 @@ pub(crate) fn rule(
 
     // in
     let mut dedent = false;
-    steps.push_back(crate::builder::Step::Format(child_in.element));
+    steps.push_back(crate::builder::Step::Format(child_in));
     if vertical {
         if child_comments.is_empty()
             && matches!(
-                child_expr.element.kind(),
+                child_expr.kind(),
                 rnix::SyntaxKind::NODE_ATTR_SET
                     | rnix::SyntaxKind::NODE_LET_IN
                     | rnix::SyntaxKind::NODE_LIST
@@ -135,13 +133,13 @@ pub(crate) fn rule(
 
     // expr
     if vertical {
-        steps.push_back(crate::builder::Step::FormatWider(child_expr.element));
+        steps.push_back(crate::builder::Step::FormatWider(child_expr));
         if dedent {
             steps.push_back(crate::builder::Step::Dedent);
         }
     } else {
         steps.push_back(crate::builder::Step::Whitespace);
-        steps.push_back(crate::builder::Step::Format(child_expr.element));
+        steps.push_back(crate::builder::Step::Format(child_expr));
     }
 
     steps

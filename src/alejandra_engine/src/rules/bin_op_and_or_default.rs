@@ -21,7 +21,7 @@ pub(crate) fn rule_with_configuration(
     // expr
     let child = children.get_next().unwrap();
     if vertical {
-        let kind = child.element.kind();
+        let kind = child.kind();
 
         if (parent_kind == "bin_op_and_or_default"
             && matches!(
@@ -32,14 +32,14 @@ pub(crate) fn rule_with_configuration(
             || (parent_kind == "select"
                 && matches!(kind, rnix::SyntaxKind::NODE_SELECT))
         {
-            steps.push_back(crate::builder::Step::Format(child.element));
+            steps.push_back(crate::builder::Step::Format(child));
         } else {
-            steps.push_back(crate::builder::Step::FormatWider(child.element));
+            steps.push_back(crate::builder::Step::FormatWider(child));
         }
         steps.push_back(crate::builder::Step::NewLine);
         steps.push_back(crate::builder::Step::Pad);
     } else {
-        steps.push_back(crate::builder::Step::Format(child.element));
+        steps.push_back(crate::builder::Step::Format(child));
     }
 
     // /**/
@@ -57,7 +57,7 @@ pub(crate) fn rule_with_configuration(
     if !vertical && parent_kind == "bin_op_and_or_default" {
         steps.push_back(crate::builder::Step::Whitespace);
     }
-    steps.push_back(crate::builder::Step::Format(child.element));
+    steps.push_back(crate::builder::Step::Format(child));
 
     // /**/
     let mut comment = false;
@@ -81,9 +81,9 @@ pub(crate) fn rule_with_configuration(
     // expr
     let child = children.get_next().unwrap();
     if vertical {
-        steps.push_back(crate::builder::Step::FormatWider(child.element));
+        steps.push_back(crate::builder::Step::FormatWider(child));
     } else {
-        steps.push_back(crate::builder::Step::Format(child.element));
+        steps.push_back(crate::builder::Step::Format(child));
     }
 
     steps

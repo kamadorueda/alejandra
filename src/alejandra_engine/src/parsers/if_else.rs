@@ -32,7 +32,7 @@ pub(crate) fn parse(
     });
 
     // expr
-    if_else.if_expr = Some(children.get_next().unwrap().element);
+    if_else.if_expr = Some(children.get_next().unwrap());
 
     // /**/
     children.drain_trivia(|element| match element {
@@ -54,7 +54,7 @@ pub(crate) fn parse(
     });
 
     // expr
-    if_else.then_expr = Some(children.get_next().unwrap().element);
+    if_else.then_expr = Some(children.get_next().unwrap());
 
     // /**/
     children.drain_trivia(|element| match element {
@@ -76,7 +76,7 @@ pub(crate) fn parse(
     });
 
     // expr
-    if_else.else_expr = Some(children.get_next().unwrap().element);
+    if_else.else_expr = Some(children.get_next().unwrap());
 
     if_else
 }
