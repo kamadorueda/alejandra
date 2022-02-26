@@ -1,10 +1,10 @@
 #[derive(Clone)]
-pub struct FormattedPath {
+pub(crate) struct FormattedPath {
     pub path:   String,
     pub status: alejandra_engine::format::Status,
 }
 
-pub fn parse(args: Vec<String>) -> clap::ArgMatches {
+pub(crate) fn parse(args: Vec<String>) -> clap::ArgMatches {
     clap::Command::new("Alejandra")
         .about("The Uncompromising Nix Code Formatter.")
         .version(alejandra_engine::version::VERSION)
@@ -51,7 +51,7 @@ pub fn parse(args: Vec<String>) -> clap::ArgMatches {
         .get_matches_from(args)
 }
 
-pub fn stdin() -> FormattedPath {
+pub(crate) fn stdin() -> FormattedPath {
     use std::io::Read;
 
     let mut before = String::new();
@@ -69,7 +69,7 @@ pub fn stdin() -> FormattedPath {
     FormattedPath { path, status }
 }
 
-pub fn simple(paths: Vec<String>) -> Vec<FormattedPath> {
+pub(crate) fn simple(paths: Vec<String>) -> Vec<FormattedPath> {
     use rayon::prelude::*;
 
     eprintln!("Formatting: {} files", paths.len());
@@ -90,7 +90,7 @@ pub fn simple(paths: Vec<String>) -> Vec<FormattedPath> {
         .collect()
 }
 
-pub fn tui(paths: Vec<String>) -> std::io::Result<Vec<FormattedPath>> {
+pub(crate) fn tui(paths: Vec<String>) -> std::io::Result<Vec<FormattedPath>> {
     use rayon::prelude::*;
     use termion::{input::TermRead, raw::IntoRawMode};
 
@@ -304,4 +304,86 @@ pub fn tui(paths: Vec<String>) -> std::io::Result<Vec<FormattedPath>> {
     }
 
     Ok(formatted_paths.iter().cloned().collect())
+}
+
+pub fn main() -> std::io::Result<()> {
+    let matches = crate::cli::parse(std::env::args().collect());
+
+    let check = matches.is_present("check");
+
+    let formatted_paths = match matches.values_of("include") {
+        Some(include) => {
+            let include = include.collect();
+            let exclude = match matches.values_of("exclude") {
+                Some(exclude) => exclude.collect(),
+                None => vec![],
+            };
+
+            let paths: Vec<String> = crate::find::nix_files(include, exclude);
+
+            if atty::is(atty::Stream::Stderr)
+                && atty::is(atty::Stream::Stdin)
+                && atty::is(atty::Stream::Stdout)
+            {
+                crate::cli::tui(paths)?
+            } else {
+                crate::cli::simple(paths)
+            }
+        }
+        None => vec![crate::cli::stdin()],
+    };
+
+    let errors = formatted_paths
+        .iter()
+        .filter(|formatted_path| {
+            matches!(
+                formatted_path.status,
+                alejandra_engine::format::Status::Error(_)
+            )
+        })
+        .count();
+
+    if errors > 0 {
+        eprintln!();
+        eprintln!(
+            "Failed! We encountered {} error{} at:",
+            errors,
+            if errors > 0 { "s" } else { "" }
+        );
+        for formatted_path in formatted_paths {
+            if let alejandra_engine::format::Status::Error(error) =
+                formatted_path.status
+            {
+                eprintln!("  {}: {}", formatted_path.path, &error);
+            }
+        }
+        std::process::exit(1);
+    }
+
+    let changed = formatted_paths
+        .iter()
+        .filter(|formatted_path| match formatted_path.status {
+            alejandra_engine::format::Status::Changed(changed) => changed,
+            _ => false,
+        })
+        .count();
+
+    if changed > 0 {
+        eprintln!();
+        eprintln!(
+            "Success! {} file{} {} changed",
+            changed,
+            if changed > 0 { "s" } else { "" },
+            if changed > 0 { "were" } else { "was" },
+        );
+        if check {
+            std::process::exit(2);
+        } else {
+            std::process::exit(0);
+        }
+    }
+
+    eprintln!();
+    eprintln!("Success! Your code complies the Alejandra style");
+    std::process::exit(0);
 }
