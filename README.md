@@ -105,9 +105,7 @@ Please visit:
 
 ### Prebuilt binaries
 
-You can download a binary for your platform,
-make it executable (`$ chmod +x`)
-and have fun!
+You can download a binary for your platform:
 
 - [aarch64-unknown-linux-musl](https://github.com/kamadorueda/alejandra/releases/download/0.6.0/alejandra-aarch64-unknown-linux-musl)
 - [armv6l-unknown-linux-musleabihf](https://github.com/kamadorueda/alejandra/releases/download/0.6.0/alejandra-armv6l-unknown-linux-musleabihf)
@@ -115,19 +113,8 @@ and have fun!
 - [i686-unknown-linux-musl](https://github.com/kamadorueda/alejandra/releases/download/0.6.0/alejandra-i686-unknown-linux-musl)
 - [x86_64-unknown-linux-musl](https://github.com/kamadorueda/alejandra/releases/download/0.6.0/alejandra-x86_64-unknown-linux-musl)
 
-Alternatively there is an automated method for some platforms.
-It needs:
-[curl](https://curl.se/),
-[sh](https://www.gnu.org/software/bash/) and
-[chmod](https://www.gnu.org/software/coreutils/):
-
-- aarch64-linux:
-  `$ curl https://raw.githubusercontent.com/kamadorueda/alejandra/main/installers/aarch64-linux.sh | sh`
-
-- x86_64-linux:
-  `$ curl https://raw.githubusercontent.com/kamadorueda/alejandra/main/installers/x86_64-linux.sh | sh`
-
-Then run Alejandra with:
+Make it executable (`$ chmod +x`)
+and run Alejandra with:
 
 ```bash
 $ ./alejandra --help
