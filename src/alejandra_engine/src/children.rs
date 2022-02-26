@@ -15,13 +15,24 @@ impl Children {
     ) -> Children {
         let mut children: Vec<rnix::SyntaxElement> = Vec::new();
 
-        let mut pos = build_ctx.pos_old.clone();
+        // Updating the position is costly,
+        // so let's just do it when really needed
+        let mut pos = {
+            let has_comments = node.children_with_tokens().any(|child| {
+                matches!(child.kind(), rnix::SyntaxKind::TOKEN_COMMENT)
+            });
+
+            if has_comments { Some(build_ctx.pos_old.clone()) } else { None }
+        };
 
         for child in node.children_with_tokens() {
             match child {
                 rnix::SyntaxElement::Node(node) => {
                     children.push(node.clone().into());
-                    pos.update(&node.text().to_string());
+
+                    if pos.is_some() {
+                        pos.as_mut().unwrap().update(&node.text().to_string());
+                    }
                 }
                 rnix::SyntaxElement::Token(token) => {
                     match token.kind() {
@@ -29,7 +40,10 @@ impl Children {
                             children.push(
                                 crate::builder::make_isolated_token(
                                     rnix::SyntaxKind::TOKEN_COMMENT,
-                                    &dedent_comment(&pos, token.text()),
+                                    &dedent_comment(
+                                        &pos.as_ref().unwrap(),
+                                        token.text(),
+                                    ),
                                 )
                                 .into(),
                             );
@@ -44,7 +58,9 @@ impl Children {
                         }
                     }
 
-                    pos.update(token.text());
+                    if pos.is_some() {
+                        pos.as_mut().unwrap().update(token.text());
+                    }
                 }
             }
         }

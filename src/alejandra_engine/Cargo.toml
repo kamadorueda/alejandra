@@ -2,23 +2,29 @@
 rnix = "*"
 rowan = "0.12.6" # follows rnix
 
-[target.aarch64-unknown-linux-musl.dependencies]
-mimalloc = { version = "*", default-features = false }
+[target.aarch64-unknown-linux-musl.dependencies.mimalloc]
+default-features = false
+version = "*"
 
-[target.armv6l-unknown-linux-musleabihf.dependencies]
-mimalloc = { version = "*", default-features = false }
+[target.armv6l-unknown-linux-musleabihf.dependencies.mimalloc]
+default-features = false
+version = "*"
 
-[target.armv7l-unknown-linux-musleabihf.dependencies]
-mimalloc = { version = "*", default-features = false }
+[target.armv7l-unknown-linux-musleabihf.dependencies.mimalloc]
+default-features = false
+version = "*"
 
-[target.i686-unknown-linux-musl.dependencies]
-mimalloc = { version = "*", default-features = false }
+[target.i686-unknown-linux-musl.dependencies.mimalloc]
+default-features = false
+version = "*"
 
-[target.x86_64-unknown-linux-gnu.dependencies]
-mimalloc = { version = "*", default-features = false }
+[target.x86_64-unknown-linux-gnu.dependencies.mimalloc]
+default-features = false
+version = "*"
 
-[target.x86_64-unknown-linux-musl.dependencies]
-mimalloc = { version = "*", default-features = false }
+[target.x86_64-unknown-linux-musl.dependencies.mimalloc]
+default-features = false
+version = "*"
 
 [package]
 authors = ["Kevin Amado <kamadorueda@gmail.com>"]
