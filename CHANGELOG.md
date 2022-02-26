@@ -17,6 +17,33 @@ Types of changes
 - Security in case of vulnerabilities.
 -->
 
+### Changed
+
+- Linux binaries now use [mimalloc](https://github.com/microsoft/mimalloc)
+  to provide much better performance when formatting Nixpkgs:
+
+  - x86_64-unknown-linux-gnu, 1.3x faster,
+    from 0m10.639s to 0m8.381s
+
+  - x86_64-unknown-linux-musl, 15.8x faster,
+    from 2m32.686s to 0m9.642s
+
+  - [On QEMU](https://www.qemu.org/) aarch64-unknown-linux-musl,
+    4.6x faster,
+    from 5m26s to 1m10s
+
+  - [On QEMU](https://www.qemu.org/) armv6l-unknown-linux-musleabihf,
+    1.05x faster,
+    from 8m7s to 7m41s
+
+  - [On QEMU](https://www.qemu.org/) armv7l-unknown-linux-musleabihf,
+    1.15x faster,
+    from 5m54s to 5m7s
+
+  - [On QEMU](https://www.qemu.org/) i686-unknown-linux-musl,
+    1.07x faster,
+    from 2m44s to 2m33s
+
 ## [0.6.0] - 2022-02-25
 
 ### Added
