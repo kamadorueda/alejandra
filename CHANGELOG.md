@@ -44,6 +44,44 @@ Types of changes
     1.07x faster,
     from 2m44s to 2m33s
 
+- After profiling the code as suggested by
+  [nnethercote's perf-book](https://nnethercote.github.io/perf-book/profiling.html)
+  one critical path of Alejandra was identified an optimized,
+  yielding huge performance boosts:
+
+  - x86_64-unknown-linux-gnu, 2.5x faster,
+    from 0m8.381s to 0m3.410s
+
+  - x86_64-unknown-linux-musl, 2.3x faster,
+    from 0m9.642s to 0m4.134s
+
+  - [On QEMU](https://www.qemu.org/) aarch64-unknown-linux-musl,
+    2.4x faster,
+    from 1m10s to 0m29s
+
+  - [On QEMU](https://www.qemu.org/) armv6l-unknown-linux-musleabihf,
+    1.85x faster,
+    from 7m41s to 4m8.399s
+
+  - [On QEMU](https://www.qemu.org/) armv7l-unknown-linux-musleabihf,
+    1.88x faster,
+    from 5m7s to 2m42.595s
+
+  - [On QEMU](https://www.qemu.org/) i686-unknown-linux-musl,
+    1.65x faster,
+    from 2m33s to 1m32.671s
+
+  In general this is an algorithmic improvement
+  and therefore the following platforms should be faster as well
+  by a similar ratio
+  (not measured):
+
+  - aarch64-apple-darwin
+  - x86_64-apple-darwin
+
+- A `--threads` flag, so you can pick how many formatting threads to spawn.
+  Defaults to the number of logical CPUs in your system.
+
 ## [0.6.0] - 2022-02-25
 
 ### Added

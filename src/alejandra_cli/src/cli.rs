@@ -24,7 +24,19 @@ pub(crate) fn parse(args: Vec<String>) -> clap::ArgMatches {
         .arg(
             clap::Arg::new("check")
                 .help("Check if the input is already formatted.")
-                .long("--check"),
+                .long("--check")
+                .short('c'),
+        )
+        .arg(
+            clap::Arg::new("threads")
+                .default_value("0")
+                .help(
+                    "Number of formatting threads to spawn. Defaults to the \
+                     number of logical CPUs.",
+                )
+                .long("--threads")
+                .short('t')
+                .takes_value(true),
         )
         .term_width(80)
         .after_help(indoc::indoc!(
@@ -310,6 +322,13 @@ pub fn main() -> std::io::Result<()> {
     let matches = crate::cli::parse(std::env::args().collect());
 
     let check = matches.is_present("check");
+    let threads = matches.value_of("threads").unwrap();
+    let threads: usize = threads.parse().unwrap();
+
+    rayon::ThreadPoolBuilder::new()
+        .num_threads(threads)
+        .build_global()
+        .unwrap();
 
     let formatted_paths = match matches.values_of("include") {
         Some(include) => {
