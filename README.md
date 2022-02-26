@@ -101,7 +101,7 @@
 ### On the web editor
 
 Please visit:
-[kamadorueda.github.io/alejandra](https://kamadorueda.github.io/alejandra/)
+[kamadorueda.github.io/alejandra](https://kamadorueda.github.io/alejandra/).
 
 ### Prebuilt binaries
 
@@ -125,6 +125,10 @@ or:
 ```bash
 $ /path/to/alejandra --help
 ```
+
+### From [Nixpkgs](https://github.com/nixos/nixpkgs)
+
+Please visit: [search.nixos.org/packages?query=alejandra](https://search.nixos.org/packages?channel=unstable&show=alejandra&from=0&size=50&sort=relevance&type=packages&query=alejandra).
 
 ### Nix installation
 
