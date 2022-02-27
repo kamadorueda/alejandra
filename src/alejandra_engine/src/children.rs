@@ -41,7 +41,7 @@ impl Children {
                                 crate::builder::make_isolated_token(
                                     rnix::SyntaxKind::TOKEN_COMMENT,
                                     &dedent_comment(
-                                        &pos.as_ref().unwrap(),
+                                        pos.as_ref().unwrap(),
                                         token.text(),
                                     ),
                                 )
