@@ -4,55 +4,51 @@ pub(crate) fn rule(
 ) -> std::collections::LinkedList<crate::builder::Step> {
     let mut steps = std::collections::LinkedList::new();
 
-    let mut children = crate::children::Children::new(build_ctx, node);
+    let apply = crate::parsers::apply::parse(build_ctx, node);
 
-    let vertical = children.has_comments()
-        || children.has_newlines()
-        || build_ctx.vertical;
+    let vertical =
+        build_ctx.vertical || apply.newline || !apply.comments.is_empty();
 
     // left
-    let child = children.get_next().unwrap();
-
+    let element = apply.left.unwrap();
     if vertical {
-        steps.push_back(crate::builder::Step::FormatWider(child));
+        steps.push_back(crate::builder::Step::FormatWider(element));
     } else {
-        steps.push_back(crate::builder::Step::Format(child));
+        steps.push_back(crate::builder::Step::Format(element));
     }
 
     // /**/
-    children.drain_trivia(|element| match element {
-        crate::children::Trivia::Comment(text) => {
+    let comments = !apply.comments.is_empty();
+    if comments {
+        for text in apply.comments {
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
             steps.push_back(crate::builder::Step::Comment(text));
         }
-        crate::children::Trivia::Whitespace(_) => {}
-    });
-
-    let child_prev = children.peek_prev().unwrap();
+    }
 
     // right
-    let child = children.get_next().unwrap();
+    let element = apply.right.unwrap();
     if vertical {
-        if let rnix::SyntaxKind::TOKEN_COMMENT
-        | rnix::SyntaxKind::TOKEN_WHITESPACE = child_prev.kind()
-        {
-            steps.push_back(crate::builder::Step::NewLine);
-            steps.push_back(crate::builder::Step::Pad);
-        } else if let rnix::SyntaxKind::NODE_ATTR_SET
-        | rnix::SyntaxKind::NODE_LIST
-        | rnix::SyntaxKind::NODE_PAREN
-        | rnix::SyntaxKind::NODE_STRING = child.kind()
+        if !apply.newline
+            && !comments
+            && matches!(
+                element.kind(),
+                rnix::SyntaxKind::NODE_ATTR_SET
+                    | rnix::SyntaxKind::NODE_LIST
+                    | rnix::SyntaxKind::NODE_PAREN
+                    | rnix::SyntaxKind::NODE_STRING
+            )
         {
             steps.push_back(crate::builder::Step::Whitespace);
         } else {
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
         };
-        steps.push_back(crate::builder::Step::FormatWider(child));
+        steps.push_back(crate::builder::Step::FormatWider(element));
     } else {
         steps.push_back(crate::builder::Step::Whitespace);
-        steps.push_back(crate::builder::Step::Format(child));
+        steps.push_back(crate::builder::Step::Format(element));
     }
 
     steps

@@ -96,10 +96,6 @@ impl Children {
         self.get(self.current_index)
     }
 
-    pub fn peek_prev(&mut self) -> Option<rnix::SyntaxElement> {
-        self.get(self.current_index - 1)
-    }
-
     pub fn move_next(&mut self) {
         self.current_index += 1
     }
