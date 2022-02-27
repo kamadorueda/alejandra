@@ -105,6 +105,7 @@
           cargo-tarpaulin
           clippy
           jq
+          linuxPackages_latest.perf
           nodejs
           nodePackages.prettier
           nodePackages.prettier-plugin-toml
