@@ -177,7 +177,7 @@ fn format(
                 rnix::SyntaxKind::NODE_APPLY => crate::rules::apply::rule,
                 // assert a; b
                 rnix::SyntaxKind::NODE_ASSERT => {
-                    crate::rules::assert_and_with::rule
+                    crate::rules::assert_or_with::rule
                 }
                 // { }
                 rnix::SyntaxKind::NODE_ATTR_SET => crate::rules::attr_set::rule,
@@ -244,7 +244,7 @@ fn format(
                 rnix::SyntaxKind::NODE_UNARY_OP => crate::rules::default,
                 // with a; b
                 rnix::SyntaxKind::NODE_WITH => {
-                    crate::rules::assert_and_with::rule
+                    crate::rules::assert_or_with::rule
                 }
                 kind => {
                     panic!(
