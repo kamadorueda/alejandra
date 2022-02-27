@@ -12,15 +12,13 @@ impl Default for Position {
 
 impl Position {
     pub fn update(&mut self, text: &str) {
-        let chars: Vec<char> = text.chars().collect();
-        let newlines = chars.iter().filter(|&c| *c == '\n').count();
-        self.line += newlines;
-        if newlines > 0 {
-            self.column = 0
+        for char in text.chars() {
+            if char == '\n' {
+                self.line += 1;
+                self.column = 0;
+            } else {
+                self.column += 1;
+            }
         }
-        self.column += match chars.iter().rposition(|c| *c == '\n') {
-            Some(pos) => chars.len() - pos - 1,
-            None => chars.len(),
-        };
     }
 }

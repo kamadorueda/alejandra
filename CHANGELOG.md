@@ -82,6 +82,8 @@ Types of changes
 - A `--threads` flag, so you can pick how many formatting threads to spawn.
   Defaults to the number of logical CPUs in your system.
 
+- Position counters were improved to offer an extra 1.13x speedup.
+
 ## [0.6.0] - 2022-02-25
 
 ### Added

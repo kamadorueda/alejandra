@@ -203,15 +203,22 @@ Please see: [CHANGELOG.md](./CHANGELOG.md).
     - BogoMips: 7599.80
     - Cache Size: 16384 KB
 
+    Using:
+
+    ```bash
+    # x86_64-unknown-linux-gnu
+    $ time alejandra --threads $threads /path/to/nixpkgs
+    ```
+
     Results:
 
-    | Logical Cores | Seconds |
-    | :-----------: | :-----: |
-    |       1       |  15.1   |
-    |       2       |   7.9   |
-    |       4       |   5.4   |
-    |       8       |   4.1   |
-    |      16       |   3.6   |
+    | $threads | Seconds |
+    | :------: | :-----: |
+    |    1     |  13.4   |
+    |    2     |   6.9   |
+    |    4     |   3.6   |
+    |    8     |   2.6   |
+    |    16    |   3.1   |
 
 [^semantic-changes]: The methodology to claim this is:
 
