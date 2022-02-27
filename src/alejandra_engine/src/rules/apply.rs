@@ -4,36 +4,35 @@ pub(crate) fn rule(
 ) -> std::collections::LinkedList<crate::builder::Step> {
     let mut steps = std::collections::LinkedList::new();
 
-    let apply = crate::parsers::apply::parse(build_ctx, node);
+    let parsed = crate::parsers::apply::Apply::parse(build_ctx, node);
 
-    let vertical =
-        build_ctx.vertical || apply.newline || !apply.comments.is_empty();
+    let vertical = build_ctx.vertical
+        || !parsed.comments_after_left.is_empty()
+        || parsed.has_newlines_after_left;
 
-    // left
-    let element = apply.left.unwrap();
+    // left_expression
     if vertical {
-        steps.push_back(crate::builder::Step::FormatWider(element));
+        steps.push_back(crate::builder::Step::FormatWider(
+            parsed.left_expression,
+        ));
     } else {
-        steps.push_back(crate::builder::Step::Format(element));
+        steps.push_back(crate::builder::Step::Format(parsed.left_expression));
     }
 
-    // /**/
-    let comments = !apply.comments.is_empty();
-    if comments {
-        for text in apply.comments {
-            steps.push_back(crate::builder::Step::NewLine);
-            steps.push_back(crate::builder::Step::Pad);
-            steps.push_back(crate::builder::Step::Comment(text));
-        }
+    // comments_after_left
+    let has_comments_after_left = !parsed.comments_after_left.is_empty();
+    for text in parsed.comments_after_left {
+        steps.push_back(crate::builder::Step::NewLine);
+        steps.push_back(crate::builder::Step::Pad);
+        steps.push_back(crate::builder::Step::Comment(text));
     }
 
-    // right
-    let element = apply.right.unwrap();
+    // right_expression
     if vertical {
-        if !apply.newline
-            && !comments
+        if !has_comments_after_left
+            && !parsed.has_newlines_after_left
             && matches!(
-                element.kind(),
+                parsed.right_expression.kind(),
                 rnix::SyntaxKind::NODE_ATTR_SET
                     | rnix::SyntaxKind::NODE_LIST
                     | rnix::SyntaxKind::NODE_PAREN
@@ -45,10 +44,12 @@ pub(crate) fn rule(
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
         };
-        steps.push_back(crate::builder::Step::FormatWider(element));
+        steps.push_back(crate::builder::Step::FormatWider(
+            parsed.right_expression,
+        ));
     } else {
         steps.push_back(crate::builder::Step::Whitespace);
-        steps.push_back(crate::builder::Step::Format(element));
+        steps.push_back(crate::builder::Step::Format(parsed.right_expression));
     }
 
     steps
