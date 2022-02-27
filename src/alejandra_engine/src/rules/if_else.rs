@@ -4,154 +4,143 @@ pub(crate) fn rule(
 ) -> std::collections::LinkedList<crate::builder::Step> {
     let mut steps = std::collections::LinkedList::new();
 
-    let if_else = crate::parsers::if_else::parse(build_ctx, node);
+    let parsed = crate::parsers::if_else::IfElse::parse(build_ctx, node);
 
-    // if
-    steps.push_back(crate::builder::Step::Token(
-        rnix::SyntaxKind::TOKEN_IF,
-        "if".to_string(),
-    ));
+    // if_
+    steps.push_back(crate::builder::Step::Format(parsed.if_));
 
-    if if_else.comments_before_if_expr.is_empty() {
-        // expr
-        let element = if_else.if_expr.unwrap();
-        if crate::builder::fits_in_single_line(build_ctx, element.clone()) {
+    if parsed.comments_before_if_expr.is_empty() {
+        // if_expr
+        if crate::builder::fits_in_single_line(
+            build_ctx,
+            parsed.if_expr.clone(),
+        ) {
             steps.push_back(crate::builder::Step::Whitespace);
-            steps.push_back(crate::builder::Step::FormatWider(element));
+            steps.push_back(crate::builder::Step::FormatWider(parsed.if_expr));
         } else {
             steps.push_back(crate::builder::Step::Indent);
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
-            steps.push_back(crate::builder::Step::FormatWider(element));
+            steps.push_back(crate::builder::Step::FormatWider(parsed.if_expr));
             steps.push_back(crate::builder::Step::Dedent);
         }
         steps.push_back(crate::builder::Step::NewLine);
         steps.push_back(crate::builder::Step::Pad);
     } else {
-        // /**/
+        // comments_before_if_expr
         steps.push_back(crate::builder::Step::Indent);
         steps.push_back(crate::builder::Step::NewLine);
         steps.push_back(crate::builder::Step::Pad);
-        for text in if_else.comments_before_if_expr {
+        for text in parsed.comments_before_if_expr {
             steps.push_back(crate::builder::Step::Comment(text));
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
         }
-        // expr
-        steps.push_back(crate::builder::Step::FormatWider(
-            if_else.if_expr.unwrap(),
-        ));
+        // if_expr
+        steps.push_back(crate::builder::Step::FormatWider(parsed.if_expr));
         steps.push_back(crate::builder::Step::Dedent);
         steps.push_back(crate::builder::Step::NewLine);
         steps.push_back(crate::builder::Step::Pad);
     }
 
-    // /**/
-    if !if_else.comments_after_if_expr.is_empty() {
-        for text in if_else.comments_after_if_expr {
-            steps.push_back(crate::builder::Step::Comment(text));
-            steps.push_back(crate::builder::Step::NewLine);
-            steps.push_back(crate::builder::Step::Pad);
-        }
+    // comments_after_if_expr
+    for text in parsed.comments_after_if_expr {
+        steps.push_back(crate::builder::Step::Comment(text));
+        steps.push_back(crate::builder::Step::NewLine);
+        steps.push_back(crate::builder::Step::Pad);
     }
 
-    // then
-    steps.push_back(crate::builder::Step::Token(
-        rnix::SyntaxKind::TOKEN_THEN,
-        "then".to_string(),
-    ));
+    // then_
+    steps.push_back(crate::builder::Step::Format(parsed.then_));
 
-    if if_else.comments_before_then_expr.is_empty() {
-        // expr
-        let element = if_else.then_expr.unwrap();
+    if parsed.comments_before_then_expr.is_empty() {
+        // then_expr
         if matches!(
-            element.kind(),
+            parsed.then_expr.kind(),
             rnix::SyntaxKind::NODE_ATTR_SET
                 | rnix::SyntaxKind::NODE_LET_IN
                 | rnix::SyntaxKind::NODE_LIST
                 | rnix::SyntaxKind::NODE_STRING
-        ) || crate::builder::fits_in_single_line(build_ctx, element.clone())
-        {
+        ) || crate::builder::fits_in_single_line(
+            build_ctx,
+            parsed.then_expr.clone(),
+        ) {
             steps.push_back(crate::builder::Step::Whitespace);
-            steps.push_back(crate::builder::Step::FormatWider(element));
+            steps
+                .push_back(crate::builder::Step::FormatWider(parsed.then_expr));
         } else {
             steps.push_back(crate::builder::Step::Indent);
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
-            steps.push_back(crate::builder::Step::FormatWider(element));
+            steps
+                .push_back(crate::builder::Step::FormatWider(parsed.then_expr));
             steps.push_back(crate::builder::Step::Dedent);
         }
         steps.push_back(crate::builder::Step::NewLine);
         steps.push_back(crate::builder::Step::Pad);
     } else {
-        // /**/
+        // comments_before_then_expr
         steps.push_back(crate::builder::Step::Indent);
         steps.push_back(crate::builder::Step::NewLine);
         steps.push_back(crate::builder::Step::Pad);
-        for text in if_else.comments_before_then_expr {
+        for text in parsed.comments_before_then_expr {
             steps.push_back(crate::builder::Step::Comment(text));
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
         }
-        // expr
-        steps.push_back(crate::builder::Step::FormatWider(
-            if_else.then_expr.unwrap(),
-        ));
+        // then_expr
+        steps.push_back(crate::builder::Step::FormatWider(parsed.then_expr));
         steps.push_back(crate::builder::Step::Dedent);
         steps.push_back(crate::builder::Step::NewLine);
         steps.push_back(crate::builder::Step::Pad);
     }
 
-    // /**/
-    if !if_else.comments_after_then_expr.is_empty() {
-        for text in if_else.comments_after_then_expr {
-            steps.push_back(crate::builder::Step::Comment(text));
-            steps.push_back(crate::builder::Step::NewLine);
-            steps.push_back(crate::builder::Step::Pad);
-        }
+    // comments_after_then_expr
+    for text in parsed.comments_after_then_expr {
+        steps.push_back(crate::builder::Step::Comment(text));
+        steps.push_back(crate::builder::Step::NewLine);
+        steps.push_back(crate::builder::Step::Pad);
     }
 
-    // else
-    steps.push_back(crate::builder::Step::Token(
-        rnix::SyntaxKind::TOKEN_ELSE,
-        "else".to_string(),
-    ));
+    // else_
+    steps.push_back(crate::builder::Step::Format(parsed.else_));
 
-    if if_else.comments_before_else_expr.is_empty() {
-        // expr
-        let element = if_else.else_expr.unwrap();
+    if parsed.comments_before_else_expr.is_empty() {
+        // else_expr
         if matches!(
-            element.kind(),
+            parsed.else_expr.kind(),
             rnix::SyntaxKind::NODE_ATTR_SET
                 | rnix::SyntaxKind::NODE_IF_ELSE
                 | rnix::SyntaxKind::NODE_LET_IN
                 | rnix::SyntaxKind::NODE_LIST
                 | rnix::SyntaxKind::NODE_STRING
-        ) || crate::builder::fits_in_single_line(build_ctx, element.clone())
-        {
+        ) || crate::builder::fits_in_single_line(
+            build_ctx,
+            parsed.else_expr.clone(),
+        ) {
             steps.push_back(crate::builder::Step::Whitespace);
-            steps.push_back(crate::builder::Step::FormatWider(element));
+            steps
+                .push_back(crate::builder::Step::FormatWider(parsed.else_expr));
         } else {
             steps.push_back(crate::builder::Step::Indent);
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
-            steps.push_back(crate::builder::Step::FormatWider(element));
+            steps
+                .push_back(crate::builder::Step::FormatWider(parsed.else_expr));
             steps.push_back(crate::builder::Step::Dedent);
         }
     } else {
-        // /**/
+        // comments_before_else_expr
         steps.push_back(crate::builder::Step::Indent);
         steps.push_back(crate::builder::Step::NewLine);
         steps.push_back(crate::builder::Step::Pad);
-        for text in if_else.comments_before_else_expr {
+        for text in parsed.comments_before_else_expr {
             steps.push_back(crate::builder::Step::Comment(text));
             steps.push_back(crate::builder::Step::NewLine);
             steps.push_back(crate::builder::Step::Pad);
         }
-        // expr
-        steps.push_back(crate::builder::Step::FormatWider(
-            if_else.else_expr.unwrap(),
-        ));
+        // else_expr
+        steps.push_back(crate::builder::Step::FormatWider(parsed.else_expr));
         steps.push_back(crate::builder::Step::Dedent);
     }
 
