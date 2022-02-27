@@ -23,6 +23,6 @@ pub(crate) fn default(
     node: &rnix::SyntaxNode,
 ) -> std::collections::LinkedList<crate::builder::Step> {
     node.children_with_tokens()
-        .map(|child| crate::builder::Step::Format(child.into()))
+        .map(|child| crate::builder::Step::Format(child))
         .collect()
 }
