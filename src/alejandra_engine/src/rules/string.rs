@@ -27,7 +27,7 @@ pub(crate) fn rule(
         }
     } else {
         let elements: Vec<rnix::SyntaxElement> =
-            children.get_remaining().iter().cloned().collect();
+            children.get_remaining().to_vec();
 
         let mut interpolations = elements
             .iter()

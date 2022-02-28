@@ -12,16 +12,17 @@ pub(crate) fn rule_with_configuration(
 ) -> std::collections::LinkedList<crate::builder::Step> {
     let mut steps = std::collections::LinkedList::new();
 
-    let mut children = crate::children::Children::new(build_ctx, node);
+    let parsed = crate::parsers::bin_op::BinOp::parse(build_ctx, node);
 
-    let vertical = children.has_comments()
-        || children.has_newlines()
-        || build_ctx.vertical;
+    let vertical = build_ctx.vertical
+        || !parsed.comments_before_operator.is_empty()
+        || parsed.has_newlines_before_operator
+        || !parsed.comments_after_operator.is_empty()
+        || parsed.has_newlines_after_operator;
 
-    // expr
-    let child = children.get_next().unwrap();
+    // left_expression
     if vertical {
-        let kind = child.kind();
+        let kind = parsed.left_expression.kind();
 
         if (parent_kind == "bin_op_and_or_default"
             && matches!(
@@ -32,58 +33,55 @@ pub(crate) fn rule_with_configuration(
             || (parent_kind == "select"
                 && matches!(kind, rnix::SyntaxKind::NODE_SELECT))
         {
-            steps.push_back(crate::builder::Step::Format(child));
+            steps.push_back(crate::builder::Step::Format(
+                parsed.left_expression,
+            ));
         } else {
-            steps.push_back(crate::builder::Step::FormatWider(child));
+            steps.push_back(crate::builder::Step::FormatWider(
+                parsed.left_expression,
+            ));
         }
         steps.push_back(crate::builder::Step::NewLine);
         steps.push_back(crate::builder::Step::Pad);
     } else {
-        steps.push_back(crate::builder::Step::Format(child));
+        steps.push_back(crate::builder::Step::Format(parsed.left_expression));
     }
 
-    // /**/
-    children.drain_trivia(|element| match element {
-        crate::children::Trivia::Comment(text) => {
-            steps.push_back(crate::builder::Step::Comment(text));
-            steps.push_back(crate::builder::Step::NewLine);
-            steps.push_back(crate::builder::Step::Pad);
-        }
-        crate::children::Trivia::Whitespace(_) => {}
-    });
+    // comments_before_operator
+    for text in parsed.comments_before_operator {
+        steps.push_back(crate::builder::Step::Comment(text));
+        steps.push_back(crate::builder::Step::NewLine);
+        steps.push_back(crate::builder::Step::Pad);
+    }
 
     // operator
-    let child = children.get_next().unwrap();
     if !vertical && parent_kind == "bin_op_and_or_default" {
         steps.push_back(crate::builder::Step::Whitespace);
     }
-    steps.push_back(crate::builder::Step::Format(child));
+    steps.push_back(crate::builder::Step::Format(parsed.operator));
 
-    // /**/
-    let mut comment = false;
-    children.drain_trivia(|element| match element {
-        crate::children::Trivia::Comment(text) => {
-            steps.push_back(crate::builder::Step::NewLine);
-            steps.push_back(crate::builder::Step::Pad);
-            steps.push_back(crate::builder::Step::Comment(text));
-            comment = true;
+    // comments_before_operator
+    if parsed.comments_after_operator.is_empty() {
+        if parent_kind == "bin_op_and_or_default" {
+            steps.push_back(crate::builder::Step::Whitespace);
         }
-        crate::children::Trivia::Whitespace(_) => {}
-    });
-
-    if comment {
+    } else {
         steps.push_back(crate::builder::Step::NewLine);
         steps.push_back(crate::builder::Step::Pad);
-    } else if parent_kind == "bin_op_and_or_default" {
-        steps.push_back(crate::builder::Step::Whitespace);
+        for text in parsed.comments_after_operator {
+            steps.push_back(crate::builder::Step::Comment(text));
+            steps.push_back(crate::builder::Step::NewLine);
+            steps.push_back(crate::builder::Step::Pad);
+        }
     }
 
-    // expr
-    let child = children.get_next().unwrap();
+    // right_expression
     if vertical {
-        steps.push_back(crate::builder::Step::FormatWider(child));
+        steps.push_back(crate::builder::Step::FormatWider(
+            parsed.right_expression,
+        ));
     } else {
-        steps.push_back(crate::builder::Step::Format(child));
+        steps.push_back(crate::builder::Step::Format(parsed.right_expression));
     }
 
     steps
