@@ -55,6 +55,19 @@ pub(crate) fn rule(
 
     // peek: expr
     let child_expr = children.get_next().unwrap();
+    let child_expr =
+        if matches!(child_expr.kind(), rnix::SyntaxKind::NODE_PAREN) {
+            let mut children: Vec<rnix::SyntaxElement> =
+                child_expr.as_node().unwrap().children_with_tokens().collect();
+
+            if children.len() == 3 {
+                children.swap_remove(1)
+            } else {
+                child_expr
+            }
+        } else {
+            child_expr
+        };
 
     // peek: /**/
     let mut comments_after = std::collections::LinkedList::new();
