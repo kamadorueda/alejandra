@@ -11,4 +11,19 @@
   { inherit /*a*/ b       d /*e*/ ; }
   { inherit /*a*/ b /*c*/ d       ; }
   { inherit /*a*/ b /*c*/ d /*e*/ ; }
+  {
+    inherit # test
+      a # test
+
+      b # test
+      c # test
+      d # test
+
+      e
+      f
+
+      g
+      h
+      ;
+  }
 ]

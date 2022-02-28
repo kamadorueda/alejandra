@@ -36,6 +36,16 @@ Types of changes
   +  assert stdenv.isDarwin -> libXaw != null; # fails to link otherwise
   +
   ```
+- Inline comments support for `if-then-else` expressions:
+  ```diff
+                  if y ? ${a}
+  -                then v x.${a} y.${a}
+  -                # both have attr, use merge func
+  -                else x.${a}
+  -              # only x has attr
+  +                then v x.${a} y.${a} # both have attr, use merge func
+  +                else x.${a} # only x has attr
+  ```
 
 ### Changed
 

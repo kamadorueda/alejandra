@@ -4,45 +4,83 @@ pub(crate) fn rule(
 ) -> std::collections::LinkedList<crate::builder::Step> {
     let mut steps = std::collections::LinkedList::new();
 
-    let mut children = crate::children::Children::new(build_ctx, node);
+    let children: Vec<crate::children2::Child> =
+        crate::children2::new(build_ctx, node).collect();
 
-    let vertical = children.has_comments()
-        || children.has_newlines()
-        || build_ctx.vertical;
+    let vertical = build_ctx.vertical
+        || children
+            .iter()
+            .any(|child| child.has_inline_comment || child.has_trivialities);
+
+    let children_count = children.len() - 1;
+    let mut children = children.into_iter();
 
     // inherit
-    let child = children.get_next().unwrap();
-    steps.push_back(crate::builder::Step::Format(child));
+    let child = children.next().unwrap();
+    steps.push_back(crate::builder::Step::Format(child.element));
     if vertical {
         steps.push_back(crate::builder::Step::Indent);
     }
 
-    loop {
-        // /**/
-        children.drain_trivia(|element| match element {
-            crate::children::Trivia::Comment(text) => {
-                steps.push_back(crate::builder::Step::NewLine);
-                steps.push_back(crate::builder::Step::Pad);
-                steps.push_back(crate::builder::Step::Comment(text));
-            }
-            crate::children::Trivia::Whitespace(_) => {}
-        });
+    if let Some(text) = child.inline_comment {
+        steps.push_back(crate::builder::Step::Whitespace);
+        steps.push_back(crate::builder::Step::Comment(text));
+        steps.push_back(crate::builder::Step::NewLine);
+        steps.push_back(crate::builder::Step::Pad);
+    } else if vertical {
+        steps.push_back(crate::builder::Step::NewLine);
+        steps.push_back(crate::builder::Step::Pad);
+    }
 
-        if let Some(child) = children.get_next() {
-            // expr
-            if vertical {
+    for trivia in child.trivialities {
+        match trivia {
+            crate::children2::Trivia::Comment(text) => {
+                steps.push_back(crate::builder::Step::Comment(text));
                 steps.push_back(crate::builder::Step::NewLine);
                 steps.push_back(crate::builder::Step::Pad);
-                steps.push_back(crate::builder::Step::FormatWider(child));
-            } else {
-                if let rnix::SyntaxKind::TOKEN_SEMICOLON = child.kind() {
-                } else {
-                    steps.push_back(crate::builder::Step::Whitespace);
+            }
+            crate::children2::Trivia::Newlines(_) => {}
+        }
+    }
+
+    for (index, child) in children.into_iter().enumerate() {
+        let not_last_child = index + 1 < children_count;
+
+        if vertical {
+            steps.push_back(crate::builder::Step::FormatWider(child.element));
+
+            if let Some(text) = child.inline_comment {
+                steps.push_back(crate::builder::Step::Whitespace);
+                steps.push_back(crate::builder::Step::Comment(text));
+                steps.push_back(crate::builder::Step::NewLine);
+                steps.push_back(crate::builder::Step::Pad);
+            } else if (not_last_child && !child.has_trivialities)
+                || matches!(
+                    child.trivialities.front(),
+                    Some(crate::children2::Trivia::Comment(_))
+                )
+            {
+                steps.push_back(crate::builder::Step::NewLine);
+                steps.push_back(crate::builder::Step::Pad);
+            }
+
+            for trivia in child.trivialities {
+                match trivia {
+                    crate::children2::Trivia::Comment(text) => {
+                        steps.push_back(crate::builder::Step::Comment(text));
+                    }
+                    crate::children2::Trivia::Newlines(_) => {}
                 }
-                steps.push_back(crate::builder::Step::Format(child));
+                if not_last_child {
+                    steps.push_back(crate::builder::Step::NewLine);
+                    steps.push_back(crate::builder::Step::Pad);
+                }
             }
         } else {
-            break;
+            if not_last_child {
+                steps.push_back(crate::builder::Step::Whitespace);
+            }
+            steps.push_back(crate::builder::Step::Format(child.element));
         }
     }
 
