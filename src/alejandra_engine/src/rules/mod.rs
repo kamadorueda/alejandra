@@ -22,7 +22,5 @@ pub(crate) fn default(
     _: &crate::builder::BuildCtx,
     node: &rnix::SyntaxNode,
 ) -> std::collections::LinkedList<crate::builder::Step> {
-    node.children_with_tokens()
-        .map(|child| crate::builder::Step::Format(child))
-        .collect()
+    node.children_with_tokens().map(crate::builder::Step::Format).collect()
 }

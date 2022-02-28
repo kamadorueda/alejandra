@@ -261,8 +261,9 @@ fn format(
             builder.finish_node();
         }
         rnix::SyntaxElement::Token(token) => {
-            add_token(builder, build_ctx, kind, token.text());
-            build_ctx.pos_old.update(token.text());
+            let text = token.text();
+            add_token(builder, build_ctx, kind, text);
+            build_ctx.pos_old.update(text);
         }
     }
 }
