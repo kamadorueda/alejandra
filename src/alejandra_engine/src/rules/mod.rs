@@ -1,5 +1,4 @@
 pub(crate) mod apply;
-pub(crate) mod assert_or_with;
 pub(crate) mod attr_set;
 pub(crate) mod bin_op;
 pub(crate) mod dynamic;
@@ -14,6 +13,7 @@ pub(crate) mod pat_bind;
 pub(crate) mod pat_entry;
 pub(crate) mod pattern;
 pub(crate) mod root;
+pub(crate) mod scoped;
 pub(crate) mod select;
 pub(crate) mod string;
 pub(crate) mod string_interpol;
