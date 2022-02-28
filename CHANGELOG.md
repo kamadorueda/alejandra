@@ -46,6 +46,15 @@ Types of changes
   +                then v x.${a} y.${a} # both have attr, use merge func
   +                else x.${a} # only x has attr
   ```
+- Inline comments support for `inherit` expressions:
+  ```diff
+      inherit
+        (callPackage ../development/tools/ocaml/ocamlformat {})
+  -      ocamlformat
+  -      # latest version
+  +      ocamlformat # latest version
+         ocamlformat_0_11_0
+  ```
 
 ### Changed
 
