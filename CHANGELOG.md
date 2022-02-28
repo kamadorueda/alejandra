@@ -19,11 +19,22 @@ Types of changes
 
 ### Added
 
-- Binary operators now support inline comments:
+- Inline comments support in binary operators:
   ```diff
   -      ++
   -      # subsections go last
   +      ++ # subsections go last
+  ```
+- Inline comments support in `with` and `assert` expressions:
+  ```diff
+  -  assert (libXft != null) -> libpng != null;
+  -  # probably a bug
+  -  assert stdenv.isDarwin -> libXaw != null;
+  -  # fails to link otherwise
+  +  assert (libXft != null) -> libpng != null; # probably a bug
+  +
+  +  assert stdenv.isDarwin -> libXaw != null; # fails to link otherwise
+  +
   ```
 
 ### Changed
