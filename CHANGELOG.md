@@ -17,6 +17,15 @@ Types of changes
 - Security in case of vulnerabilities.
 -->
 
+### Added
+
+- Binary operators now support inline comments:
+  ```diff
+  -      ++
+  -      # subsections go last
+  +      ++ # subsections go last
+  ```
+
 ### Changed
 
 - Linux binaries now use [mimalloc](https://github.com/microsoft/mimalloc)
