@@ -61,11 +61,9 @@
   }
   {
     binPath = with pkgs;
-      makeBinPath (
-        [
-          rsync
-          util-linux
-        ]
-      );
+      makeBinPath [
+        rsync
+        util-linux
+      ];
   }
 ]
