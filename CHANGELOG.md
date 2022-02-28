@@ -17,6 +17,8 @@ Types of changes
 - Security in case of vulnerabilities.
 -->
 
+## [0.7.0] - 2022-02-28
+
 ### Added
 
 - Inline comments support in binary operators:
@@ -386,7 +388,8 @@ Types of changes
 
 ---
 
-[unreleased]: https://github.com/kamadorueda/alejandra/compare/0.6.0...HEAD
+[unreleased]: https://github.com/kamadorueda/alejandra/compare/0.7.0...HEAD
+[0.7.0]: https://github.com/kamadorueda/alejandra/compare/0.6.0...0.7.0
 [0.6.0]: https://github.com/kamadorueda/alejandra/compare/0.5.0...0.6.0
 [0.5.0]: https://github.com/kamadorueda/alejandra/compare/0.4.0...0.5.0
 [0.4.0]: https://github.com/kamadorueda/alejandra/compare/0.3.1...0.4.0

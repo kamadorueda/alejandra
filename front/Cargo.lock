@@ -4,7 +4,7 @@ version = 3
 
 [[package]]
 name = "alejandra_engine"
-version = "0.6.0"
+version = "0.7.0"
 dependencies = [
  "mimalloc",
  "rnix",
@@ -13,7 +13,7 @@ dependencies = [
 
 [[package]]
 name = "alejandra_front"
-version = "0.6.0"
+version = "0.7.0"
 dependencies = [
  "alejandra_engine",
  "console_error_panic_hook",
