@@ -55,6 +55,15 @@ Types of changes
   +      ocamlformat # latest version
          ocamlformat_0_11_0
   ```
+- Inline comments support for `parenthesis` expressions:
+  ```diff
+  -        || (
+  -          # Accept {} for tests that are unsupported
+  +        || ( # Accept {} for tests that are unsupported
+            isDerivation x
+            && x ? meta.timeout
+          );
+  ```
 
 ### Changed
 
