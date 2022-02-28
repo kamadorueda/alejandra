@@ -27,6 +27,22 @@
   else
     /**/
     c)
+  (if # test
+    a # test
+  then # test
+    b # test
+  else # test
+    c)
+  (if # test
+    /**/
+    a # test
+  /**/
+  then # test
+    b # test
+  /**/
+  else # test
+    /**/
+    c)
   (if
     if a
     then b
