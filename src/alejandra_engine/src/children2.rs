@@ -1,10 +1,12 @@
 use std::collections::LinkedList;
 
+#[derive(Debug)]
 pub(crate) enum Trivia {
     Comment(String),
     Newlines(usize),
 }
 
+#[derive(Debug)]
 pub(crate) struct Child {
     pub element: rnix::SyntaxElement,
 
@@ -28,16 +30,26 @@ pub(crate) fn new(
         let mut inline_comment = None;
         let mut trivialities = LinkedList::new();
 
+        let mut skip_next_newline = false;
         children.drain_trivia(|element| match element {
             crate::children::Trivia::Comment(text) => {
-                if trivialities.is_empty() && text.starts_with('#') {
+                if inline_comment.is_none()
+                    && trivialities.is_empty()
+                    && text.starts_with('#')
+                {
                     inline_comment = Some(text);
+                    skip_next_newline = true;
                 } else {
                     trivialities.push_back(Trivia::Comment(text));
                 }
             }
             crate::children::Trivia::Whitespace(text) => {
-                let newlines = crate::utils::count_newlines(&text);
+                let mut newlines = crate::utils::count_newlines(&text);
+
+                if skip_next_newline && newlines > 0 {
+                    newlines -= 1;
+                    skip_next_newline = false;
+                }
 
                 if newlines > 0 {
                     trivialities.push_back(Trivia::Newlines(newlines))
