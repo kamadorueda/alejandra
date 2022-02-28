@@ -182,9 +182,7 @@ fn format(
                 // { }
                 rnix::SyntaxKind::NODE_ATTR_SET => crate::rules::attr_set::rule,
                 // a $op b
-                rnix::SyntaxKind::NODE_BIN_OP => {
-                    crate::rules::bin_op_and_or_default::rule
-                }
+                rnix::SyntaxKind::NODE_BIN_OP => crate::rules::bin_op::rule,
                 // ${a} (interpolation but for NODE_SELECT)
                 rnix::SyntaxKind::NODE_DYNAMIC => crate::rules::dynamic::rule,
                 // $identifier
@@ -213,9 +211,7 @@ fn format(
                 // let { }
                 rnix::SyntaxKind::NODE_LEGACY_LET => crate::rules::default,
                 // a or b
-                rnix::SyntaxKind::NODE_OR_DEFAULT => {
-                    crate::rules::bin_op_and_or_default::rule
-                }
+                rnix::SyntaxKind::NODE_OR_DEFAULT => crate::rules::bin_op::rule,
                 // ( a )
                 rnix::SyntaxKind::NODE_PAREN => crate::rules::paren::rule,
                 // a | a ? b

@@ -29,6 +29,7 @@ static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
 
 pub(crate) mod builder;
 pub(crate) mod children;
+pub(crate) mod children2;
 pub mod format;
 pub(crate) mod parsers;
 pub(crate) mod position;
