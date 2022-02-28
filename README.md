@@ -107,11 +107,11 @@ Please visit:
 
 You can download a binary for your platform:
 
-- [aarch64-unknown-linux-musl](https://github.com/kamadorueda/alejandra/releases/download/0.6.0/alejandra-aarch64-unknown-linux-musl)
-- [armv6l-unknown-linux-musleabihf](https://github.com/kamadorueda/alejandra/releases/download/0.6.0/alejandra-armv6l-unknown-linux-musleabihf)
-- [armv7l-unknown-linux-musleabihf](https://github.com/kamadorueda/alejandra/releases/download/0.6.0/alejandra-armv7l-unknown-linux-musleabihf)
-- [i686-unknown-linux-musl](https://github.com/kamadorueda/alejandra/releases/download/0.6.0/alejandra-i686-unknown-linux-musl)
-- [x86_64-unknown-linux-musl](https://github.com/kamadorueda/alejandra/releases/download/0.6.0/alejandra-x86_64-unknown-linux-musl)
+- [aarch64-unknown-linux-musl](https://github.com/kamadorueda/alejandra/releases/download/0.7.0/alejandra-aarch64-unknown-linux-musl)
+- [armv6l-unknown-linux-musleabihf](https://github.com/kamadorueda/alejandra/releases/download/0.7.0/alejandra-armv6l-unknown-linux-musleabihf)
+- [armv7l-unknown-linux-musleabihf](https://github.com/kamadorueda/alejandra/releases/download/0.7.0/alejandra-armv7l-unknown-linux-musleabihf)
+- [i686-unknown-linux-musl](https://github.com/kamadorueda/alejandra/releases/download/0.7.0/alejandra-i686-unknown-linux-musl)
+- [x86_64-unknown-linux-musl](https://github.com/kamadorueda/alejandra/releases/download/0.7.0/alejandra-x86_64-unknown-linux-musl)
 
 Make it executable (`$ chmod +x`)
 and run Alejandra with:
@@ -135,7 +135,7 @@ Please visit: [search.nixos.org/packages?query=alejandra](https://search.nixos.o
 - Nix with [Flakes](https://nixos.wiki/wiki/Flakes):
 
   ```bash
-  $ nix profile install github:kamadorueda/alejandra/0.6.0
+  $ nix profile install github:kamadorueda/alejandra/0.7.0
   ```
 
 - Nix stable:
@@ -143,10 +143,10 @@ Please visit: [search.nixos.org/packages?query=alejandra](https://search.nixos.o
   Pick one depending on your platform:
 
   ```bash
-  $ nix-env -ivA aarch64-darwin -f https://github.com/kamadorueda/alejandra/tarball/0.6.0
-  $ nix-env -ivA aarch64-linux -f https://github.com/kamadorueda/alejandra/tarball/0.6.0
-  $ nix-env -ivA x86_64-darwin -f https://github.com/kamadorueda/alejandra/tarball/0.6.0
-  $ nix-env -ivA x86_64-linux -f https://github.com/kamadorueda/alejandra/tarball/0.6.0
+  $ nix-env -ivA aarch64-darwin -f https://github.com/kamadorueda/alejandra/tarball/0.7.0
+  $ nix-env -ivA aarch64-linux -f https://github.com/kamadorueda/alejandra/tarball/0.7.0
+  $ nix-env -ivA x86_64-darwin -f https://github.com/kamadorueda/alejandra/tarball/0.7.0
+  $ nix-env -ivA x86_64-linux -f https://github.com/kamadorueda/alejandra/tarball/0.7.0
   ```
 
 Then run Alejandra with:
