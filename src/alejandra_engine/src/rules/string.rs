@@ -37,8 +37,7 @@ pub(crate) fn rule(
             .iter()
             .map(|element| match element.kind() {
                 rnix::SyntaxKind::TOKEN_STRING_CONTENT => {
-                    let token = element.clone().into_token().unwrap();
-                    token.text().to_string()
+                    element.as_token().unwrap().to_string()
                 }
                 _ => PLACEHOLDER.to_string(),
             })
