@@ -43,8 +43,7 @@ pub(crate) fn rule(
             })
             .collect();
 
-        let lines: Vec<String> =
-            content.split('\n').map(|line| line.to_string()).collect();
+        let lines: Vec<&str> = content.split('\n').collect();
 
         let should_trim_end: bool =
             !lines.is_empty() && lines[lines.len() - 1].trim().is_empty();
