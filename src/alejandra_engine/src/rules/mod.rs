@@ -4,7 +4,6 @@ pub(crate) mod bin_op;
 pub(crate) mod dynamic;
 pub(crate) mod if_else;
 pub(crate) mod inherit;
-pub(crate) mod inherit_from;
 pub(crate) mod key_value;
 pub(crate) mod lambda;
 pub(crate) mod let_in;

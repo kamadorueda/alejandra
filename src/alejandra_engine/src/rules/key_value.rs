@@ -55,6 +55,8 @@ pub(crate) fn rule(
 
     // peek: expr
     let child_expr = children.get_next().unwrap();
+
+    // Superfluous parens can be removed: `a = (x);` -> `a = x;`
     let child_expr =
         if matches!(child_expr.kind(), rnix::SyntaxKind::NODE_PAREN) {
             let mut children: Vec<rnix::SyntaxElement> =
