@@ -26,42 +26,70 @@ impl Children {
         };
 
         for child in node.children_with_tokens() {
-            match child {
-                rnix::SyntaxElement::Node(node) => {
-                    children.push(node.clone().into());
+            let text: String = child.to_string();
 
-                    if pos.is_some() {
-                        pos.as_mut().unwrap().update(&node.text().to_string());
+            match child.kind() {
+                rnix::SyntaxKind::NODE_PAREN => {
+                    let mut simplified = child.into_node().unwrap();
+
+                    while matches!(
+                        simplified.kind(),
+                        rnix::SyntaxKind::NODE_PAREN
+                    ) {
+                        let mut children =
+                            crate::children2::new(build_ctx, &simplified);
+
+                        let opener = children.next().unwrap();
+                        let expression = children.next().unwrap();
+                        let closer = children.next().unwrap();
+
+                        if !opener.has_inline_comment
+                            && !opener.has_comments
+                            && !expression.has_inline_comment
+                            && !expression.has_comments
+                            && !closer.has_inline_comment
+                            && !closer.has_comments
+                            && matches!(
+                                expression.element.kind(),
+                                rnix::SyntaxKind::NODE_ATTR_SET
+                                    | rnix::SyntaxKind::NODE_IDENT
+                                    | rnix::SyntaxKind::NODE_LIST
+                                    | rnix::SyntaxKind::NODE_LITERAL
+                                    | rnix::SyntaxKind::NODE_PAREN
+                                    | rnix::SyntaxKind::NODE_PATH_WITH_INTERPOL
+                                    | rnix::SyntaxKind::NODE_STRING
+                            )
+                        {
+                            simplified =
+                                expression.element.into_node().unwrap();
+                        } else {
+                            break;
+                        }
+                    }
+
+                    children.push(simplified.into());
+                }
+                rnix::SyntaxKind::TOKEN_COMMENT => {
+                    children.push(
+                        crate::builder::make_isolated_token(
+                            rnix::SyntaxKind::TOKEN_COMMENT,
+                            &dedent_comment(pos.as_ref().unwrap(), &text),
+                        )
+                        .into(),
+                    );
+                }
+                rnix::SyntaxKind::TOKEN_WHITESPACE => {
+                    if crate::utils::count_newlines(&text) > 0 {
+                        children.push(child);
                     }
                 }
-                rnix::SyntaxElement::Token(token) => {
-                    match token.kind() {
-                        rnix::SyntaxKind::TOKEN_COMMENT => {
-                            children.push(
-                                crate::builder::make_isolated_token(
-                                    rnix::SyntaxKind::TOKEN_COMMENT,
-                                    &dedent_comment(
-                                        pos.as_ref().unwrap(),
-                                        token.text(),
-                                    ),
-                                )
-                                .into(),
-                            );
-                        }
-                        rnix::SyntaxKind::TOKEN_WHITESPACE => {
-                            if crate::utils::count_newlines(token.text()) > 0 {
-                                children.push(token.clone().into());
-                            }
-                        }
-                        _ => {
-                            children.push(token.clone().into());
-                        }
-                    }
-
-                    if pos.is_some() {
-                        pos.as_mut().unwrap().update(token.text());
-                    }
+                _ => {
+                    children.push(child);
                 }
+            }
+
+            if pos.is_some() {
+                pos.as_mut().unwrap().update(&text);
             }
         }
 

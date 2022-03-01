@@ -191,7 +191,7 @@ fn format(
                 rnix::SyntaxKind::NODE_INHERIT => crate::rules::inherit::rule,
                 // ( a )
                 rnix::SyntaxKind::NODE_INHERIT_FROM => {
-                    crate::rules::inherit_from::rule
+                    crate::rules::paren::rule
                 }
                 rnix::SyntaxKind::NODE_KEY => crate::rules::default,
                 // a = b;
