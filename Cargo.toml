@@ -1,5 +1,8 @@
 [profile.release]
 lto = true
 
+[profile.dev]
+opt-level = 2
+
 [workspace]
 members = ["src/*"]
