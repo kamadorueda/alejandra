@@ -1,4 +1,6 @@
 [
+  (a
+    b)
   ((a b)
     (a b)
     (a
@@ -57,17 +59,19 @@
       asdf = 1;
     };
 
-    name2 = function arg {
-      asdf = 1;
-    }
-    argument;
+    name2 =
+      function arg {
+        asdf = 1;
+      }
+      argument;
 
-    name3 = function arg {
-      asdf = 1;
-    } {
-      qwer = 12345;
-    }
-    argument;
+    name3 =
+      function arg {
+        asdf = 1;
+      } {
+        qwer = 12345;
+      }
+      argument;
   }
   {
     name4 =
@@ -81,23 +85,26 @@
       argument;
   }
   {
-    option1 = function arg {asdf = 1;} {
-      qwer = 12345;
-      qwer2 = 54321;
-    }
-    lastArg;
+    option1 =
+      function arg {asdf = 1;} {
+        qwer = 12345;
+        qwer2 = 54321;
+      }
+      lastArg;
 
-    option2 = function arg {asdf = 1;} {
-      qwer = 12345;
-      qwer2 = 54321;
-    }
-    lastArg;
+    option2 =
+      function arg {asdf = 1;} {
+        qwer = 12345;
+        qwer2 = 54321;
+      }
+      lastArg;
 
-    option3 = function arg {asdf = 1;}
-    {
-      qwer = 12345;
-      qwer2 = 54321;
-    }
-    lastArg;
+    option3 =
+      function arg {asdf = 1;}
+      {
+        qwer = 12345;
+        qwer2 = 54321;
+      }
+      lastArg;
   }
 ]

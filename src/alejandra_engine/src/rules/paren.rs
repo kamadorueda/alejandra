@@ -28,9 +28,10 @@ pub(crate) fn rule(
                 | rnix::SyntaxKind::NODE_LAMBDA
                 | rnix::SyntaxKind::NODE_SELECT
                 | rnix::SyntaxKind::NODE_WITH
-        ) && second_through_penultimate_line_are_not_indented(
+        ) && !crate::utils::second_through_penultimate_line_are_indented(
             build_ctx,
             expression.element.clone(),
+            matches!(expression.element.kind(), rnix::SyntaxKind::NODE_LAMBDA),
         );
 
     // opener
@@ -95,32 +96,4 @@ pub(crate) fn rule(
     steps.push_back(crate::builder::Step::Format(closer.element));
 
     steps
-}
-
-fn second_through_penultimate_line_are_not_indented(
-    build_ctx: &crate::builder::BuildCtx,
-    element: rnix::SyntaxElement,
-) -> bool {
-    let mut build_ctx =
-        crate::builder::BuildCtx { force_wide: false, ..build_ctx.clone() };
-
-    let formatted =
-        crate::builder::build(&mut build_ctx, element).unwrap().to_string();
-
-    let formatted_lines: Vec<&str> = formatted.split('\n').collect();
-
-    if formatted_lines.len() <= 2 {
-        return false;
-    }
-
-    let whitespace = format!("{0:<1$}  ", "", 2 * build_ctx.indentation);
-    let lambda = format!("{0:<1$}}}:", "", 2 * build_ctx.indentation);
-    let in_ = format!("{0:<1$}in", "", 2 * build_ctx.indentation);
-
-    formatted_lines.iter().skip(1).rev().skip(1).any(|line| {
-        !line.is_empty()
-            && !(line.starts_with(&whitespace)
-                || line.starts_with(&lambda)
-                || line.starts_with(&in_))
-    })
 }
