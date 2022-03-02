@@ -21,45 +21,15 @@ pub(crate) struct BuildCtx {
     pub vertical:           bool,
 }
 
-impl BuildCtx {
-    pub fn new(
-        force_wide: bool,
-        path: String,
-        pos_old: crate::position::Position,
-        vertical: bool,
-    ) -> BuildCtx {
-        BuildCtx {
-            force_wide,
-            force_wide_success: true,
-            indentation: 0,
-            path,
-            pos_old,
-            vertical,
-        }
-    }
-}
-
 pub(crate) fn build(
+    build_ctx: &mut BuildCtx,
     element: rnix::SyntaxElement,
-    force_wide: bool,
-    path: String,
-    vertical: bool,
 ) -> Option<rowan::GreenNode> {
     let mut builder = rowan::GreenNodeBuilder::new();
-    let mut build_ctx = BuildCtx::new(
-        force_wide,
-        path,
-        crate::position::Position::default(),
-        vertical,
-    );
 
-    build_step(
-        &mut builder,
-        &mut build_ctx,
-        &crate::builder::Step::Format(element),
-    );
+    build_step(&mut builder, build_ctx, &crate::builder::Step::Format(element));
 
-    if force_wide {
+    if build_ctx.force_wide {
         if build_ctx.force_wide_success { Some(builder.finish()) } else { None }
     } else {
         Some(builder.finish())
@@ -266,10 +236,17 @@ fn format_wider(
 }
 
 pub(crate) fn fits_in_single_line(
-    build_ctx: &crate::builder::BuildCtx,
+    build_ctx_old: &crate::builder::BuildCtx,
     element: rnix::SyntaxElement,
 ) -> bool {
-    build(element, true, build_ctx.path.clone(), false).is_some()
+    let mut build_ctx = crate::builder::BuildCtx {
+        force_wide: true,
+        force_wide_success: true,
+        vertical: false,
+        ..build_ctx_old.clone()
+    };
+
+    build(&mut build_ctx, element).is_some()
 }
 
 pub(crate) fn make_isolated_token(

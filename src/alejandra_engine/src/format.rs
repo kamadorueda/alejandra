@@ -19,7 +19,16 @@ pub fn in_memory(path: String, before: String) -> (Status, String) {
         return (Status::Error(errors[0].to_string()), before);
     }
 
-    let after = crate::builder::build(ast.node().into(), false, path, true)
+    let mut build_ctx = crate::builder::BuildCtx {
+        force_wide: false,
+        force_wide_success: true,
+        indentation: 0,
+        path,
+        pos_old: crate::position::Position::default(),
+        vertical: true,
+    };
+
+    let after = crate::builder::build(&mut build_ctx, ast.node().into())
         .unwrap()
         .to_string();
 

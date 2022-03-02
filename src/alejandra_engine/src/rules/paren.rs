@@ -11,11 +11,28 @@ pub(crate) fn rule(
     let closer = children.next().unwrap();
 
     let vertical = opener.has_inline_comment
-        || opener.has_trivialities
+        || opener.has_comments
         || expression.has_inline_comment
-        || expression.has_trivialities
+        || expression.has_comments
         || closer.has_inline_comment
-        || closer.has_trivialities;
+        || closer.has_comments
+        || matches!(
+            expression.element.kind(),
+            rnix::SyntaxKind::NODE_IF_ELSE | rnix::SyntaxKind::NODE_LET_IN
+        )
+        || (matches!(
+            expression.element.kind(),
+            rnix::SyntaxKind::NODE_APPLY
+                | rnix::SyntaxKind::NODE_ASSERT
+                | rnix::SyntaxKind::NODE_BIN_OP
+                | rnix::SyntaxKind::NODE_OR_DEFAULT
+                | rnix::SyntaxKind::NODE_LAMBDA
+                | rnix::SyntaxKind::NODE_SELECT
+                | rnix::SyntaxKind::NODE_WITH
+        ) && second_through_penultimate_line_are_not_indented(
+            build_ctx,
+            expression.element.clone(),
+        ));
 
     // opener
     steps.push_back(crate::builder::Step::Format(opener.element));
@@ -76,4 +93,30 @@ pub(crate) fn rule(
     steps.push_back(crate::builder::Step::Format(closer.element));
 
     steps
+}
+
+fn second_through_penultimate_line_are_not_indented(
+    build_ctx: &crate::builder::BuildCtx,
+    element: rnix::SyntaxElement,
+) -> bool {
+    let mut build_ctx =
+        crate::builder::BuildCtx { force_wide: false, ..build_ctx.clone() };
+
+    let formatted =
+        crate::builder::build(&mut build_ctx, element).unwrap().to_string();
+
+    let formatted_lines: Vec<&str> = formatted.split('\n').collect();
+
+    if formatted_lines.len() <= 2 {
+        return false;
+    }
+
+    let whitespace = format!("{0:<1$}", "", 2 * (build_ctx.indentation + 1));
+
+    formatted_lines
+        .iter()
+        .skip(1)
+        .rev()
+        .skip(1)
+        .any(|line| !line.is_empty() && !line.starts_with(&whitespace))
 }

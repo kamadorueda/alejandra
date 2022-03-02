@@ -1,13 +1,13 @@
 use std::collections::LinkedList;
 
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub(crate) struct Argument {
     pub comments_before: LinkedList<String>,
     pub item:            Option<rnix::SyntaxElement>,
     pub comment_after:   Option<String>,
 }
 
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub(crate) struct Pattern {
     pub initial_at:                    Option<rnix::SyntaxElement>,
     pub comments_after_initial_at:     LinkedList<String>,
