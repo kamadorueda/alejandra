@@ -6,9 +6,9 @@ pub(crate) fn rule(
 
     let mut children = crate::children::Children::new(build_ctx, node);
 
-    let vertical = children.has_comments()
-        || children.has_newlines()
-        || build_ctx.vertical;
+    let vertical = build_ctx.vertical
+        || children.has_comments()
+        || children.has_newlines();
 
     // a
     let child = children.get_next().unwrap();
@@ -103,7 +103,12 @@ pub(crate) fn rule(
         ) || (matches!(
             child_expr.kind(),
             rnix::SyntaxKind::NODE_APPLY
-        ) && !newlines)
+        )
+            && crate::utils::second_through_penultimate_line_are_indented(
+                build_ctx,
+                child_expr.clone(),
+                false,
+            ))
         {
             steps.push_back(crate::builder::Step::Whitespace);
         } else {
