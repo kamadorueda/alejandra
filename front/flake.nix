@@ -15,13 +15,11 @@
     devShell.${system} = nixpkgs.mkShell {
       name = "alejandra";
       packages = [
-        (
-          fenix.combine [
-            fenix.latest.rustc
-            fenix.latest.toolchain
-            fenix.targets."wasm32-unknown-unknown".latest.rust-std
-          ]
-        )
+        (fenix.combine [
+          fenix.latest.rustc
+          fenix.latest.toolchain
+          fenix.targets."wasm32-unknown-unknown".latest.rust-std
+        ])
         nixpkgs.binaryen
         nixpkgs.pkg-config
         nixpkgs.openssl
