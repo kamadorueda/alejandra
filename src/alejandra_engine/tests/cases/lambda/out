@@ -1,51 +1,61 @@
 [
-  (a: b:
-  /*
-   c
-   */
-    d)
-  ({}: b:
-  /*
-   c
-   */
-    d)
-  (a: {}:
-  /*
-   c
-   */
-    d)
+  (
+    a: b:
+    /*
+     c
+     */
+      d
+  )
+  (
+    {}: b:
+    /*
+     c
+     */
+      d
+  )
+  (
+    a: {}:
+    /*
+     c
+     */
+      d
+  )
   (a: d)
-  (a:
-  /*
-   c
-   */
-    d)
-  (a
-  /*
-   b
-   */
-  :
-    d)
-  (a
-  /*
-   b
-   */
-  :
-  /*
-   c
-   */
-    d)
   (
-    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    a:
+    /*
+     c
+     */
+      d
   )
   (
-    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    a
+    /*
+     b
+     */
+    :
+      d
   )
-  ({
-    pkgs ? import ./.. {},
-    locationsXml,
-  }:
-    null)
+  (
+    a
+    /*
+     b
+     */
+    :
+    /*
+     c
+     */
+      d
+  )
+  (aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa)
+  (aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa)
+  (
+    {
+      pkgs ? import ./.. {},
+      locationsXml,
+    }:
+      null
+  )
   (a: b: c: {}: a: b: c:
     a)
 
@@ -53,19 +63,23 @@
     # Stuff
   })
 
-  ({pkgs, ...}: let
-  in
-    pkgs)
+  (
+    {pkgs, ...}: let
+    in
+      pkgs
+  )
 
   (a: {b, ...}: c: {
     # Stuff
   })
 
-  (a: {
-    b,
-    c,
-    ...
-  }: d: {
-    # Stuff
-  })
+  (
+    a: {
+      b,
+      c,
+      ...
+    }: d: {
+      # Stuff
+    }
+  )
 ]

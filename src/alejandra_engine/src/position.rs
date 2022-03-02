@@ -1,4 +1,4 @@
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub(crate) struct Position {
     pub column: usize,
     pub line:   usize,

@@ -1,12 +1,10 @@
 use std::collections::LinkedList;
 
-#[derive(Debug)]
 pub(crate) enum Trivia {
     Comment(String),
     Newlines(usize),
 }
 
-#[derive(Debug)]
 pub(crate) struct Child {
     pub element: rnix::SyntaxElement,
 
