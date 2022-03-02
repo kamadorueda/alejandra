@@ -16,41 +16,39 @@
     nixpkgsForHost = host:
       import inputs.nixpkgs {
         overlays = [
-          (
-            self: super: {
-              alejandra = self.rustPlatform.buildRustPackage {
-                pname = "alejandra";
-                inherit version;
-                src = self.stdenv.mkDerivation {
-                  name = "src";
-                  builder = builtins.toFile "builder.sh" ''
-                    source $stdenv/setup
+          (self: super: {
+            alejandra = self.rustPlatform.buildRustPackage {
+              pname = "alejandra";
+              inherit version;
+              src = self.stdenv.mkDerivation {
+                name = "src";
+                builder = builtins.toFile "builder.sh" ''
+                  source $stdenv/setup
 
-                    mkdir $out
-                    cp -rT --no-preserve=mode,ownership $src $out/src/
-                    cp $cargoLock $out/Cargo.lock
-                    cp $cargoToml $out/Cargo.toml
-                  '';
-                  cargoLock = ./Cargo.lock;
-                  cargoToml = ./Cargo.toml;
-                  src = ./src;
-                };
-                cargoLock.lockFile = ./Cargo.lock;
-
-                passthru.tests = {
-                  version = self.testVersion {package = super.alejandra;};
-                };
-
-                meta = {
-                  description = "The Uncompromising Nix Code Formatter.";
-                  homepage = "https://github.com/kamadorueda/alejandra";
-                  license = self.lib.licenses.unlicense;
-                  maintainers = [self.lib.maintainers.kamadorueda];
-                  platforms = self.lib.systems.doubles.all;
-                };
+                  mkdir $out
+                  cp -rT --no-preserve=mode,ownership $src $out/src/
+                  cp $cargoLock $out/Cargo.lock
+                  cp $cargoToml $out/Cargo.toml
+                '';
+                cargoLock = ./Cargo.lock;
+                cargoToml = ./Cargo.toml;
+                src = ./src;
               };
-            }
-          )
+              cargoLock.lockFile = ./Cargo.lock;
+
+              passthru.tests = {
+                version = self.testVersion {package = super.alejandra;};
+              };
+
+              meta = {
+                description = "The Uncompromising Nix Code Formatter.";
+                homepage = "https://github.com/kamadorueda/alejandra";
+                license = self.lib.licenses.unlicense;
+                maintainers = [self.lib.maintainers.kamadorueda];
+                platforms = self.lib.systems.doubles.all;
+              };
+            };
+          })
         ];
         system = host;
       };
@@ -62,12 +60,10 @@
 
     buildBinariesForHost = host: pkgs: let
       binaries = builtins.listToAttrs (
-        builtins.map (
-          pkg: {
-            name = "alejandra-${pkg.stdenv.targetPlatform.config}";
-            value = pkg;
-          }
-        )
+        builtins.map (pkg: {
+          name = "alejandra-${pkg.stdenv.targetPlatform.config}";
+          value = pkg;
+        })
         pkgs
       );
     in
@@ -75,12 +71,10 @@
       // {
         "alejandra-binaries" = nixpkgs.${host}.linkFarm "alejandra-binaries" (
           nixpkgs.${host}.lib.mapAttrsToList
-          (
-            name: binary: {
-              inherit name;
-              path = "${binary}/bin/alejandra";
-            }
-          )
+          (name: binary: {
+            inherit name;
+            path = "${binary}/bin/alejandra";
+          })
           binaries
         );
       };
@@ -130,20 +124,18 @@
         alejandra
       ];
     packages."x86_64-linux" = with nixpkgs."x86_64-linux";
-      (
-        buildBinariesForHost "x86_64-linux" [
-          alejandra
-          pkgsStatic.alejandra
+      (buildBinariesForHost "x86_64-linux" [
+        alejandra
+        pkgsStatic.alejandra
 
-          pkgsCross.aarch64-multiplatform.pkgsStatic.alejandra
+        pkgsCross.aarch64-multiplatform.pkgsStatic.alejandra
 
-          pkgsCross.armv7l-hf-multiplatform.pkgsStatic.alejandra
+        pkgsCross.armv7l-hf-multiplatform.pkgsStatic.alejandra
 
-          pkgsCross.gnu32.pkgsStatic.alejandra
+        pkgsCross.gnu32.pkgsStatic.alejandra
 
-          pkgsCross.raspberryPi.pkgsStatic.alejandra
-        ]
-      )
+        pkgsCross.raspberryPi.pkgsStatic.alejandra
+      ])
       // {
         "alejandra-vscode-vsix" = mkYarnPackage {
           name = "alejandra";
