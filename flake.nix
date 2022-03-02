@@ -103,6 +103,7 @@
           nodejs
           nodePackages.prettier
           nodePackages.prettier-plugin-toml
+          rustc
           shfmt
           treefmt
           yarn
