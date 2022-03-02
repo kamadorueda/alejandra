@@ -10,17 +10,16 @@ pub(crate) fn rule(
     let expression = children.next().unwrap();
     let closer = children.next().unwrap();
 
-    let vertical = opener.has_inline_comment
+    let loose = opener.has_inline_comment
         || opener.has_comments
         || expression.has_inline_comment
         || expression.has_comments
         || closer.has_inline_comment
         || closer.has_comments
+        || matches!(expression.element.kind(), rnix::SyntaxKind::NODE_IF_ELSE);
+
+    let should_indent = loose
         || matches!(
-            expression.element.kind(),
-            rnix::SyntaxKind::NODE_IF_ELSE | rnix::SyntaxKind::NODE_LET_IN
-        )
-        || (matches!(
             expression.element.kind(),
             rnix::SyntaxKind::NODE_APPLY
                 | rnix::SyntaxKind::NODE_ASSERT
@@ -32,11 +31,11 @@ pub(crate) fn rule(
         ) && second_through_penultimate_line_are_not_indented(
             build_ctx,
             expression.element.clone(),
-        ));
+        );
 
     // opener
     steps.push_back(crate::builder::Step::Format(opener.element));
-    if vertical {
+    if should_indent {
         steps.push_back(crate::builder::Step::Indent);
     }
 
@@ -45,7 +44,7 @@ pub(crate) fn rule(
         steps.push_back(crate::builder::Step::Comment(text));
         steps.push_back(crate::builder::Step::NewLine);
         steps.push_back(crate::builder::Step::Pad);
-    } else if vertical {
+    } else if loose {
         steps.push_back(crate::builder::Step::NewLine);
         steps.push_back(crate::builder::Step::Pad);
     }
@@ -62,7 +61,7 @@ pub(crate) fn rule(
     }
 
     // expression
-    if vertical {
+    if loose {
         steps.push_back(crate::builder::Step::FormatWider(expression.element));
     } else {
         steps.push_back(crate::builder::Step::Format(expression.element));
@@ -85,8 +84,11 @@ pub(crate) fn rule(
     }
 
     // closer
-    if vertical {
+    if should_indent {
         steps.push_back(crate::builder::Step::Dedent);
+    }
+
+    if loose {
         steps.push_back(crate::builder::Step::NewLine);
         steps.push_back(crate::builder::Step::Pad);
     }
@@ -111,12 +113,14 @@ fn second_through_penultimate_line_are_not_indented(
         return false;
     }
 
-    let whitespace = format!("{0:<1$}", "", 2 * (build_ctx.indentation + 1));
+    let whitespace = format!("{0:<1$}  ", "", 2 * build_ctx.indentation);
+    let lambda = format!("{0:<1$}}}:", "", 2 * build_ctx.indentation);
+    let in_ = format!("{0:<1$}in", "", 2 * build_ctx.indentation);
 
-    formatted_lines
-        .iter()
-        .skip(1)
-        .rev()
-        .skip(1)
-        .any(|line| !line.is_empty() && !line.starts_with(&whitespace))
+    formatted_lines.iter().skip(1).rev().skip(1).any(|line| {
+        !line.is_empty()
+            && !(line.starts_with(&whitespace)
+                || line.starts_with(&lambda)
+                || line.starts_with(&in_))
+    })
 }

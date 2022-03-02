@@ -1,29 +1,22 @@
 [
   (assert b; e)
-  (
-    assert b;
+  (assert b;
     /*
      d
      */
-      e
-  )
+      e)
   (assert b; e)
-  (
-    assert b;
+  (assert b;
     /*
      d
      */
-      e
-  )
-  (
-    assert
+      e)
+  (assert
     /*
      a
      */
-    b; e
-  )
-  (
-    assert
+    b; e)
+  (assert
     /*
      a
      */
@@ -31,17 +24,13 @@
     /*
      d
      */
-      e
-  )
-  (
-    assert
+      e)
+  (assert
     /*
      a
      */
-    b; e
-  )
-  (
-    assert
+    b; e)
+  (assert
     /*
      a
      */
@@ -49,8 +38,7 @@
     /*
      d
      */
-      e
-  )
+      e)
   (assert b; cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc)
   (assert b; cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc)
 ]
