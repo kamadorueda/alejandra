@@ -89,6 +89,7 @@ steps:
       - cargo clippy
 
   - label: flake check
+    if: build.branch != "main"
     command:
       - echo +++
       - nix flake check
