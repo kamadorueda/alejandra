@@ -13,27 +13,26 @@ pub(crate) enum Step {
 
 #[derive(Clone)]
 pub(crate) struct BuildCtx {
-    pub force_wide:  bool,
-    pub indentation: usize,
-    pub pos_new:     crate::position::Position,
-    pub pos_old:     crate::position::Position,
-    pub path:        String,
-    pub vertical:    bool,
+    pub force_wide:         bool,
+    pub force_wide_success: bool,
+    pub indentation:        usize,
+    pub pos_old:            crate::position::Position,
+    pub path:               String,
+    pub vertical:           bool,
 }
 
 impl BuildCtx {
     pub fn new(
         force_wide: bool,
         path: String,
-        pos_new: crate::position::Position,
         pos_old: crate::position::Position,
         vertical: bool,
     ) -> BuildCtx {
         BuildCtx {
             force_wide,
+            force_wide_success: true,
             indentation: 0,
             path,
-            pos_new,
             pos_old,
             vertical,
         }
@@ -51,7 +50,6 @@ pub(crate) fn build(
         force_wide,
         path,
         crate::position::Position::default(),
-        crate::position::Position::default(),
         vertical,
     );
 
@@ -61,8 +59,8 @@ pub(crate) fn build(
         &crate::builder::Step::Format(element),
     );
 
-    if build_ctx.force_wide && build_ctx.pos_new.line > 1 {
-        None
+    if force_wide {
+        if build_ctx.force_wide_success { Some(builder.finish()) } else { None }
     } else {
         Some(builder.finish())
     }
@@ -74,7 +72,7 @@ fn build_step(
 
     step: &crate::builder::Step,
 ) {
-    if build_ctx.force_wide && build_ctx.pos_new.line > 1 {
+    if build_ctx.force_wide && !build_ctx.force_wide_success {
         return;
     }
 
@@ -102,7 +100,6 @@ fn build_step(
 
             add_token(
                 builder,
-                build_ctx,
                 rnix::SyntaxKind::TOKEN_COMMENT,
                 &lines.join("\n"),
             );
@@ -120,45 +117,34 @@ fn build_step(
             build_ctx.indentation += 1;
         }
         crate::builder::Step::NewLine => {
-            add_token(
-                builder,
-                build_ctx,
-                rnix::SyntaxKind::TOKEN_WHITESPACE,
-                "\n",
-            );
+            build_ctx.force_wide_success = false;
+
+            add_token(builder, rnix::SyntaxKind::TOKEN_WHITESPACE, "\n");
         }
         crate::builder::Step::Pad => {
             if build_ctx.indentation > 0 {
                 add_token(
                     builder,
-                    build_ctx,
                     rnix::SyntaxKind::TOKEN_WHITESPACE,
                     &format!("{0:<1$}", "", 2 * build_ctx.indentation),
                 );
             }
         }
         crate::builder::Step::Token(kind, text) => {
-            add_token(builder, build_ctx, *kind, text);
+            add_token(builder, *kind, text);
         }
         crate::builder::Step::Whitespace => {
-            add_token(
-                builder,
-                build_ctx,
-                rnix::SyntaxKind::TOKEN_WHITESPACE,
-                " ",
-            );
+            add_token(builder, rnix::SyntaxKind::TOKEN_WHITESPACE, " ");
         }
     }
 }
 
 fn add_token(
     builder: &mut rowan::GreenNodeBuilder,
-    build_ctx: &mut BuildCtx,
     kind: rnix::SyntaxKind,
     text: &str,
 ) {
     builder.token(rowan::SyntaxKind(kind as u16), text);
-    build_ctx.pos_new.update(text);
 }
 
 fn format(
@@ -254,7 +240,7 @@ fn format(
         }
         rnix::SyntaxElement::Token(token) => {
             let text = token.text();
-            add_token(builder, build_ctx, kind, text);
+            add_token(builder, kind, text);
             build_ctx.pos_old.update(text);
         }
     }
@@ -283,13 +269,7 @@ pub(crate) fn fits_in_single_line(
     build_ctx: &crate::builder::BuildCtx,
     element: rnix::SyntaxElement,
 ) -> bool {
-    let line = build_ctx.pos_new.line;
-    let maybe_green_node = build(element, true, build_ctx.path.clone(), false);
-
-    match maybe_green_node {
-        Some(_) => build_ctx.pos_new.line == line,
-        None => false,
-    }
+    build(element, true, build_ctx.path.clone(), false).is_some()
 }
 
 pub(crate) fn make_isolated_token(
