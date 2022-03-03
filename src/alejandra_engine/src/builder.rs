@@ -188,7 +188,7 @@ fn format(
                 rnix::SyntaxKind::NODE_STRING => crate::rules::string::rule,
                 // ${a}
                 rnix::SyntaxKind::NODE_STRING_INTERPOL => {
-                    crate::rules::string_interpol::rule
+                    crate::rules::paren::rule
                 }
                 // !a
                 rnix::SyntaxKind::NODE_UNARY_OP => crate::rules::default,

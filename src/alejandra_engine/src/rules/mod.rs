@@ -16,7 +16,6 @@ pub(crate) mod root;
 pub(crate) mod scoped;
 pub(crate) mod select;
 pub(crate) mod string;
-pub(crate) mod string_interpol;
 
 pub(crate) fn default(
     _: &crate::builder::BuildCtx,
