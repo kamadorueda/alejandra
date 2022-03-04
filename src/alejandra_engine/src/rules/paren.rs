@@ -16,7 +16,19 @@ pub(crate) fn rule(
         || expression.has_comments
         || closer.has_inline_comment
         || closer.has_comments
-        || matches!(expression.element.kind(), rnix::SyntaxKind::NODE_IF_ELSE);
+        || matches!(expression.element.kind(), rnix::SyntaxKind::NODE_IF_ELSE)
+        || ((opener.has_trivialities
+            || expression.has_trivialities
+            || closer.has_trivialities)
+            && !matches!(
+                expression.element.kind(),
+                rnix::SyntaxKind::NODE_ATTR_SET
+                    | rnix::SyntaxKind::NODE_IDENT
+                    | rnix::SyntaxKind::NODE_LITERAL
+                    | rnix::SyntaxKind::NODE_LIST
+                    | rnix::SyntaxKind::NODE_STRING
+                    | rnix::SyntaxKind::NODE_UNARY_OP
+            ));
 
     let should_indent = loose
         || matches!(
