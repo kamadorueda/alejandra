@@ -42,7 +42,7 @@ Types of changes
 
 - String interpolations (`"${something}"`)
   now follow the same logic as parentheses (`(something)`),
-  since ultimately, the are the same family of elements
+  since ultimately, they are the same family of elements.
 
 - Parentheses handling logic was rewritten
   and by extension string interpolations as well.
@@ -137,7 +137,7 @@ Types of changes
 
 - A few internal position counters, nothing visible from the outside.
 - The new features cost a little of runtime speed,
-  but anyway we are still pretty fast ⚡
+  but anyway we are still pretty fast. ⚡
 
 ## [0.7.0] - 2022-02-28
 
