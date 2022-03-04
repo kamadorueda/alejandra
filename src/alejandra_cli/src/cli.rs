@@ -39,27 +39,44 @@ pub(crate) fn parse(args: Vec<String>) -> clap::ArgMatches {
                 .takes_value(true),
         )
         .term_width(80)
-        .after_help(indoc::indoc!(
-            // Let's just use the same sorting as on GitHub
-            //
-            // There are some non-code contributors,
-            // I'm sorting those subjectively
-            //
-            // Feel free to add here your contact/blog/links if you want
-            "
-            The program will exit with status code:
-              1, if any error occurs.
-              2, if --check was used and any file was changed.
-              0, otherwise.
+        .after_help(
+            #[cfg_attr(rustfmt, rustfmt_skip)]
+            indoc::indoc!(
+                // Let's just use the same sorting as on GitHub
+                //
+                // There are some non-code contributors,
+                // I'm sorting those subjectively.
+                // I've tried to be as just as possible.
+                //
+                // Feel free to add here your contact/blog/links if you want
+                "
+                The program will exit with status code:
+                  1, if any error occurs.
+                  2, if --check was used and any file was changed.
+                  0, otherwise.
 
-            Shaped with love by:
-              Kevin Amado ~ @kamadorueda on GitHub, matrix.org and Gmail.
-              Thomas Bereknyei ~ @tomberek on GitHub and matrix.org.
-              David Arnold ~ @blaggacao on GitHub and matrix.org.
-              Vincent Ambo ~ @tazjin on GitHub.
-              Mr Hedgehog ~ @ModdedGamers on GitHub.
-            "
-        ))
+                Shaped with love by:
+                  Kevin Amado ~ @kamadorueda on GitHub, matrix.org and Gmail.
+                  Thomas Bereknyei ~ @tomberek on GitHub and matrix.org.
+                  Piegames ~ @piegamesde on GitHub.
+                  Joachim Ernst ~  @0x4A6F on GitHub.
+                  David Arnold ~ @blaggacao on GitHub and matrix.org.
+                  David Hauer ~ @DavHau on GitHub.
+                  Fabian Möller ~ @B4dM4n on GitHub.
+                  Rok Garbas ~ @garbas on GitHub.
+                  Yorick van Pelt ~ @yorickvP on GitHub.
+                  Vincent Ambo ~ @tazjin on GitHub.
+                  Mr Hedgehog ~ @ModdedGamers on GitHub.
+                  Tristan Maat ~ @TLATER on GitHub.
+                  Norbert Melzer ~ @NobbZ on GitHub.
+                  Patrick Stevens ~ @Smaug123 on GitHub.
+                  Florian Finkernagel ~ @TyberiusPrime on GitHub.
+
+                Your star and feedback is very much appreciated!
+                  https://github.com/kamadorueda/alejandra
+                "
+            ),
+        )
         .get_matches_from(args)
 }
 
