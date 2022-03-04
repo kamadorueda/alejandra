@@ -17,6 +17,128 @@ Types of changes
 - Security in case of vulnerabilities.
 -->
 
+## [1.0.0] - 2022-03-03
+
+### Added
+
+- NixOS installation instructions
+
+### Changed
+
+- The indentation for function applications was improved,
+  so that indentation is now correct to the human eye in all cases:
+
+  ```diff
+  -  name2 = function arg {
+  -    asdf = 1;
+  -  }
+  -  argument;
+  +  name2 =
+  +    function arg {
+  +      asdf = 1;
+  +    }
+  +    argument;
+  ```
+
+- String interpolations (`"${something}"`)
+  now follow the same logic as parentheses (`(something)`),
+  since ultimately, the are the same family of elements
+
+- Parentheses handling logic was rewritten
+  and by extension string interpolations as well.
+
+  ```diff
+  - (
+  -   self: super: {
+  -     # ...
+  -   }
+  - )
+  + (self: super: {
+  +   # ...
+  + })
+  ```
+
+  ```diff
+  -      builtins.map (
+  -        pkg: {
+  -          name = "alejandra-${pkg.stdenv.targetPlatform.config}";
+  -          value = pkg;
+  -        }
+  -      )
+  +      builtins.map (pkg: {
+  +        name = "alejandra-${pkg.stdenv.targetPlatform.config}";
+  +        value = pkg;
+  +      })
+  ```
+
+  ```diff
+  -      (
+  -        fenix.combine [
+  -          fenix.latest.rustc
+  -          fenix.latest.toolchain
+  -          fenix.targets."wasm32-unknown-unknown".latest.rust-std
+  -        ]
+  -      )
+  +      (fenix.combine [
+  +        fenix.latest.rustc
+  +        fenix.latest.toolchain
+  +        fenix.targets."wasm32-unknown-unknown".latest.rust-std
+  +      ])
+  ```
+
+  ```diff
+     pkgs.writeText "other-modules.json"
+     (l.toJSON
+  -  (l.mapAttrs
+  -  (pname: subOutputs: let
+  -    pkg = subOutputs.packages."${pname}".overrideAttrs (old: {
+  -      buildScript = "true";
+  -      installMethod = "copy";
+  -    });
+  -  in "${pkg}/lib/node_modules/${pname}/node_modules")
+  -  outputs.subPackages))
+  +    (l.mapAttrs
+  +      (pname: subOutputs:
+  +        let
+  +          pkg = subOutputs.packages."${pname}".overrideAttrs (old: {
+  +            buildScript = "true";
+  +            installMethod = "copy";
+  +          });
+  +        in
+  +          "${pkg}/lib/node_modules/${pname}/node_modules")
+  +      outputs.subPackages))
+  ```
+
+  ```diff
+  -  (with a;
+  -  /*
+  -   comment
+  -   */
+  -  with b;
+  -  with c; {
+  -    a = 1;
+  -    b = 2;
+  -  })
+  +  (with a;
+  +    /*
+  +      comment
+  +      */
+  +    with b;
+  +    with c; {
+  +      a = 1;
+  +      b = 2;
+  +    })
+  ```
+
+  In some cases it's possible to insert a newline after the
+  opening element (either `(` or `${`) to force a tall formatting.
+
+### Removed
+
+- A few internal position counters, nothing visible from the outside.
+- The new features cost a little of runtime speed,
+  but anyway we are still pretty fast ⚡
+
 ## [0.7.0] - 2022-02-28
 
 ### Added
@@ -388,7 +510,8 @@ Types of changes
 
 ---
 
-[unreleased]: https://github.com/kamadorueda/alejandra/compare/0.7.0...HEAD
+[unreleased]: https://github.com/kamadorueda/alejandra/compare/1.0.0...HEAD
+[1.0.0]: https://github.com/kamadorueda/alejandra/compare/0.7.0...1.0.0
 [0.7.0]: https://github.com/kamadorueda/alejandra/compare/0.6.0...0.7.0
 [0.6.0]: https://github.com/kamadorueda/alejandra/compare/0.5.0...0.6.0
 [0.5.0]: https://github.com/kamadorueda/alejandra/compare/0.4.0...0.5.0
