@@ -384,7 +384,7 @@ pub fn main() -> std::io::Result<()> {
         eprintln!(
             "Failed! We encountered {} error{} at:",
             errors,
-            if errors > 0 { "s" } else { "" }
+            if errors >= 2 { "s" } else { "" }
         );
         for formatted_path in formatted_paths {
             if let alejandra_engine::format::Status::Error(error) =
@@ -409,8 +409,8 @@ pub fn main() -> std::io::Result<()> {
         eprintln!(
             "Success! {} file{} {} changed",
             changed,
-            if changed > 0 { "s" } else { "" },
-            if changed > 0 { "were" } else { "was" },
+            if changed >= 2 { "s" } else { "" },
+            if changed >= 2 { "were" } else { "was" },
         );
         if check {
             std::process::exit(2);
