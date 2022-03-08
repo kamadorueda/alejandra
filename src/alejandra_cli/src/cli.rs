@@ -38,6 +38,12 @@ pub(crate) fn parse(args: Vec<String>) -> clap::ArgMatches {
                 .short('t')
                 .takes_value(true),
         )
+        .arg(
+            clap::Arg::new("quiet")
+                .help("Hide the details, only show error messages.")
+                .long("--quiet")
+                .short('q'),
+        )
         .term_width(80)
         .after_help(
             #[cfg_attr(rustfmt, rustfmt_skip)]
@@ -80,13 +86,15 @@ pub(crate) fn parse(args: Vec<String>) -> clap::ArgMatches {
         .get_matches_from(args)
 }
 
-pub(crate) fn stdin() -> FormattedPath {
+pub(crate) fn stdin(quiet: bool) -> FormattedPath {
     use std::io::Read;
 
     let mut before = String::new();
     let path = "<anonymous file on stdin>".to_string();
 
-    eprintln!("Formatting stdin, run with --help to see all options.");
+    if !quiet {
+        eprintln!("Formatting stdin, run with --help to see all options.");
+    }
 
     std::io::stdin().read_to_string(&mut before).unwrap();
 
@@ -98,10 +106,12 @@ pub(crate) fn stdin() -> FormattedPath {
     FormattedPath { path, status }
 }
 
-pub(crate) fn simple(paths: Vec<String>) -> Vec<FormattedPath> {
+pub(crate) fn simple(paths: Vec<String>, quiet: bool) -> Vec<FormattedPath> {
     use rayon::prelude::*;
 
-    eprintln!("Formatting: {} files", paths.len());
+    if !quiet {
+        eprintln!("Formatting: {} files", paths.len());
+    }
 
     paths
         .par_iter()
@@ -109,7 +119,7 @@ pub(crate) fn simple(paths: Vec<String>) -> Vec<FormattedPath> {
             let status = alejandra_engine::format::in_place(path.clone());
 
             if let alejandra_engine::format::Status::Changed(changed) = status {
-                if changed {
+                if changed && !quiet {
                     eprintln!("Changed: {}", &path);
                 }
             }
@@ -341,6 +351,7 @@ pub fn main() -> std::io::Result<()> {
     let check = matches.is_present("check");
     let threads = matches.value_of("threads").unwrap();
     let threads: usize = threads.parse().unwrap();
+    let quiet = matches.is_present("quiet");
 
     rayon::ThreadPoolBuilder::new()
         .num_threads(threads)
@@ -357,16 +368,17 @@ pub fn main() -> std::io::Result<()> {
 
             let paths: Vec<String> = crate::find::nix_files(include, exclude);
 
-            if atty::is(atty::Stream::Stderr)
+            if !quiet
+                && atty::is(atty::Stream::Stderr)
                 && atty::is(atty::Stream::Stdin)
                 && atty::is(atty::Stream::Stdout)
             {
                 crate::cli::tui(paths)?
             } else {
-                crate::cli::simple(paths)
+                crate::cli::simple(paths, quiet)
             }
         }
-        None => vec![crate::cli::stdin()],
+        None => vec![crate::cli::stdin(quiet)],
     };
 
     let errors = formatted_paths
@@ -405,13 +417,15 @@ pub fn main() -> std::io::Result<()> {
         .count();
 
     if changed > 0 {
-        eprintln!();
-        eprintln!(
-            "Success! {} file{} {} changed",
-            changed,
-            if changed >= 2 { "s" } else { "" },
-            if changed >= 2 { "were" } else { "was" },
-        );
+        if !quiet {
+            eprintln!();
+            eprintln!(
+                "Success! {} file{} {} changed",
+                changed,
+                if changed >= 2 { "s" } else { "" },
+                if changed >= 2 { "were" } else { "was" },
+            );
+        }
         if check {
             std::process::exit(2);
         } else {
@@ -419,7 +433,9 @@ pub fn main() -> std::io::Result<()> {
         }
     }
 
-    eprintln!();
-    eprintln!("Success! Your code complies the Alejandra style");
+    if !quiet {
+        eprintln!();
+        eprintln!("Success! Your code complies the Alejandra style");
+    }
     std::process::exit(0);
 }
