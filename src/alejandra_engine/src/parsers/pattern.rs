@@ -50,7 +50,6 @@ pub(crate) fn parse(
         // Before an item we can have: comma, comments, whitespace
         loop {
             let child = children.peek_next().unwrap();
-            // eprintln!("before item {:?}", child.kind());
 
             match child.kind() {
                 rnix::SyntaxKind::NODE_PAT_ENTRY
@@ -76,7 +75,6 @@ pub(crate) fn parse(
 
         // item
         let child = children.peek_next().unwrap();
-        // eprintln!("item {:?}", child.kind());
         match child.kind() {
             rnix::SyntaxKind::TOKEN_CURLY_B_CLOSE => {
                 pattern.comments_before_curly_b_close =
@@ -94,7 +92,6 @@ pub(crate) fn parse(
         // After an item we can have: comma, comments, whitespace
         loop {
             let child = children.peek_next().unwrap();
-            // eprintln!("after item {:?}", child.kind());
 
             match child.kind() {
                 rnix::SyntaxKind::NODE_PAT_ENTRY
