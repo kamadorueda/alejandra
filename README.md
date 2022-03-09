@@ -95,6 +95,7 @@
   We integrate with common code editors:
 
   - [Alejandra extension for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=kamadorueda.alejandra)
+  - [doom-emacs configuration](https://github.com/hlissner/doom-emacs): `(set-formatter! 'alejandra  "alejandra --quiet" :modes '(nix-mode))`
 
 ## Getting started
 
