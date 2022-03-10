@@ -17,6 +17,19 @@ Types of changes
 - Security in case of vulnerabilities.
 -->
 
+## [1.1.0] - 2022-03-10
+
+### Added
+
+- Emacs integration instructions.
+- A `--quiet` flag to the CLI which hide output details,
+  disable the TUI
+  and only print error messages.
+
+### Changed
+
+- Updated dependencies to its latest version.
+
 ## [1.0.0] - 2022-03-03
 
 ### Added
@@ -510,7 +523,8 @@ Types of changes
 
 ---
 
-[unreleased]: https://github.com/kamadorueda/alejandra/compare/1.0.0...HEAD
+[unreleased]: https://github.com/kamadorueda/alejandra/compare/1.1.0...HEAD
+[1.1.0]: https://github.com/kamadorueda/alejandra/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/kamadorueda/alejandra/compare/0.7.0...1.0.0
 [0.7.0]: https://github.com/kamadorueda/alejandra/compare/0.6.0...0.7.0
 [0.6.0]: https://github.com/kamadorueda/alejandra/compare/0.5.0...0.6.0
