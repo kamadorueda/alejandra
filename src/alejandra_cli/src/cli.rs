@@ -65,12 +65,13 @@ pub(crate) fn parse(args: Vec<String>) -> clap::ArgMatches {
                   Kevin Amado ~ @kamadorueda on GitHub, matrix.org and Gmail.
                   Thomas Bereknyei ~ @tomberek on GitHub and matrix.org.
                   Piegames ~ @piegamesde on GitHub.
-                  Joachim Ernst ~  @0x4A6F on GitHub.
+                  Joachim Ernst ~ @0x4A6F on GitHub.
                   David Arnold ~ @blaggacao on GitHub and matrix.org.
                   David Hauer ~ @DavHau on GitHub.
                   Fabian Möller ~ @B4dM4n on GitHub.
                   Rok Garbas ~ @garbas on GitHub.
                   Yorick van Pelt ~ @yorickvP on GitHub.
+                  Jörg Thalheim ~ @Mic92 on GitHub.
                   Vincent Ambo ~ @tazjin on GitHub.
                   Mr Hedgehog ~ @ModdedGamers on GitHub.
                   Tristan Maat ~ @TLATER on GitHub.
