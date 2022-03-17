@@ -172,7 +172,7 @@ $ alejandra --help
     outputs = {alejandra, nixpkgs, ...}: {
       nixosConfigurations = {
         example = nixpkgs.lib.nixosSystem rec {
-          # We support: aarch64-linux, aarch64-linux, x86_64-darwin, x86_64-linux
+          # We support: aarch64-darwin, aarch64-linux, x86_64-darwin, x86_64-linux
           system = "x86_64-linux";
 
           modules = [
@@ -198,7 +198,7 @@ $ alejandra --help
         url = "https://github.com/kamadorueda/alejandra/tarball/1.1.0";
         sha256 = "0000000000000000000000000000000000000000000000000000";
       }))
-      # Pick one from: aarch64-linux, aarch64-linux, x86_64-darwin, x86_64-linux
+      # Pick one from: aarch64-darwin, aarch64-linux, x86_64-darwin, x86_64-linux
       .x86_64-linux
       .outPath;
   in {
