@@ -88,7 +88,7 @@
 
     defaultPackage."aarch64-darwin" = packages."aarch64-darwin"."alejandra-aarch64-apple-darwin";
     defaultPackage."aarch64-linux" = packages."aarch64-linux"."alejandra-aarch64-unknown-linux-gnu";
-    defaultPackage."i686-linux" = packages."aarch64-linux"."alejandra-i686-unknown-linux-gnu";
+    defaultPackage."i686-linux" = packages."i686-linux"."alejandra-i686-unknown-linux-gnu";
     defaultPackage."x86_64-darwin" = packages."x86_64-darwin"."alejandra-x86_64-apple-darwin";
     defaultPackage."x86_64-linux" = packages."x86_64-linux"."alejandra-x86_64-unknown-linux-gnu";
 
