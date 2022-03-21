@@ -55,6 +55,7 @@
 
     nixpkgs."aarch64-darwin" = nixpkgsForHost "aarch64-darwin";
     nixpkgs."aarch64-linux" = nixpkgsForHost "aarch64-linux";
+    nixpkgs."i686-linux" = nixpkgsForHost "i686-linux";
     nixpkgs."x86_64-darwin" = nixpkgsForHost "x86_64-darwin";
     nixpkgs."x86_64-linux" = nixpkgsForHost "x86_64-linux";
 
@@ -81,11 +82,13 @@
   in rec {
     checks."aarch64-darwin" = packages."aarch64-darwin";
     checks."aarch64-linux" = packages."aarch64-linux";
+    checks."i686-linux" = packages."i686-linux";
     checks."x86_64-darwin" = packages."x86_64-darwin";
     checks."x86_64-linux" = packages."x86_64-linux";
 
     defaultPackage."aarch64-darwin" = packages."aarch64-darwin"."alejandra-aarch64-apple-darwin";
     defaultPackage."aarch64-linux" = packages."aarch64-linux"."alejandra-aarch64-unknown-linux-gnu";
+    defaultPackage."i686-linux" = packages."aarch64-linux"."alejandra-i686-unknown-linux-gnu";
     defaultPackage."x86_64-darwin" = packages."x86_64-darwin"."alejandra-x86_64-apple-darwin";
     defaultPackage."x86_64-linux" = packages."x86_64-linux"."alejandra-x86_64-unknown-linux-gnu";
 
@@ -119,6 +122,10 @@
       buildBinariesForHost "aarch64-linux" [
         alejandra
         pkgsStatic.alejandra
+      ];
+    packages."i686-linux" = with nixpkgs."i686-linux";
+      buildBinariesForHost "i686-linux" [
+        alejandra
       ];
     packages."x86_64-darwin" = with nixpkgs."x86_64-darwin";
       buildBinariesForHost "x86_64-darwin" [
