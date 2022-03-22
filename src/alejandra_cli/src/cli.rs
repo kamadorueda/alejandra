@@ -71,12 +71,14 @@ pub(crate) fn parse(args: Vec<String>) -> clap::ArgMatches {
                   Fabian Möller ~ @B4dM4n on GitHub.
                   Rok Garbas ~ @garbas on GitHub.
                   Yorick van Pelt ~ @yorickvP on GitHub.
+                  Rehno Lindeque ~ @rehno-lindeque on GitHub.
                   Jörg Thalheim ~ @Mic92 on GitHub.
                   Vincent Ambo ~ @tazjin on GitHub.
                   Mr Hedgehog ~ @ModdedGamers on GitHub.
                   Tristan Maat ~ @TLATER on GitHub.
                   Norbert Melzer ~ @NobbZ on GitHub.
                   Patrick Stevens ~ @Smaug123 on GitHub.
+                  Connor Baker ~ @ConnorBaker on GitHub.
                   Florian Finkernagel ~ @TyberiusPrime on GitHub.
 
                 Your star and feedback is very much appreciated!
