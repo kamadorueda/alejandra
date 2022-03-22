@@ -95,7 +95,7 @@
   We integrate with common code editors:
 
   - [Alejandra extension for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=kamadorueda.alejandra)
-  - [doom-emacs configuration](https://github.com/hlissner/doom-emacs): `(set-formatter! 'alejandra "alejandra --quiet" :modes '(nix-mode))`
+  - [Doom-emacs configuration](https://github.com/hlissner/doom-emacs): `(set-formatter! 'alejandra "alejandra --quiet" :modes '(nix-mode))`
 
 ## Getting started
 
@@ -228,6 +228,8 @@ See why Alejandra was created
 and a comparison between alternatives
 [here](https://discourse.nixos.org/t/the-uncompromising-nix-code-formatter/17385/3?u=kamadorueda).
 
+Alternatively, checkout the code examples of the different formatters [here](https://github.com/kamadorueda/rfc-0101).
+
 ## Versioning
 
 We use [semver](https://semver.org/) to version Alejandra.
@@ -243,7 +245,35 @@ Our public API consists of:
 
 ## Changelog
 
-Please see: [CHANGELOG.md](./CHANGELOG.md).
+Please read: [CHANGELOG](./CHANGELOG.md).
+
+## Contributors
+
+The following people have helped improving Alejandra.
+
+Thank you ❤️
+
+- [Kevin Amado](https://github.com/kamadorueda) ~
+  [Email](mailto:kamadorueda@gmail.com),
+  [Patreon](https://www.patreon.com/kamadorueda),
+  @kamadorueda:[matrix.org](https://matrix.org/).
+- [Thomas Bereknyei](https://github.com/tomberek).
+- [Piegames](https://github.com/piegamesde).
+- [Joachim Ernst](https://github.com/0x4A6F).
+- [David Arnold](https://github.com/blaggacao).
+- [David Hauer](https://github.com/DavHau).
+- [Fabian Möller](https://github.com/B4dM4n).
+- [Rok Garbas](https://github.com/garbas).
+- [Yorick van Pelt](https://github.com/yorickvP).
+- [Rehno Lindeque](https://github.com/rehno-lindeque).
+- [Jörg Thalheim](https://github.com/Mic92).
+- [Vincent Ambo](https://github.com/tazjin).
+- [Mr Hedgehog](https://github.com/ModdedGamers).
+- [Tristan Maat](https://github.com/TLATER).
+- [Norbert Melzer](https://github.com/NobbZ).
+- [Patrick Stevens](https://github.com/Smaug123).
+- [Connor Baker](https://github.com/ConnorBaker).
+- [Florian Finkernagel](https://github.com/TyberiusPrime).
 
 ## Footnotes
 
