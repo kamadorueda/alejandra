@@ -132,7 +132,8 @@ pub(crate) fn simple(paths: Vec<String>, quiet: bool) -> Vec<FormattedPath> {
 
 pub(crate) fn tui(paths: Vec<String>) -> std::io::Result<Vec<FormattedPath>> {
     use rayon::prelude::*;
-    use termion::{input::TermRead, raw::IntoRawMode};
+    use termion::input::TermRead;
+    use termion::raw::IntoRawMode;
 
     enum Event {
         FormattedPath(FormattedPath),
