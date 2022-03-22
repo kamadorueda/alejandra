@@ -95,7 +95,7 @@
   We integrate with common code editors:
 
   - [Alejandra extension for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=kamadorueda.alejandra)
-  - [doom-emacs configuration](https://github.com/hlissner/doom-emacs): `(set-formatter! 'alejandra  "alejandra --quiet" :modes '(nix-mode))`
+  - [doom-emacs configuration](https://github.com/hlissner/doom-emacs): `(set-formatter! 'alejandra "alejandra --quiet" :modes '(nix-mode))`
 
 ## Getting started
 
@@ -146,6 +146,7 @@ Please visit: [search.nixos.org/packages?query=alejandra](https://search.nixos.o
   ```bash
   $ nix-env -ivA aarch64-darwin -f https://github.com/kamadorueda/alejandra/tarball/1.1.0
   $ nix-env -ivA aarch64-linux -f https://github.com/kamadorueda/alejandra/tarball/1.1.0
+  $ nix-env -ivA i686-linux -f https://github.com/kamadorueda/alejandra/tarball/1.1.0
   $ nix-env -ivA x86_64-darwin -f https://github.com/kamadorueda/alejandra/tarball/1.1.0
   $ nix-env -ivA x86_64-linux -f https://github.com/kamadorueda/alejandra/tarball/1.1.0
   ```
@@ -172,7 +173,7 @@ $ alejandra --help
     outputs = {alejandra, nixpkgs, ...}: {
       nixosConfigurations = {
         example = nixpkgs.lib.nixosSystem rec {
-          # We support: aarch64-darwin, aarch64-linux, x86_64-darwin, x86_64-linux
+          # We support: aarch64-darwin, aarch64-linux, i686-linux, x86_64-darwin, x86_64-linux
           system = "x86_64-linux";
 
           modules = [
@@ -198,7 +199,7 @@ $ alejandra --help
         url = "https://github.com/kamadorueda/alejandra/tarball/1.1.0";
         sha256 = "0000000000000000000000000000000000000000000000000000";
       }))
-      # Pick one from: aarch64-darwin, aarch64-linux, x86_64-darwin, x86_64-linux
+      # Pick one from: aarch64-darwin, aarch64-linux, i686-linux, x86_64-darwin, x86_64-linux
       .x86_64-linux
       .outPath;
   in {
