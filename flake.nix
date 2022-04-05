@@ -78,6 +78,7 @@
           })
           binaries
         );
+        "default" = builtins.elemAt pkgs 0;
       };
   in rec {
     checks."aarch64-darwin" = packages."aarch64-darwin";
