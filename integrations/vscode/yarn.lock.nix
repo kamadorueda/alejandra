@@ -136,11 +136,11 @@
       };
     }
     {
-      name = "cheerio_select___cheerio_select_1.5.0.tgz";
+      name = "cheerio_select___cheerio_select_1.6.0.tgz";
       path = fetchurl {
-        name = "cheerio_select___cheerio_select_1.5.0.tgz";
-        url = "https://registry.yarnpkg.com/cheerio-select/-/cheerio-select-1.5.0.tgz";
-        sha512 = "qocaHPv5ypefh6YNxvnbABM07KMxExbtbfuJoIie3iZXX1ERwYmJcIiRrr9H05ucQP1k28dav8rpdDgjQd8drg==";
+        name = "cheerio_select___cheerio_select_1.6.0.tgz";
+        url = "https://registry.yarnpkg.com/cheerio-select/-/cheerio-select-1.6.0.tgz";
+        sha512 = "eq0GdBvxVFbqWgmCm7M3XGs1I8oLy/nExUnh6oLqmBditPO9AqQJrkslDpMun/hZ0yyTs8L0m85OHp4ho6Qm9g==";
       };
     }
     {
@@ -216,19 +216,19 @@
       };
     }
     {
-      name = "css_select___css_select_4.2.1.tgz";
+      name = "css_select___css_select_4.3.0.tgz";
       path = fetchurl {
-        name = "css_select___css_select_4.2.1.tgz";
-        url = "https://registry.yarnpkg.com/css-select/-/css-select-4.2.1.tgz";
-        sha512 = "/aUslKhzkTNCQUB2qTX84lVmfia9NyjP3WpDGtj/WxhwBzWBYUV3DgUpurHTme8UTPcPlAD1DJ+b0nN/t50zDQ==";
+        name = "css_select___css_select_4.3.0.tgz";
+        url = "https://registry.yarnpkg.com/css-select/-/css-select-4.3.0.tgz";
+        sha512 = "wPpOYtnsVontu2mODhA19JrqWxNsfdatRKd64kmpRbQgh1KtItko5sTnEpPdpSaJszTOhEMlF/RPz28qj4HqhQ==";
       };
     }
     {
-      name = "css_what___css_what_5.1.0.tgz";
+      name = "css_what___css_what_6.1.0.tgz";
       path = fetchurl {
-        name = "css_what___css_what_5.1.0.tgz";
-        url = "https://registry.yarnpkg.com/css-what/-/css-what-5.1.0.tgz";
-        sha512 = "arSMRWIIFY0hV8pIxZMEfmMI47Wj3R/aWpZDDxWYCPEiOMv6tfOrnpDtgxBYPEQD4V0Y/958+1TdC3iWTFcUPw==";
+        name = "css_what___css_what_6.1.0.tgz";
+        url = "https://registry.yarnpkg.com/css-what/-/css-what-6.1.0.tgz";
+        sha512 = "HTUrgRJ7r4dsZKU6GjmpfRK1O76h97Z8MfS1G0FozR+oF2kG6Vfe8JE6zwrkbxigziPHinCJ+gCPjA9EaBDtRw==";
       };
     }
     {
