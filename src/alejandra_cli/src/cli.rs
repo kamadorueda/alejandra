@@ -109,21 +109,30 @@ pub(crate) fn stdin(quiet: bool) -> FormattedPath {
     FormattedPath { path, status }
 }
 
-pub(crate) fn simple(paths: Vec<String>, quiet: bool) -> Vec<FormattedPath> {
+pub(crate) fn simple(
+    paths: Vec<String>,
+    in_place: bool,
+    quiet: bool,
+) -> Vec<FormattedPath> {
     use rayon::prelude::*;
 
     if !quiet {
-        eprintln!("Formatting: {} files", paths.len());
+        eprintln!("Processing: {} files", paths.len());
     }
 
     paths
         .par_iter()
         .map(|path| {
-            let status = alejandra_engine::format::in_place(path.clone());
+            let status =
+                alejandra_engine::format::in_fs(path.clone(), in_place);
 
             if let alejandra_engine::format::Status::Changed(changed) = status {
                 if changed && !quiet {
-                    eprintln!("Changed: {}", &path);
+                    if in_place {
+                        eprintln!("Changed: {}", &path);
+                    } else {
+                        eprintln!("Would be changed: {}", &path);
+                    }
                 }
             }
 
@@ -132,7 +141,10 @@ pub(crate) fn simple(paths: Vec<String>, quiet: bool) -> Vec<FormattedPath> {
         .collect()
 }
 
-pub(crate) fn tui(paths: Vec<String>) -> std::io::Result<Vec<FormattedPath>> {
+pub(crate) fn tui(
+    paths: Vec<String>,
+    in_place: bool,
+) -> std::io::Result<Vec<FormattedPath>> {
     use rayon::prelude::*;
     use termion::input::TermRead;
     use termion::raw::IntoRawMode;
@@ -183,7 +195,8 @@ pub(crate) fn tui(paths: Vec<String>) -> std::io::Result<Vec<FormattedPath>> {
     let sender_finished = sender;
     std::thread::spawn(move || {
         paths.into_par_iter().for_each_with(sender_paths, |sender, path| {
-            let status = alejandra_engine::format::in_place(path.clone());
+            let status =
+                alejandra_engine::format::in_fs(path.clone(), in_place);
 
             if let Err(error) = sender
                 .send(Event::FormattedPath(FormattedPath { path, status }))
@@ -279,9 +292,15 @@ pub(crate) fn tui(paths: Vec<String>) -> std::io::Result<Vec<FormattedPath>> {
                     tui::widgets::Block::default()
                         .borders(tui::widgets::Borders::ALL)
                         .title(format!(
-                            " Formatting ({} changed, {} unchanged, {} \
-                             errors) ",
-                            paths_changed, paths_unchanged, paths_with_errors
+                            " Formatting ({} {}, {} unchanged, {} errors) ",
+                            paths_changed,
+                            if in_place {
+                                "changed"
+                            } else {
+                                "would be changed"
+                            },
+                            paths_unchanged,
+                            paths_with_errors
                         )),
                 )
                 .gauge_style(
@@ -313,16 +332,20 @@ pub(crate) fn tui(paths: Vec<String>) -> std::io::Result<Vec<FormattedPath>> {
                                     changed,
                                 ) => tui::text::Span::styled(
                                     if changed {
-                                        "CHANGED "
+                                        if in_place {
+                                            "CHANGED "
+                                        } else {
+                                            "WOULD BE CHANGED "
+                                        }
                                     } else {
-                                        "OK      "
+                                        "OK "
                                     },
                                     tui::style::Style::default()
                                         .fg(tui::style::Color::Green),
                                 ),
                                 alejandra_engine::format::Status::Error(_) => {
                                     tui::text::Span::styled(
-                                        "ERROR   ",
+                                        "ERROR ",
                                         tui::style::Style::default()
                                             .fg(tui::style::Color::Red),
                                     )
@@ -352,7 +375,7 @@ pub(crate) fn tui(paths: Vec<String>) -> std::io::Result<Vec<FormattedPath>> {
 pub fn main() -> std::io::Result<()> {
     let matches = crate::cli::parse(std::env::args().collect());
 
-    let check = matches.is_present("check");
+    let in_place = !matches.is_present("check");
     let threads = matches.value_of("threads").unwrap();
     let threads: usize = threads.parse().unwrap();
     let quiet = matches.is_present("quiet");
@@ -377,9 +400,9 @@ pub fn main() -> std::io::Result<()> {
                 && atty::is(atty::Stream::Stdin)
                 && atty::is(atty::Stream::Stdout)
             {
-                crate::cli::tui(paths)?
+                crate::cli::tui(paths, in_place)?
             } else {
-                crate::cli::simple(paths, quiet)
+                crate::cli::simple(paths, in_place, quiet)
             }
         }
         None => vec![crate::cli::stdin(quiet)],
@@ -424,22 +447,24 @@ pub fn main() -> std::io::Result<()> {
         if !quiet {
             eprintln!();
             eprintln!(
-                "Success! {} file{} {} changed",
+                "Success! {} file{} {}",
                 changed,
                 if changed >= 2 { "s" } else { "" },
-                if changed >= 2 { "were" } else { "was" },
+                if in_place {
+                    if changed >= 2 { "were changed" } else { "was changed" }
+                } else {
+                    "would be changed"
+                }
             );
         }
-        if check {
-            std::process::exit(2);
-        } else {
-            std::process::exit(0);
-        }
+
+        std::process::exit(if in_place { 0 } else { 2 });
     }
 
     if !quiet {
         eprintln!();
         eprintln!("Success! Your code complies the Alejandra style");
     }
+
     std::process::exit(0);
 }

@@ -39,26 +39,35 @@ pub fn in_memory(path: String, before: String) -> (Status, String) {
     }
 }
 
-pub fn in_place(path: String) -> Status {
+pub fn in_fs(path: String, in_place: bool) -> Status {
     use std::io::Write;
 
     match std::fs::read_to_string(&path) {
         Ok(before) => {
             let (status, data) = crate::format::in_memory(path.clone(), before);
 
-            if let Status::Changed(changed) = status {
-                if changed {
-                    return match std::fs::File::create(path) {
-                        Ok(mut file) => match file.write_all(data.as_bytes()) {
-                            Ok(_) => status,
-                            Err(error) => Status::from(error),
-                        },
-                        Err(error) => Status::from(error),
-                    };
+            match status {
+                Status::Changed(changed) => {
+                    if in_place {
+                        if changed {
+                            match std::fs::File::create(path) {
+                                Ok(mut file) => {
+                                    match file.write_all(data.as_bytes()) {
+                                        Ok(_) => Status::Changed(true),
+                                        Err(error) => Status::from(error),
+                                    }
+                                }
+                                Err(error) => Status::from(error),
+                            }
+                        } else {
+                            Status::Changed(false)
+                        }
+                    } else {
+                        Status::Changed(changed)
+                    }
                 }
+                Status::Error(error) => Status::Error(error),
             }
-
-            status
         }
         Err(error) => Status::from(error),
     }
