@@ -23,7 +23,10 @@ pub(crate) fn parse(args: Vec<String>) -> clap::ArgMatches {
         )
         .arg(
             clap::Arg::new("check")
-                .help("Check if the input is already formatted.")
+                .help(
+                    "Check if the input is already formatted and disable \
+                     writing in-place the modified content.",
+                )
                 .long("--check")
                 .short('c'),
         )

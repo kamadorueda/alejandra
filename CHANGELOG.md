@@ -17,6 +17,26 @@ Types of changes
 - Security in case of vulnerabilities.
 -->
 
+## [1.2.0] - 2022-04-05
+
+### Added
+
+- A new i686-linux system to the flake.
+- `apps.${system}.default` to the Flake
+  so that newer versions of Nix
+  understand this instead of `defaultApp.${system}`.
+
+### Fixed
+
+- A typo in the documentation where `aarch64-linux` appeared twice
+  and `aarch64-darwin` didn't.
+
+### Security
+
+- New CVEs were discovered in the third party dependencies of our website:
+  https://kamadorueda.github.io/alejandra/
+  and so we updated those front-end dependencies to their latest version.
+
 ## [1.1.0] - 2022-03-10
 
 ### Added
