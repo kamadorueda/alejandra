@@ -17,20 +17,20 @@ const AFTER_HELP: &str = indoc::indoc! {"
     "
 };
 
-/// The Uncompromising Nix Code Formatter
+/// The Uncompromising Nix Code Formatter.
 #[derive(Debug, Parser)]
 #[clap(version, after_help = AFTER_HELP, term_width = 80)]
 struct Args {
-    /// Files or directories, or none to format stdin
+    /// Files or directories, or a single "-" (or leave empty) to format stdin.
     #[clap(multiple_values = true)]
     include: Vec<String>,
 
-    /// Files or directories to exclude from formatting
+    /// Files or directories to exclude from formatting.
     #[clap(long, short, multiple_occurrences = true)]
     exclude: Vec<String>,
 
     /// Check if the input is already formatted and disable writing in-place
-    /// the modified content
+    /// the modified content.
     #[clap(long, short)]
     check: bool,
 
@@ -334,8 +334,11 @@ pub fn main() -> std::io::Result<()> {
         .build_global()
         .unwrap();
 
-    let formatted_paths = match &args.include[..] {
-        &[] => {
+    let include: Vec<&str> =
+        args.include.iter().map(String::as_str).collect::<Vec<&str>>();
+
+    let formatted_paths = match &include[..] {
+        &[] | &["-"] => {
             vec![crate::cli::stdin(args.quiet)]
         }
         include => {
