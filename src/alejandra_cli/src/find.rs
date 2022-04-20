@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-pub(crate) fn nix_files(include: &[String], exclude: &[String]) -> Vec<String> {
+pub(crate) fn nix_files(include: &[&str], exclude: &[String]) -> Vec<String> {
     let include: HashSet<_> =
         include.iter().flat_map(|s| nix_files_in_path(s)).collect();
     let exclude: HashSet<_> =
