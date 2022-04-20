@@ -10,7 +10,7 @@ pub(crate) fn parse(args: Vec<String>) -> clap::ArgMatches {
         .version(alejandra_engine::version::VERSION)
         .arg(
             clap::Arg::new("include")
-                .help("Files or directories, or none to format stdin.")
+                .help("Files or directories, or none (or '-') to format stdin.")
                 .multiple_values(true),
         )
         .arg(
@@ -390,11 +390,15 @@ pub fn main() -> std::io::Result<()> {
 
     let formatted_paths = match matches.values_of("include") {
         Some(include) => {
-            let include = include.collect();
+            let include : Vec<_> = include.collect();
             let exclude = match matches.values_of("exclude") {
                 Some(exclude) => exclude.collect(),
                 None => vec![],
             };
+
+            if include.len() == 1 && exclude.len() == 0 && include[0] == "-" {
+                vec![crate::cli::stdin(quiet)];
+            }
 
             let paths: Vec<String> = crate::find::nix_files(include, exclude);
 
