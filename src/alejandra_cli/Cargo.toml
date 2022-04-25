@@ -16,6 +16,7 @@ walkdir = { version = "*" }
 authors = ["Kevin Amado <kamadorueda@gmail.com>"]
 description = "The Uncompromising Nix Code Formatter"
 edition = "2021"
+license = "Unlicense"
 name = "alejandra_cli"
 repository = "https://github.com/kamadorueda/alejandra"
 version = "1.2.0"
