@@ -10,7 +10,7 @@ pub(crate) fn parse(args: Vec<String>) -> clap::ArgMatches {
         .version(alejandra_engine::version::VERSION)
         .arg(
             clap::Arg::new("include")
-                .help("Files or directories, or none (or '-') to format stdin.")
+                .help("Files or directories, or none (or a single '-') to format stdin.")
                 .multiple_values(true),
         )
         .arg(
