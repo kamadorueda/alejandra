@@ -1,0 +1,7 @@
+- id: alejandra
+  name: alejandra
+  description: Format Nix code with Alejandra.
+  entry: .pre-commit-entry.sh
+  language: script
+  files: \.nix$
+  minimum_pre_commit_version: 1.18.1
