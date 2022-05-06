@@ -92,10 +92,24 @@
 
 - ✔️ **Native**
 
-  We integrate with common code editors:
+  We integrate with common code editors and workflows:
 
   - [Alejandra extension for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=kamadorueda.alejandra)
-  - [Doom-emacs configuration](https://github.com/hlissner/doom-emacs): `(set-formatter! 'alejandra "alejandra --quiet" :modes '(nix-mode))`
+  - [Doom-emacs](https://github.com/hlissner/doom-emacs):
+
+    ```
+    (set-formatter! 'alejandra "alejandra --quiet" :modes '(nix-mode))
+    ```
+
+  - [Pre-commit](https://pre-commit.com/):
+
+    ```yaml
+    repos:
+      - repo: https://github.com/kamadorueda/alejandra
+        rev: dcaed43358af225dd2593b75537a01beb98563f0
+        hooks:
+          - id: alejandra
+    ```
 
 ## Getting started
 
