@@ -269,8 +269,7 @@ Thank you ❤️
 
 - [Kevin Amado](https://github.com/kamadorueda) ~
   [Email](mailto:kamadorueda@gmail.com),
-  [Patreon](https://www.patreon.com/kamadorueda),
-  @kamadorueda:[matrix.org](https://matrix.org/).
+  [Patreon](https://www.patreon.com/kamadorueda).
 - [Thomas Bereknyei](https://github.com/tomberek).
 - [Piegames](https://github.com/piegamesde).
 - [Joachim Ernst](https://github.com/0x4A6F).
@@ -282,6 +281,7 @@ Thank you ❤️
 - [Rehno Lindeque](https://github.com/rehno-lindeque).
 - [Jörg Thalheim](https://github.com/Mic92).
 - [Vincent Ambo](https://github.com/tazjin).
+- [Loïc Reynier](https://github.com/loicreynier).
 - [Mr Hedgehog](https://github.com/ModdedGamers).
 - [Tristan Maat](https://github.com/TLATER).
 - [Norbert Melzer](https://github.com/NobbZ).
