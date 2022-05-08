@@ -8,7 +8,12 @@ steps:
     command:
       - echo +++
       - nix build .#alejandra-binaries
-      - cachix push alejandra result
+      - nix-store
+        --query
+        --include-outputs $(nix-store --query --deriver result)
+        --requisites |
+        grep -v '\.drv$$' |
+        cachix push alejandra
       - cp -L result/* .
 
   - label: coverage
