@@ -275,6 +275,7 @@ Thank you ❤️
 - [Joachim Ernst](https://github.com/0x4A6F).
 - [David Arnold](https://github.com/blaggacao).
 - [David Hauer](https://github.com/DavHau).
+- [Ryan Mulligan](https://github.com/ryantm).
 - [Fabian Möller](https://github.com/B4dM4n).
 - [Rok Garbas](https://github.com/garbas).
 - [Yorick van Pelt](https://github.com/yorickvP).
