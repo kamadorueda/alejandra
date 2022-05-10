@@ -25,7 +25,7 @@ export const SideBySide = () => {
   const [loading, setLoading] = react.useState(true);
   const [before, setBefore] = react.useState("");
 
-  react.useEffect(async () => {
+  react.useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
 
     if (searchParams.has("path")) {
@@ -37,15 +37,19 @@ export const SideBySide = () => {
     }
   }, []);
 
-  react.useEffect(async () => {
-    await wasm.default();
-    setLoading(false);
+  react.useEffect(() => {
+    (async () => {
+      await wasm.default();
+      setLoading(false);
+    })();
   }, [wasm]);
 
-  react.useEffect(async () => {
+  react.useEffect(() => {
     if (path !== undefined) {
-      const content = await get(path);
-      setBefore(content);
+      (async () => {
+        const content = await get(path);
+        setBefore(content);
+      })();
     }
   }, [path]);
 
