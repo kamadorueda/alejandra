@@ -15,41 +15,7 @@
 
     nixpkgsForHost = host:
       import inputs.nixpkgs {
-        overlays = [
-          (self: super: {
-            alejandra = self.rustPlatform.buildRustPackage {
-              pname = "alejandra";
-              inherit version;
-              src = self.stdenv.mkDerivation {
-                name = "src";
-                builder = builtins.toFile "builder.sh" ''
-                  source $stdenv/setup
-
-                  mkdir $out
-                  cp -rT --no-preserve=mode,ownership $src $out/src/
-                  cp $cargoLock $out/Cargo.lock
-                  cp $cargoToml $out/Cargo.toml
-                '';
-                cargoLock = ./Cargo.lock;
-                cargoToml = ./Cargo.toml;
-                src = ./src;
-              };
-              cargoLock.lockFile = ./Cargo.lock;
-
-              passthru.tests = {
-                version = self.testVersion {package = super.alejandra;};
-              };
-
-              meta = {
-                description = "The Uncompromising Nix Code Formatter.";
-                homepage = "https://github.com/kamadorueda/alejandra";
-                license = self.lib.licenses.unlicense;
-                maintainers = [self.lib.maintainers.kamadorueda];
-                platforms = self.lib.systems.doubles.all;
-              };
-            };
-          })
-        ];
+        overlays = [overlay];
         system = host;
       };
 
@@ -58,6 +24,40 @@
     nixpkgs."i686-linux" = nixpkgsForHost "i686-linux";
     nixpkgs."x86_64-darwin" = nixpkgsForHost "x86_64-darwin";
     nixpkgs."x86_64-linux" = nixpkgsForHost "x86_64-linux";
+
+    overlay = final: prev: {
+      alejandra = final.rustPlatform.buildRustPackage {
+        pname = "alejandra";
+        inherit version;
+        src = final.stdenv.mkDerivation {
+          name = "src";
+          builder = builtins.toFile "builder.sh" ''
+            source $stdenv/setup
+
+            mkdir $out
+            cp -rT --no-preserve=mode,ownership $src $out/src/
+            cp $cargoLock $out/Cargo.lock
+            cp $cargoToml $out/Cargo.toml
+          '';
+          cargoLock = ./Cargo.lock;
+          cargoToml = ./Cargo.toml;
+          src = ./src;
+        };
+        cargoLock.lockFile = ./Cargo.lock;
+
+        passthru.tests = {
+          version = final.testVersion {package = prev.alejandra;};
+        };
+
+        meta = {
+          description = "The Uncompromising Nix Code Formatter.";
+          homepage = "https://github.com/kamadorueda/alejandra";
+          license = final.lib.licenses.unlicense;
+          maintainers = [final.lib.maintainers.kamadorueda];
+          platforms = final.lib.systems.doubles.all;
+        };
+      };
+    };
 
     buildBinariesForHost = host: pkgs: let
       binaries = builtins.listToAttrs (
@@ -114,6 +114,9 @@
           yarn2nix
         ];
       };
+
+    inherit overlay;
+    overlays.default = overlay;
 
     packages."aarch64-darwin" = with nixpkgs."aarch64-darwin";
       buildBinariesForHost "aarch64-darwin" [
