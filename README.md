@@ -108,7 +108,9 @@
       - repo: https://github.com/kamadorueda/alejandra
         rev: 1.3.0
         hooks:
-          - id: alejandra
+          # Choose one of the following:
+          - id: alejandra # Requires Nix to be previously installed in the system
+          - id: alejandra-system # Requires Alejandra to be previously installed in the system
     ```
 
 ## Getting started
