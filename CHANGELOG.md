@@ -17,6 +17,12 @@ Types of changes
 - Security in case of vulnerabilities.
 -->
 
+## [1.4.0] - 2022-05-19
+
+### Added
+
+- A pre-commit hook (requires Alejandra to be installed in the host).
+
 ## [1.3.0] - 2022-05-09
 
 ### Added
@@ -553,7 +559,8 @@ Types of changes
 
 ---
 
-[unreleased]: https://github.com/kamadorueda/alejandra/compare/1.3.0...HEAD
+[unreleased]: https://github.com/kamadorueda/alejandra/compare/1.4.0...HEAD
+[1.4.0]: https://github.com/kamadorueda/alejandra/compare/1.3.0...1.4.0
 [1.3.0]: https://github.com/kamadorueda/alejandra/compare/1.2.0...1.3.0
 [1.2.0]: https://github.com/kamadorueda/alejandra/compare/1.1.0...1.2.0
 [1.1.0]: https://github.com/kamadorueda/alejandra/compare/1.0.0...1.1.0
