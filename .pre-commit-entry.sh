@@ -20,7 +20,7 @@ echo INFO: building Alejandra
 nix-build \
   --attr ${system} \
   --out-link result-alejandra \
-  https://github.com/kamadorueda/alejandra/tarball/1.3.0
+  https://github.com/kamadorueda/alejandra/tarball/1.4.0
 
 echo INFO: running Alejandra:
 result-alejandra/bin/alejandra -- -q "${@}"
