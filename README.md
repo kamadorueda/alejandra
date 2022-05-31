@@ -112,6 +112,16 @@
           - id: alejandra # Requires Nix to be previously installed in the system
           - id: alejandra-system # Requires Alejandra to be previously installed in the system
     ```
+    
+  - [pre-commit-hooks.nix](https://github.com/cachix/pre-commit-hooks.nix)
+  
+    ```nix
+    pre-commit-check = pre-commit-hooks.lib.${system}.run {
+      hooks = {
+        alejandra.enable = true;
+      };
+    };
+    ```
 
 ## Getting started
 
