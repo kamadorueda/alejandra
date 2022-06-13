@@ -95,33 +95,9 @@
   We integrate with common code editors and workflows:
 
   - [Alejandra extension for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=kamadorueda.alejandra)
-  - [Doom-emacs](https://github.com/hlissner/doom-emacs):
-
-    ```
-    (set-formatter! 'alejandra "alejandra --quiet" :modes '(nix-mode))
-    ```
-
-  - [Pre-commit](https://pre-commit.com/):
-
-    ```yaml
-    repos:
-      - repo: https://github.com/kamadorueda/alejandra
-        rev: 1.4.0
-        hooks:
-          # Choose one of the following:
-          - id: alejandra # Requires Nix to be previously installed in the system
-          - id: alejandra-system # Requires Alejandra to be previously installed in the system
-    ```
-    
-  - [pre-commit-hooks.nix](https://github.com/cachix/pre-commit-hooks.nix)
-  
-    ```nix
-    pre-commit-check = pre-commit-hooks.lib.${system}.run {
-      hooks = {
-        alejandra.enable = true;
-      };
-    };
-    ```
+  - [Doom-emacs](./integrations/doom-emacs/README.md)
+  - [Pre-commit](./integrations/pre-commit/README.md)
+  - [pre-commit-hooks.nix](./integrations/pre-commit-hooks-nix/README.md)
 
 ## Getting started
 
