@@ -17,6 +17,21 @@ Types of changes
 - Security in case of vulnerabilities.
 -->
 
+<!--
+Before releasing update dependencies with:
+
+/
+  cargo update
+  nix flake update
+/front/
+  cargo update
+  nix flake update
+  yarn upgrade
+/integrations/vscode/
+  yarn upgrade
+  yarn2nix > yarn.lock.nix
+-->
+
 ## [1.4.0] - 2022-05-19
 
 ### Added
