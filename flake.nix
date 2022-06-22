@@ -11,7 +11,7 @@
   outputs = inputs: let
     commit = inputs.self.shortRev or "dirty";
     date = inputs.self.lastModifiedDate or inputs.self.lastModified or "19700101";
-    version = "1.4.0+${builtins.substring 0 8 date}.${commit}";
+    version = "1.5.0+${builtins.substring 0 8 date}.${commit}";
 
     nixpkgsForHost = host:
       import inputs.nixpkgs {

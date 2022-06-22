@@ -110,11 +110,11 @@ Please visit:
 
 You can download a binary for your platform:
 
-- [aarch64-unknown-linux-musl](https://github.com/kamadorueda/alejandra/releases/download/1.4.0/alejandra-aarch64-unknown-linux-musl)
-- [armv6l-unknown-linux-musleabihf](https://github.com/kamadorueda/alejandra/releases/download/1.4.0/alejandra-armv6l-unknown-linux-musleabihf)
-- [armv7l-unknown-linux-musleabihf](https://github.com/kamadorueda/alejandra/releases/download/1.4.0/alejandra-armv7l-unknown-linux-musleabihf)
-- [i686-unknown-linux-musl](https://github.com/kamadorueda/alejandra/releases/download/1.4.0/alejandra-i686-unknown-linux-musl)
-- [x86_64-unknown-linux-musl](https://github.com/kamadorueda/alejandra/releases/download/1.4.0/alejandra-x86_64-unknown-linux-musl)
+- [aarch64-unknown-linux-musl](https://github.com/kamadorueda/alejandra/releases/download/1.5.0/alejandra-aarch64-unknown-linux-musl)
+- [armv6l-unknown-linux-musleabihf](https://github.com/kamadorueda/alejandra/releases/download/1.5.0/alejandra-armv6l-unknown-linux-musleabihf)
+- [armv7l-unknown-linux-musleabihf](https://github.com/kamadorueda/alejandra/releases/download/1.5.0/alejandra-armv7l-unknown-linux-musleabihf)
+- [i686-unknown-linux-musl](https://github.com/kamadorueda/alejandra/releases/download/1.5.0/alejandra-i686-unknown-linux-musl)
+- [x86_64-unknown-linux-musl](https://github.com/kamadorueda/alejandra/releases/download/1.5.0/alejandra-x86_64-unknown-linux-musl)
 
 Make it executable (`$ chmod +x`)
 and run Alejandra with:
@@ -138,7 +138,7 @@ Please visit: [search.nixos.org/packages?query=alejandra](https://search.nixos.o
 - Nix with [Flakes](https://nixos.wiki/wiki/Flakes):
 
   ```bash
-  $ nix profile install github:kamadorueda/alejandra/1.4.0
+  $ nix profile install github:kamadorueda/alejandra/1.5.0
   ```
 
 - Nix stable:
@@ -146,11 +146,11 @@ Please visit: [search.nixos.org/packages?query=alejandra](https://search.nixos.o
   Pick one depending on your platform:
 
   ```bash
-  $ nix-env -ivA aarch64-darwin -f https://github.com/kamadorueda/alejandra/tarball/1.4.0
-  $ nix-env -ivA aarch64-linux -f https://github.com/kamadorueda/alejandra/tarball/1.4.0
-  $ nix-env -ivA i686-linux -f https://github.com/kamadorueda/alejandra/tarball/1.4.0
-  $ nix-env -ivA x86_64-darwin -f https://github.com/kamadorueda/alejandra/tarball/1.4.0
-  $ nix-env -ivA x86_64-linux -f https://github.com/kamadorueda/alejandra/tarball/1.4.0
+  $ nix-env -ivA aarch64-darwin -f https://github.com/kamadorueda/alejandra/tarball/1.5.0
+  $ nix-env -ivA aarch64-linux -f https://github.com/kamadorueda/alejandra/tarball/1.5.0
+  $ nix-env -ivA i686-linux -f https://github.com/kamadorueda/alejandra/tarball/1.5.0
+  $ nix-env -ivA x86_64-darwin -f https://github.com/kamadorueda/alejandra/tarball/1.5.0
+  $ nix-env -ivA x86_64-linux -f https://github.com/kamadorueda/alejandra/tarball/1.5.0
   ```
 
 Then run Alejandra with:
@@ -168,7 +168,7 @@ $ alejandra --help
     inputs = {
       nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
-      alejandra.url = "github:kamadorueda/alejandra/1.4.0";
+      alejandra.url = "github:kamadorueda/alejandra/1.5.0";
       alejandra.inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -198,7 +198,7 @@ $ alejandra --help
   let
     alejandra =
       (import (builtins.fetchTarball {
-        url = "https://github.com/kamadorueda/alejandra/tarball/1.4.0";
+        url = "https://github.com/kamadorueda/alejandra/tarball/1.5.0";
         sha256 = "0000000000000000000000000000000000000000000000000000";
       }))
       # Pick one from: aarch64-darwin, aarch64-linux, i686-linux, x86_64-darwin, x86_64-linux
@@ -310,17 +310,17 @@ Thank you ❤️
     1.  Checkout [Nixpkgs](https://github.com/nixos/nixpkgs) and run:
 
         ```bash
-        $ nix-env -qaP --json --drv-path > before
+        $ nix-env -qaf . --drv-path --xml > before
         ```
 
     1.  Now format with Alejandra and run:
 
         ```bash
-        $ nix-env -qaP --json --drv-path > after
+        $ nix-env -qaf . --drv-path --xml > after
         ```
 
-    As of 2022-02-21,
-    there are 46 differences in a set of 36314 derivations
+    As of 2022-06-22,
+    there are 41 differences in a set of 38109 derivations
     because of things like this:
 
     ```
@@ -331,6 +331,8 @@ Thank you ❤️
     you get a semantical difference.
 
     This is something that should be solved on Nixpkgs
-    and not a bug in Alejandra. For example:
+    and not a bug in Alejandra.
+    For example:
 
+    - https://github.com/NixOS/nixpkgs/pull/178378
     - https://github.com/NixOS/nixpkgs/pull/157760
