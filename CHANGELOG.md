@@ -20,17 +20,26 @@ Types of changes
 <!--
 Before releasing update dependencies with:
 
-/
+pushd .
   cargo update
   nix flake update
-/front/
+popd
+pushd front/
   cargo update
   nix flake update
   yarn upgrade
-/integrations/vscode/
+popd
+pushd integrations/vscode/
   yarn upgrade
   yarn2nix > yarn.lock.nix
+popd
 -->
+
+## [1.5.0] - 2022-06-22
+
+### Changed
+
+- Updated dependencies to its latest version.
 
 ## [1.4.0] - 2022-05-19
 
@@ -574,7 +583,8 @@ Before releasing update dependencies with:
 
 ---
 
-[unreleased]: https://github.com/kamadorueda/alejandra/compare/1.4.0...HEAD
+[unreleased]: https://github.com/kamadorueda/alejandra/compare/1.5.0...HEAD
+[1.5.0]: https://github.com/kamadorueda/alejandra/compare/1.4.0...1.5.0
 [1.4.0]: https://github.com/kamadorueda/alejandra/compare/1.3.0...1.4.0
 [1.3.0]: https://github.com/kamadorueda/alejandra/compare/1.2.0...1.3.0
 [1.2.0]: https://github.com/kamadorueda/alejandra/compare/1.1.0...1.2.0
