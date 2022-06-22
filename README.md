@@ -94,8 +94,9 @@
 
   We integrate with common code editors and workflows:
 
-  - [Alejandra extension for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=kamadorueda.alejandra)
-  - [Doom-emacs](./integrations/doom-emacs/README.md)
+  - [Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=kamadorueda.alejandra)
+  - [Neovim](./integrations/neovim/README.md)
+  - [Doom-Emacs](./integrations/doom-emacs/README.md)
   - [Pre-commit](./integrations/pre-commit/README.md)
   - [pre-commit-hooks.nix](./integrations/pre-commit-hooks-nix/README.md)
 
@@ -219,6 +220,8 @@ $ alejandra --help
 
 ## Cool libraries
 
+- [NixEL](https://github.com/kamadorueda/nixel)
+- [Santiago](https://github.com/kamadorueda/santiago)
 - [rnix-parser](https://github.com/nix-community/rnix-parser)
 
 ## Alternatives
