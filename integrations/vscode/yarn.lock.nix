@@ -802,11 +802,11 @@
       };
     }
     {
-      name = "vsce___vsce_2.9.1.tgz";
+      name = "vsce___vsce_2.9.2.tgz";
       path = fetchurl {
-        name = "vsce___vsce_2.9.1.tgz";
-        url  = "https://registry.yarnpkg.com/vsce/-/vsce-2.9.1.tgz";
-        sha512 = "l/X4hkoYgOoZhRYQpJXqexBJU2z4mzNywx+artzWnOV3v45YMM6IoDDtIcB9SWluobem476KmMPLkCdAdnvoOg==";
+        name = "vsce___vsce_2.9.2.tgz";
+        url  = "https://registry.yarnpkg.com/vsce/-/vsce-2.9.2.tgz";
+        sha512 = "xyLqL4U82BilUX1t6Ym2opQEa2tLGWYjbgB7+ETeNVXlIJz5sWBJjQJSYJVFOKJSpiOtQclolu88cj7oY6vvPQ==";
       };
     }
     {
