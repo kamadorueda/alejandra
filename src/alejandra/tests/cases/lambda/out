@@ -1,71 +1,25 @@
 [
-  (a: b:
-    /*
-    c
-    */
-      d)
-  ({}: b:
-    /*
-    c
-    */
-      d)
-  (a: {}:
-    /*
-    c
-    */
-      d)
-  (a: d)
-  (a:
-    /*
-    c
-    */
-      d)
-  (a
-    /*
-    b
-    */
-    :
-      d)
-  (a
-    /*
-    b
-    */
-    :
-    /*
-    c
-    */
-      d)
+  (CST::FunctionSimple)
+  (CST::FunctionDestructured)
+  (CST::FunctionSimple)
+  (CST::FunctionSimple)
+  (CST::FunctionSimple)
+  (CST::FunctionSimple)
+  (CST::FunctionSimple)
   (
-    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    CST::FunctionSimple
   )
   (
-    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    CST::FunctionSimple
   )
-  ({
-    pkgs ? import ./.. {},
-    locationsXml,
-  }:
-    null)
-  (a: b: c: {}: a: b: c:
-    a)
+  (CST::FunctionDestructured)
+  (CST::FunctionSimple)
 
-  ({pkgs, ...}: {
-    # Stuff
-  })
+  (CST::FunctionDestructured)
 
-  ({pkgs, ...}: let
-  in
-    pkgs)
+  (CST::FunctionDestructured)
 
-  (a: {b, ...}: c: {
-    # Stuff
-  })
+  (CST::FunctionSimple)
 
-  (a: {
-    b,
-    c,
-    ...
-  }: d: {
-    # Stuff
-  })
+  (CST::FunctionSimple)
 ]

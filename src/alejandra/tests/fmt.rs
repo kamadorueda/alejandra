@@ -13,9 +13,10 @@ fn cases() {
     for case in cases {
         let path_in = format!("tests/cases/{}/in", case);
         let path_out = format!("tests/cases/{}/out", case);
+        dbg!(&path_in);
         let content_in = std::fs::read_to_string(path_in.clone()).unwrap();
         let content_got =
-            alejandra::format::in_memory(path_in, content_in.clone()).1;
+            alejandra::format::in_memory(content_in.clone()).1;
 
         if should_update {
             std::fs::File::create(&path_out)

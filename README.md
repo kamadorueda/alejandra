@@ -265,6 +265,7 @@ Thank you ❤️
 - [Rok Garbas](https://github.com/garbas).
 - [Yorick van Pelt](https://github.com/yorickvP).
 - [Rehno Lindeque](https://github.com/rehno-lindeque).
+- [Ryan Mulligan](https://github.com/ryantm).
 - [Jörg Thalheim](https://github.com/Mic92).
 - [Vincent Ambo](https://github.com/tazjin).
 - [Jamie Quigley](https://github.com/Sciencentistguy).

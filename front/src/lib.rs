@@ -12,6 +12,6 @@ pub fn main() -> Result<(), JsValue> {
 }
 
 #[wasm_bindgen]
-pub fn format(before: String, path: String) -> String {
-    alejandra::format::in_memory(path, before).1
+pub fn format(before: String) -> String {
+    alejandra::format::in_memory(before).1
 }

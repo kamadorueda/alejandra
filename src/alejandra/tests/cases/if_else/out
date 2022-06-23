@@ -1,286 +1,29 @@
 [
   (
-    if true
-    then {
-      version = "1.2.3";
-    }
-    else {
-      version = "3.2.1";
-    }
+    CST::IfThenElse
   )
   (
-    if true
-    then ''
-      some text
-    ''
-    else ''
-      other text
-    ''
+    CST::IfThenElse
   )
   (
-    if ./a
-    then b
-    else c
+    CST::IfThenElse
   )
   (
-    if
-      /**/
-      a
-    /**/
-    then
-      /**/
-      b
-    /**/
-    else
-      /**/
-      c
+    CST::IfThenElse
   )
   (
-    if # test
-      a # test
-    then # test
-      b # test
-    else # test
-      c
+    CST::IfThenElse
   )
   (
-    if # test
-      /**/
-      a # test
-    /**/
-    then # test
-      b # test
-    /**/
-    else # test
-      /**/
-      c
+    CST::IfThenElse
   )
   (
-    if
-      if a
-      then b
-      else c
-    then b
-    else if a
-    then b
-    else if a
-    then b
-    else c
+    CST::IfThenElse
   )
   (
-    if
-      if a
-      then b
-      else c
-    then b
-    else if a
-    then b
-    else
-      /*
-      x
-      */
-      if a
-      then b
-      else c
+    CST::IfThenElse
   )
   (
-    if
-      (
-        if
-          (
-            if
-              (
-                if a
-                then b
-                else c
-              )
-            then
-              (
-                if a
-                then b
-                else c
-              )
-            else
-              (
-                if a
-                then b
-                else c
-              )
-          )
-        then
-          (
-            if
-              (
-                if a
-                then b
-                else c
-              )
-            then
-              (
-                if a
-                then b
-                else c
-              )
-            else
-              (
-                if a
-                then b
-                else c
-              )
-          )
-        else
-          (
-            if
-              (
-                if a
-                then b
-                else c
-              )
-            then
-              (
-                if a
-                then b
-                else c
-              )
-            else
-              (
-                if a
-                then b
-                else c
-              )
-          )
-      )
-    then
-      (
-        if
-          (
-            if
-              (
-                if a
-                then b
-                else c
-              )
-            then
-              (
-                if a
-                then b
-                else c
-              )
-            else
-              (
-                if a
-                then b
-                else c
-              )
-          )
-        then
-          (
-            if
-              (
-                if a
-                then b
-                else c
-              )
-            then
-              (
-                if a
-                then b
-                else c
-              )
-            else
-              (
-                if a
-                then b
-                else c
-              )
-          )
-        else
-          (
-            if
-              (
-                if a
-                then b
-                else c
-              )
-            then
-              (
-                if a
-                then b
-                else c
-              )
-            else
-              (
-                if a
-                then b
-                else c
-              )
-          )
-      )
-    else
-      (
-        if
-          (
-            if
-              (
-                if a
-                then b
-                else c
-              )
-            then
-              (
-                if a
-                then b
-                else c
-              )
-            else
-              (
-                if a
-                then b
-                else c
-              )
-          )
-        then
-          (
-            if
-              (
-                if a
-                then b
-                else c
-              )
-            then
-              (
-                if a
-                then b
-                else c
-              )
-            else
-              (
-                if a
-                then b
-                else c
-              )
-          )
-        else
-          (
-            if
-              (
-                if a
-                then b
-                else c
-              )
-            then
-              (
-                if a
-                then b
-                else c
-              )
-            else
-              (
-                if a
-                then b
-                else c
-              )
-          )
-      )
+    CST::IfThenElse
   )
 ]

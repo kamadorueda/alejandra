@@ -1,6 +1,5 @@
-[dependencies]
-rnix = "0"
-rowan = "0.12.6" # follows rnix
+[dependencies.nixel]
+path = "/data/nixel"
 
 [target.aarch64-unknown-linux-musl.dependencies.mimalloc]
 default-features = false

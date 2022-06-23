@@ -2,7 +2,7 @@ use clap::Parser;
 
 #[derive(Clone)]
 pub(crate) struct FormattedPath {
-    pub path:   String,
+    pub path: String,
     pub status: alejandra::format::Status,
 }
 
@@ -56,8 +56,7 @@ pub(crate) fn stdin(quiet: bool) -> FormattedPath {
 
     std::io::stdin().read_to_string(&mut before).unwrap();
 
-    let (status, data) =
-        alejandra::format::in_memory(path.clone(), before.clone());
+    let (status, data) = alejandra::format::in_memory(before.clone());
 
     print!("{}", data);
 
@@ -180,25 +179,25 @@ pub(crate) fn tui(
                                 } else {
                                     paths_unchanged += 1;
                                 }
-                            }
+                            },
                             alejandra::format::Status::Error(_) => {
                                 paths_with_errors += 1;
-                            }
+                            },
                         };
 
                         formatted_paths.push_back(formatted_path);
-                    }
+                    },
                     Event::FormattingFinished => {
                         finished = true;
-                    }
+                    },
                     Event::Input(key) => {
                         if let termion::event::Key::Ctrl('c') = key {
                             return Err(std::io::ErrorKind::Interrupted.into());
                         }
-                    }
+                    },
                     Event::Tick => {
                         break;
-                    }
+                    },
                 }
             }
         }
@@ -293,14 +292,14 @@ pub(crate) fn tui(
                                         tui::style::Style::default()
                                             .fg(tui::style::Color::Green),
                                     )
-                                }
+                                },
                                 alejandra::format::Status::Error(_) => {
                                     tui::text::Span::styled(
                                         "ERROR ",
                                         tui::style::Style::default()
                                             .fg(tui::style::Color::Red),
                                     )
-                                }
+                                },
                             },
                             tui::text::Span::raw(formatted_path.path.clone()),
                         ])
@@ -340,7 +339,7 @@ pub fn main() -> std::io::Result<()> {
     let formatted_paths = match &include[..] {
         &[] | &["-"] => {
             vec![crate::cli::stdin(args.quiet)]
-        }
+        },
         include => {
             let paths = crate::find::nix_files(include, &args.exclude);
 
@@ -353,7 +352,7 @@ pub fn main() -> std::io::Result<()> {
             } else {
                 crate::cli::simple(paths, in_place, args.quiet)
             }
-        }
+        },
     };
 
     let errors = formatted_paths
@@ -382,9 +381,11 @@ pub fn main() -> std::io::Result<()> {
 
     let changed = formatted_paths
         .iter()
-        .filter(|formatted_path| match formatted_path.status {
-            alejandra::format::Status::Changed(changed) => changed,
-            _ => false,
+        .filter(|formatted_path| {
+            match formatted_path.status {
+                alejandra::format::Status::Changed(changed) => changed,
+                _ => false,
+            }
         })
         .count();
 
