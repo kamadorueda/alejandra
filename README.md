@@ -136,22 +136,16 @@ Please visit: [search.nixos.org/packages?query=alejandra](https://search.nixos.o
 
 ### Nix installation
 
+- Nix stable:
+
+  ```bash
+  $ nix-env -ivf https://github.com/kamadorueda/alejandra/tarball/1.5.0
+  ```
+
 - Nix with [Flakes](https://nixos.wiki/wiki/Flakes):
 
   ```bash
   $ nix profile install github:kamadorueda/alejandra/1.5.0
-  ```
-
-- Nix stable:
-
-  Pick one depending on your platform:
-
-  ```bash
-  $ nix-env -ivA aarch64-darwin -f https://github.com/kamadorueda/alejandra/tarball/1.5.0
-  $ nix-env -ivA aarch64-linux -f https://github.com/kamadorueda/alejandra/tarball/1.5.0
-  $ nix-env -ivA i686-linux -f https://github.com/kamadorueda/alejandra/tarball/1.5.0
-  $ nix-env -ivA x86_64-darwin -f https://github.com/kamadorueda/alejandra/tarball/1.5.0
-  $ nix-env -ivA x86_64-linux -f https://github.com/kamadorueda/alejandra/tarball/1.5.0
   ```
 
 Then run Alejandra with:
@@ -161,6 +155,21 @@ $ alejandra --help
 ```
 
 ### NixOS installation
+
+- Nix stable:
+
+  ```nix
+  let
+    alejandra =
+      (import (builtins.fetchTarball {
+        url = "https://github.com/kamadorueda/alejandra/tarball/1.5.0";
+        sha256 = "0000000000000000000000000000000000000000000000000000";
+      }) {})
+      .outPath;
+  in {
+    environment.systemPackages = [alejandra];
+  }
+  ```
 
 - Nix with [Flakes](https://nixos.wiki/wiki/Flakes):
 
@@ -190,23 +199,6 @@ $ alejandra --help
         };
       };
     };
-  }
-  ```
-
-- Nix stable:
-
-  ```nix
-  let
-    alejandra =
-      (import (builtins.fetchTarball {
-        url = "https://github.com/kamadorueda/alejandra/tarball/1.5.0";
-        sha256 = "0000000000000000000000000000000000000000000000000000";
-      }))
-      # Pick one from: aarch64-darwin, aarch64-linux, i686-linux, x86_64-darwin, x86_64-linux
-      .x86_64-linux
-      .outPath;
-  in {
-    environment.systemPackages = [alejandra];
   }
   ```
 

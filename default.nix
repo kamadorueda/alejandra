@@ -8,4 +8,18 @@ let
   };
   flake = import flakeCompatSrc {src = ./.;};
 in
-  flake.defaultNix.defaultPackage
+  {system ? builtins.currentSystem, ...}:
+    if builtins.hasAttr system flake.defaultNix.defaultPackage
+    then flake.defaultNix.defaultPackage.${system}
+    else
+      builtins.throw ''
+
+        Alejandra does not support the system: ${system}
+
+        Please consider creating an issue requesting
+        support for such system:
+        https://github.com/kamadorueda/alejandra
+
+        Thank you!
+
+      ''
