@@ -1,13 +1,13 @@
 #[derive(Clone)]
 pub(crate) struct FormattedPath {
     pub path:   String,
-    pub status: alejandra_engine::format::Status,
+    pub status: alejandra::format::Status,
 }
 
 pub(crate) fn parse(args: Vec<String>) -> clap::ArgMatches {
     clap::Command::new("Alejandra")
         .about("The Uncompromising Nix Code Formatter.")
-        .version(alejandra_engine::version::VERSION)
+        .version(alejandra::version::VERSION)
         .arg(
             clap::Arg::new("include")
                 .help("Files or directories, or none to format stdin.")
@@ -78,7 +78,7 @@ pub(crate) fn stdin(quiet: bool) -> FormattedPath {
     std::io::stdin().read_to_string(&mut before).unwrap();
 
     let (status, data) =
-        alejandra_engine::format::in_memory(path.clone(), before.clone());
+        alejandra::format::in_memory(path.clone(), before.clone());
 
     print!("{}", data);
 
@@ -100,9 +100,9 @@ pub(crate) fn simple(
         .par_iter()
         .map(|path| {
             let status =
-                alejandra_engine::format::in_fs(path.clone(), in_place);
+                alejandra::format::in_fs(path.clone(), in_place);
 
-            if let alejandra_engine::format::Status::Changed(changed) = status {
+            if let alejandra::format::Status::Changed(changed) = status {
                 if changed && !quiet {
                     if in_place {
                         eprintln!("Changed: {}", &path);
@@ -172,7 +172,7 @@ pub(crate) fn tui(
     std::thread::spawn(move || {
         paths.into_par_iter().for_each_with(sender_paths, |sender, path| {
             let status =
-                alejandra_engine::format::in_fs(path.clone(), in_place);
+                alejandra::format::in_fs(path.clone(), in_place);
 
             if let Err(error) = sender
                 .send(Event::FormattedPath(FormattedPath { path, status }))
@@ -197,7 +197,7 @@ pub(crate) fn tui(
                 match event {
                     Event::FormattedPath(formatted_path) => {
                         match &formatted_path.status {
-                            alejandra_engine::format::Status::Changed(
+                            alejandra::format::Status::Changed(
                                 changed,
                             ) => {
                                 if *changed {
@@ -206,7 +206,7 @@ pub(crate) fn tui(
                                     paths_unchanged += 1;
                                 }
                             }
-                            alejandra_engine::format::Status::Error(_) => {
+                            alejandra::format::Status::Error(_) => {
                                 paths_with_errors += 1;
                             }
                         };
@@ -250,7 +250,7 @@ pub(crate) fn tui(
                             .fg(tui::style::Color::Green),
                     ),
                     tui::text::Span::raw(" "),
-                    tui::text::Span::raw(alejandra_engine::version::VERSION),
+                    tui::text::Span::raw(alejandra::version::VERSION),
                 ]),
                 tui::text::Spans::from(vec![tui::text::Span::raw(
                     "The Uncompromising Nix Code Formatter",
@@ -304,7 +304,7 @@ pub(crate) fn tui(
                     .map(|formatted_path| {
                         tui::text::Spans::from(vec![
                             match formatted_path.status {
-                                alejandra_engine::format::Status::Changed(
+                                alejandra::format::Status::Changed(
                                     changed,
                                 ) => tui::text::Span::styled(
                                     if changed {
@@ -319,7 +319,7 @@ pub(crate) fn tui(
                                     tui::style::Style::default()
                                         .fg(tui::style::Color::Green),
                                 ),
-                                alejandra_engine::format::Status::Error(_) => {
+                                alejandra::format::Status::Error(_) => {
                                     tui::text::Span::styled(
                                         "ERROR ",
                                         tui::style::Style::default()
@@ -389,7 +389,7 @@ pub fn main() -> std::io::Result<()> {
         .filter(|formatted_path| {
             matches!(
                 formatted_path.status,
-                alejandra_engine::format::Status::Error(_)
+                alejandra::format::Status::Error(_)
             )
         })
         .count();
@@ -402,7 +402,7 @@ pub fn main() -> std::io::Result<()> {
             if errors >= 2 { "s" } else { "" }
         );
         for formatted_path in formatted_paths {
-            if let alejandra_engine::format::Status::Error(error) =
+            if let alejandra::format::Status::Error(error) =
                 formatted_path.status
             {
                 eprintln!("  {}: {}", formatted_path.path, &error);
@@ -414,7 +414,7 @@ pub fn main() -> std::io::Result<()> {
     let changed = formatted_paths
         .iter()
         .filter(|formatted_path| match formatted_path.status {
-            alejandra_engine::format::Status::Changed(changed) => changed,
+            alejandra::format::Status::Changed(changed) => changed,
             _ => false,
         })
         .count();

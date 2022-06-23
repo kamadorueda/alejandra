@@ -1,36 +1,36 @@
 [dependencies]
-rnix = "*"
+rnix = "0"
 rowan = "0.12.6" # follows rnix
 
 [target.aarch64-unknown-linux-musl.dependencies.mimalloc]
 default-features = false
-version = "*"
+version = "0"
 
 [target.armv6l-unknown-linux-musleabihf.dependencies.mimalloc]
 default-features = false
-version = "*"
+version = "0"
 
 [target.armv7l-unknown-linux-musleabihf.dependencies.mimalloc]
 default-features = false
-version = "*"
+version = "0"
 
 [target.i686-unknown-linux-musl.dependencies.mimalloc]
 default-features = false
-version = "*"
+version = "0"
 
 [target.x86_64-unknown-linux-gnu.dependencies.mimalloc]
 default-features = false
-version = "*"
+version = "0"
 
 [target.x86_64-unknown-linux-musl.dependencies.mimalloc]
 default-features = false
-version = "*"
+version = "0"
 
 [package]
 authors = ["Kevin Amado <kamadorueda@gmail.com>"]
 description = "The Uncompromising Nix Code Formatter"
 edition = "2021"
 license = "Unlicense"
-name = "alejandra_engine"
+name = "alejandra"
 repository = "https://github.com/kamadorueda/alejandra"
 version = "1.5.0"

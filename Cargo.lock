@@ -3,10 +3,19 @@
 version = 3
 
 [[package]]
+name = "alejandra"
+version = "1.5.0"
+dependencies = [
+ "mimalloc",
+ "rnix",
+ "rowan",
+]
+
+[[package]]
 name = "alejandra_cli"
 version = "1.5.0"
 dependencies = [
- "alejandra_engine",
+ "alejandra",
  "atty",
  "clap",
  "indoc",
@@ -14,15 +23,6 @@ dependencies = [
  "termion",
  "tui",
  "walkdir",
-]
-
-[[package]]
-name = "alejandra_engine"
-version = "1.5.0"
-dependencies = [
- "mimalloc",
- "rnix",
- "rowan",
 ]
 
 [[package]]
@@ -142,9 +142,9 @@ dependencies = [
 
 [[package]]
 name = "crossbeam-utils"
-version = "0.8.9"
+version = "0.8.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8ff1f980957787286a554052d03c7aee98d99cc32e09f6d45f0a814133c87978"
+checksum = "7d82ee10ce34d7bc12c2122495e7593a9c41347ecdd64185af4ecf72cb1a7f83"
 dependencies = [
  "cfg-if",
  "once_cell",

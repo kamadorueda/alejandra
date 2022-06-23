@@ -3,7 +3,7 @@ name = "alejandra"
 path = "src/main.rs"
 
 [dependencies]
-alejandra_engine = { path = "../alejandra_engine" }
+alejandra = { path = "../alejandra" }
 atty = "*"
 clap = "*"
 indoc = "*"
