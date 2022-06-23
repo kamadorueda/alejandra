@@ -1,5 +1,5 @@
 [dependencies]
-alejandra_engine = { "path" = "../src/alejandra_engine" }
+alejandra = { "path" = "../src/alejandra" }
 console_error_panic_hook = "*"
 wasm-bindgen = "*"
 wee_alloc = "*"
