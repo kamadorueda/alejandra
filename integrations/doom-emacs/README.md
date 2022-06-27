@@ -1,4 +1,4 @@
-# Doom-Emacs integration
+# Doom Emacs integration
 
 In order to configure Alejandra in
 [Doom Emacs](https://github.com/hlissner/doom-emacs)
