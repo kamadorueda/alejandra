@@ -1,68 +1,45 @@
+use clap::Parser;
+
 #[derive(Clone)]
 pub(crate) struct FormattedPath {
     pub path:   String,
     pub status: alejandra::format::Status,
 }
 
-pub(crate) fn parse(args: Vec<String>) -> clap::ArgMatches {
-    clap::Command::new("Alejandra")
-        .about("The Uncompromising Nix Code Formatter.")
-        .version(alejandra::version::VERSION)
-        .arg(
-            clap::Arg::new("include")
-                .help("Files or directories, or none to format stdin.")
-                .multiple_values(true),
-        )
-        .arg(
-            clap::Arg::new("exclude")
-                .short('e')
-                .help("Files or directories to exclude from formatting.")
-                .long("exclude")
-                .multiple_occurrences(true)
-                .takes_value(true),
-        )
-        .arg(
-            clap::Arg::new("check")
-                .help(
-                    "Check if the input is already formatted and disable \
-                     writing in-place the modified content.",
-                )
-                .long("--check")
-                .short('c'),
-        )
-        .arg(
-            clap::Arg::new("threads")
-                .default_value("0")
-                .help(
-                    "Number of formatting threads to spawn. Defaults to the \
-                     number of logical CPUs.",
-                )
-                .long("--threads")
-                .short('t')
-                .takes_value(true),
-        )
-        .arg(
-            clap::Arg::new("quiet")
-                .help("Hide the details, only show error messages.")
-                .long("--quiet")
-                .short('q'),
-        )
-        .term_width(80)
-        .after_help(
-            #[cfg_attr(rustfmt, rustfmt_skip)]
-            indoc::indoc!(
-                "
-                The program will exit with status code:
-                  1, if any error occurs.
-                  2, if --check was used and any file was changed.
-                  0, otherwise.
+const AFTER_HELP: &str = indoc::indoc! {"
+    The program will exit with status code:
+      1, if any error occurs.
+      2, if --check was used and any file was changed.
+      0, otherwise.
 
-                Your star and feedback is very much appreciated!
-                  https://github.com/kamadorueda/alejandra
-                "
-            ),
-        )
-        .get_matches_from(args)
+    Your star and feedback is very much appreciated!
+      https://github.com/kamadorueda/alejandra
+    "
+};
+
+/// The Uncompromising Nix Code Formatter
+#[derive(Debug, Parser)]
+#[clap(version, after_help = AFTER_HELP, term_width = 80)]
+struct Args {
+    /// Files or directories, or none to format stdin
+    #[clap(multiple_values = true)]
+    include: Vec<String>,
+
+    /// Files or directories to exclude from formatting
+    #[clap(long, short, multiple_occurrences = true)]
+    exclude: Vec<String>,
+
+    /// Check if the input is already formatted and disable writing in-place the modified content
+    #[clap(long, short)]
+    check: bool,
+
+    /// Number of formatting threads to spawn. Defaults to the number of logical CPUs.
+    #[clap(long, short)]
+    threads: Option<usize>,
+
+    /// Hide the details, only show error messages.
+    #[clap(long, short)]
+    quiet: bool,
 }
 
 pub(crate) fn stdin(quiet: bool) -> FormattedPath {
@@ -99,8 +76,7 @@ pub(crate) fn simple(
     paths
         .par_iter()
         .map(|path| {
-            let status =
-                alejandra::format::in_fs(path.clone(), in_place);
+            let status = alejandra::format::in_fs(path.clone(), in_place);
 
             if let alejandra::format::Status::Changed(changed) = status {
                 if changed && !quiet {
@@ -171,8 +147,7 @@ pub(crate) fn tui(
     let sender_finished = sender;
     std::thread::spawn(move || {
         paths.into_par_iter().for_each_with(sender_paths, |sender, path| {
-            let status =
-                alejandra::format::in_fs(path.clone(), in_place);
+            let status = alejandra::format::in_fs(path.clone(), in_place);
 
             if let Err(error) = sender
                 .send(Event::FormattedPath(FormattedPath { path, status }))
@@ -197,9 +172,7 @@ pub(crate) fn tui(
                 match event {
                     Event::FormattedPath(formatted_path) => {
                         match &formatted_path.status {
-                            alejandra::format::Status::Changed(
-                                changed,
-                            ) => {
+                            alejandra::format::Status::Changed(changed) => {
                                 if *changed {
                                     paths_changed += 1;
                                 } else {
@@ -304,21 +277,21 @@ pub(crate) fn tui(
                     .map(|formatted_path| {
                         tui::text::Spans::from(vec![
                             match formatted_path.status {
-                                alejandra::format::Status::Changed(
-                                    changed,
-                                ) => tui::text::Span::styled(
-                                    if changed {
-                                        if in_place {
-                                            "CHANGED "
+                                alejandra::format::Status::Changed(changed) => {
+                                    tui::text::Span::styled(
+                                        if changed {
+                                            if in_place {
+                                                "CHANGED "
+                                            } else {
+                                                "WOULD BE CHANGED "
+                                            }
                                         } else {
-                                            "WOULD BE CHANGED "
-                                        }
-                                    } else {
-                                        "OK "
-                                    },
-                                    tui::style::Style::default()
-                                        .fg(tui::style::Color::Green),
-                                ),
+                                            "OK "
+                                        },
+                                        tui::style::Style::default()
+                                            .fg(tui::style::Color::Green),
+                                    )
+                                }
                                 alejandra::format::Status::Error(_) => {
                                     tui::text::Span::styled(
                                         "ERROR ",
@@ -349,48 +322,39 @@ pub(crate) fn tui(
 }
 
 pub fn main() -> std::io::Result<()> {
-    let matches = crate::cli::parse(std::env::args().collect());
+    let args = Args::parse();
 
-    let in_place = !matches.is_present("check");
-    let threads = matches.value_of("threads").unwrap();
-    let threads: usize = threads.parse().unwrap();
-    let quiet = matches.is_present("quiet");
+    let in_place = !args.check;
+    let threads = args.threads.unwrap_or(0);
 
     rayon::ThreadPoolBuilder::new()
         .num_threads(threads)
         .build_global()
         .unwrap();
 
-    let formatted_paths = match matches.values_of("include") {
-        Some(include) => {
-            let include = include.collect();
-            let exclude = match matches.values_of("exclude") {
-                Some(exclude) => exclude.collect(),
-                None => vec![],
-            };
+    let formatted_paths = match &args.include[..] {
+        &[] => {
+            vec![crate::cli::stdin(args.quiet)]
+        }
+        include => {
+            let paths = crate::find::nix_files(include, &args.exclude);
 
-            let paths: Vec<String> = crate::find::nix_files(include, exclude);
-
-            if !quiet
+            if !args.quiet
                 && atty::is(atty::Stream::Stderr)
                 && atty::is(atty::Stream::Stdin)
                 && atty::is(atty::Stream::Stdout)
             {
                 crate::cli::tui(paths, in_place)?
             } else {
-                crate::cli::simple(paths, in_place, quiet)
+                crate::cli::simple(paths, in_place, args.quiet)
             }
         }
-        None => vec![crate::cli::stdin(quiet)],
     };
 
     let errors = formatted_paths
         .iter()
         .filter(|formatted_path| {
-            matches!(
-                formatted_path.status,
-                alejandra::format::Status::Error(_)
-            )
+            matches!(formatted_path.status, alejandra::format::Status::Error(_))
         })
         .count();
 
@@ -420,7 +384,7 @@ pub fn main() -> std::io::Result<()> {
         .count();
 
     if changed > 0 {
-        if !quiet {
+        if !args.quiet {
             eprintln!();
             eprintln!(
                 "Success! {} file{} {}",
@@ -437,7 +401,7 @@ pub fn main() -> std::io::Result<()> {
         std::process::exit(if in_place { 0 } else { 2 });
     }
 
-    if !quiet {
+    if !args.quiet {
         eprintln!();
         eprintln!("Success! Your code complies the Alejandra style");
     }

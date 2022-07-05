@@ -5,7 +5,7 @@ path = "src/main.rs"
 [dependencies]
 alejandra = { path = "../alejandra" }
 atty = "*"
-clap = "*"
+clap = { version = "3", features = ["derive"] }
 indoc = "*"
 rayon = "*"
 termion = "*"
