@@ -2,6 +2,9 @@
   description = "The Uncompromising Nix Code Formatter";
 
   inputs = {
+    fenix.url = "github:nix-community/fenix";
+    fenix.inputs.nixpkgs.follows = "nixpkgs";
+
     flakeCompat.url = github:edolstra/flake-compat;
     flakeCompat.flake = false;
 
@@ -103,6 +106,7 @@
           cargo-tarpaulin
           clippy
           jq
+          inputs.fenix.packages."x86_64-linux".latest.rustfmt
           linuxPackages_latest.perf
           nodejs
           nodePackages.prettier
