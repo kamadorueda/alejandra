@@ -29,11 +29,13 @@ struct Args {
     #[clap(long, short, multiple_occurrences = true)]
     exclude: Vec<String>,
 
-    /// Check if the input is already formatted and disable writing in-place the modified content
+    /// Check if the input is already formatted and disable writing in-place
+    /// the modified content
     #[clap(long, short)]
     check: bool,
 
-    /// Number of formatting threads to spawn. Defaults to the number of logical CPUs.
+    /// Number of formatting threads to spawn. Defaults to the number of
+    /// logical CPUs.
     #[clap(long, short)]
     threads: Option<usize>,
 
