@@ -6,6 +6,155 @@ and produces **clean diffs**.
 This means trading aggressively compact code
 for regularity and ease of modification.
 
+## Function
+
+### With Destructured Arguments
+
+✅ Good:
+
+```nix
+{mkDerivation, ...} @ attrs:
+  mkDerivation # ...
+```
+
+- Indenting the body relative to the function signature
+  hints that a new scope is introduced by the
+  function arguments.
+- Keeping the signature in one line
+  when there is only 1 argument in the destructuring (`mkDerivation`)
+  helps saving vertical space.
+- Spacing between elements of the destructuring,
+  and between opening and closing elements
+  is consistent with _List_ and _Map_.
+
+✅ Good:
+
+```nix
+{mkDerivation, ...} @ attrs:
+mkDerivation # ...
+```
+
+- When there is only 1 function in the whole file
+  it's valid not to indent the body
+  because it's clear when reading the file from top to bottom
+  that the whole remaining of the file
+  is the scope of the function,
+  Therefore saving an unneeded indent.
+
+✅ Good:
+
+```nix
+{
+  mkDerivation,
+  lib,
+  fetchurl,
+  ...
+} @ attrs:
+  stdenv.mkDerivation # ...
+```
+
+- Adding an argument produces a minimal diff
+  (including the first and last elements):
+
+  ```patch
+    mkDerivation,
+    lib,
+    fetchurl,
+  + google-chrome-stable,
+  ```
+
+- Removing an argument produces a minimal diff
+  (including the first and last elements):
+
+  ```patch
+    mkDerivation,
+  - lib,
+    fetchurl,
+  ```
+
+- The comma at the end is consistent with _Let-In_, and _Map_,
+  where the separator goes after the element
+  instead of at the beginning.
+
+❌ Bad:
+
+<!-- nixpkgs-fmt -->
+
+```nix
+{ lib
+, mkDerivation
+, fetchurl
+, ...
+} @ attrs:
+stdenv.mkDerivation # ...
+```
+
+- Removing the first element
+  produces a diff in two elements:
+
+  ```diff
+  - { lib
+  - , mkDerivation
+  + { mkDerivation
+    , fetchurl
+    , ...
+    } @ attrs:
+    stdenv.mkDerivation # ...
+  ```
+
+- Documenting the first argument creates an inconsistency
+  between the way argument start:
+
+  ```nix
+  {
+    # Lorem Ipsum
+    lib
+  , mkDerivation
+  , fetchurl
+  , ...
+  } @ attrs:
+  stdenv.mkDerivation # ...
+  ```
+
+- This is not consistent with _Let-In_, and _Map_,
+  where the separator goes after the element
+  instead of at the beginning.
+
+❌ Bad:
+
+<!-- nixfmt -->
+
+```nix
+{ mkDerivation, lib, fetchurl, ... }@attrs: stdenv.mkDerivation # ...
+```
+
+- One-liners are unreadable.
+
+❌ Bad:
+
+<!-- nixfmt -->
+
+```nix
+{ mkDerivation, lib, fetchurl, extra-cmake-modules, kdoctools, wrapGAppsHook
+, karchive, kconfig, kcrash, kguiaddons, kinit, kparts, kwind, ... }@attrs:
+stdenv.mkDerivation # ...
+```
+
+- It's hard to tell this destructuring has an ellipsis (`...`) at a first glance,
+  because it's mixed with the other arguments.
+- Moving elements becomes harder
+  than a simple whole-line movement.
+  (Moving a whole line is normally a keyboard-shortcut
+  or command in major code editors).
+- Excessively compact:
+  adding, removing, or editing an argument
+  produces a diff in more than one argument.
+- `}@attrs` is not intuitive
+  with the rules of written english,
+  where you add whitespace
+  after the end of the previous phrase
+  (`phrase. Other phrase`).
+
 ## If-Then-Else
 
 ✅ Good:
