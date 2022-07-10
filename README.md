@@ -266,6 +266,7 @@ Thank you ❤️
 - [Rehno Lindeque](https://github.com/rehno-lindeque).
 - [Jörg Thalheim](https://github.com/Mic92).
 - [Vincent Ambo](https://github.com/tazjin).
+- [Jamie Quigley](https://github.com/Sciencentistguy).
 - [Loïc Reynier](https://github.com/loicreynier).
 - [Mr Hedgehog](https://github.com/ModdedGamers).
 - [Tristan Maat](https://github.com/TLATER).
