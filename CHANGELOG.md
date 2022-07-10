@@ -35,6 +35,17 @@ pushd integrations/vscode/
 popd
 -->
 
+### Added
+
+- A [Style Guide](./STYLE.md), explaining why certain decisions were taken
+  and why they are optimal.
+- Integration guides for: Neovim, GNU Emacs.
+- Published Alejandra as [a crate](https://crates.io/crates/alejandra).
+
+### Changed
+
+- Now running: `$ alejandra -` also formats stdin.
+
 ## [1.5.0] - 2022-06-22
 
 ### Changed
