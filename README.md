@@ -81,7 +81,8 @@
   [Nixpkgs](https://github.com/NixOS/nixpkgs),
   and then we applied the feedback of developers
   who have used [Nix](https://nixos.org) at scale
-  for several years.
+  for several years,
+  producing a very **well-grounded** [**style guide**](./STYLE.md).
 
 - ✔️ **Transparent**
 
