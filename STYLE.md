@@ -8,6 +8,9 @@ for regularity and ease of modification.
 
 ## Function
 
+> Discussions:
+> [1](https://github.com/kamadorueda/alejandra/issues/95)
+
 ### With Destructured Arguments
 
 ✅ Good:
@@ -103,7 +106,7 @@ stdenv.mkDerivation # ...
   ```
 
 - Documenting the first argument creates an inconsistency
-  between the way argument start:
+  between the way arguments start:
 
   ```nix
   {
@@ -119,6 +122,10 @@ stdenv.mkDerivation # ...
 - This is not consistent with _Let-In_, and _Map_,
   where the separator goes after the element
   instead of at the beginning.
+- It ruins "folding by indentation" modes
+  on Vim, Neovim, VSCode, and other major code editors,
+  because the data-structure has the same indentation
+  as the opening bracket.
 
 ❌ Bad:
 
