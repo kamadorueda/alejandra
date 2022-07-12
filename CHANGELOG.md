@@ -17,24 +17,6 @@ Types of changes
 - Security in case of vulnerabilities.
 -->
 
-<!--
-Before releasing update dependencies with:
-
-pushd .
-  cargo update
-  nix flake update
-popd
-pushd front/
-  cargo update
-  nix flake update
-  yarn upgrade
-popd
-pushd integrations/vscode/
-  yarn upgrade
-  yarn2nix > yarn.lock.nix
-popd
--->
-
 ### Added
 
 - A [Style Guide](./STYLE.md), explaining why certain decisions were taken
