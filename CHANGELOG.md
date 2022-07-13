@@ -19,14 +19,75 @@ Types of changes
 
 ### Added
 
-- A [Style Guide](./STYLE.md), explaining why certain decisions were taken
-  and why they are optimal.
-- Integration guides for: Neovim, GNU Emacs.
-- Published Alejandra as [a crate](https://crates.io/crates/alejandra).
+- A [Style Guide](./STYLE.md),
+  explaining why certain decisions were taken
+  and why they are optimal
+  from a productive Nix hacker point of view.
+
+  This guide is a work in progress,
+  but the aim is that it eventually documents
+  all of the aspects of the Nix language,
+  so that we all have the peace of mind
+  that comes from knowing that the style in Alejandra
+  is the way it is for a reason.
+
+- Integration guides for: Neovim and GNU Emacs.
+- Published Alejandra as [a crate](https://crates.io/crates/alejandra),
+  and added API [documentation](https://docs.rs/alejandra/)
+  so other tools and integrations can be built in top of it.
 
 ### Changed
 
-- Now running: `$ alejandra -` also formats stdin.
+- Now running: `$ alejandra -` formats stdin,
+  as [POSIX](https://pubs.opengroup.org/onlinepubs/009695399/basedefs/xbd_chap12.html#tag_12_02)
+  suggests.
+- Comments are now indented by a multiple of 2
+  [issues/294](https://github.com/kamadorueda/alejandra/issues/294):
+
+  Previously
+  (notice how some lines are indented with 3 and 5 spaces):
+
+  ```nix
+  /*
+   Bla bla bla.
+
+   More bla:
+     - Bla bla
+     - Bla
+   */
+  123
+  ```
+
+  Now (all lines are indented to 2 and 4 spaces):
+
+  ```nix
+  /*
+  Bla bla bla.
+
+  More bla:
+    - Bla bla
+    - Bla
+  */
+  123
+  ```
+
+  This makes it easier to write comments on major code editors,
+  where a `<TAB>` (or `<Shift>+<Tab>`)
+  moves the cursor/content to the next multiple of 2,
+  and so indenting the comment contents
+  to an odd number of spaces (like 3, 5, 7)
+  is uncomfortable and unproductive.
+
+  This change also allows cooperation
+  with other tools
+  like [EditorConfig](https://editorconfig.org/),
+  to further exercise good practices over a codebase.
+
+### Fixed
+
+- Empty lines in comments are now effectively empty,
+  avoiding git from warning about extra whitespace:
+  [issues/314](https://github.com/kamadorueda/alejandra/issues/314).
 
 ## [1.5.0] - 2022-06-22
 
