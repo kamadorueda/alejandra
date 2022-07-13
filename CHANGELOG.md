@@ -83,6 +83,8 @@ Types of changes
   like [EditorConfig](https://editorconfig.org/),
   to further exercise good practices over a codebase.
 
+- Updated dependencies to its latest version.
+
 ### Fixed
 
 - Empty lines in comments are now effectively empty,
