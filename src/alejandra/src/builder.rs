@@ -55,11 +55,11 @@ fn build_step(
                 .iter()
                 .enumerate()
                 .map(|(index, line)| {
-                    if index == 0 {
+                    if index == 0 || line.is_empty() {
                         line.to_string()
                     } else {
                         format!(
-                            "{0:<1$} {2}",
+                            "{0:<1$}{2}",
                             "",
                             2 * build_ctx.indentation,
                             line,
