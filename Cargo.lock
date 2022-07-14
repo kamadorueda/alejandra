@@ -4,7 +4,7 @@ version = 3
 
 [[package]]
 name = "alejandra"
-version = "1.5.0"
+version = "2.0.0"
 dependencies = [
  "mimalloc",
  "rnix",
@@ -13,7 +13,7 @@ dependencies = [
 
 [[package]]
 name = "alejandra_cli"
-version = "1.5.0"
+version = "2.0.0"
 dependencies = [
  "alejandra",
  "atty",

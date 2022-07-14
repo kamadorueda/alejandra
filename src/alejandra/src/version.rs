@@ -1,2 +1,2 @@
 /// The version of Alejandra.
-pub const VERSION: &str = "1.5.0";
+pub const VERSION: &str = "2.0.0";
