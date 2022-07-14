@@ -17,6 +17,8 @@ Types of changes
 - Security in case of vulnerabilities.
 -->
 
+## [2.0.0] - 2022-07-13
+
 ### Added
 
 - A [Style Guide](./STYLE.md),
@@ -639,7 +641,8 @@ Types of changes
 
 ---
 
-[unreleased]: https://github.com/kamadorueda/alejandra/compare/1.5.0...HEAD
+[unreleased]: https://github.com/kamadorueda/alejandra/compare/2.0.0...HEAD
+[2.0.0]: https://github.com/kamadorueda/alejandra/compare/1.5.0...2.0.0
 [1.5.0]: https://github.com/kamadorueda/alejandra/compare/1.4.0...1.5.0
 [1.4.0]: https://github.com/kamadorueda/alejandra/compare/1.3.0...1.4.0
 [1.3.0]: https://github.com/kamadorueda/alejandra/compare/1.2.0...1.3.0
