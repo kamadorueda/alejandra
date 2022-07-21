@@ -1,69 +1,28 @@
 [
-  (with b; c)
-  (with b;
-    /*
-    b
-    */
-      c)
-  (with
-    /*
-    a
-    */
-    b; c)
-  (with
-    /*
-    a
-    */
-    b;
-    /*
-    b
-    */
-      c)
-  (with b; cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc)
-  (with b; cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc)
-  {a = with b; 1;}
-  {a = with b; 1 + 1;}
-  {a = with b; {c = 1;};}
+  (CST::With)
+  (CST::With)
+  (CST::With)
+  (CST::With)
+  (CST::With)
+  (CST::With)
+  {a = CST::With;}
+  {a = CST::With;}
+  {a = CST::With;}
+  {a = CST::With;}
   {
-    a = with b; {
-      c = 1;
-      d = 2;
-      e = 3;
-    };
+    a = CST::With;
   }
   {
-    a = with b;
-    # comment
-      1;
-  }
-  {
-    a = with b; 1;
+    a = CST::With;
     # comment
   }
-  (with a; with b; with c; {a = 1;})
-  (with a;
-    with b;
-    with c; {
-      a = 1;
-      b = 2;
-    })
-  (with a;
-    /*
-    comment
-    */
-    with b;
-    with c; {
-      a = 1;
-      b = 2;
-    })
+  (CST::With)
+  (CST::With)
+  (CST::With)
   {
-    a = with b; with b; with b; 1;
+    a = CST::With;
   }
   {
-    binPath = with pkgs;
-      makeBinPath [
-        rsync
-        util-linux
-      ];
+    binPath = CST::With;
   }
 ]

@@ -1,33 +1,11 @@
 [
-  ({} @ a: _)
-  ({} @
-    /**/
-    a:
-      _)
-  ({}
-    /**/
-    @ a:
-      _)
-  ({}
-    /**/
-    @
-    /**/
-    a:
-      _)
+  (CST::FunctionDestructured)
+  (CST::FunctionDestructured)
+  (CST::FunctionDestructured)
+  (CST::FunctionDestructured)
 
-  (a @ {}: _)
-  (a @
-    /**/
-    {}:
-      _)
-  (a
-    /**/
-    @ {}:
-      _)
-  (a
-    /**/
-    @
-    /**/
-    {}:
-      _)
+  (CST::FunctionDestructured)
+  (CST::FunctionDestructured)
+  (CST::FunctionDestructured)
+  (CST::FunctionDestructured)
 ]
