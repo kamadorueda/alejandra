@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "alejandra_front": "file:pkg",
-    "codemirror": "*",
+    "codemirror": "5",
     "react": "*",
     "react-codemirror2": "*",
     "react-diff-viewer": "*",
