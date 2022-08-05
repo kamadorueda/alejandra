@@ -19,7 +19,13 @@ const AFTER_HELP: &str = indoc::indoc! {"
 
 /// The Uncompromising Nix Code Formatter.
 #[derive(Debug, Parser)]
-#[clap(version, after_help = AFTER_HELP, term_width = 80)]
+#[clap(
+    name="Alejandra",
+
+    after_help = AFTER_HELP,
+    term_width = 80,
+    version,
+)]
 struct Args {
     /// Files or directories, or a single "-" (or leave empty) to format stdin.
     #[clap(multiple_values = true)]
