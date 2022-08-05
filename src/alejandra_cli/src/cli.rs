@@ -84,7 +84,7 @@ pub(crate) fn simple(
     if !quiet {
         eprintln!(
             "{} {paths_len} file{} using {threads} thread{}.",
-            if in_place { "Formatting" } else { "Checking style in" },
+            "Checking style in",
             if paths_len == 1 { "" } else { "s" },
             if threads == 1 { "" } else { "s" },
         );
@@ -107,7 +107,7 @@ pub(crate) fn simple(
                         println!(
                             "{}: {path}",
                             if in_place {
-                                "Changed"
+                                "Formatted"
                             } else {
                                 "Requires formatting"
                             },
@@ -187,12 +187,11 @@ pub fn main() -> std::io::Result<()> {
                 "{}! {changed} file{} {}.",
                 if in_place { "Success" } else { "Alert" },
                 if changed == 1 { "" } else { "s" },
-                if changed == 1 {
-                    if in_place { "was changed" } else { "requires formatting" }
-                } else if in_place {
-                    "were changed"
-                } else {
-                    "require formatting"
+                match (changed == 1, in_place) {
+                    (false, true) => "were formatted",
+                    (false, false) => "require formatting",
+                    (true, true) => "was formatted",
+                    (true, false) => "requires formatting",
                 }
             );
         }
