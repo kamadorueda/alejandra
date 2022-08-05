@@ -5,6 +5,8 @@ use futures::future::RemoteHandle;
 use futures::stream::FuturesUnordered;
 use futures::task::SpawnExt;
 
+use crate::ads::random_ad;
+
 #[derive(Clone)]
 pub(crate) struct FormattedPath {
     pub path: String,
@@ -81,8 +83,8 @@ pub(crate) fn simple(
 
     if !quiet {
         eprintln!(
-            "{} {paths_len} file{} using {threads} thread{}",
-            if in_place { "Formatting" } else { "Checking formatting in" },
+            "{} {paths_len} file{} using {threads} thread{}.",
+            if in_place { "Formatting" } else { "Checking style in" },
             if paths_len == 1 { "" } else { "s" },
             if threads == 1 { "" } else { "s" },
         );
@@ -182,7 +184,7 @@ pub fn main() -> std::io::Result<()> {
         if !args.quiet {
             eprintln!();
             eprintln!(
-                "{}! {changed} file{} {}",
+                "{}! {changed} file{} {}.",
                 if in_place { "Success" } else { "Alert" },
                 if changed == 1 { "" } else { "s" },
                 if changed == 1 {
@@ -195,7 +197,8 @@ pub fn main() -> std::io::Result<()> {
             );
         }
         if in_place {
-            ads();
+            println!();
+            print!("{}", random_ad());
         }
 
         std::process::exit(if in_place { 0 } else { 2 });
@@ -203,11 +206,10 @@ pub fn main() -> std::io::Result<()> {
 
     if !args.quiet {
         eprintln!();
-        eprintln!("Congratulations! Your code complies the Alejandra style");
-        ads();
+        eprintln!("Congratulations! Your code complies the Alejandra style.");
+        println!();
+        print!("{}", random_ad());
     }
 
     std::process::exit(0);
 }
-
-fn ads() {}
