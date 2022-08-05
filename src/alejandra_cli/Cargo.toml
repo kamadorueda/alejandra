@@ -4,13 +4,18 @@ path = "src/main.rs"
 
 [dependencies]
 alejandra = { path = "../alejandra" }
-atty = "*"
-clap = { version = "3", features = ["derive"] }
-indoc = "*"
-rayon = "*"
-termion = "*"
-tui = { version = "*", default-features = false, features = ["termion"] }
-walkdir = { version = "*" }
+clap = { version = "*", default_features = false, features = [
+  "color",
+  "derive",
+  "std",
+  "strsim"
+] }
+futures = { version = "*", default_features = false, features = [
+  "executor",
+  "thread-pool"
+] }
+num_cpus = { version = "*", default_features = false, features = [] }
+walkdir = { version = "*", default_features = false, features = [] }
 
 [package]
 authors = ["Kevin Amado <kamadorueda@gmail.com>"]
