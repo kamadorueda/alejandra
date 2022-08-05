@@ -281,10 +281,10 @@ Thank you ❤️
 [^benchmark-specs]:
     Running on a [machine](https://github.com/kamadorueda/machine) with:
 
-    - CPU: 8 physical x Intel(R) Core(TM) i7-10700K, 16 logical
-    - MHz: 3800.00
-    - BogoMips: 7599.80
-    - Cache Size: 16384 KB
+    - CPU: 4 physical, 4 logical, 11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz
+    - MHz: from 400 to 4700 MHz
+    - BogoMips: 5606.40
+    - Cache L3: 12 MiB
 
     Using:
 
@@ -297,11 +297,9 @@ Thank you ❤️
 
     | $threads | Seconds |
     | :------: | :-----: |
-    |    1     |  13.4   |
-    |    2     |   6.9   |
-    |    4     |   3.6   |
-    |    8     |   2.6   |
-    |    16    |   3.1   |
+    |    1     |   45    |
+    |    2     |   27    |
+    |    4     |   19    |
 
 [^semantic-changes]: The methodology to claim this is:
 
