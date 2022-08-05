@@ -15,6 +15,7 @@ futures = { version = "*", default_features = false, features = [
   "thread-pool"
 ] }
 num_cpus = { version = "*", default_features = false, features = [] }
+rand = { version = "*", default-features = false, features = ["getrandom"] }
 walkdir = { version = "*", default_features = false, features = [] }
 
 [package]
