@@ -298,8 +298,8 @@ Thank you ❤️
     | $threads | Seconds |
     | :------: | :-----: |
     |    1     |   45    |
-    |    2     |   27    |
-    |    4     |   19    |
+    |    2     |   25    |
+    |    4     |   14    |
 
 [^semantic-changes]: The methodology to claim this is:
 
