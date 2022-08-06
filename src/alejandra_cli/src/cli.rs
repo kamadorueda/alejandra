@@ -194,10 +194,11 @@ pub fn main() -> std::io::Result<()> {
                     (true, false) => "requires formatting",
                 }
             );
-        }
-        if in_place {
-            println!();
-            print!("{}", random_ad());
+
+            if in_place {
+                eprintln!();
+                eprint!("{}", random_ad());
+            }
         }
 
         std::process::exit(if in_place { 0 } else { 2 });
@@ -206,8 +207,8 @@ pub fn main() -> std::io::Result<()> {
     if !args.quiet {
         eprintln!();
         eprintln!("Congratulations! Your code complies the Alejandra style.");
-        println!();
-        print!("{}", random_ad());
+        eprintln!();
+        eprint!("{}", random_ad());
     }
 
     std::process::exit(0);
