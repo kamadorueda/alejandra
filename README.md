@@ -97,6 +97,7 @@
 
   - [Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=kamadorueda.alejandra)
   - [Neovim](./integrations/neovim/README.md)
+  - [Vim](./integrations/vim/README.md)
   - [GNU Emacs](./integrations/gnu-emacs/README.md)
   - [Doom Emacs](./integrations/doom-emacs/README.md)
   - [Pre-commit](./integrations/pre-commit/README.md)
