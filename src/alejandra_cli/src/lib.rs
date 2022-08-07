@@ -1,3 +1,4 @@
-pub mod ads;
+mod ads;
 pub mod cli;
-pub mod find;
+mod find;
+mod verbosity;
