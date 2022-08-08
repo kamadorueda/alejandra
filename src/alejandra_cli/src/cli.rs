@@ -206,7 +206,7 @@ pub fn main() -> std::io::Result<()> {
 
     if !args.quiet {
         eprintln!();
-        eprintln!("Congratulations! Your code complies the Alejandra style.");
+        eprintln!("Congratulations! Your code complies with the Alejandra style.");
         eprintln!();
         eprint!("{}", random_ad());
     }
