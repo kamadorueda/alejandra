@@ -87,8 +87,7 @@ fn format_paths(
 
     if verbosity.allows_info() {
         eprintln!(
-            "{} {paths_len} file{} using {threads} thread{}.",
-            "Checking style in",
+            "Checking style in {paths_len} file{} using {threads} thread{}.",
             if paths_len == 1 { "" } else { "s" },
             if threads == 1 { "" } else { "s" },
         );
@@ -218,7 +217,9 @@ pub fn main() -> std::io::Result<()> {
 
     if verbosity.allows_info() {
         eprintln!();
-        eprintln!("Congratulations! Your code complies with the Alejandra style.");
+        eprintln!(
+            "Congratulations! Your code complies with the Alejandra style."
+        );
         eprintln!();
         eprint!("{}", random_ad());
     }

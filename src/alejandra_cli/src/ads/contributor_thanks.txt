@@ -1,0 +1,2 @@
+👏 Special thanks to {name} for helping improve this project:
+https://github.com/{github}

@@ -275,6 +275,7 @@ Thank you ❤️
 - [Norbert Melzer](https://github.com/NobbZ).
 - [Patrick Stevens](https://github.com/Smaug123).
 - [Connor Baker](https://github.com/ConnorBaker).
+- [Matthew Kenigsberg](https://github.com/mkenigs).
 - [Florian Finkernagel](https://github.com/TyberiusPrime).
 
 ## Footnotes
