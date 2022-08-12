@@ -5,7 +5,7 @@ use rand::rngs::OsRng;
 pub(crate) fn random_ad() -> String {
     let ads = [
         // 90% distributed proportional to total past and present contributions
-        // (0.9001, sponsor_benefits as fn() -> String),
+        (0.9001, sponsor_benefits as fn() -> String),
         // 10% is reserved for everything else
         (0.0333, contributor_thanks as fn() -> String),
         (0.0333, please_sponsor as fn() -> String),
@@ -22,7 +22,13 @@ fn sponsor_benefits() -> String {
         Company { ad: &'a str },
     }
 
-    let sponsors = [];
+    let sponsors = [
+        // Proportional to total past and present contributions
+        (0.1247, Sponsor::Individual { name: "GuangTao Zhang" }),
+        (0.1468, Sponsor::Individual { name: "Fabio Leimgruber" }),
+        (0.2495, Sponsor::Individual { name: "Raphael Megzari" }),
+        (0.4790, Sponsor::Individual { name: "Daniel Salazar" }),
+    ];
 
     match random_weighted_choice(&sponsors[..]) {
         Sponsor::Company { ad } => {
