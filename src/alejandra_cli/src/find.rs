@@ -22,11 +22,9 @@ fn nix_files_in_path(path: &str) -> HashSet<String> {
     walkdir::WalkDir::new(path)
         .into_iter()
         .filter_entry(is_nix_file_or_dir)
-        .filter_map(|entry| {
-            match entry {
-                Ok(entry) => Some(entry),
-                Err(_) => None,
-            }
+        .filter_map(|entry| match entry {
+            Ok(entry) => Some(entry),
+            Err(_) => None,
         })
         .filter(is_nix_file)
         .map(to_full_path)
@@ -53,6 +51,6 @@ fn len_of(path: &str) -> u64 {
             eprintln!("Could not get the size of file at: {path}");
             eprintln!("Got error: {err}");
             exit(1);
-        },
+        }
     }
 }

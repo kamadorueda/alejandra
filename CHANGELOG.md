@@ -17,6 +17,41 @@ Types of changes
 - Security in case of vulnerabilities.
 -->
 
+## [3.0.0] - 2022-08-14
+
+### Added
+
+- Different levels of --quiet by repeating the `-q` flag,
+  which makes Vim users have a better formatting experience by using `:%!alejandra -qq` to format the current buffer,
+  specially when the file has syntax errors.
+- The possibility for companies to promote their business
+  by placing an add at the end of Alejandra's terminal output, and thank you messages for the sponsors of the project.
+
+  You can obtain this benefits in @kamadorueda's [sponsor page](https://github.com/sponsors/kamadorueda).
+
+- Thank you messages for the different people
+  who have helped improving Alejandra.
+
+### Changed
+
+- Now big files are formatted first,
+  making faster the formatting process
+  when using many threads and
+  when formatting a big file is slower
+  than formatting all the other smaller files in the repository.
+  For instance in Nixpkgs.
+- The CLI was simplified,
+  removing the elements that people find less useful
+  and polishing those that people use the most.
+  The screen is not cleared anymore.
+- Upgraded dependencies to its latest version.
+
+### Fixed
+
+- The name displayed in the CLI application used to be `alejandra_cli`,
+  now it is `Alejandra`.
+- Typos here and there.
+
 ## [2.0.0] - 2022-07-13
 
 ### Added
@@ -641,7 +676,8 @@ Types of changes
 
 ---
 
-[unreleased]: https://github.com/kamadorueda/alejandra/compare/2.0.0...HEAD
+[unreleased]: https://github.com/kamadorueda/alejandra/compare/3.0.0...HEAD
+[3.0.0]: https://github.com/kamadorueda/alejandra/compare/2.0.0...3.0.0
 [2.0.0]: https://github.com/kamadorueda/alejandra/compare/1.5.0...2.0.0
 [1.5.0]: https://github.com/kamadorueda/alejandra/compare/1.4.0...1.5.0
 [1.4.0]: https://github.com/kamadorueda/alejandra/compare/1.3.0...1.4.0
