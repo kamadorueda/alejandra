@@ -504,11 +504,11 @@
       };
     }
     {
-      name = "node_abi___node_abi_3.22.0.tgz";
+      name = "node_abi___node_abi_3.24.0.tgz";
       path = fetchurl {
-        name = "node_abi___node_abi_3.22.0.tgz";
-        url = "https://registry.yarnpkg.com/node-abi/-/node-abi-3.22.0.tgz";
-        sha512 = "u4uAs/4Zzmp/jjsD9cyFYDXeISfUWaAVWshPmDZOFOv4Xl4SbzTXm53I04C2uRueYJ+0t5PEtLH/owbn2Npf/w==";
+        name = "node_abi___node_abi_3.24.0.tgz";
+        url = "https://registry.yarnpkg.com/node-abi/-/node-abi-3.24.0.tgz";
+        sha512 = "YPG3Co0luSu6GwOBsmIdGW6Wx0NyNDLg/hriIyDllVsNwnI6UeqaWShxC3lbH4LtEQUgoLP3XR1ndXiDAWvmRw==";
       };
     }
     {
@@ -800,11 +800,11 @@
       };
     }
     {
-      name = "vsce___vsce_2.9.2.tgz";
+      name = "vsce___vsce_2.10.0.tgz";
       path = fetchurl {
-        name = "vsce___vsce_2.9.2.tgz";
-        url = "https://registry.yarnpkg.com/vsce/-/vsce-2.9.2.tgz";
-        sha512 = "xyLqL4U82BilUX1t6Ym2opQEa2tLGWYjbgB7+ETeNVXlIJz5sWBJjQJSYJVFOKJSpiOtQclolu88cj7oY6vvPQ==";
+        name = "vsce___vsce_2.10.0.tgz";
+        url = "https://registry.yarnpkg.com/vsce/-/vsce-2.10.0.tgz";
+        sha512 = "b+wB3XMapEi368g64klSM6uylllZdNutseqbNY+tUoHYSy6g2NwnlWuAGKDQTYc0IqfDUjUFRQBpPgA89Q+Fyw==";
       };
     }
     {

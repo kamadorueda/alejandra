@@ -33,10 +33,10 @@ fn sponsor_benefits() -> String {
     match random_weighted_choice(&sponsors[..]) {
         Sponsor::Company { ad } => {
             include_str!("sponsor_advertisement.txt").replace("{ad}", ad)
-        },
+        }
         Sponsor::Individual { name } => {
             include_str!("sponsor_thanks.txt").replace("{name}", name)
-        },
+        }
     }
 }
 
