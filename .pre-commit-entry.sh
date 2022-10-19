@@ -18,7 +18,6 @@ system="$(nix-instantiate --eval --expr builtins.currentSystem)"
 echo INFO: building Alejandra
 
 nix-build \
-  --attr ${system} \
   --out-link result-alejandra \
   https://github.com/kamadorueda/alejandra/tarball/3.0.0
 
