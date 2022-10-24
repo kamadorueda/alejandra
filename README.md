@@ -267,7 +267,9 @@ Thank you ❤️
 - [Jamie Quigley](https://github.com/Sciencentistguy).
 - [Loïc Reynier](https://github.com/loicreynier).
 - [Mr Hedgehog](https://github.com/ModdedGamers).
+- [Tobias Bora](https://github.com/tobiasBora).
 - [Tristan Maat](https://github.com/TLATER).
+- [Victor Engmark](https://github.com/l0b0).
 - [Norbert Melzer](https://github.com/NobbZ).
 - [Patrick Stevens](https://github.com/Smaug123).
 - [Connor Baker](https://github.com/ConnorBaker).

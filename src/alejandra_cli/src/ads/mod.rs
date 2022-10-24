@@ -16,28 +16,17 @@ pub(crate) fn random_ad() -> String {
 }
 
 fn sponsor_benefits() -> String {
-    #[allow(dead_code)]
-    enum Sponsor<'a> {
-        Individual { name: &'a str },
-        Company { ad: &'a str },
-    }
-
     let sponsors = [
         // Proportional to total past and present contributions
-        (0.1247, Sponsor::Individual { name: "GuangTao Zhang" }),
-        (0.1468, Sponsor::Individual { name: "Fabio Leimgruber" }),
-        (0.2495, Sponsor::Individual { name: "Raphael Megzari" }),
-        (0.4790, Sponsor::Individual { name: "Daniel Salazar" }),
+        (0.1247, "GuangTao Zhang"),
+        (0.1468, "Fabio Leimgruber"),
+        (0.2495, "Raphael Megzari"),
+        (0.4790, "Daniel Salazar"),
     ];
 
-    match random_weighted_choice(&sponsors[..]) {
-        Sponsor::Company { ad } => {
-            include_str!("sponsor_advertisement.txt").replace("{ad}", ad)
-        }
-        Sponsor::Individual { name } => {
-            include_str!("sponsor_thanks.txt").replace("{name}", name)
-        }
-    }
+    let name = random_weighted_choice(&sponsors[..]);
+
+    include_str!("sponsor_thanks.txt").replace("{name}", name)
 }
 
 fn contributor_thanks() -> String {
@@ -61,7 +50,9 @@ fn contributor_thanks() -> String {
         (1.0, ("Rok Garbas", "garbas")),
         (1.0, ("Ryan Mulligan", "ryantm")),
         (1.0, ("Thomas Bereknyei", "tomberek")),
+        (1.0, ("Tobias Bora", "tobiasBora")),
         (1.0, ("Tristan Maat", "TLATER")),
+        (1.0, ("Victor Engmark", "l0b0")),
         (1.0, ("Vincent Ambo", "tazjin")),
         (1.0, ("Yorick van Pelt", "yorickvP")),
     ];
@@ -74,18 +65,7 @@ fn contributor_thanks() -> String {
 }
 
 fn please_sponsor() -> String {
-    let messages = [
-        (0.5000, include_str!("sponsor_advertisement.txt").replace(
-            "{ad}",
-            concat!(
-                "Advertise your company here, reach lots of active Nix users!\n",
-                "More information at: https://github.com/sponsors/kamadorueda\n"
-            ),
-        )),
-        (0.5000, include_str!("please_sponsor.txt").to_string()),
-    ];
-
-    random_weighted_choice(&messages[..]).clone()
+    include_str!("please_sponsor.txt").to_string()
 }
 
 fn please_star() -> String {
