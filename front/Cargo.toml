@@ -2,7 +2,6 @@
 alejandra = { "path" = "../src/alejandra" }
 console_error_panic_hook = "*"
 wasm-bindgen = "*"
-wee_alloc = "*"
 
 [lib]
 crate-type = ["cdylib"]

@@ -1,5 +1,5 @@
 [dependencies]
-rnix = "0"
+rnix = "0.10.2"
 rowan = "0.12.6" # follows rnix
 
 [target.aarch64-unknown-linux-musl.dependencies.mimalloc]
