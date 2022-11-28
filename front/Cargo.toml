@@ -1,5 +1,6 @@
 [dependencies]
-alejandra = { "path" = "../src/alejandra" }
+alejandra = { "path" = "../src/alejandra", default-features = false, features = [
+] }
 console_error_panic_hook = "*"
 wasm-bindgen = "*"
 

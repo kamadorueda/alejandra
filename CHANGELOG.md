@@ -17,6 +17,21 @@ Types of changes
 - Security in case of vulnerabilities.
 -->
 
+## [3.1.0] - 2022-11-27
+
+### Added
+
+- Error locations, using [Nixel](https://github.com/kamadorueda/nixel).
+
+### Changed
+
+- Upgraded dependencies to its latest version.
+
+### Fixed
+
+- The pre-commit hook integration,
+  courtesy of Victor Engmark and Tobias Bora.
+
 ## [3.0.0] - 2022-08-14
 
 ### Added

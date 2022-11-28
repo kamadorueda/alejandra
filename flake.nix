@@ -32,24 +32,17 @@
       alejandra = final.rustPlatform.buildRustPackage {
         pname = "alejandra";
         inherit version;
-        src = final.stdenv.mkDerivation {
-          name = "src";
-          builder = builtins.toFile "builder.sh" ''
-            source $stdenv/setup
-
-            mkdir $out
-            cp -rT --no-preserve=mode,ownership $src $out/src/
-            cp $cargoLock $out/Cargo.lock
-            cp $cargoToml $out/Cargo.toml
-          '';
-          cargoLock = ./Cargo.lock;
-          cargoToml = ./Cargo.toml;
-          src = ./src;
-        };
+        src = ./.;
         cargoLock.lockFile = ./Cargo.lock;
 
+        nativeBuildInputs = [
+          final.pkg-config
+          final.pkgsBuildBuild.rustPlatform.bindgenHook
+        ];
+        buildInputs = [final.gcc.cc.lib];
+
         passthru.tests = {
-          version = final.testVersion {package = prev.alejandra;};
+          version = final.testVersion {package = final.alejandra;};
         };
 
         meta = {
@@ -100,23 +93,25 @@
       mkShell {
         name = "alejandra";
         packages = [
+          inputs.fenix.packages."x86_64-linux".stable.toolchain
           cargo
           cargo-bloat
           cargo-license
           cargo-tarpaulin
-          clippy
           jq
-          inputs.fenix.packages."x86_64-linux".latest.rustfmt
           linuxPackages_latest.perf
           nodejs
+          clang
           nodePackages.prettier
           nodePackages.prettier-plugin-toml
-          rustc
           shfmt
           treefmt
           yarn
           yarn2nix
         ];
+        shellHook = ''
+          export LIBCLANG_PATH="${libclang.lib}/lib"
+        '';
       };
 
     inherit overlay;

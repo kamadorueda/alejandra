@@ -554,11 +554,11 @@
       };
     }
     {
-      name = "parse5___parse5_7.1.1.tgz";
+      name = "parse5___parse5_7.1.2.tgz";
       path = fetchurl {
-        name = "parse5___parse5_7.1.1.tgz";
-        url  = "https://registry.yarnpkg.com/parse5/-/parse5-7.1.1.tgz";
-        sha512 = "kwpuwzB+px5WUg9pyK0IcK/shltJN5/OVhQagxhCQNtT9Y9QRZqNY2e1cmbu/paRh5LMnz/oVTVLBpjFmMZhSg==";
+        name = "parse5___parse5_7.1.2.tgz";
+        url  = "https://registry.yarnpkg.com/parse5/-/parse5-7.1.2.tgz";
+        sha512 = "Czj1WaSVpaoj0wbhMzLmWD69anp2WH7FXMB9n1Sy8/ZFF9jolSQVMu1Ij5WIyGmcBmhk7EOndpO4mIpihVqAXw==";
       };
     }
     {

@@ -3,18 +3,18 @@ use std::collections::LinkedList;
 #[derive(Default)]
 pub(crate) struct Argument {
     pub comments_before: LinkedList<String>,
-    pub item:            Option<rnix::SyntaxElement>,
-    pub comment_after:   Option<String>,
+    pub item: Option<rnix::SyntaxElement>,
+    pub comment_after: Option<String>,
 }
 
 #[derive(Default)]
 pub(crate) struct Pattern {
-    pub initial_at:                    Option<rnix::SyntaxElement>,
-    pub comments_after_initial_at:     LinkedList<String>,
-    pub arguments:                     LinkedList<Argument>,
+    pub initial_at: Option<rnix::SyntaxElement>,
+    pub comments_after_initial_at: LinkedList<String>,
+    pub arguments: LinkedList<Argument>,
     pub comments_before_curly_b_close: LinkedList<String>,
-    pub comments_before_end_at:        LinkedList<String>,
-    pub end_at:                        Option<rnix::SyntaxElement>,
+    pub comments_before_end_at: LinkedList<String>,
+    pub end_at: Option<rnix::SyntaxElement>,
 }
 
 pub(crate) fn parse(

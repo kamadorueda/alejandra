@@ -17,6 +17,23 @@ impl From<std::io::Error> for Status {
 /// Formats the content of `before` in-memory,
 /// and assume `path` in the displayed error messages
 pub fn in_memory(path: String, before: String) -> (Status, String) {
+    #[cfg(feature = "nixel")]
+    if let nixel::Expression::Error(nixel::Error { message, span }) =
+        *nixel::parse(before.clone()).expression
+    {
+        return (
+            Status::Error(format!(
+                "{message}. Starts at line {} column {}, ends at line {} \
+                 column {}",
+                span.start.line,
+                span.start.column,
+                span.end.line,
+                span.end.column
+            )),
+            before,
+        );
+    }
+
     let tokens = rnix::tokenizer::Tokenizer::new(&before);
     let ast = rnix::parser::parse(tokens);
 

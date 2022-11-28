@@ -1,7 +1,7 @@
 #[derive(Clone)]
 pub(crate) struct Position {
     pub column: usize,
-    pub line:   usize,
+    pub line: usize,
 }
 
 impl Default for Position {

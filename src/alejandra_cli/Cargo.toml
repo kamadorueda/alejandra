@@ -4,12 +4,7 @@ path = "src/main.rs"
 
 [dependencies]
 alejandra = { path = "../alejandra" }
-clap = { version = "*", default_features = false, features = [
-  "color",
-  "derive",
-  "std",
-  "strsim"
-] }
+clap = { version = "*", features = ["derive"] }
 futures = { version = "*", default_features = false, features = [
   "executor",
   "thread-pool"

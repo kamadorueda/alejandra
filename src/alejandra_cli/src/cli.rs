@@ -26,26 +26,26 @@ use crate::verbosity::Verbosity;
 )]
 struct CLIArgs {
     /// Files or directories, or a single "-" (or leave empty) to format stdin.
-    #[clap(multiple_values = true)]
+    #[arg()]
     include: Vec<String>,
 
     /// Files or directories to exclude from formatting.
-    #[clap(long, short, multiple_occurrences = true)]
+    #[arg(long, short)]
     exclude: Vec<String>,
 
     /// Check if the input is already formatted and disable writing in-place
     /// the modified content.
-    #[clap(long, short)]
+    #[arg(long, short)]
     check: bool,
 
     /// Number of formatting threads to spawn. Defaults to the number of
     /// physical CPUs.
-    #[clap(long, short, value_parser = value_parser!(u8).range(1..))]
+    #[arg(long, short, value_parser = value_parser!(u8).range(1..))]
     threads: Option<u8>,
 
     /// Use once to hide informational messages,
     /// twice to hide error messages.
-    #[clap(long, short, action = ArgAction::Count)]
+    #[arg(long, short, action = ArgAction::Count)]
     quiet: u8,
 }
 
@@ -147,12 +147,12 @@ pub fn main() -> std::io::Result<()> {
     let formatted_paths = match &include[..] {
         &[] | &["-"] => {
             vec![crate::cli::format_stdin(verbosity)]
-        },
+        }
         include => {
             let paths = crate::find::nix_files(include, &args.exclude);
 
             crate::cli::format_paths(paths, in_place, verbosity, threads)
-        },
+        }
     };
 
     let errors = formatted_paths
@@ -183,11 +183,9 @@ pub fn main() -> std::io::Result<()> {
 
     let changed = formatted_paths
         .iter()
-        .filter(|formatted_path| {
-            match formatted_path.status {
-                alejandra::format::Status::Changed(changed) => changed,
-                _ => false,
-            }
+        .filter(|formatted_path| match formatted_path.status {
+            alejandra::format::Status::Changed(changed) => changed,
+            _ => false,
         })
         .count();
 

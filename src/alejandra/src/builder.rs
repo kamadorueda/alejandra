@@ -13,12 +13,12 @@ pub(crate) enum Step {
 
 #[derive(Clone)]
 pub(crate) struct BuildCtx {
-    pub force_wide:         bool,
+    pub force_wide: bool,
     pub force_wide_success: bool,
-    pub indentation:        usize,
-    pub pos_old:            crate::position::Position,
-    pub path:               String,
-    pub vertical:           bool,
+    pub indentation: usize,
+    pub pos_old: crate::position::Position,
+    pub path: String,
+    pub vertical: bool,
 }
 
 pub(crate) fn build(
@@ -30,7 +30,11 @@ pub(crate) fn build(
     build_step(&mut builder, build_ctx, &crate::builder::Step::Format(element));
 
     if build_ctx.force_wide {
-        if build_ctx.force_wide_success { Some(builder.finish()) } else { None }
+        if build_ctx.force_wide_success {
+            Some(builder.finish())
+        } else {
+            None
+        }
     } else {
         Some(builder.finish())
     }

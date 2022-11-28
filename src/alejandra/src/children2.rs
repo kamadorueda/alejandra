@@ -8,11 +8,11 @@ pub(crate) enum Trivia {
 pub(crate) struct Child {
     pub element: rnix::SyntaxElement,
 
-    pub inline_comment:     Option<String>,
+    pub inline_comment: Option<String>,
     pub has_inline_comment: bool,
 
-    pub trivialities:     LinkedList<Trivia>,
-    pub has_comments:     bool,
+    pub trivialities: LinkedList<Trivia>,
+    pub has_comments: bool,
     pub has_trivialities: bool,
 }
 

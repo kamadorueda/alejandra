@@ -64,7 +64,7 @@
 
 - ✔️ **Reliable**
 
-  High coverage, battle tested.
+  High coverage, battle-tested.
 
   From Nix's eyes, code is _just_ the same.
   [^semantic-changes]
@@ -84,8 +84,8 @@
 
   You won't notice the formatter after a while.
 
-  Humans care about the content,
-  machines about the style!
+  Humans care about the content
+  and machines about the style!
 
 - ✔️ **Native**
 
@@ -224,7 +224,7 @@ See why Alejandra was created
 and a comparison between alternatives
 [here](https://discourse.nixos.org/t/the-uncompromising-nix-code-formatter/17385/3?u=kamadorueda).
 
-Alternatively, checkout the code examples of the different formatters [here](https://github.com/kamadorueda/rfc-0101).
+Alternatively, check out the code examples of the different formatters [here](https://github.com/kamadorueda/rfc-0101).
 
 ## Versioning
 
@@ -241,11 +241,11 @@ Our public API consists of:
 
 ## Changelog
 
-Please read: [CHANGELOG](./CHANGELOG.md).
+Please read the [CHANGELOG](./CHANGELOG.md).
 
 ## Contributors
 
-The following people have helped improving Alejandra.
+The following people have helped improve Alejandra.
 
 Thank you ❤️
 
@@ -297,9 +297,9 @@ Thank you ❤️
 
     | $threads | Seconds |
     | :------: | :-----: |
-    |    1     |   45    |
-    |    2     |   25    |
-    |    4     |   14    |
+    |    1     |   75    |
+    |    2     |   38    |
+    |    4     |   24    |
 
 [^semantic-changes]: The methodology to claim this is:
 
