@@ -3,4 +3,5 @@
 /**/result*
 /**/target/
 /.direnv
+/.idea/
 /tarpaulin*
