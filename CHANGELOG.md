@@ -31,6 +31,7 @@ Types of changes
 
 - Thank you messages for the different people
   who have helped improving Alejandra.
+- A pre-commit hook with no prerequisites.
 
 ### Changed
 

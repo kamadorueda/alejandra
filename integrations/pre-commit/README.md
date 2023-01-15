@@ -12,8 +12,11 @@ repos:
     # Choose either the 'alejandra' or 'alejandra-system' hook
     # depending on what pre-requisites you have:
     hooks:
-      # Requires Nix to be previously installed in the system
+      # No prerequisites
       - id: alejandra
+
+      # Requires Nix to be previously installed in the system
+      - id: alejandra-nix
 
       # Requires Alejandra to be previously installed in the system
       - id: alejandra-system
