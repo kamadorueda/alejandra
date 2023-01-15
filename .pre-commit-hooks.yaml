@@ -1,4 +1,12 @@
 - id: alejandra
+  name: alejandra
+  description: Format Nix code with Alejandra.
+  entry: alejandra
+  language: rust
+  files: \.nix$
+  minimum_pre_commit_version: 2.21.0
+
+- id: alejandra-nix
   name: alejandra (Nix)
   description: Format Nix code with Alejandra.
   entry: .pre-commit-entry.sh
