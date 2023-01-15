@@ -21,3 +21,5 @@ repos:
       # Requires Alejandra to be previously installed in the system
       - id: alejandra-system
 ```
+
+To use the latest hook, run `pre-commit autoupdate --freeze --repo=https://github.com/kamadorueda/alejandra`.
