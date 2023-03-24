@@ -3,6 +3,7 @@
 [formatter.nix]
 command = "cargo"
 includes = ["*.nix"]
+excludes = ["./src/alejandra/tests/cases/**"]
 options = ["run", "--"]
 
 [formatter.prettier]
