@@ -51,7 +51,7 @@ struct CLIArgs {
 
 #[derive(Clone)]
 struct FormattedPath {
-    pub path: String,
+    pub path:   String,
     pub status: alejandra::format::Status,
 }
 
@@ -147,12 +147,12 @@ pub fn main() -> std::io::Result<()> {
     let formatted_paths = match &include[..] {
         &[] | &["-"] => {
             vec![crate::cli::format_stdin(verbosity)]
-        },
+        }
         include => {
             let paths = crate::find::nix_files(include, &args.exclude);
 
             crate::cli::format_paths(paths, in_place, verbosity, threads)
-        },
+        }
     };
 
     let errors = formatted_paths
@@ -183,11 +183,9 @@ pub fn main() -> std::io::Result<()> {
 
     let changed = formatted_paths
         .iter()
-        .filter(|formatted_path| {
-            match formatted_path.status {
-                alejandra::format::Status::Changed(changed) => changed,
-                _ => false,
-            }
+        .filter(|formatted_path| match formatted_path.status {
+            alejandra::format::Status::Changed(changed) => changed,
+            _ => false,
         })
         .count();
 
