@@ -1,5 +1,6 @@
-use pretty_assertions::assert_eq;
 use std::io::Write;
+
+use pretty_assertions::assert_eq;
 
 #[test]
 fn cases() {
@@ -27,6 +28,10 @@ fn cases() {
 
         let content_out = std::fs::read_to_string(path_out.clone()).unwrap();
 
-        assert_eq!(content_out, content_got, "Test case `{case}` failed; see `src/alejandra/tests/cases/{case}/`");
+        assert_eq!(
+            content_out, content_got,
+            "Test case `{case}` failed; see \
+             `src/alejandra/tests/cases/{case}/`"
+        );
     }
 }
