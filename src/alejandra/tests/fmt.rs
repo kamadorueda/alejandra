@@ -12,8 +12,8 @@ fn cases() {
             .collect();
 
     for case in cases {
-        let path_in = format!("tests/cases/{}/in", case);
-        let path_out = format!("tests/cases/{}/out", case);
+        let path_in = format!("tests/cases/{}/in.nix", case);
+        let path_out = format!("tests/cases/{}/out.nix", case);
         let content_in = std::fs::read_to_string(path_in.clone()).unwrap();
         let content_got =
             alejandra::format::in_memory(path_in, content_in.clone()).1;
