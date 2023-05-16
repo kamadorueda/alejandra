@@ -17,6 +17,17 @@ Types of changes
 - Security in case of vulnerabilities.
 -->
 
+## [3.1.0] - 2023-05-15
+
+### Added
+
+- Thank you messages for the different people
+  who have helped improving Alejandra since the last version.
+
+### Changed
+
+- Upgraded dependencies to its latest version.
+
 ## [3.0.0] - 2022-08-14
 
 ### Added
@@ -677,7 +688,8 @@ Types of changes
 
 ---
 
-[unreleased]: https://github.com/kamadorueda/alejandra/compare/3.0.0...HEAD
+[unreleased]: https://github.com/kamadorueda/alejandra/compare/3.1.0...HEAD
+[3.1.0]: https://github.com/kamadorueda/alejandra/compare/3.0.0...3.1.0
 [3.0.0]: https://github.com/kamadorueda/alejandra/compare/2.0.0...3.0.0
 [2.0.0]: https://github.com/kamadorueda/alejandra/compare/1.5.0...2.0.0
 [1.5.0]: https://github.com/kamadorueda/alejandra/compare/1.4.0...1.5.0
