@@ -18,10 +18,11 @@ pub(crate) fn random_ad() -> String {
 fn sponsor_benefits() -> String {
     let sponsors = [
         // Proportional to total past and present contributions
-        (0.1247, "GuangTao Zhang"),
-        (0.1468, "Fabio Leimgruber"),
-        (0.2495, "Raphael Megzari"),
-        (0.4790, "Daniel Salazar"),
+        (0.0908, "Guangtao Zhang"),
+        (0.1069, "Fabio Leimgruber"),
+        (0.1815, "Raphael Megzari"),
+        (0.3485, "Daniel Salazar"),
+        (0.2723, "https://mercury.com"),
     ];
 
     let name = random_weighted_choice(&sponsors[..]);
@@ -43,9 +44,11 @@ fn contributor_thanks() -> String {
         (1.0, ("Loïc Reynier", "loicreynier")),
         (1.0, ("Matthew Kenigsberg", "mkenigs")),
         (1.0, ("Mr Hedgehog", "ModdedGamers")),
+        (1.0, ("Nathan Henrie", "n8henrie")),
         (1.0, ("Norbert Melzer", "NobbZ")),
         (1.0, ("Patrick Stevens", "Smaug123")),
         (1.0, ("Piegames", "piegamesde")),
+        (1.0, ("Rebecca Turner", "9999years")),
         (1.0, ("Rehno Lindeque", "rehno-lindeque")),
         (1.0, ("Rok Garbas", "garbas")),
         (1.0, ("Ryan Mulligan", "ryantm")),
