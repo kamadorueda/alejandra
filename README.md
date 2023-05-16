@@ -251,7 +251,7 @@ Thank you ❤️
 
 - [Kevin Amado](https://github.com/kamadorueda) ~
   [Email](mailto:kamadorueda@gmail.com),
-  [Patreon](https://www.patreon.com/kamadorueda).
+  [LinkedIn](https://www.linkedin.com/in/kamadorueda).
 - [Thomas Bereknyei](https://github.com/tomberek).
 - [Piegames](https://github.com/piegamesde).
 - [Joachim Ernst](https://github.com/0x4A6F).
@@ -262,7 +262,9 @@ Thank you ❤️
 - [Rok Garbas](https://github.com/garbas).
 - [Yorick van Pelt](https://github.com/yorickvP).
 - [Rehno Lindeque](https://github.com/rehno-lindeque).
+- [Rebecca Turner](https://github.com/9999years).
 - [Jörg Thalheim](https://github.com/Mic92).
+- [Nathan Henrie](https://github.com/n8henrie).
 - [Vincent Ambo](https://github.com/tazjin).
 - [Jamie Quigley](https://github.com/Sciencentistguy).
 - [Loïc Reynier](https://github.com/loicreynier).
