@@ -5,7 +5,7 @@
     fenix.url = "github:nix-community/fenix";
     fenix.inputs.nixpkgs.follows = "nixpkgs";
 
-    flakeCompat.url = github:edolstra/flake-compat;
+    flakeCompat.url = "github:edolstra/flake-compat";
     flakeCompat.flake = false;
 
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
