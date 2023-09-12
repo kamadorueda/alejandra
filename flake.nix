@@ -45,6 +45,7 @@
           license = final.lib.licenses.unlicense;
           maintainers = [final.lib.maintainers.kamadorueda];
           platforms = final.lib.systems.doubles.all;
+          mainProgram = "alejandra";
         };
       };
     };
