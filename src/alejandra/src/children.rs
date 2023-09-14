@@ -193,14 +193,26 @@ fn dedent_comment(pos: &crate::position::Position, text: &str) -> String {
     if text.starts_with('#') {
         text.to_string()
     } else {
-        let mut lines: Vec<String> = text[2..text.len() - 2]
-            .lines()
-            .map(|line| line.to_string())
-            .collect();
+        let is_doc = text.starts_with("/**") && !text.starts_with("/**/");
+        let mut lines: Vec<String> = if is_doc {
+            text[3..text.len() - 2]
+                .lines()
+                .map(|line| line.to_string())
+                .collect()
+        } else {
+            text[2..text.len() - 2]
+                .lines()
+                .map(|line| line.to_string())
+                .collect()
+        };
 
         // If all lines are whitespace just return a compact comment
         if lines.iter().all(|line| line.trim().is_empty()) {
-            return "/**/".to_string();
+            if is_doc {
+                return "/***/".to_string();
+            } else {
+                return "/**/".to_string();
+            }
         }
 
         // Make sure it starts with empty line
@@ -279,7 +291,10 @@ fn dedent_comment(pos: &crate::position::Position, text: &str) -> String {
                 }
             })
             .collect();
-
-        format!("/*{}*/", lines.join("\n"))
+        if is_doc {
+            format!("/**{}*/", lines.join("\n"))
+        } else {
+            format!("/*{}*/", lines.join("\n"))
+        }
     }
 }
