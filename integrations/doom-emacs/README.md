@@ -5,5 +5,13 @@ In order to configure Alejandra in
 just use the following:
 
 ```lisp
-(set-formatter! 'alejandra "alejandra --quiet" :modes '(nix-mode))
+(after! nix-mode
+  (set-formatter! 'alejandra '("alejandra" "--quiet") :modes '(nix-mode)))
+```
+
+If you've enabled formatting via LSP in Nix,
+you might also need to add the following:
+
+```lisp
+(setq-hook! 'nix-mode-hook +format-with-lsp nil)
 ```
