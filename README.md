@@ -141,7 +141,7 @@ Please visit: [search.nixos.org/packages?query=alejandra](https://search.nixos.o
   $ nix-env -ivf https://github.com/kamadorueda/alejandra/tarball/3.0.0
   ```
 
-- Nix with [Flakes](https://nixos.wiki/wiki/Flakes):
+- Nix with [Flakes](https://wiki.nixos.org/wiki/Flakes):
 
   ```bash
   $ nix profile install github:kamadorueda/alejandra/3.0.0
