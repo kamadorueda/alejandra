@@ -170,7 +170,7 @@ $ alejandra --help
   }
   ```
 
-- Nix with [Flakes](https://nixos.wiki/wiki/Flakes):
+- Nix with [Flakes](https://wiki.nixos.org/wiki/Flakes):
 
   ```nix
   {
