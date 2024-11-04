@@ -6,11 +6,7 @@ rowan = "0.12.6" # follows rnix
 default-features = false
 version = "0"
 
-[target.armv6l-unknown-linux-musleabihf.dependencies.mimalloc]
-default-features = false
-version = "0"
-
-[target.armv7l-unknown-linux-musleabihf.dependencies.mimalloc]
+[target.arm-unknown-linux-musleabihf.dependencies.mimalloc]
 default-features = false
 version = "0"
 
