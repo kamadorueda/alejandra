@@ -272,6 +272,9 @@ Thank you ❤️
 - [Tobias Bora](https://github.com/tobiasBora).
 - [Tristan Maat](https://github.com/TLATER).
 - [Victor Engmark](https://github.com/l0b0).
+- [UserSv4](https://github.com/UserSv4).
+- [Michael Utz](https://github.com/theutz).
+- [Pablo Ovelleiro Corral](https://github.com/pinpox).
 - [Norbert Melzer](https://github.com/NobbZ).
 - [Patrick Stevens](https://github.com/Smaug123).
 - [Connor Baker](https://github.com/ConnorBaker).
