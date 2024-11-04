@@ -29,7 +29,7 @@ pub(crate) fn rule(
                 steps.push_back(crate::builder::Step::Pad);
                 steps.push_back(crate::builder::Step::Comment(text));
             }
-            crate::children2::Trivia::Newlines(_) => {}
+            crate::children2::Trivia::Newlines => {}
         }
     }
     steps.push_back(crate::builder::Step::Dedent);
@@ -69,7 +69,7 @@ pub(crate) fn rule(
                 steps.push_back(crate::builder::Step::NewLine);
                 steps.push_back(crate::builder::Step::Pad);
             }
-            crate::children2::Trivia::Newlines(_) => {}
+            crate::children2::Trivia::Newlines => {}
         }
     }
 
@@ -89,7 +89,7 @@ pub(crate) fn rule(
                 steps.push_back(crate::builder::Step::Pad);
                 steps.push_back(crate::builder::Step::Comment(text));
             }
-            crate::children2::Trivia::Newlines(_) => {}
+            crate::children2::Trivia::Newlines => {}
         }
     }
     steps.push_back(crate::builder::Step::Dedent);
@@ -135,7 +135,7 @@ pub(crate) fn rule(
                 steps.push_back(crate::builder::Step::NewLine);
                 steps.push_back(crate::builder::Step::Pad);
             }
-            crate::children2::Trivia::Newlines(_) => {}
+            crate::children2::Trivia::Newlines => {}
         }
     }
 
@@ -155,7 +155,7 @@ pub(crate) fn rule(
                 steps.push_back(crate::builder::Step::Pad);
                 steps.push_back(crate::builder::Step::Comment(text));
             }
-            crate::children2::Trivia::Newlines(_) => {}
+            crate::children2::Trivia::Newlines => {}
         }
     }
     steps.push_back(crate::builder::Step::Dedent);

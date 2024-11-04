@@ -2,7 +2,7 @@ use std::collections::LinkedList;
 
 pub(crate) enum Trivia {
     Comment(String),
-    Newlines(usize),
+    Newlines,
 }
 
 pub(crate) struct Child {
@@ -50,7 +50,7 @@ pub(crate) fn new(
                 }
 
                 if newlines > 0 {
-                    trivialities.push_back(Trivia::Newlines(newlines))
+                    trivialities.push_back(Trivia::Newlines)
                 }
             }
         });

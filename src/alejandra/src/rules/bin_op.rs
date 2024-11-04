@@ -64,7 +64,7 @@ pub(crate) fn rule_with_configuration(
                 steps.push_back(crate::builder::Step::NewLine);
                 steps.push_back(crate::builder::Step::Pad);
             }
-            crate::children2::Trivia::Newlines(_) => {}
+            crate::children2::Trivia::Newlines => {}
         }
     }
 
@@ -91,7 +91,7 @@ pub(crate) fn rule_with_configuration(
                     steps.push_back(crate::builder::Step::NewLine);
                     steps.push_back(crate::builder::Step::Pad);
                 }
-                crate::children2::Trivia::Newlines(_) => {}
+                crate::children2::Trivia::Newlines => {}
             }
         }
     } else if !second.has_inline_comment

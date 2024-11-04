@@ -36,7 +36,7 @@ pub(crate) fn rule(
                 steps.push_back(crate::builder::Step::Pad);
                 steps.push_back(crate::builder::Step::Comment(text));
             }
-            crate::children2::Trivia::Newlines(_) => {}
+            crate::children2::Trivia::Newlines => {}
         }
     }
 
