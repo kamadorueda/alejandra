@@ -14,7 +14,7 @@
   outputs = inputs: let
     commit = inputs.self.shortRev or "dirty";
     date = inputs.self.lastModifiedDate or inputs.self.lastModified or "19700101";
-    version = "3.0.0+${builtins.substring 0 8 date}.${commit}";
+    version = "3.1.0+${builtins.substring 0 8 date}.${commit}";
 
     nixpkgsForHost = host:
       import inputs.nixpkgs {
@@ -133,12 +133,10 @@
         pkgsStatic.alejandra
 
         pkgsCross.aarch64-multiplatform.pkgsStatic.alejandra
-
-        pkgsCross.armv7l-hf-multiplatform.pkgsStatic.alejandra
-
-        pkgsCross.gnu32.pkgsStatic.alejandra
-
-        pkgsCross.raspberryPi.pkgsStatic.alejandra
+        # Temporarily disabled to speed up release
+        # pkgsCross.armv7l-hf-multiplatform.pkgsStatic.alejandra
+        # pkgsCross.gnu32.pkgsStatic.alejandra
+        # pkgsCross.raspberryPi.pkgsStatic.alejandra
       ])
       // {
         "alejandra-vscode-vsix" = mkYarnPackage {

@@ -1,5 +1,5 @@
-use rand::distributions::weighted::WeightedIndex;
 use rand::distributions::Distribution;
+use rand::distributions::weighted::WeightedIndex;
 use rand::rngs::OsRng;
 
 pub(crate) fn random_ad() -> String {
