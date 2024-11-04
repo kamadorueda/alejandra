@@ -18,11 +18,14 @@ pub(crate) fn random_ad() -> String {
 fn sponsor_benefits() -> String {
     let sponsors = [
         // Proportional to total past and present contributions
-        (0.0908, "Guangtao Zhang"),
-        (0.1069, "Fabio Leimgruber"),
-        (0.1815, "Raphael Megzari"),
-        (0.3485, "Daniel Salazar"),
-        (0.2723, "https://mercury.com"),
+        (0.0316, "Guangtao Zhang"),
+        (0.0372, "Fabio Leimgruber"),
+        (0.0633, "Raphael Megzari"),
+        (0.1215, "Daniel Salazar"),
+        (0.6642, "https://mercury.com"),
+        (0.0633, "https://shop.beekeeb.com/"),
+        (0.0063, "Murat Cabuk"),
+        (0.0127, "Pavel Roskin"),
     ];
 
     let name = random_weighted_choice(&sponsors[..]);
@@ -43,9 +46,11 @@ fn contributor_thanks() -> String {
         (1.0, ("Kevin Amado", "kamadorueda")),
         (1.0, ("Loïc Reynier", "loicreynier")),
         (1.0, ("Matthew Kenigsberg", "mkenigs")),
+        (1.0, ("Michael Utz ", "theutz")),
         (1.0, ("Mr Hedgehog", "ModdedGamers")),
         (1.0, ("Nathan Henrie", "n8henrie")),
         (1.0, ("Norbert Melzer", "NobbZ")),
+        (1.0, ("Pablo Ovelleiro Corral", "pinpox")),
         (1.0, ("Patrick Stevens", "Smaug123")),
         (1.0, ("Piegames", "piegamesde")),
         (1.0, ("Rebecca Turner", "9999years")),
@@ -55,6 +60,7 @@ fn contributor_thanks() -> String {
         (1.0, ("Thomas Bereknyei", "tomberek")),
         (1.0, ("Tobias Bora", "tobiasBora")),
         (1.0, ("Tristan Maat", "TLATER")),
+        (1.0, ("UserSv4", "UserSv4")),
         (1.0, ("Victor Engmark", "l0b0")),
         (1.0, ("Vincent Ambo", "tazjin")),
         (1.0, ("Yorick van Pelt", "yorickvP")),
