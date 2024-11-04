@@ -43,7 +43,7 @@ pub(crate) fn rule(
         }
     }
 
-    for (index, child) in children.into_iter().enumerate() {
+    for (index, child) in children.enumerate() {
         let not_last_child = index + 1 < children_count;
 
         if vertical {
