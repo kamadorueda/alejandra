@@ -39,7 +39,7 @@ pub(crate) fn rule(
                 steps.push_back(crate::builder::Step::NewLine);
                 steps.push_back(crate::builder::Step::Pad);
             }
-            crate::children2::Trivia::Newlines(_) => {}
+            crate::children2::Trivia::Newlines => {}
         }
     }
 
@@ -54,7 +54,7 @@ pub(crate) fn rule(
                 steps.push_back(crate::builder::Step::Comment(text));
                 steps.push_back(crate::builder::Step::NewLine);
                 // Only add padding if there are no `trivialities` (that is,
-                // there's no extra `Newlines(_)` to be added)
+                // there's no extra `Newlines` to be added)
                 // or if the first one is a comment (that is, it'll need
                 // to be indented to match the content).
                 if matches!(
@@ -84,12 +84,12 @@ pub(crate) fn rule(
                         // line in the output.
                         if matches!(
                             trivia_iter.peek(),
-                            Some(crate::children2::Trivia::Newlines(_))
+                            Some(crate::children2::Trivia::Newlines)
                         ) {
                             continue;
                         }
                     }
-                    crate::children2::Trivia::Newlines(_) => {}
+                    crate::children2::Trivia::Newlines => {}
                 }
                 if not_last_child {
                     steps.push_back(crate::builder::Step::NewLine);
