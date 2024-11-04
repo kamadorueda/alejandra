@@ -13,24 +13,30 @@
 #![deny(rustdoc::private_doc_tests)]
 
 #[cfg(any(
+    // aarch64-unknown-linux-musl
     all(
         target_arch = "aarch64",
         target_vendor = "unknown",
         target_os = "linux",
         target_env = "musl"
     ),
+    // arm-unknown-linux-musleabihf
     all(
-        any(target_arch = "armv6l", target_arch = "armv7l",),
+        target_arch = "arm",
         target_vendor = "unknown",
         target_os = "linux",
-        target_env = "musleabihf"
+        target_env = "musl",
+        target_abi = "eabihf"
     ),
+    // i686-unknown-linux-musl
     all(
-        target_arch = "i686",
+        target_arch = "x86",
         target_vendor = "unknown",
         target_os = "linux",
         target_env = "musl"
     ),
+    // x86_64-unknown-linux-gnu
+    // x86_64-unknown-linux-musl
     all(
         target_arch = "x86_64",
         target_vendor = "unknown",
