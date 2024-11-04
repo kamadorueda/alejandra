@@ -47,6 +47,7 @@
   },
   "description": "The Uncompromising Nix Code Formatter",
   "devDependencies": {
+    "ovsx": "*",
     "vsce": "*"
   },
   "displayName": "Alejandra 💅",
