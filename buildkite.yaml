@@ -44,6 +44,7 @@ steps:
       - echo --- Cloning nixpkgs
       - git config --global user.email CI/CD
       - git config --global user.name CI/CD
+      - git config --global --add safe.directory /data/nixpkgs/.git
       - git clone --branch=master --depth 1 --origin=upstream file:///data/nixpkgs
 
       - echo --- Formatting - before
@@ -66,6 +67,7 @@ steps:
     command:
       - git config --global user.email CI/CD
       - git config --global user.name CI/CD
+      - git config --global --add safe.directory /data/nixpkgs/.git
       - git clone --branch=master --depth 1 --origin=upstream file:///data/nixpkgs
 
       - echo --- Closure @ before

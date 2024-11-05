@@ -47,6 +47,7 @@
   },
   "description": "The Uncompromising Nix Code Formatter",
   "devDependencies": {
+    "ovsx": "*",
     "vsce": "*"
   },
   "displayName": "Alejandra 💅",
@@ -65,5 +66,5 @@
     "type": "git",
     "url": "https://github.com/kamadorueda/alejandra"
   },
-  "version": "3.0.0"
+  "version": "3.1.0"
 }

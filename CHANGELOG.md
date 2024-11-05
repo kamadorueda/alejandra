@@ -17,6 +17,26 @@ Types of changes
 - Security in case of vulnerabilities.
 -->
 
+## [3.1.0] - 2023-05-15
+
+### Added
+
+- Thank you messages for the different people
+  who have helped improving Alejandra.
+- Pre-commit hooks with no prerequisites and instructions on how to update the pre-commit hooks.
+- A meta.mainProgram to our `flake.nix`.
+- Refreshed docs (updated moved links, integrations instructions, maintainer instructions).
+
+### Changed
+
+- The pre-commit option `alejandra` was renamed to `alejandra-nix`.
+- Upgraded dependencies to its latest version.
+- Blank lines are no longer added after comments in `inherit`.
+
+### Fixed
+
+- A syntax error in one of the pre-commit hooks.
+
 ## [3.0.0] - 2022-08-14
 
 ### Added
@@ -31,7 +51,6 @@ Types of changes
 
 - Thank you messages for the different people
   who have helped improving Alejandra.
-- A pre-commit hook with no prerequisites.
 
 ### Changed
 
@@ -677,7 +696,8 @@ Types of changes
 
 ---
 
-[unreleased]: https://github.com/kamadorueda/alejandra/compare/3.0.0...HEAD
+[unreleased]: https://github.com/kamadorueda/alejandra/compare/3.1.0...HEAD
+[3.1.0]: https://github.com/kamadorueda/alejandra/compare/3.0.0...3.1.0
 [3.0.0]: https://github.com/kamadorueda/alejandra/compare/2.0.0...3.0.0
 [2.0.0]: https://github.com/kamadorueda/alejandra/compare/1.5.0...2.0.0
 [1.5.0]: https://github.com/kamadorueda/alejandra/compare/1.4.0...1.5.0

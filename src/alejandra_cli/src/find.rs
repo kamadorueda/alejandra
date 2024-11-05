@@ -45,7 +45,7 @@ fn to_full_path(entry: walkdir::DirEntry) -> String {
 }
 
 fn len_of(path: &str) -> u64 {
-    match std::fs::metadata(&path) {
+    match std::fs::metadata(path) {
         Ok(meta) => meta.len(),
         Err(err) => {
             eprintln!("Could not get the size of file at: {path}");

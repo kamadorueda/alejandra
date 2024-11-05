@@ -76,8 +76,8 @@ impl Children {
                         }
                     }
 
-                    if pos.is_some() {
-                        pos.as_mut().unwrap().update(&node.text().to_string());
+                    if let Some(ref mut pos) = pos {
+                        pos.update(&node.text().to_string());
                     }
                 }
 
@@ -105,8 +105,8 @@ impl Children {
                         }
                     }
 
-                    if pos.is_some() {
-                        pos.as_mut().unwrap().update(token.text());
+                    if let Some(ref mut pos) = pos {
+                        pos.update(token.text());
                     }
                 }
             }

@@ -4,22 +4,22 @@ path = "src/main.rs"
 
 [dependencies]
 alejandra = { path = "../alejandra" }
-clap = { version = "*", default_features = false, features = [
+clap = { version = "*", default-features = false, features = [
   "color",
   "derive",
   "std",
-  "strsim"
+  "strsim",
 ] }
-futures = { version = "*", default_features = false, features = [
+futures = { version = "*", default-features = false, features = [
   "executor",
-  "thread-pool"
+  "thread-pool",
 ] }
-num_cpus = { version = "*", default_features = false, features = [] }
+num_cpus = { version = "*", default-features = false, features = [] }
 rand = { version = "*", default-features = false, features = [
   "alloc",
-  "getrandom"
+  "getrandom",
 ] }
-walkdir = { version = "*", default_features = false, features = [] }
+walkdir = { version = "*", default-features = false, features = [] }
 
 [package]
 authors = ["Kevin Amado <kamadorueda@gmail.com>"]
@@ -28,4 +28,4 @@ edition = "2021"
 license = "Unlicense"
 name = "alejandra_cli"
 repository = "https://github.com/kamadorueda/alejandra"
-version = "3.0.0"
+version = "3.1.0"

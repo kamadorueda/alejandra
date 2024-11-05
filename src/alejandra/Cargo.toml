@@ -6,11 +6,7 @@ rowan = "0.12.6" # follows rnix
 default-features = false
 version = "0"
 
-[target.armv6l-unknown-linux-musleabihf.dependencies.mimalloc]
-default-features = false
-version = "0"
-
-[target.armv7l-unknown-linux-musleabihf.dependencies.mimalloc]
+[target.arm-unknown-linux-musleabihf.dependencies.mimalloc]
 default-features = false
 version = "0"
 
@@ -32,8 +28,9 @@ description = "The Uncompromising Nix Code Formatter"
 edition = "2021"
 license = "Unlicense"
 name = "alejandra"
+readme = "../../README.md"
 repository = "https://github.com/kamadorueda/alejandra"
-version = "3.0.0"
+version = "3.1.0"
 
 [dev-dependencies]
 pretty_assertions = "1.3.0"
