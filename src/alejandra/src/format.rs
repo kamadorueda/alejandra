@@ -39,6 +39,7 @@ pub fn in_memory(
         path,
         pos_old: crate::position::Position::default(),
         vertical: true,
+        indent,
     };
 
     let after = crate::builder::build(&mut build_ctx, ast.node().into())
