@@ -16,7 +16,7 @@ impl From<std::io::Error> for Status {
 
 /// Formats the content of `before` in-memory,
 /// and assume `path` in the displayed error messages
-pub fn in_memory(path: String, before: String, spaces: usize) -> (Status, String) {
+pub fn in_memory(path: String, before: String, indent: String) -> (Status, String) {
     let tokens = rnix::tokenizer::Tokenizer::new(&before);
     let ast = rnix::parser::parse(tokens);
 
@@ -32,7 +32,7 @@ pub fn in_memory(path: String, before: String, spaces: usize) -> (Status, String
         path,
         pos_old: crate::position::Position::default(),
         vertical: true,
-        spaces,
+        indent,
     };
 
     let after = crate::builder::build(&mut build_ctx, ast.node().into())
@@ -48,12 +48,12 @@ pub fn in_memory(path: String, before: String, spaces: usize) -> (Status, String
 
 /// Formats the file at `path`,
 /// optionally overriding it's contents if `in_place` is true.
-pub fn in_fs(path: String, in_place: bool, spaces: usize) -> Status {
+pub fn in_fs(path: String, in_place: bool, indent: String) -> Status {
     use std::io::Write;
 
     match std::fs::read_to_string(&path) {
         Ok(before) => {
-            let (status, data) = crate::format::in_memory(path.clone(), before, spaces);
+            let (status, data) = crate::format::in_memory(path.clone(), before, indent);
 
             match status {
                 Status::Changed(changed) => {

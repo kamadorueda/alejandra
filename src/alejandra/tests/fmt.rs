@@ -17,7 +17,7 @@ fn cases() {
         let path_out = format!("tests/cases/{}/out.nix", case);
         let content_in = std::fs::read_to_string(path_in.clone()).unwrap();
         let content_got =
-            alejandra::format::in_memory(path_in, content_in.clone(), 2).1;
+            alejandra::format::in_memory(path_in, content_in.clone(), " ".repeat(2)).1;
 
         if should_update {
             std::fs::File::create(&path_out)
@@ -51,7 +51,7 @@ fn indent() {
         let path_out = format!("tests/indent/{}/out.nix", case);
         let content_in = std::fs::read_to_string(path_in.clone()).unwrap();
         let content_got =
-            alejandra::format::in_memory(path_in, content_in.clone(), 4).1;
+            alejandra::format::in_memory(path_in, content_in.clone(), "\t".to_string()).1;
 
         if should_update {
             std::fs::File::create(&path_out)
