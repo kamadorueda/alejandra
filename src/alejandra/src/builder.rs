@@ -1,3 +1,5 @@
+use crate::config::Config;
+
 #[derive(PartialEq)]
 pub(crate) enum Step {
     Comment(String),
@@ -13,6 +15,7 @@ pub(crate) enum Step {
 
 #[derive(Clone)]
 pub(crate) struct BuildCtx {
+    pub _config:            Config,
     pub force_wide:         bool,
     pub force_wide_success: bool,
     pub indentation:        usize,

@@ -1,13 +1,16 @@
+use std::fs::read_to_string;
 use std::io::Read;
 
+use alejandra::config::Config;
+use clap::value_parser;
 use clap::ArgAction;
 use clap::Parser;
-use clap::value_parser;
 use futures::future::RemoteHandle;
 use futures::stream::FuturesUnordered;
 use futures::task::SpawnExt;
 
 use crate::ads::random_ad;
+use crate::config_options::ConfigOptions;
 use crate::verbosity::Verbosity;
 
 /// The Uncompromising Nix Code Formatter.
@@ -38,6 +41,10 @@ struct CLIArgs {
     #[clap(long, short)]
     check: bool,
 
+    /// [Experimental] Path to a config file.
+    #[clap(long)]
+    experimental_config: Option<String>,
+
     /// Number of formatting threads to spawn. Defaults to the number of
     /// physical CPUs.
     #[clap(long, short, value_parser = value_parser!(u8).range(1..))]
@@ -55,7 +62,7 @@ struct FormattedPath {
     pub status: alejandra::format::Status,
 }
 
-fn format_stdin(verbosity: Verbosity) -> FormattedPath {
+fn format_stdin(config: Config, verbosity: Verbosity) -> FormattedPath {
     let mut before = String::new();
     let path = "<anonymous file on stdin>".to_string();
 
@@ -70,7 +77,7 @@ fn format_stdin(verbosity: Verbosity) -> FormattedPath {
         .expect("Unable to read stdin.");
 
     let (status, data) =
-        alejandra::format::in_memory(path.clone(), before.clone());
+        alejandra::format::in_memory(path.clone(), before.clone(), config);
 
     print!("{data}");
 
@@ -79,9 +86,10 @@ fn format_stdin(verbosity: Verbosity) -> FormattedPath {
 
 fn format_paths(
     paths: Vec<String>,
+    config: Config,
     in_place: bool,
-    verbosity: Verbosity,
     threads: usize,
+    verbosity: Verbosity,
 ) -> Vec<FormattedPath> {
     let paths_len = paths.len();
 
@@ -102,8 +110,11 @@ fn format_paths(
     let futures: FuturesUnordered<RemoteHandle<FormattedPath>> = paths
         .into_iter()
         .map(|path| {
+            let config = config.clone();
+
             pool.spawn_with_handle(async move {
-                let status = alejandra::format::in_fs(path.clone(), in_place);
+                let status =
+                    alejandra::format::in_fs(path.clone(), config, in_place);
 
                 if let alejandra::format::Status::Changed(changed) = status {
                     if changed && verbosity.allows_info() {
@@ -127,7 +138,7 @@ fn format_paths(
     futures::executor::block_on_stream(futures).collect()
 }
 
-pub fn main() -> std::io::Result<()> {
+pub fn main() -> ! {
     let args = CLIArgs::parse();
 
     let in_place = !args.check;
@@ -144,14 +155,18 @@ pub fn main() -> std::io::Result<()> {
         _ => Verbosity::NoErrors,
     };
 
+    let config = resolve_config(args.experimental_config.as_deref(), verbosity);
+
     let formatted_paths = match &include[..] {
         &[] | &["-"] => {
-            vec![crate::cli::format_stdin(verbosity)]
+            vec![crate::cli::format_stdin(config, verbosity)]
         }
         include => {
             let paths = crate::find::nix_files(include, &args.exclude);
 
-            crate::cli::format_paths(paths, in_place, verbosity, threads)
+            crate::cli::format_paths(
+                paths, config, in_place, threads, verbosity,
+            )
         }
     };
 
@@ -223,4 +238,31 @@ pub fn main() -> std::io::Result<()> {
     }
 
     std::process::exit(0);
+}
+
+fn resolve_config(path: Option<&str>, verbosity: Verbosity) -> Config {
+    if let Some(path) = path {
+        if verbosity.allows_info() {
+            eprintln!("Using config from: {}", path);
+        }
+
+        let contents = read_to_string(path).unwrap_or_else(|error| {
+            if verbosity.allows_errors() {
+                eprintln!("Unable to read config: {}", error);
+            }
+            std::process::exit(1);
+        });
+
+        let config_file = serde_json::from_str::<ConfigOptions>(&contents)
+            .unwrap_or_else(|error| {
+                if verbosity.allows_errors() {
+                    eprintln!("Errors found in config: {}", error);
+                }
+                std::process::exit(1);
+            });
+
+        config_file.into()
+    } else {
+        Config::default()
+    }
 }

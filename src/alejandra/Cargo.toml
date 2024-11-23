@@ -1,6 +1,7 @@
 [dependencies]
-rnix = "0.10.2"
-rowan = "0.12.6" # follows rnix
+rnix = { version = "0.10.2", default-features = false, features = [] }
+# rowan follows rnix
+rowan = { version = "0.12.6", default-features = false, features = [] }
 
 [target.aarch64-unknown-linux-musl.dependencies.mimalloc]
 default-features = false

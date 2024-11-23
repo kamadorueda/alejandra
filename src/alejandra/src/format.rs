@@ -1,7 +1,9 @@
+use crate::config::Config;
+
 /// Possibles results after formatting.
 #[derive(Clone)]
 pub enum Status {
-    /// An error ocurred, and its reason.
+    /// An error occurred, and its reason.
     Error(String),
     /// Formatting was successful,
     /// the file changed or not according to the boolean.
@@ -14,9 +16,13 @@ impl From<std::io::Error> for Status {
     }
 }
 
-/// Formats the content of `before` in-memory,
-/// and assume `path` in the displayed error messages
-pub fn in_memory(path: String, before: String) -> (Status, String) {
+/// Formats the content of `before` in-memory
+/// assuming the contents come from `path` when displaying error messages
+pub fn in_memory(
+    path: String,
+    before: String,
+    config: Config,
+) -> (Status, String) {
     let tokens = rnix::tokenizer::Tokenizer::new(&before);
     let ast = rnix::parser::parse(tokens);
 
@@ -26,6 +32,7 @@ pub fn in_memory(path: String, before: String) -> (Status, String) {
     }
 
     let mut build_ctx = crate::builder::BuildCtx {
+        _config: config,
         force_wide: false,
         force_wide_success: true,
         indentation: 0,
@@ -47,12 +54,13 @@ pub fn in_memory(path: String, before: String) -> (Status, String) {
 
 /// Formats the file at `path`,
 /// optionally overriding it's contents if `in_place` is true.
-pub fn in_fs(path: String, in_place: bool) -> Status {
+pub fn in_fs(path: String, config: Config, in_place: bool) -> Status {
     use std::io::Write;
 
     match std::fs::read_to_string(&path) {
         Ok(before) => {
-            let (status, data) = crate::format::in_memory(path.clone(), before);
+            let (status, data) =
+                crate::format::in_memory(path.clone(), before, config);
 
             match status {
                 Status::Changed(changed) => {
