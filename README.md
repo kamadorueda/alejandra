@@ -239,6 +239,8 @@ Our public API consists of:
   exit codes,
   and stdout.
 
+With the exception of those explicitly marked as "experimental".
+
 ## Changelog
 
 Please read: [CHANGELOG](./CHANGELOG.md).
