@@ -19,6 +19,7 @@ pub(crate) struct BuildCtx {
     pub pos_old:            crate::position::Position,
     pub path:               String,
     pub vertical:           bool,
+    pub indent:             String,
 }
 
 pub(crate) fn build(
@@ -96,7 +97,7 @@ fn build_step(
                 add_token(
                     builder,
                     rnix::SyntaxKind::TOKEN_WHITESPACE,
-                    &format!("{0:<1$}", "", 2 * build_ctx.indentation),
+                    &build_ctx.indent.repeat(build_ctx.indentation),
                 );
             }
         }

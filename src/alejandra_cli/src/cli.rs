@@ -47,6 +47,25 @@ struct CLIArgs {
     /// twice to hide error messages.
     #[clap(long, short, action = ArgAction::Count)]
     quiet: u8,
+
+    /// Specifies the number of spaces/tabs to be used for each level of indentation.
+    /// Possible options: '1t', '4', '4s' (the same as '4')
+    #[clap(long, short, value_parser = parse_indent, default_value = "2s")]
+    indent: String,
+}
+
+fn parse_indent(s: &str) -> Result<String, String> {
+    let unit = match s.chars().last() {
+        Some('t') => "\t",
+        Some(c) if c == 's' || c.is_ascii_digit() => " ",
+        None => Err("empty value is not allowed")?,
+        Some(c) => Err(format!("only 't', 's' or '' are valid units, but got '{}'", c))?,
+    };
+    let count = s
+        .trim_end_matches(['t', 's'])
+        .parse::<usize>()
+        .map_err(|e| e.to_string())?;
+    Ok(unit.repeat(count))
 }
 
 #[derive(Clone)]
@@ -55,7 +74,7 @@ struct FormattedPath {
     pub status: alejandra::format::Status,
 }
 
-fn format_stdin(verbosity: Verbosity) -> FormattedPath {
+fn format_stdin(verbosity: Verbosity, indent: String) -> FormattedPath {
     let mut before = String::new();
     let path = "<anonymous file on stdin>".to_string();
 
@@ -70,7 +89,7 @@ fn format_stdin(verbosity: Verbosity) -> FormattedPath {
         .expect("Unable to read stdin.");
 
     let (status, data) =
-        alejandra::format::in_memory(path.clone(), before.clone());
+        alejandra::format::in_memory(path.clone(), before.clone(), indent);
 
     print!("{data}");
 
@@ -82,6 +101,7 @@ fn format_paths(
     in_place: bool,
     verbosity: Verbosity,
     threads: usize,
+    indent: String,
 ) -> Vec<FormattedPath> {
     let paths_len = paths.len();
 
@@ -102,8 +122,9 @@ fn format_paths(
     let futures: FuturesUnordered<RemoteHandle<FormattedPath>> = paths
         .into_iter()
         .map(|path| {
+            let indent = indent.clone();
             pool.spawn_with_handle(async move {
-                let status = alejandra::format::in_fs(path.clone(), in_place);
+                let status = alejandra::format::in_fs(path.clone(), in_place, indent);
 
                 if let alejandra::format::Status::Changed(changed) = status {
                     if changed && verbosity.allows_info() {
@@ -146,12 +167,12 @@ pub fn main() -> std::io::Result<()> {
 
     let formatted_paths = match &include[..] {
         &[] | &["-"] => {
-            vec![crate::cli::format_stdin(verbosity)]
+            vec![crate::cli::format_stdin(verbosity, args.indent)]
         }
         include => {
             let paths = crate::find::nix_files(include, &args.exclude);
 
-            crate::cli::format_paths(paths, in_place, verbosity, threads)
+            crate::cli::format_paths(paths, in_place, verbosity, threads, args.indent)
         }
     };
 
