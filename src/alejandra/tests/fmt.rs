@@ -3,6 +3,7 @@ use std::collections::HashSet;
 use std::io::Write;
 
 use alejandra::config::Config;
+use alejandra::config::Indentation;
 use pretty_assertions::assert_eq;
 
 #[test]
@@ -14,7 +15,13 @@ fn cases() {
         .map(|entry| entry.unwrap().file_name().into_string().unwrap())
         .collect();
 
-    let configs = HashMap::from([("", Config::default())]);
+    let configs = HashMap::from([
+        ("default", Config::default()),
+        ("tabs", Config {
+            indentation: Indentation::Tabs,
+            ..Default::default()
+        }),
+    ]);
 
     for case in cases {
         let path_in = format!("tests/cases/{}/in.nix", case);
@@ -22,11 +29,11 @@ fn cases() {
 
         for (config_name, config) in &configs {
             let path_out =
-                format!("tests/cases/{}/out{}.nix", case, config_name);
+                format!("tests/cases/{}/out-{}.nix", case, config_name);
             let content_got = alejandra::format::in_memory(
                 path_in.clone(),
                 content_in.clone(),
-                config.clone(),
+                *config,
             )
             .1;
 

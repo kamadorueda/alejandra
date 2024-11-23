@@ -32,14 +32,13 @@ pub fn in_memory(
     }
 
     let mut build_ctx = crate::builder::BuildCtx {
-        _config: config,
+        config,
         force_wide: false,
         force_wide_success: true,
         indentation: 0,
         path,
         pos_old: crate::position::Position::default(),
         vertical: true,
-        indent,
     };
 
     let after = crate::builder::build(&mut build_ctx, ast.node().into())
