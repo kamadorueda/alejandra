@@ -94,12 +94,12 @@
           cargo-tarpaulin
           clippy
           jq
+          inputs.fenix.packages."x86_64-linux".stable.toolchain
           inputs.fenix.packages."x86_64-linux".latest.rustfmt
           linuxPackages_latest.perf
           nodejs
           nodePackages.prettier
           nodePackages.prettier-plugin-toml
-          rustc
           shfmt
           treefmt
           yarn
