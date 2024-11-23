@@ -450,11 +450,11 @@
       };
     }
     {
-      name = "cross_spawn___cross_spawn_7.0.3.tgz";
+      name = "cross_spawn___cross_spawn_7.0.6.tgz";
       path = fetchurl {
-        name = "cross_spawn___cross_spawn_7.0.3.tgz";
-        url  = "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-7.0.3.tgz";
-        sha512 = "iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==";
+        name = "cross_spawn___cross_spawn_7.0.6.tgz";
+        url  = "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-7.0.6.tgz";
+        sha512 = "uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==";
       };
     }
     {
