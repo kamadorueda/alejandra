@@ -205,10 +205,6 @@ $ alejandra --help
 
 - No.
 
-## Discussion
-
-- [RFC 0101 - Nix formatting](https://github.com/NixOS/rfcs/pull/101)
-
 ## Cool libraries
 
 - [NixEL](https://github.com/kamadorueda/nixel)
@@ -217,14 +213,9 @@ $ alejandra --help
 
 ## Alternatives
 
+- [NixOS/nixfmt](https://github.com/NixOS/nixfmt)
+- [serokell/nixfmt](https://github.com/serokell/nixfmt)
 - [nixpkgs-fmt](https://github.com/nix-community/nixpkgs-fmt)
-- [nixfmt](https://github.com/serokell/nixfmt)
-
-See why Alejandra was created
-and a comparison between alternatives
-[here](https://discourse.nixos.org/t/the-uncompromising-nix-code-formatter/17385/3?u=kamadorueda).
-
-Alternatively, checkout the code examples of the different formatters [here](https://github.com/kamadorueda/rfc-0101).
 
 ## Versioning
 
