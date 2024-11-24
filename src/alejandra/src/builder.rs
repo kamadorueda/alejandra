@@ -1,4 +1,5 @@
 use crate::config::Config;
+use crate::config::Indentation;
 
 #[derive(PartialEq)]
 pub(crate) enum Step {
@@ -15,7 +16,7 @@ pub(crate) enum Step {
 
 #[derive(Clone)]
 pub(crate) struct BuildCtx {
-    pub _config:            Config,
+    pub config:             Config,
     pub force_wide:         bool,
     pub force_wide_success: bool,
     pub indentation:        usize,
@@ -99,7 +100,12 @@ fn build_step(
                 add_token(
                     builder,
                     rnix::SyntaxKind::TOKEN_WHITESPACE,
-                    &format!("{0:<1$}", "", 2 * build_ctx.indentation),
+                    &match build_ctx.config.indentation {
+                        Indentation::FourSpaces => "    ",
+                        Indentation::Tabs => "\t",
+                        Indentation::TwoSpaces => "  ",
+                    }
+                    .repeat(build_ctx.indentation),
                 );
             }
         }
