@@ -1,11 +1,5 @@
+use serde::Deserialize;
+
 /// Configuration used by the formatter
-#[derive(Clone)]
+#[derive(Clone, Copy, Default, Deserialize)]
 pub struct Config {}
-
-use std::default::Default;
-
-impl Default for Config {
-    fn default() -> Self {
-        Self {}
-    }
-}
