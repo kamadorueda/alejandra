@@ -2,6 +2,7 @@
 rnix = { version = "0.10.2", default-features = false, features = [] }
 # rowan follows rnix
 rowan = { version = "0.12.6", default-features = false, features = [] }
+serde = { version = "*", default-features = false, features = ["derive"] }
 
 [target.aarch64-unknown-linux-musl.dependencies.mimalloc]
 default-features = false

@@ -10,6 +10,7 @@ dependencies = [
  "pretty_assertions",
  "rnix",
  "rowan",
+ "serde",
 ]
 
 [[package]]
@@ -21,7 +22,6 @@ dependencies = [
  "futures",
  "num_cpus",
  "rand",
- "serde",
  "serde_json",
  "walkdir",
 ]

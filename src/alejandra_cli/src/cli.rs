@@ -10,7 +10,6 @@ use futures::stream::FuturesUnordered;
 use futures::task::SpawnExt;
 
 use crate::ads::random_ad;
-use crate::config_options::ConfigOptions;
 use crate::verbosity::Verbosity;
 
 /// The Uncompromising Nix Code Formatter.
@@ -110,8 +109,6 @@ fn format_paths(
     let futures: FuturesUnordered<RemoteHandle<FormattedPath>> = paths
         .into_iter()
         .map(|path| {
-            let config = config.clone();
-
             pool.spawn_with_handle(async move {
                 let status =
                     alejandra::format::in_fs(path.clone(), config, in_place);
@@ -253,15 +250,12 @@ fn resolve_config(path: Option<&str>, verbosity: Verbosity) -> Config {
             std::process::exit(1);
         });
 
-        let config_file = serde_json::from_str::<ConfigOptions>(&contents)
-            .unwrap_or_else(|error| {
-                if verbosity.allows_errors() {
-                    eprintln!("Errors found in config: {}", error);
-                }
-                std::process::exit(1);
-            });
-
-        config_file.into()
+        serde_json::from_str::<Config>(&contents).unwrap_or_else(|error| {
+            if verbosity.allows_errors() {
+                eprintln!("Errors found in config: {}", error);
+            }
+            std::process::exit(1);
+        })
     } else {
         Config::default()
     }
