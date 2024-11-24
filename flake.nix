@@ -88,11 +88,9 @@
       mkShell {
         name = "alejandra";
         packages = [
-          cargo
           cargo-bloat
           cargo-license
           cargo-tarpaulin
-          clippy
           jq
           inputs.fenix.packages."x86_64-linux".stable.toolchain
           inputs.fenix.packages."x86_64-linux".latest.rustfmt
