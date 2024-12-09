@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 use std::io::Write;
+use std::path::PathBuf;
 
 use alejandra::config::Config;
 use alejandra::config::Indentation;
@@ -11,28 +12,28 @@ fn cases() {
 
     let configs = HashMap::from([
         ("default", Config::default()),
-        ("indentation-tabs", Config {
-            indentation: Indentation::Tabs,
-            ..Default::default()
-        }),
+        ("indentation-tabs", Config { indentation: Indentation::Tabs }),
     ]);
 
+    let cases_path = PathBuf::new().join("tests").join("cases");
+
     for (config_name, config) in configs {
-        let cases: Vec<String> =
-            std::fs::read_dir(format!("tests/cases/{}", config_name))
-                .unwrap()
-                .map(|entry| entry.unwrap().file_name().into_string().unwrap())
-                .collect();
+        let config_cases_path = cases_path.join(config_name);
+
+        let cases: Vec<String> = std::fs::read_dir(&config_cases_path)
+            .unwrap()
+            .map(|entry| entry.unwrap().file_name().into_string().unwrap())
+            .collect();
 
         for case in cases {
-            let path_in =
-                format!("tests/cases/{}/{}/in.nix", config_name, case);
+            let case_path = config_cases_path.join(&case);
+
+            let path_in = case_path.join("in.nix");
             let content_in = std::fs::read_to_string(&path_in).unwrap();
 
-            let path_out =
-                format!("tests/cases/{}/{}/out.nix", config_name, case);
+            let path_out = case_path.join("out.nix");
             let content_got = alejandra::format::in_memory(
-                path_in.clone(),
+                path_in.to_str().unwrap().to_owned(),
                 content_in.clone(),
                 config,
             )
@@ -45,14 +46,12 @@ fn cases() {
                     .unwrap();
             }
 
-            let content_out =
-                std::fs::read_to_string(path_out.clone()).unwrap();
+            let content_out = std::fs::read_to_string(&path_out).unwrap();
 
             assert_eq!(
                 content_out, content_got,
-                "Test case `{}/{}` failed; see \
-                 `src/alejandra/tests/cases/{}/{}/`",
-                config_name, case, config_name, case,
+                "Test case `{:?}` failed",
+                case_path
             );
         }
     }

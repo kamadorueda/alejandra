@@ -4,4 +4,6 @@
 /**/target/
 /.direnv
 /.idea/
+/front/build
+/front/worktree
 /tarpaulin*

@@ -1,0 +1,190 @@
+===
+args: ["--help"]
+stdout:
+  Alejandra 3.1.0
+  The Uncompromising Nix Code Formatter
+  
+  USAGE:
+      alejandra [OPTIONS] [INCLUDE]...
+  
+  ARGS:
+      <INCLUDE>...    Files or directories, or a single "-" (or leave empty)
+                      to format stdin
+  
+  OPTIONS:
+      -c, --check
+              Check if the input is already formatted and disable writing in-place
+              the modified content
+  
+      -e, --exclude <EXCLUDE>
+              Files or directories to exclude from formatting
+  
+          --experimental-config <EXPERIMENTAL_CONFIG>
+              [Experimental] Path to a config file. If not provided, it'll default
+              to `alejandra.toml` in the current directory. If not found, it'll
+              use the default style
+  
+      -h, --help
+              Print help information
+  
+      -q, --quiet
+              Use once to hide informational messages, twice to hide error
+              messages
+  
+      -t, --threads <THREADS>
+              Number of formatting threads to spawn. Defaults to the number of
+              physical CPUs
+  
+      -V, --version
+              Print version information
+  
+  Alejandra will exit with status code:
+    1, if any error occurs.
+    2, if --check was used and any file requires formatting.
+    0, otherwise.
+
+exit code: Some(0)
+===
+args: ["--version"]
+stdout:
+  Alejandra 3.1.0
+
+exit code: Some(0)
+===
+args: []
+stderr:
+  Formatting stdin.
+  Use --help to see all command line options.
+  use --quiet to suppress this and other messages.
+  
+  Failed! 1 error found at:
+  - <anonymous file on stdin>: unexpected end of file
+
+exit code: Some(1)
+===
+args: ["--quiet"]
+stdin: "[]"
+stdout:
+  []
+
+exit code: Some(0)
+===
+args: ["--quiet", "--quiet"]
+stdin: "[]"
+stdout:
+  []
+
+exit code: Some(0)
+===
+args: ["--check", "--quiet"]
+stdin: "[]\n"
+stdout:
+  []
+
+exit code: Some(0)
+===
+args: ["--check", "--quiet"]
+stdin: "[\t]"
+stdout:
+  []
+
+exit code: Some(2)
+===
+args: ["--check", "--quiet", "--quiet"]
+stdin: "[]\n"
+stdout:
+  []
+
+exit code: Some(0)
+===
+args: ["--check", "--quiet", "--quiet"]
+stdin: "[\t]"
+stdout:
+  []
+
+exit code: Some(2)
+===
+args: ["--quiet"]
+stdin: "["
+stdout:
+  [
+
+stderr:
+  
+  Failed! 1 error found at:
+  - <anonymous file on stdin>: unexpected end of file
+
+exit code: Some(1)
+===
+args: ["--quiet", "--quiet"]
+stdin: "["
+stdout:
+  [
+
+exit code: Some(1)
+===
+args: [".", "--exclude", ".", "--quiet"]
+exit code: Some(0)
+===
+args: ["--exclude", ".", "--quiet", "--quiet", "--", "."]
+exit code: Some(0)
+===
+args: ["--check", "tests/inputs/changed.nix", "--quiet"]
+exit code: Some(2)
+===
+args: ["-c", "tests/inputs/changed.nix", "-q", "-e", "tests/changed.nix"]
+exit code: Some(2)
+===
+args: ["--check", "tests/inputs/changed.nix", "-qq"]
+exit code: Some(2)
+===
+args: ["--check", "tests/inputs/unchanged.nix", "-q"]
+exit code: Some(0)
+===
+args: ["--check", "tests/inputs/unchanged.nix", "-qq"]
+exit code: Some(0)
+===
+args: ["--check", "tests/inputs/error.nix", "-q"]
+stderr:
+  
+  Failed! 1 error found at:
+  - tests/inputs/error.nix: unexpected end of file
+
+exit code: Some(1)
+===
+args: ["--check", "tests/inputs/error.nix", "-qq"]
+exit code: Some(1)
+===
+args: ["--check", "tests/inputs/unchanged.nix", "--experimental-config", "../../alejandra.toml", "--threads", "1"]
+stderr:
+  Using config from: ../../alejandra.toml
+  Checking style in 1 file using 1 thread.
+  
+  
+  Congratulations! Your code complies with the Alejandra style.
+  
+
+exit code: Some(0)
+===
+args: ["--check", "tests/inputs/unchanged.nix", "--experimental-config", "tests/configs/empty_config.toml", "-t", "1"]
+stderr:
+  Using config from: tests/configs/empty_config.toml
+  Checking style in 1 file using 1 thread.
+  
+  
+  Congratulations! Your code complies with the Alejandra style.
+  
+
+exit code: Some(0)
+===
+args: ["--check", "tests/inputs/unchanged.nix", "--experimental-config", "tests/configs/wrong_key.toml"]
+stderr:
+  Using config from: tests/configs/wrong_key.toml
+  Errors found in config: TOML parse error at line 1, column 1
+    |
+  1 | asdf = "asdf"
+    | ^^^^
+  unknown field `asdf`, expected `indentation`
+  
+
+exit code: Some(1)
