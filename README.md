@@ -111,9 +111,6 @@ Please visit:
 You can download a binary for your platform:
 
 - [aarch64-unknown-linux-musl](https://github.com/kamadorueda/alejandra/releases/download/3.1.0/alejandra-aarch64-unknown-linux-musl)
-- [armv6l-unknown-linux-musleabihf](https://github.com/kamadorueda/alejandra/releases/download/3.1.0/alejandra-armv6l-unknown-linux-musleabihf)
-- [armv7l-unknown-linux-musleabihf](https://github.com/kamadorueda/alejandra/releases/download/3.1.0/alejandra-armv7l-unknown-linux-musleabihf)
-- [i686-unknown-linux-musl](https://github.com/kamadorueda/alejandra/releases/download/3.1.0/alejandra-i686-unknown-linux-musl)
 - [x86_64-unknown-linux-musl](https://github.com/kamadorueda/alejandra/releases/download/3.1.0/alejandra-x86_64-unknown-linux-musl)
 
 Make it executable (`$ chmod +x`)
