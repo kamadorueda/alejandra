@@ -79,6 +79,7 @@
   who have used [Nix](https://nixos.org) at scale
   for several years,
   producing a very **well-grounded** [**style guide**](./STYLE.md).
+  For everything else, some pieces of the style are [configurable](#experimental-configuration-options).
 
 - ✔️ **Transparent**
 
@@ -198,9 +199,15 @@ $ alejandra --help
   }
   ```
 
-## Do I need to configure anything?
+## (experimental) Configuration Options
 
-- No.
+You can configure Alejandra through a file named `alejandra.toml`.
+This file will be automatically detected if found in the same directory
+where Alejandra is being run from,
+or you can tell Alejandra to use a different location by using the
+`--experimental-config ./path/to/alejandra.toml` flag in the CLI.
+
+You can find a full configuration file and the supported options here: [alejandra.toml](./alejandra.toml).
 
 ## Cool libraries
 
