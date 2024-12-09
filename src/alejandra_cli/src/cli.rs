@@ -40,7 +40,9 @@ struct CLIArgs {
     #[clap(long, short)]
     check: bool,
 
-    /// [Experimental] Path to a config file.
+    /// [Experimental] Path to a config file. If not provided, it'll default to
+    /// `alejandra.toml` in the current directory. If not found, it'll use the
+    /// default style.
     #[clap(long)]
     experimental_config: Option<String>,
 
@@ -238,6 +240,15 @@ pub fn main() -> ! {
 }
 
 fn resolve_config(path: Option<&str>, verbosity: Verbosity) -> Config {
+    let default_config_path = "alejandra.toml";
+
+    // If no path was provided and the default config path exists, use it
+    let path = path.or_else(|| {
+        std::fs::exists(default_config_path)
+            .unwrap_or(false)
+            .then_some(default_config_path)
+    });
+
     if let Some(path) = path {
         if verbosity.allows_info() {
             eprintln!("Using config from: {}", path);
@@ -250,7 +261,7 @@ fn resolve_config(path: Option<&str>, verbosity: Verbosity) -> Config {
             std::process::exit(1);
         });
 
-        serde_json::from_str::<Config>(&contents).unwrap_or_else(|error| {
+        toml::from_str::<Config>(&contents).unwrap_or_else(|error| {
             if verbosity.allows_errors() {
                 eprintln!("Errors found in config: {}", error);
             }
