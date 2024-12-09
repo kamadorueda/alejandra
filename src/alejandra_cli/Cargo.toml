@@ -19,7 +19,7 @@ rand = { version = "*", default-features = false, features = [
   "alloc",
   "getrandom",
 ] }
-serde_json = { version = "*", default-features = false, features = ["std"] }
+toml = { version = "*", default-features = false, features = ["parse"] }
 walkdir = { version = "*", default-features = false, features = [] }
 
 [package]
