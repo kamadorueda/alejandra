@@ -242,37 +242,38 @@ The following people have helped improving Alejandra.
 
 Thank you ❤️
 
-- [Kevin Amado](https://github.com/kamadorueda) ~
-  [Email](mailto:kamadorueda@gmail.com),
-  [LinkedIn](https://www.linkedin.com/in/kamadorueda).
-- [Thomas Bereknyei](https://github.com/tomberek).
-- [Piegames](https://github.com/piegamesde).
-- [Joachim Ernst](https://github.com/0x4A6F).
-- [David Arnold](https://github.com/blaggacao).
-- [David Hauer](https://github.com/DavHau).
-- [Ryan Mulligan](https://github.com/ryantm).
-- [Fabian Möller](https://github.com/B4dM4n).
-- [Rok Garbas](https://github.com/garbas).
-- [Yorick van Pelt](https://github.com/yorickvP).
-- [Rehno Lindeque](https://github.com/rehno-lindeque).
-- [Rebecca Turner](https://github.com/9999years).
-- [Jörg Thalheim](https://github.com/Mic92).
-- [Nathan Henrie](https://github.com/n8henrie).
-- [Vincent Ambo](https://github.com/tazjin).
-- [Jamie Quigley](https://github.com/Sciencentistguy).
-- [Loïc Reynier](https://github.com/loicreynier).
-- [Mr Hedgehog](https://github.com/ModdedGamers).
-- [Tobias Bora](https://github.com/tobiasBora).
-- [Tristan Maat](https://github.com/TLATER).
-- [Victor Engmark](https://github.com/l0b0).
-- [UserSv4](https://github.com/UserSv4).
-- [Michael Utz](https://github.com/theutz).
-- [Pablo Ovelleiro Corral](https://github.com/pinpox).
-- [Norbert Melzer](https://github.com/NobbZ).
-- [Patrick Stevens](https://github.com/Smaug123).
-- [Connor Baker](https://github.com/ConnorBaker).
-- [Matthew Kenigsberg](https://github.com/mkenigs).
-- [Florian Finkernagel](https://github.com/TyberiusPrime).
+[Connor Baker](https://github.com/ConnorBaker),
+[David Arnold](https://github.com/blaggacao),
+[David Hauer](https://github.com/DavHau),
+[Fabian Möller](https://github.com/B4dM4n),
+[Florian Finkernagel](https://github.com/TyberiusPrime),
+[Jamie Quigley](https://github.com/Sciencentistguy),
+[Joachim Ernst](https://github.com/0x4A6F),
+[Jörg Thalheim](https://github.com/Mic92),
+[Kevin Amado](https://github.com/kamadorueda)
+([Email](mailto:kamadorueda@gmail.com),
+[LinkedIn](https://www.linkedin.com/in/kamadorueda)),
+[Loïc Reynier](https://github.com/loicreynier),
+[Matthew Kenigsberg](https://github.com/mkenigs),
+[Michael Utz](https://github.com/theutz),
+[Mr Hedgehog](https://github.com/ModdedGamers),
+[Nathan Henrie](https://github.com/n8henrie),
+[Norbert Melzer](https://github.com/NobbZ),
+[Pablo Ovelleiro Corral](https://github.com/pinpox),
+[Patrick Stevens](https://github.com/Smaug123),
+[Piegames](https://github.com/piegamesde),
+[Rebecca Turner](https://github.com/9999years),
+[Rehno Lindeque](https://github.com/rehno-lindeque),
+[Rok Garbas](https://github.com/garbas),
+[Ryan Mulligan](https://github.com/ryantm),
+[Thomas Bereknyei](https://github.com/tomberek),
+[Tobias Bora](https://github.com/tobiasBora),
+[Tristan Maat](https://github.com/TLATER),
+[UserSv4](https://github.com/UserSv4),
+[Victor Engmark](https://github.com/l0b0),
+[Vincent Ambo](https://github.com/tazjin),
+[Vladimir Fetisov](https://github.com/3timeslazy),
+and [Yorick van Pelt](https://github.com/yorickvP).
 
 ## Footnotes
 
