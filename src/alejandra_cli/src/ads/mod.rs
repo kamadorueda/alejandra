@@ -1,5 +1,5 @@
-use rand::distributions::Distribution;
 use rand::distributions::weighted::WeightedIndex;
+use rand::distributions::Distribution;
 use rand::rngs::OsRng;
 
 pub(crate) fn random_ad() -> String {
@@ -63,6 +63,7 @@ fn contributor_thanks() -> String {
         (1.0, ("UserSv4", "UserSv4")),
         (1.0, ("Victor Engmark", "l0b0")),
         (1.0, ("Vincent Ambo", "tazjin")),
+        (1.0, ("Vladimir Fetisov", "3timeslazy")),
         (1.0, ("Yorick van Pelt", "yorickvP")),
     ];
 
