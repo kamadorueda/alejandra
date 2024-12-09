@@ -1,0 +1,3 @@
+# (experimental) Configuration options for Alejandra
+
+indentation = "TwoSpaces" # Or: FourSpaces, Tabs
