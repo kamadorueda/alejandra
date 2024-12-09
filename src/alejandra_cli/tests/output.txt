@@ -62,6 +62,21 @@ stderr:
 
 exit code: Some(1)
 ===
+args: []
+stdin: "[]"
+stdout:
+  []
+
+stderr:
+  Formatting stdin.
+  Use --help to see all command line options.
+  use --quiet to suppress this and other messages.
+  
+  Success! 1 file was formatted.
+  
+
+exit code: Some(0)
+===
 args: ["--quiet"]
 stdin: "[]"
 stdout:
@@ -76,12 +91,48 @@ stdout:
 
 exit code: Some(0)
 ===
+args: ["--check"]
+stdin: "[]\n"
+stdout:
+  []
+
+stderr:
+  Formatting stdin.
+  Use --help to see all command line options.
+  use --quiet to suppress this and other messages.
+  
+  Congratulations! Your code complies with the Alejandra style.
+  
+
+exit code: Some(0)
+===
 args: ["--check", "--quiet"]
 stdin: "[]\n"
 stdout:
   []
 
 exit code: Some(0)
+===
+args: ["--check", "--quiet", "--quiet"]
+stdin: "[]\n"
+stdout:
+  []
+
+exit code: Some(0)
+===
+args: ["--check"]
+stdin: "[\t]"
+stdout:
+  []
+
+stderr:
+  Formatting stdin.
+  Use --help to see all command line options.
+  use --quiet to suppress this and other messages.
+  
+  Alert! 1 file requires formatting.
+
+exit code: Some(2)
 ===
 args: ["--check", "--quiet"]
 stdin: "[\t]"
@@ -91,18 +142,26 @@ stdout:
 exit code: Some(2)
 ===
 args: ["--check", "--quiet", "--quiet"]
-stdin: "[]\n"
-stdout:
-  []
-
-exit code: Some(0)
-===
-args: ["--check", "--quiet", "--quiet"]
 stdin: "[\t]"
 stdout:
   []
 
 exit code: Some(2)
+===
+args: []
+stdin: "["
+stdout:
+  [
+
+stderr:
+  Formatting stdin.
+  Use --help to see all command line options.
+  use --quiet to suppress this and other messages.
+  
+  Failed! 1 error found at:
+  - <anonymous file on stdin>: unexpected end of file
+
+exit code: Some(1)
 ===
 args: ["--quiet"]
 stdin: "["
@@ -123,13 +182,47 @@ stdout:
 
 exit code: Some(1)
 ===
+args: [".", "--exclude", "."]
+stderr:
+  Checking style in 0 files using 4 threads.
+  
+  
+  Congratulations! Your code complies with the Alejandra style.
+  
+
+exit code: Some(0)
+===
 args: [".", "--exclude", ".", "--quiet"]
 exit code: Some(0)
 ===
 args: ["--exclude", ".", "--quiet", "--quiet", "--", "."]
 exit code: Some(0)
 ===
+args: ["--check", "tests/inputs/changed.nix"]
+stdout:
+  Requires formatting: tests/inputs/changed.nix
+
+stderr:
+  Checking style in 1 file using 4 threads.
+  
+  
+  Alert! 1 file requires formatting.
+
+exit code: Some(2)
+===
 args: ["--check", "tests/inputs/changed.nix", "--quiet"]
+exit code: Some(2)
+===
+args: ["-c", "tests/inputs/changed.nix", "-e", "tests/changed.nix"]
+stdout:
+  Requires formatting: tests/inputs/changed.nix
+
+stderr:
+  Checking style in 1 file using 4 threads.
+  
+  
+  Alert! 1 file requires formatting.
+
 exit code: Some(2)
 ===
 args: ["-c", "tests/inputs/changed.nix", "-q", "-e", "tests/changed.nix"]
@@ -138,11 +231,31 @@ exit code: Some(2)
 args: ["--check", "tests/inputs/changed.nix", "-qq"]
 exit code: Some(2)
 ===
+args: ["-c", "tests/inputs/unchanged.nix"]
+stderr:
+  Checking style in 1 file using 4 threads.
+  
+  
+  Congratulations! Your code complies with the Alejandra style.
+  
+
+exit code: Some(0)
+===
 args: ["--check", "tests/inputs/unchanged.nix", "-q"]
 exit code: Some(0)
 ===
 args: ["--check", "tests/inputs/unchanged.nix", "-qq"]
 exit code: Some(0)
+===
+args: ["--check", "tests/inputs/error.nix"]
+stderr:
+  Checking style in 1 file using 4 threads.
+  
+  
+  Failed! 1 error found at:
+  - tests/inputs/error.nix: unexpected end of file
+
+exit code: Some(1)
 ===
 args: ["--check", "tests/inputs/error.nix", "-q"]
 stderr:
