@@ -13,22 +13,39 @@ struct TestCase {
 const CASES: &[TestCase] = &[
     TestCase { args: &["--help"], stdin: None },
     TestCase { args: &["--version"], stdin: None },
+    //
     TestCase { args: &[], stdin: None },
+    // changed
+    TestCase { args: &[], stdin: Some("[]") },
     TestCase { args: &["--quiet"], stdin: Some("[]") },
     TestCase { args: &["--quiet", "--quiet"], stdin: Some("[]") },
+    // check unchanged
+    TestCase { args: &["--check"], stdin: Some("[]\n") },
     TestCase { args: &["--check", "--quiet"], stdin: Some("[]\n") },
-    TestCase { args: &["--check", "--quiet"], stdin: Some("[\t]") },
     TestCase { args: &["--check", "--quiet", "--quiet"], stdin: Some("[]\n") },
+    // check changed
+    TestCase { args: &["--check"], stdin: Some("[\t]") },
+    TestCase { args: &["--check", "--quiet"], stdin: Some("[\t]") },
     TestCase { args: &["--check", "--quiet", "--quiet"], stdin: Some("[\t]") },
+    // check error
+    TestCase { args: &[], stdin: Some("[") },
     TestCase { args: &["--quiet"], stdin: Some("[") },
     TestCase { args: &["--quiet", "--quiet"], stdin: Some("[") },
+    // nothing to format
+    TestCase { args: &[".", "--exclude", "."], stdin: None },
     TestCase { args: &[".", "--exclude", ".", "--quiet"], stdin: None },
     TestCase {
         args:  &["--exclude", ".", "--quiet", "--quiet", "--", "."],
         stdin: None,
     },
+    //
+    TestCase { args: &["--check", "tests/inputs/changed.nix"], stdin: None },
     TestCase {
         args:  &["--check", "tests/inputs/changed.nix", "--quiet"],
+        stdin: None,
+    },
+    TestCase {
+        args:  &["-c", "tests/inputs/changed.nix", "-e", "tests/changed.nix"],
         stdin: None,
     },
     TestCase {
@@ -45,6 +62,7 @@ const CASES: &[TestCase] = &[
         args:  &["--check", "tests/inputs/changed.nix", "-qq"],
         stdin: None,
     },
+    TestCase { args: &["-c", "tests/inputs/unchanged.nix"], stdin: None },
     TestCase {
         args:  &["--check", "tests/inputs/unchanged.nix", "-q"],
         stdin: None,
@@ -53,6 +71,7 @@ const CASES: &[TestCase] = &[
         args:  &["--check", "tests/inputs/unchanged.nix", "-qq"],
         stdin: None,
     },
+    TestCase { args: &["--check", "tests/inputs/error.nix"], stdin: None },
     TestCase {
         args:  &["--check", "tests/inputs/error.nix", "-q"],
         stdin: None,
