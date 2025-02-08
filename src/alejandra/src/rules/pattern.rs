@@ -59,7 +59,7 @@ pub(crate) fn rule(
 
     // {
     steps.push_back(crate::builder::Step::Token(
-        rnix::SyntaxKind::TOKEN_CURLY_B_OPEN,
+        rnix::SyntaxKind::TOKEN_L_BRACE,
         "{".to_string(),
     ));
     if vertical {
@@ -138,7 +138,7 @@ pub(crate) fn rule(
         }
     }
     steps.push_back(crate::builder::Step::Token(
-        rnix::SyntaxKind::TOKEN_CURLY_B_OPEN,
+        rnix::SyntaxKind::TOKEN_R_BRACE,
         "}".to_string(),
     ));
 

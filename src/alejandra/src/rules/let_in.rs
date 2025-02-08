@@ -11,7 +11,7 @@ pub(crate) fn rule(
         .filter(|element| {
             matches!(
                 element.kind(),
-                rnix::SyntaxKind::NODE_KEY_VALUE
+                rnix::SyntaxKind::NODE_ATTRPATH_VALUE
                     | rnix::SyntaxKind::NODE_INHERIT
                     | rnix::SyntaxKind::NODE_INHERIT_FROM
             )

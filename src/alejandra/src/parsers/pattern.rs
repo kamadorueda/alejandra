@@ -53,7 +53,7 @@ pub(crate) fn parse(
 
             match child.kind() {
                 rnix::SyntaxKind::NODE_PAT_ENTRY
-                | rnix::SyntaxKind::TOKEN_CURLY_B_CLOSE
+                | rnix::SyntaxKind::TOKEN_R_BRACE
                 | rnix::SyntaxKind::TOKEN_ELLIPSIS => {
                     break;
                 }
@@ -76,7 +76,7 @@ pub(crate) fn parse(
         // item
         let child = children.peek_next().unwrap();
         match child.kind() {
-            rnix::SyntaxKind::TOKEN_CURLY_B_CLOSE => {
+            rnix::SyntaxKind::TOKEN_R_BRACE => {
                 pattern.comments_before_curly_b_close =
                     argument.comments_before;
                 break;
@@ -96,7 +96,7 @@ pub(crate) fn parse(
             match child.kind() {
                 rnix::SyntaxKind::NODE_PAT_ENTRY
                 | rnix::SyntaxKind::TOKEN_ELLIPSIS
-                | rnix::SyntaxKind::TOKEN_CURLY_B_CLOSE => {
+                | rnix::SyntaxKind::TOKEN_R_BRACE => {
                     break;
                 }
                 rnix::SyntaxKind::TOKEN_COMMA => {

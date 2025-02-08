@@ -8,16 +8,12 @@ pub(crate) fn rule(
 
     let items_count = node
         .children_with_tokens()
-        .skip_while(|element| {
-            element.kind() != rnix::SyntaxKind::TOKEN_CURLY_B_OPEN
-        })
-        .take_while(|element| {
-            element.kind() != rnix::SyntaxKind::TOKEN_CURLY_B_CLOSE
-        })
+        .skip_while(|element| element.kind() != rnix::SyntaxKind::TOKEN_L_BRACE)
+        .take_while(|element| element.kind() != rnix::SyntaxKind::TOKEN_R_BRACE)
         .filter(|element| {
             matches!(
                 element.kind(),
-                rnix::SyntaxKind::NODE_KEY_VALUE
+                rnix::SyntaxKind::NODE_ATTRPATH_VALUE
                     | rnix::SyntaxKind::NODE_INHERIT
                     | rnix::SyntaxKind::NODE_INHERIT_FROM
                     | rnix::SyntaxKind::TOKEN_COMMENT
@@ -93,7 +89,7 @@ pub(crate) fn rule(
         });
 
         if let Some(child) = children.peek_next() {
-            if let rnix::SyntaxKind::TOKEN_CURLY_B_CLOSE = child.kind() {
+            if let rnix::SyntaxKind::TOKEN_R_BRACE = child.kind() {
                 break;
             }
 

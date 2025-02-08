@@ -62,7 +62,7 @@ pub(crate) fn rule(
         if let Some(child) = children.peek_next() {
             let child_kind = child.kind();
 
-            if let rnix::SyntaxKind::TOKEN_SQUARE_B_CLOSE = child_kind {
+            if let rnix::SyntaxKind::TOKEN_R_BRACK = child_kind {
                 break;
             }
 

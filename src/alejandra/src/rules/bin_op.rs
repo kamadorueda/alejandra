@@ -1,3 +1,5 @@
+use crate::children2::Child;
+
 pub(crate) fn rule(
     build_ctx: &crate::builder::BuildCtx,
     node: &rnix::SyntaxNode,
@@ -12,30 +14,24 @@ pub(crate) fn rule_with_configuration(
 ) -> std::collections::LinkedList<crate::builder::Step> {
     let mut steps = std::collections::LinkedList::new();
 
-    let mut children = crate::children2::new(build_ctx, node);
+    let mut children: Vec<Child> =
+        crate::children2::new(build_ctx, node).collect();
 
-    let first = children.next().unwrap();
-    let second = children.next().unwrap();
-    let third = children.next().unwrap();
+    children.iter().for_each(|x| {
+        println!("{:?}", x.element);
+    });
 
     let vertical = build_ctx.vertical
-        || first.has_inline_comment
-        || first.has_trivialities
-        || second.has_inline_comment
-        || second.has_trivialities
-        || third.has_inline_comment
-        || third.has_trivialities;
+        || children
+            .iter()
+            .any(|child| child.has_inline_comment || child.has_trivialities);
 
     // first
     if vertical {
         let kind = first.element.kind();
 
         if (parent_kind == "bin_op_and_or_default"
-            && matches!(
-                kind,
-                rnix::SyntaxKind::NODE_BIN_OP
-                    | rnix::SyntaxKind::NODE_OR_DEFAULT
-            ))
+            && matches!(kind, rnix::SyntaxKind::NODE_BIN_OP))
             || (parent_kind == "select"
                 && matches!(kind, rnix::SyntaxKind::NODE_SELECT))
         {
