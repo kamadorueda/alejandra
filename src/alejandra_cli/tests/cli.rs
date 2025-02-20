@@ -4,6 +4,8 @@ use std::path::PathBuf;
 use std::process::Command;
 use std::process::Stdio;
 
+use pretty_assertions::assert_eq;
+
 #[derive(Debug)]
 struct TestCase {
     args:  &'static [&'static str],
@@ -126,6 +128,7 @@ fn cases() {
         output_got.push_str(&format!("args: {:?}\n", case.args));
 
         let mut child = Command::new("cargo")
+            .env("ALEJANDRA_THREADS", "4")
             .args(["run", "--quiet", "--"])
             .args(case.args)
             .stdin(Stdio::piped())

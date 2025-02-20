@@ -21,6 +21,7 @@ dependencies = [
  "clap",
  "futures",
  "num_cpus",
+ "pretty_assertions",
  "rand",
  "toml",
  "walkdir",
