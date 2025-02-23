@@ -1,4 +1,3 @@
-use std::env;
 use std::fs::read_to_string;
 use std::io::Read;
 
@@ -49,7 +48,11 @@ struct CLIArgs {
 
     /// Number of formatting threads to spawn. Defaults to the number of
     /// physical CPUs.
-    #[clap(long, short, value_parser = value_parser!(u8).range(1..))]
+    #[clap(
+        long, short,
+        env = "ALEJANDRA_THREADS",
+        value_parser = value_parser!(u8).range(1..),
+    )]
     threads: Option<u8>,
 
     /// Use once to hide informational messages,
@@ -146,15 +149,8 @@ pub fn main() -> ! {
     let include: Vec<&str> =
         args.include.iter().map(String::as_str).collect::<Vec<&str>>();
 
-    // Try CLI value, then env var, then fall back to number of physical CPUs.
-    let threads: usize = if let Some(cli_threads) = args.threads {
-        cli_threads.into() // convert u8 to usize
-    } else {
-        env::var("ALEJANDRA_THREADS")
-            .ok()
-            .and_then(|v| v.parse::<usize>().ok())
-            .unwrap_or_else(num_cpus::get_physical)
-    };
+    let threads =
+        args.threads.map_or_else(num_cpus::get_physical, Into::<usize>::into);
 
     let verbosity = match args.quiet {
         0 => Verbosity::Everything,
