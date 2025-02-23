@@ -33,7 +33,7 @@ stdout:
   
       -t, --threads <THREADS>
               Number of formatting threads to spawn. Defaults to the number of
-              physical CPUs
+              physical CPUs [env: ALEJANDRA_THREADS=1]
   
       -V, --version
               Print version information
@@ -184,7 +184,7 @@ exit code: Some(1)
 ===
 args: [".", "--exclude", "."]
 stderr:
-  Checking style in 0 files using 4 threads.
+  Checking style in 0 files using 1 thread.
   
   
   Congratulations! Your code complies with the Alejandra style.
@@ -203,7 +203,7 @@ stdout:
   Requires formatting: tests/inputs/changed.nix
 
 stderr:
-  Checking style in 1 file using 4 threads.
+  Checking style in 1 file using 1 thread.
   
   
   Alert! 1 file requires formatting.
@@ -218,7 +218,7 @@ stdout:
   Requires formatting: tests/inputs/changed.nix
 
 stderr:
-  Checking style in 1 file using 4 threads.
+  Checking style in 1 file using 1 thread.
   
   
   Alert! 1 file requires formatting.
@@ -233,7 +233,7 @@ exit code: Some(2)
 ===
 args: ["-c", "tests/inputs/unchanged.nix"]
 stderr:
-  Checking style in 1 file using 4 threads.
+  Checking style in 1 file using 1 thread.
   
   
   Congratulations! Your code complies with the Alejandra style.
@@ -249,7 +249,7 @@ exit code: Some(0)
 ===
 args: ["--check", "tests/inputs/error.nix"]
 stderr:
-  Checking style in 1 file using 4 threads.
+  Checking style in 1 file using 1 thread.
   
   
   Failed! 1 error found at:
