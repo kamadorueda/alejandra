@@ -145,15 +145,23 @@ fn format(
                 // a b
                 rnix::SyntaxKind::NODE_APPLY => crate::rules::apply::rule,
                 // assert a; b
-                rnix::SyntaxKind::NODE_ASSERT => crate::rules::scoped::rule,
+                rnix::SyntaxKind::NODE_ASSERT => crate::rules::scoped::rule, /* a.b.c */
+                rnix::SyntaxKind::NODE_ATTRPATH => crate::rules::default,
+                // a = b;
+                rnix::SyntaxKind::NODE_ATTRPATH_VALUE => {
+                    crate::rules::key_value::rule
+                }
                 // { }
                 rnix::SyntaxKind::NODE_ATTR_SET => crate::rules::attr_set::rule,
                 // a $op b
-                rnix::SyntaxKind::NODE_BIN_OP => crate::rules::bin_op::rule,
+                rnix::SyntaxKind::NODE_BIN_OP => crate::rules::default,
                 // ${a} (interpolation but for NODE_SELECT)
                 rnix::SyntaxKind::NODE_DYNAMIC => crate::rules::dynamic::rule,
+                //
+                rnix::SyntaxKind::NODE_HAS_ATTR => crate::rules::default,
                 // $identifier
                 rnix::SyntaxKind::NODE_IDENT => crate::rules::default,
+                rnix::SyntaxKind::NODE_IDENT_PARAM => crate::rules::default,
                 // if a then b else c
                 rnix::SyntaxKind::NODE_IF_ELSE => crate::rules::if_else::rule,
                 // inherit NODE_INHERIT_FROM? b+ ;
@@ -162,47 +170,35 @@ fn format(
                 rnix::SyntaxKind::NODE_INHERIT_FROM => {
                     crate::rules::paren::rule
                 }
-                rnix::SyntaxKind::NODE_KEY => crate::rules::default,
-                // a = b;
-                rnix::SyntaxKind::NODE_KEY_VALUE => {
-                    crate::rules::key_value::rule
-                }
+                // ${a}
+                rnix::SyntaxKind::NODE_INTERPOL => crate::rules::paren::rule,
                 // a: b
                 rnix::SyntaxKind::NODE_LAMBDA => crate::rules::lambda::rule,
+                // let { }
+                rnix::SyntaxKind::NODE_LEGACY_LET => crate::rules::default,
                 // let NODE_KEY_VALUE* in b;
                 rnix::SyntaxKind::NODE_LET_IN => crate::rules::let_in::rule,
                 // [ ... ]
                 rnix::SyntaxKind::NODE_LIST => crate::rules::list::rule,
                 // 1 | true | null
                 rnix::SyntaxKind::NODE_LITERAL => crate::rules::default,
-                // let { }
-                rnix::SyntaxKind::NODE_LEGACY_LET => crate::rules::default,
-                // a or b
-                rnix::SyntaxKind::NODE_OR_DEFAULT => crate::rules::bin_op::rule,
                 // ( a )
                 rnix::SyntaxKind::NODE_PAREN => crate::rules::paren::rule,
                 // a | a ? b
                 rnix::SyntaxKind::NODE_PAT_BIND => crate::rules::pat_bind::rule,
-                // { NODE_PAT_ENTRY* }
-                rnix::SyntaxKind::NODE_PATTERN => crate::rules::pattern::rule,
                 // NODE_PAT_BIND | TOKEN_ELLIPSIS
                 rnix::SyntaxKind::NODE_PAT_ENTRY => {
                     crate::rules::pat_entry::rule
                 }
-                // /path/to/${a}
-                rnix::SyntaxKind::NODE_PATH_WITH_INTERPOL => {
-                    crate::rules::default
-                }
+                rnix::SyntaxKind::NODE_PATH => crate::rules::default,
+                // { NODE_PAT_ENTRY* }
+                rnix::SyntaxKind::NODE_PATTERN => crate::rules::pattern::rule,
                 // implementation detail of rowan
                 rnix::SyntaxKind::NODE_ROOT => crate::rules::root::rule,
                 // a.b | a.NODE_DYNAMIC
-                rnix::SyntaxKind::NODE_SELECT => crate::rules::select::rule,
+                rnix::SyntaxKind::NODE_SELECT => crate::rules::default,
                 // "..." || ''...''
                 rnix::SyntaxKind::NODE_STRING => crate::rules::string::rule,
-                // ${a}
-                rnix::SyntaxKind::NODE_STRING_INTERPOL => {
-                    crate::rules::paren::rule
-                }
                 // !a
                 rnix::SyntaxKind::NODE_UNARY_OP => crate::rules::default,
                 // with a; b

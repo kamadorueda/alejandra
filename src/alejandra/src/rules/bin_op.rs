@@ -31,11 +31,7 @@ pub(crate) fn rule_with_configuration(
         let kind = first.element.kind();
 
         if (parent_kind == "bin_op_and_or_default"
-            && matches!(
-                kind,
-                rnix::SyntaxKind::NODE_BIN_OP
-                    | rnix::SyntaxKind::NODE_OR_DEFAULT
-            ))
+            && matches!(kind, rnix::SyntaxKind::NODE_BIN_OP))
             || (parent_kind == "select"
                 && matches!(kind, rnix::SyntaxKind::NODE_SELECT))
         {
