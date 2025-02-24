@@ -81,11 +81,10 @@ in {
     };
 
     boot.kernelParams = mkOption {
-      type = types.listOf (types.strMatching ''([^"[:space:]]|"[^"]*")+''
-        // {
-          name = "kernelParam";
-          description = "string, with spaces inside double quotes";
-        });
+      type = types.listOf (types.strMatching ''([^"[:space:]]|"[^"]*")+'' // {
+        name = "kernelParam";
+        description = "string, with spaces inside double quotes";
+      });
       default = [];
       description = "Parameters added to the kernel command line.";
     };
@@ -245,8 +244,7 @@ in {
             "hid_logitech_hidpp"
             "hid_logitech_dj"
             "hid_microsoft"
-          ]
-          ++ optionals pkgs.stdenv.hostPlatform.isx86 [
+          ] ++ optionals pkgs.stdenv.hostPlatform.isx86 [
             # Misc. x86 keyboard stuff.
             "pcips2"
             "atkbd"
@@ -270,8 +268,8 @@ in {
         # Implement consoleLogLevel both in early boot and using sysctl
         # (so you don't need to reboot to have changes take effect).
         boot.kernelParams =
-          ["loglevel=${toString config.boot.consoleLogLevel}"]
-          ++ optionals config.boot.vesa ["vga=0x317" "nomodeset"];
+          ["loglevel=${toString config.boot.consoleLogLevel}"] ++
+          optionals config.boot.vesa ["vga=0x317" "nomodeset"];
 
         boot.kernel.sysctl."kernel.printk" = mkDefault config.boot.consoleLogLevel;
 
@@ -339,8 +337,7 @@ in {
             # !!! Should this really be needed?
             (isYes "MODULES")
             (isYes "BINFMT_ELF")
-          ]
-          ++ (optional (randstructSeed != "") (isYes "GCC_PLUGIN_RANDSTRUCT"));
+          ] ++ (optional (randstructSeed != "") (isYes "GCC_PLUGIN_RANDSTRUCT"));
 
         # nixpkgs kernels are assumed to have all required features
         assertions =

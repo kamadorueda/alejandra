@@ -98,7 +98,7 @@
     builtins.bitAnd
     or (import ./zip-int-bits.nix
       (a: b:
-        if a == 1 && b == 1
+        if a==1 && b==1
         then 1
         else 0));
 
@@ -109,7 +109,7 @@
     builtins.bitOr
     or (import ./zip-int-bits.nix
       (a: b:
-        if a == 1 || b == 1
+        if a==1 || b==1
         then 1
         else 0));
 
@@ -120,7 +120,7 @@
     builtins.bitXor
     or (import ./zip-int-bits.nix
       (a: b:
-        if a != b
+        if a!=b
         then 1
         else 0));
 
@@ -482,9 +482,8 @@
   Check whether something is a function or something
   annotated with function args.
   */
-  isFunction = f:
-    builtins.isFunction f
-    || (f ? __functor && isFunction (f.__functor f));
+  isFunction = f: builtins.isFunction f ||
+    (f ? __functor && isFunction (f.__functor f));
 
   /*
   Convert the given positive integer to a string of its hexadecimal
@@ -508,8 +507,9 @@
           "13" = "D";
           "14" = "E";
           "15" = "F";
-        }
-        .${toString d};
+        }.${
+          toString d
+        };
   in
     lib.concatMapStrings toHexDigit (toBaseDigits 16 i);
 

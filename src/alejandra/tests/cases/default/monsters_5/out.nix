@@ -60,7 +60,10 @@ in {
 
         type =
           types.unspecified
-          // {
+
+//
+
+{
             merge =
               mergeEqualOption;
           };
@@ -68,24 +71,30 @@ in {
         apply = kernelPackages:
           kernelPackages.extend
           (self: super: {
-            kernel =
-              super.kernel.override
-              (originalArgs: {
-                inherit
-                  randstructSeed
-                  ;
+              kernel =
+                super.kernel.override
+                (originalArgs: {
+                    inherit
+                      randstructSeed
+                      ;
 
-                kernelPatches =
-                  (originalArgs.kernelPatches
-                    or [])
-                  ++ kernelPatches;
+                    kernelPatches =
+                      (originalArgs.kernelPatches
 
-                features =
-                  lib.recursiveUpdate
-                  super.kernel.features
-                  features;
-              });
-          });
+or
+
+[])
+
+++
+
+kernelPatches;
+
+                    features =
+                      lib.recursiveUpdate
+                      super.kernel.features
+                      features;
+                  });
+            });
 
         # We don't want to evaluate all of linuxPackages for the manual
         # - some of it might not even evaluate correctly.

@@ -23,10 +23,10 @@ pub fn in_memory(
     before: String,
     config: Config,
 ) -> (Status, String) {
-    let tokens = rnix::tokenizer::Tokenizer::new(&before);
-    let ast = rnix::parser::parse(tokens);
+    let parsed = rnix::Root::parse(&before);
 
-    let errors = ast.errors();
+    let errors = parsed.errors();
+
     if !errors.is_empty() {
         return (Status::Error(errors[0].to_string()), before);
     }
@@ -41,9 +41,10 @@ pub fn in_memory(
         vertical: true,
     };
 
-    let after = crate::builder::build(&mut build_ctx, ast.node().into())
-        .unwrap()
-        .to_string();
+    let root = parsed.syntax();
+
+    let after =
+        crate::builder::build(&mut build_ctx, root.into()).unwrap().to_string();
 
     if before == after {
         (Status::Changed(false), after)

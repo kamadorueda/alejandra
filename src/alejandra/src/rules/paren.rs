@@ -36,7 +36,6 @@ pub(crate) fn rule(
             rnix::SyntaxKind::NODE_APPLY
                 | rnix::SyntaxKind::NODE_ASSERT
                 | rnix::SyntaxKind::NODE_BIN_OP
-                | rnix::SyntaxKind::NODE_OR_DEFAULT
                 | rnix::SyntaxKind::NODE_LAMBDA
                 | rnix::SyntaxKind::NODE_SELECT
                 | rnix::SyntaxKind::NODE_WITH

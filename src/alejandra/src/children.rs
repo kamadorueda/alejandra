@@ -62,7 +62,7 @@ impl Children {
                                             | rnix::SyntaxKind::NODE_LIST
                                             | rnix::SyntaxKind::NODE_LITERAL
                                             | rnix::SyntaxKind::NODE_PAREN
-                                            | rnix::SyntaxKind::NODE_PATH_WITH_INTERPOL
+                                            | rnix::SyntaxKind::NODE_INTERPOL
                                             | rnix::SyntaxKind::NODE_STRING
                                     )
                                 {
