@@ -1,3 +1,5 @@
+use crate::config::Indentation;
+
 const PLACEHOLDER: &str = "\
     4d13159079d76c1398db5f3ab0c62325\
     f884b545e63226f7ec8aad96c52e13e8\
@@ -86,7 +88,7 @@ pub(crate) fn rule(
             })
             .collect();
 
-        // Indent everything 2 spaces
+        // Indent everything
         if lines.len() > 1
             && lines.iter().filter(|line| !line.trim().is_empty()).count() >= 1
         {
@@ -94,7 +96,15 @@ pub(crate) fn rule(
                 .iter()
                 .map(|line| {
                     if !line.trim().is_empty() {
-                        format!("  {}", line)
+                        format!(
+                            "{}{}",
+                            match build_ctx.config.indentation {
+                                Indentation::FourSpaces => "    ",
+                                Indentation::Tabs => "\t",
+                                Indentation::TwoSpaces => "  ",
+                            },
+                            line
+                        )
                     } else {
                         line.to_string()
                     }

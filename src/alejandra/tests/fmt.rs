@@ -13,6 +13,7 @@ fn cases() {
     let configs = HashMap::from([
         ("default", Config::default()),
         ("indentation-tabs", Config { indentation: Indentation::Tabs }),
+        ("indentation-fourspaces", Config { indentation: Indentation::FourSpaces }),
     ]);
 
     let cases_path = PathBuf::new().join("tests").join("cases");
