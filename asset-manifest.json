@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/alejandra/static/css/main.94f8d8e7.css",
+    "main.js": "/alejandra/static/js/main.dee4cb00.js",
+    "static/media/alejandra_front_bg.wasm": "/alejandra/static/media/alejandra_front_bg.8d066edf565a47bec8e6.wasm",
+    "index.html": "/alejandra/index.html",
+    "main.94f8d8e7.css.map": "/alejandra/static/css/main.94f8d8e7.css.map",
+    "main.dee4cb00.js.map": "/alejandra/static/js/main.dee4cb00.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.94f8d8e7.css",
+    "static/js/main.dee4cb00.js"
+  ]
+}
