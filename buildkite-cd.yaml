@@ -1,0 +1,31 @@
+steps:
+  - label: build
+    agents:
+      queue: private
+    artifacts:
+      - alejandra-*
+    command:
+      - echo +++
+      - nix build .#alejandra-binaries
+      - nix-store
+        --query
+        --include-outputs $(nix-store --query --deriver result)
+        --requisites |
+        grep -v '\.drv$$' |
+        cachix push alejandra
+      - cp -L result/* .
+
+  - label: coverage
+    agents:
+      queue: private
+    command:
+      - echo +++ Fetch
+      - git branch -D main
+      - git branch main
+      - git checkout main
+      - echo --- Load environment
+      - direnv allow
+      - eval "$(direnv export bash)"
+      - echo +++ Run tests
+      - cd src/alejandra
+      - cargo tarpaulin --coveralls "$${COVERALLS_REPO_TOKEN}"
