@@ -36,7 +36,6 @@ steps:
     if: build.branch != "main"
     artifacts:
       - formatting-before-vs-after.patch.txt
-      - formatting-after.patch.txt
     command:
       - echo +++ Formatting - demo
       - nix run . -- flake.nix
