@@ -60,10 +60,7 @@ in {
 
         type =
           types.unspecified
-
-//
-
-{
+          // {
             merge =
               mergeEqualOption;
           };
@@ -84,10 +81,7 @@ in {
 or
 
 [])
-
-++
-
-kernelPatches;
+                      ++ kernelPatches;
 
                     features =
                       lib.recursiveUpdate

@@ -2,14 +2,7 @@ pub(crate) fn rule(
     build_ctx: &crate::builder::BuildCtx,
     node: &rnix::SyntaxNode,
 ) -> std::collections::LinkedList<crate::builder::Step> {
-    rule_with_configuration(build_ctx, node, "bin_op_and_or_default")
-}
 
-pub(crate) fn rule_with_configuration(
-    build_ctx: &crate::builder::BuildCtx,
-    node: &rnix::SyntaxNode,
-    parent_kind: &str,
-) -> std::collections::LinkedList<crate::builder::Step> {
     let mut steps = std::collections::LinkedList::new();
 
     let mut children = crate::children2::new(build_ctx, node);
@@ -30,11 +23,7 @@ pub(crate) fn rule_with_configuration(
     if vertical {
         let kind = first.element.kind();
 
-        if (parent_kind == "bin_op_and_or_default"
-            && matches!(kind, rnix::SyntaxKind::NODE_BIN_OP))
-            || (parent_kind == "select"
-                && matches!(kind, rnix::SyntaxKind::NODE_SELECT))
-        {
+        if matches!(kind, rnix::SyntaxKind::NODE_BIN_OP) {
             steps.push_back(crate::builder::Step::Format(first.element));
         } else {
             steps.push_back(crate::builder::Step::FormatWider(first.element));
@@ -65,7 +54,7 @@ pub(crate) fn rule_with_configuration(
     }
 
     // second
-    if !vertical && parent_kind == "bin_op_and_or_default" {
+    if !vertical {
         steps.push_back(crate::builder::Step::Whitespace);
     }
     steps.push_back(crate::builder::Step::Format(second.element));
@@ -90,9 +79,7 @@ pub(crate) fn rule_with_configuration(
                 crate::children2::Trivia::Newlines => {}
             }
         }
-    } else if !second.has_inline_comment
-        && parent_kind == "bin_op_and_or_default"
-    {
+    } else if !second.has_inline_comment {
         steps.push_back(crate::builder::Step::Whitespace);
     }
 
