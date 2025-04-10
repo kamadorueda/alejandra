@@ -12,14 +12,18 @@ fn cases() {
 
     let configs = HashMap::from([
         ("default", Config::default()),
+        ("indentation-four-spaces", Config {
+            indentation: Indentation::FourSpaces,
+        }),
         ("indentation-tabs", Config { indentation: Indentation::Tabs }),
-        ("indentation-fourspaces", Config { indentation: Indentation::FourSpaces }),
     ]);
 
     let cases_path = PathBuf::new().join("tests").join("cases");
 
     for (config_name, config) in configs {
         let config_cases_path = cases_path.join(config_name);
+
+        std::fs::create_dir_all(&config_cases_path).unwrap();
 
         let cases: Vec<String> = std::fs::read_dir(&config_cases_path)
             .unwrap()
