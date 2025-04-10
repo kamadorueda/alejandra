@@ -1,7 +1,7 @@
 ===
 args: ["--help"]
 stdout:
-  Alejandra 3.1.0
+  Alejandra 4.0.0
   The Uncompromising Nix Code Formatter
   
   USAGE:
@@ -47,7 +47,7 @@ exit code: Some(0)
 ===
 args: ["--version"]
 stdout:
-  Alejandra 3.1.0
+  Alejandra 4.0.0
 
 exit code: Some(0)
 ===

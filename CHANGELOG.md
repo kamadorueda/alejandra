@@ -17,7 +17,19 @@ Types of changes
 - Security in case of vulnerabilities.
 -->
 
-## [3.1.0] - 2023-05-15
+## [4.0.0] - 2025-04-10
+
+### Added
+
+- (experimental) Configurable indentation (two spaces, four spaces and tabs).
+- Pipe operators (`a |> b` and `a <| b`) are now supported.
+- Doc comments (`/**  */`) are handled more graciously.
+
+### Changed
+
+- Upgraded dependencies to its latest version.
+
+## [3.1.0] - 2024-11-03
 
 ### Added
 
