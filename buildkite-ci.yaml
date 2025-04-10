@@ -1,39 +1,5 @@
 steps:
-  - label: build
-    if: build.branch == "main"
-    agents:
-      queue: private
-    artifacts:
-      - alejandra-*
-    command:
-      - echo +++
-      - nix build .#alejandra-binaries
-      - nix-store
-        --query
-        --include-outputs $(nix-store --query --deriver result)
-        --requisites |
-        grep -v '\.drv$$' |
-        cachix push alejandra
-      - cp -L result/* .
-
-  - label: coverage
-    if: build.branch == "main"
-    agents:
-      queue: private
-    command:
-      - echo +++ Fetch
-      - git branch -D main
-      - git branch main
-      - git checkout main
-      - echo --- Load environment
-      - direnv allow
-      - eval "$(direnv export bash)"
-      - echo +++ Run tests
-      - cd src/alejandra
-      - cargo tarpaulin --coveralls "${COVERALLS_REPO_TOKEN}"
-
   - label: formatting diff
-    if: build.branch != "main"
     artifacts:
       - formatting-before-vs-after.patch.txt
     command:
@@ -58,7 +24,6 @@ steps:
       - git -C nixpkgs diff formatting-before > formatting-before-vs-after.patch.txt
 
   - label: closure diff
-    if: build.branch != "main"
     artifacts:
       - closure-before.txt
       - closure-after.txt
@@ -86,7 +51,6 @@ steps:
       - grep -c drvPath= closure-after.txt
 
   - label: lint
-    if: build.branch != "main"
     command:
       - echo --- Load environment
       - direnv allow
@@ -95,7 +59,6 @@ steps:
       - cargo clippy
 
   - label: flake check
-    if: build.branch != "main"
     command:
       - echo +++
       - nix flake check
