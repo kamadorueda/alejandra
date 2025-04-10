@@ -111,8 +111,8 @@ Please visit:
 
 You can download a binary for your platform:
 
-- [aarch64-unknown-linux-musl](https://github.com/kamadorueda/alejandra/releases/download/3.1.0/alejandra-aarch64-unknown-linux-musl)
-- [x86_64-unknown-linux-musl](https://github.com/kamadorueda/alejandra/releases/download/3.1.0/alejandra-x86_64-unknown-linux-musl)
+- [aarch64-unknown-linux-musl](https://github.com/kamadorueda/alejandra/releases/download/4.0.0/alejandra-aarch64-unknown-linux-musl)
+- [x86_64-unknown-linux-musl](https://github.com/kamadorueda/alejandra/releases/download/4.0.0/alejandra-x86_64-unknown-linux-musl)
 
 Make it executable (`$ chmod +x`)
 and run Alejandra with:
@@ -136,13 +136,13 @@ Please visit: [search.nixos.org/packages?query=alejandra](https://search.nixos.o
 - Nix stable:
 
   ```bash
-  $ nix-env -ivf https://github.com/kamadorueda/alejandra/tarball/3.1.0
+  $ nix-env -ivf https://github.com/kamadorueda/alejandra/tarball/4.0.0
   ```
 
 - Nix with [Flakes](https://wiki.nixos.org/wiki/Flakes):
 
   ```bash
-  $ nix profile install github:kamadorueda/alejandra/3.1.0
+  $ nix profile install github:kamadorueda/alejandra/4.0.0
   ```
 
 Then run Alejandra with:
@@ -159,7 +159,7 @@ $ alejandra --help
   let
     alejandra =
       (import (builtins.fetchTarball {
-        url = "https://github.com/kamadorueda/alejandra/tarball/3.1.0";
+        url = "https://github.com/kamadorueda/alejandra/tarball/4.0.0";
         sha256 = "0000000000000000000000000000000000000000000000000000";
       }) {})
       .outPath;
@@ -175,7 +175,7 @@ $ alejandra --help
     inputs = {
       nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
-      alejandra.url = "github:kamadorueda/alejandra/3.1.0";
+      alejandra.url = "github:kamadorueda/alejandra/4.0.0";
       alejandra.inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -246,13 +246,17 @@ The following people have helped improving Alejandra.
 
 Thank you ❤️
 
+[Bobbe](https://github.com/30350n),
 [Connor Baker](https://github.com/ConnorBaker),
+[Daniel Bast](https://github.com/dbast),
 [David Arnold](https://github.com/blaggacao),
 [David Hauer](https://github.com/DavHau),
+[esf](https://github.com/exscientiafortis),
 [Fabian Möller](https://github.com/B4dM4n),
 [Florian Finkernagel](https://github.com/TyberiusPrime),
 [Jamie Quigley](https://github.com/Sciencentistguy),
 [Joachim Ernst](https://github.com/0x4A6F),
+[Johannes Kirschbauer](https://github.com/hsjobeki),
 [Jörg Thalheim](https://github.com/Mic92),
 [Kevin Amado](https://github.com/kamadorueda)
 ([Email](mailto:kamadorueda@gmail.com),

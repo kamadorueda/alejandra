@@ -35,13 +35,17 @@ fn sponsor_benefits() -> String {
 
 fn contributor_thanks() -> String {
     let names = [
+        (1.0, ("Bobbe", "30350n")),
         (1.0, ("Connor Baker", "ConnorBaker")),
+        (1.0, ("Daniel Bast", "dbast")),
         (1.0, ("David Arnold", "blaggacao")),
         (1.0, ("David Hauer", "DavHau")),
+        (1.0, ("esf", "exscientiafortis")),
         (1.0, ("Fabian Möller", "B4dM4n")),
         (1.0, ("Florian Finkernagel", "TyberiusPrime")),
         (1.0, ("Jamie Quigley", "Sciencentistguy")),
         (1.0, ("Joachim Ernst", "0x4A6F")),
+        (1.0, ("Johannes Kirschbauer", "hsjobeki")),
         (1.0, ("Jörg Thalheim", "Mic92")),
         (1.0, ("Kevin Amado", "kamadorueda")),
         (1.0, ("Loïc Reynier", "loicreynier")),

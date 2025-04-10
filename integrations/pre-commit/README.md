@@ -8,7 +8,7 @@ with contents:
 ```yaml
 repos:
   - repo: https://github.com/kamadorueda/alejandra
-    rev: 3.1.0
+    rev: 4.0.0
     # Choose either the 'alejandra' or 'alejandra-system' hook
     # depending on what pre-requisites you have:
     hooks:
