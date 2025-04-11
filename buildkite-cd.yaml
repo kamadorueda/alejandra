@@ -1,7 +1,8 @@
+agents:
+  queue: private
+
 steps:
   - label: build
-    agents:
-      queue: private
     artifacts:
       - alejandra-*
     command:
@@ -16,8 +17,6 @@ steps:
       - cp -L result/* .
 
   - label: coverage
-    agents:
-      queue: private
     command:
       - echo +++ Fetch
       - git branch -D main
