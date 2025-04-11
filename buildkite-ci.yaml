@@ -13,14 +13,14 @@ steps:
       - git clone --branch=master --depth 1 --origin=upstream file:///data/nixpkgs
 
       - echo --- Formatting - before
-      - nix --tarball-ttl 1 run github:kamadorueda/alejandra -- nixpkgs 2>/dev/null
+      - nix run github:kamadorueda/alejandra -- --quiet nixpkgs
       - git -C nixpkgs add .
       - git -C nixpkgs commit -m formatting-before -q
       - git -C nixpkgs branch formatting-before
       - git -C nixpkgs reset --hard master~1
 
       - echo --- Formatting - after
-      - nix run . -- nixpkgs 2>/dev/null
+      - nix run . -- --quiet nixpkgs
       - git -C nixpkgs diff formatting-before > formatting-before-vs-after.patch.txt
 
   - label: closure diff
@@ -38,7 +38,7 @@ steps:
       - nix-env --query --available --attr-path --drv-path --file nixpkgs --xml > closure-before.txt
 
       - echo --- Formatting
-      - nix run . -- nixpkgs 2>/dev/null
+      - nix run . -- --quiet nixpkgs
 
       - echo --- Closure @ after
       - nix-env --query --available --attr-path --drv-path --file nixpkgs --xml > closure-after.txt

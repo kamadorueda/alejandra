@@ -1,0 +1,6 @@
+steps:
+  - if: build.branch == "main"
+    command: buildkite-agent pipeline upload buildkite-cd.yaml
+
+  - if: build.branch != "main"
+    command: buildkite-agent pipeline upload buildkite-ci.yaml
