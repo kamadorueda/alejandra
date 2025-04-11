@@ -33,6 +33,7 @@ pub fn in_memory(
 
     let mut build_ctx = crate::builder::BuildCtx {
         config,
+        fitting_in_single_line_depth: 0,
         force_wide: false,
         force_wide_success: true,
         indentation: 0,

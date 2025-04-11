@@ -16,13 +16,14 @@ pub(crate) enum Step {
 
 #[derive(Clone)]
 pub(crate) struct BuildCtx {
-    pub config:             Config,
-    pub force_wide:         bool,
-    pub force_wide_success: bool,
-    pub indentation:        usize,
-    pub pos_old:            crate::position::Position,
-    pub path:               String,
-    pub vertical:           bool,
+    pub config:                       Config,
+    pub fitting_in_single_line_depth: usize,
+    pub force_wide:                   bool,
+    pub force_wide_success:           bool,
+    pub indentation:                  usize,
+    pub pos_old:                      crate::position::Position,
+    pub path:                         String,
+    pub vertical:                     bool,
 }
 
 pub(crate) fn build(
@@ -262,6 +263,7 @@ fn format_wider(
     match element {
         rnix::SyntaxElement::Node(node) => {
             let mut build_ctx_clone = build_ctx.clone();
+
             build_ctx_clone.vertical =
                 !fits_in_single_line(build_ctx, node.clone().into());
 
@@ -284,7 +286,17 @@ pub(crate) fn fits_in_single_line(
         ..build_ctx_old.clone()
     };
 
-    build(&mut build_ctx, element).is_some()
+    build_ctx.fitting_in_single_line_depth += 1;
+
+    if build_ctx.fitting_in_single_line_depth >= 2 {
+        return true;
+    }
+
+    let fits = build(&mut build_ctx, element).is_some();
+
+    build_ctx.fitting_in_single_line_depth -= 1;
+
+    fits
 }
 
 pub(crate) fn make_isolated_token(
