@@ -199,6 +199,12 @@ $ alejandra --help
   }
   ```
 
+### From [Homebrew](https://brew.sh)
+
+```bash
+$ brew install alejandra
+```
+
 ## (experimental) Configuration Options
 
 You can configure Alejandra through a file named `alejandra.toml`.
