@@ -97,7 +97,6 @@
           linuxPackages_latest.perf
           nodejs
           nodePackages.prettier
-          nodePackages.prettier-plugin-toml
           shfmt
           treefmt
           yarn
