@@ -2,7 +2,6 @@ pub(crate) fn rule(
     build_ctx: &crate::builder::BuildCtx,
     node: &rnix::SyntaxNode,
 ) -> std::collections::LinkedList<crate::builder::Step> {
-
     let mut steps = std::collections::LinkedList::new();
 
     let mut children = crate::children2::new(build_ctx, node);

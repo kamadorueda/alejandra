@@ -1,6 +1,6 @@
 [dependencies]
 rnix = { version = "*", default-features = false, features = [] }
-rowan = { version = "0.15.16", default-features = false, features = [] }
+rowan = { version = "0.16.1", default-features = false, features = [] }
 serde = { version = "*", default-features = false, features = ["derive"] }
 
 [target.aarch64-unknown-linux-musl.dependencies.mimalloc]

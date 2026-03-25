@@ -163,6 +163,9 @@ fn format(
                 // a $op b
                 rnix::SyntaxKind::NODE_BIN_OP => crate::rules::bin_op::rule,
 
+                // __loc__ (current position)
+                rnix::SyntaxKind::NODE_CUR_POS => crate::rules::default,
+
                 // ${a} (interpolation but for NODE_SELECT)
                 rnix::SyntaxKind::NODE_DYNAMIC => crate::rules::dynamic::rule,
 
@@ -213,8 +216,17 @@ fn format(
                     crate::rules::pat_entry::rule
                 }
 
-                // /path/to/${a}
-                rnix::SyntaxKind::NODE_PATH => crate::rules::default,
+                // /path/to/${a} (absolute path)
+                rnix::SyntaxKind::NODE_PATH_ABS => crate::rules::default,
+
+                // ~/ (home path)
+                rnix::SyntaxKind::NODE_PATH_HOME => crate::rules::default,
+
+                // /path/to/${a} (relative path)
+                rnix::SyntaxKind::NODE_PATH_REL => crate::rules::default,
+
+                // <path> (search path)
+                rnix::SyntaxKind::NODE_PATH_SEARCH => crate::rules::default,
 
                 // { NODE_PAT_ENTRY* }
                 rnix::SyntaxKind::NODE_PATTERN => crate::rules::pattern::rule,

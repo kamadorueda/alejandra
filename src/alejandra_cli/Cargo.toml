@@ -20,7 +20,7 @@ rand = { version = "*", default-features = false, features = [
   "alloc",
   "getrandom",
 ] }
-toml = { version = "*", default-features = false, features = ["parse"] }
+toml = { version = "*", default-features = false, features = ["parse", "serde"] }
 walkdir = { version = "*", default-features = false, features = [] }
 
 [package]
