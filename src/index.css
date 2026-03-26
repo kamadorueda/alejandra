@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@theme {
+  /* Custom color palette */
+  --color-primary: #3b82f6;
+  --color-surface: #ffffff;
+  --color-surface-dim: #f8fafc;
+  --color-text: #475569;
+  --color-text-dark: #0f172a;
+
+  /* Fonts */
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  /* Custom utilities */
+  .focus-ring {
+    @apply focus-visible:outline-primary focus-visible:outline focus-visible:outline-1;
+  }
+}
