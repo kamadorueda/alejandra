@@ -6,6 +6,7 @@ pnpm-lock.yaml
 # Build outputs
 dist/
 build/
+pkg/
 
 # Development
 .vscode/
