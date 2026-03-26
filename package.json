@@ -1,0 +1,29 @@
+{
+  "name": "alejandra-frontend",
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Modern frontend for Alejandra Nix formatter",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "19.0.0-rc-66855b96-20241119",
+    "react-dom": "19.0.0-rc-66855b96-20241119",
+    "react-diff-viewer": "^3.1.1",
+    "codemirror": "5",
+    "alejandra_front": "file:./pkg"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.0.0-alpha.19",
+    "@vitejs/plugin-react": "^4.3.0",
+    "tailwindcss": "^4.0.0-alpha.19",
+    "typescript": "^5.3.3",
+    "vite": "^6.1.0"
+  },
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=9"
+  }
+}
