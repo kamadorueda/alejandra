@@ -1,4 +1,4 @@
-import * as wasm from "alejandra_front";
+import wasmInit, { format } from "alejandra_front";
 
 let initialized = false;
 let initPromise: Promise<void> | null = null;
@@ -18,8 +18,11 @@ export const initFormatter = async () => {
   initPromise = (async () => {
     try {
       console.log("initFormatter: Starting WASM initialization");
-      const result = await wasm.default();
-      console.log("initFormatter: WASM loaded successfully", result);
+
+      // Initialize WASM - this will auto-load from node_modules
+      await wasmInit();
+
+      console.log("initFormatter: WASM initialized successfully");
       initialized = true;
     } catch (error) {
       console.error("initFormatter: Failed to initialize WASM formatter", error);
@@ -38,8 +41,9 @@ export const formatCode = (code: string, filename: string = "file.nix"): string 
   }
 
   try {
-    const formatted = wasm.format(code, filename);
-    console.log("formatCode: Formatting successful");
+    console.log("formatCode: Calling format with code length:", code.length, "filename:", filename);
+    const formatted = format(code, filename);
+    console.log("formatCode: Formatting successful, output length:", formatted.length);
     return formatted;
   } catch (error) {
     console.error("formatCode: Formatting error", error);

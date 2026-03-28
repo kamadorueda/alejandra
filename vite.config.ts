@@ -10,4 +10,12 @@ export default defineConfig({
     },
   },
   plugins: [react(), tailwindcss()],
+  optimizeDeps: {
+    include: ["alejandra_front"],
+  },
+  build: {
+    rollupOptions: {
+      external: [],
+    },
+  },
 });
