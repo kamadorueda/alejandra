@@ -23,3 +23,5 @@ pkg/
 # OS
 .DS_Store
 Thumbs.db
+.playwright-cli/
+.playwright/
