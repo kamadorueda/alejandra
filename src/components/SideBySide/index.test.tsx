@@ -54,7 +54,9 @@ describe("SideBySide", () => {
   it("shows loading state initially", async () => {
     const { container } = render(<SideBySide />);
     // Should show loading/initializing state initially
-    expect(container).toBeDefined();
+    await waitFor(() => {
+      expect(container).toBeDefined();
+    });
   });
 
   it("renders output editor with Alejandra label", async () => {
