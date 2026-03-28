@@ -28,6 +28,8 @@
     nixpkgs."x86_64-darwin" = nixpkgsForHost "x86_64-darwin";
     nixpkgs."x86_64-linux" = nixpkgsForHost "x86_64-linux";
 
+    fenix."x86_64-linux" = inputs.fenix.packages."x86_64-linux";
+
     overlay = final: prev: {
       alejandra = final.rustPlatform.buildRustPackage {
         pname = "alejandra";
@@ -142,6 +144,24 @@
           packageJSON = ./integrations/vscode/package.json;
           yarnLock = ./integrations/vscode/yarn.lock;
           yarnNix = ./integrations/vscode/yarn.lock.nix;
+        };
+        "build-wasm" = writeShellApplication {
+          name = "build-wasm";
+          runtimeInputs = [
+            (fenix."x86_64-linux".combine [
+              fenix."x86_64-linux".latest.rustc
+              fenix."x86_64-linux".latest.toolchain
+              fenix."x86_64-linux".targets."wasm32-unknown-unknown".latest.rust-std
+            ])
+            binaryen
+            pkg-config
+            openssl
+            wasm-pack
+          ];
+          text = ''
+            cd src/alejandra_wasm
+            wasm-pack build --target web
+          '';
         };
       };
   };
