@@ -23,4 +23,14 @@
   .focus-ring {
     @apply focus-visible:outline-primary focus-visible:outline focus-visible:outline-1;
   }
+
+  /* CodeMirror styling */
+  .CodeMirror {
+    height: 100% !important;
+    flex-grow: 1;
+  }
+
+  .CodeMirror-linenumbers {
+    background-color: #3d3d3d;
+  }
 }
