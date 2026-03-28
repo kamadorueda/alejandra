@@ -16,7 +16,7 @@ pub(crate) struct Child {
     pub has_trivialities: bool,
 }
 
-pub(crate) fn new(
+pub(crate) fn annotated(
     build_ctx: &crate::builder::BuildCtx,
     node: &rnix::SyntaxNode,
 ) -> std::collections::linked_list::IntoIter<Child> {

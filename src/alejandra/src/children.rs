@@ -40,10 +40,11 @@ impl Children {
                                 simplified.kind(),
                                 rnix::SyntaxKind::NODE_PAREN
                             ) {
-                                let mut children = crate::children2::new(
-                                    build_ctx,
-                                    &simplified,
-                                );
+                                let mut children =
+                                    crate::annotated_children::annotated(
+                                        build_ctx,
+                                        &simplified,
+                                    );
 
                                 let opener = children.next().unwrap();
                                 let expression = children.next().unwrap();

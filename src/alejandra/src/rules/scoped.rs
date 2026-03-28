@@ -4,7 +4,7 @@ pub(crate) fn rule(
 ) -> std::collections::LinkedList<crate::builder::Step> {
     let mut steps = std::collections::LinkedList::new();
 
-    let mut children = crate::children2::new(build_ctx, node);
+    let mut children = crate::annotated_children::annotated(build_ctx, node);
 
     let first = children.next().unwrap();
     let second = children.next().unwrap();
@@ -38,12 +38,12 @@ pub(crate) fn rule(
 
     for trivia in first.trivialities {
         match trivia {
-            crate::children2::Trivia::Comment(text) => {
+            crate::annotated_children::Trivia::Comment(text) => {
                 steps.push_back(crate::builder::Step::Comment(text));
                 steps.push_back(crate::builder::Step::NewLine);
                 steps.push_back(crate::builder::Step::Pad);
             }
-            crate::children2::Trivia::Newlines => {}
+            crate::annotated_children::Trivia::Newlines => {}
         }
     }
 
@@ -66,12 +66,12 @@ pub(crate) fn rule(
 
     for trivia in third.trivialities {
         match trivia {
-            crate::children2::Trivia::Comment(text) => {
+            crate::annotated_children::Trivia::Comment(text) => {
                 steps.push_back(crate::builder::Step::NewLine);
                 steps.push_back(crate::builder::Step::Pad);
                 steps.push_back(crate::builder::Step::Comment(text));
             }
-            crate::children2::Trivia::Newlines => {}
+            crate::annotated_children::Trivia::Newlines => {}
         }
     }
 

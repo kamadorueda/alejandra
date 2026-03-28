@@ -243,6 +243,18 @@ pub fn main() -> ! {
     std::process::exit(0);
 }
 
+fn try_resolve_config(path: Option<&str>) -> Result<Config, String> {
+    if let Some(path) = path {
+        let contents = read_to_string(path)
+            .map_err(|error| format!("Unable to read config: {}", error))?;
+
+        toml::from_str::<Config>(&contents)
+            .map_err(|error| format!("Errors found in config: {}", error))
+    } else {
+        Ok(Config::default())
+    }
+}
+
 fn resolve_config(path: Option<&str>, verbosity: Verbosity) -> Config {
     let default_config_path = "alejandra.toml";
 
@@ -257,21 +269,15 @@ fn resolve_config(path: Option<&str>, verbosity: Verbosity) -> Config {
         if verbosity.allows_info() {
             eprintln!("Using config from: {}", path);
         }
+    }
 
-        let contents = read_to_string(path).unwrap_or_else(|error| {
+    match try_resolve_config(path) {
+        Ok(config) => config,
+        Err(error) => {
             if verbosity.allows_errors() {
-                eprintln!("Unable to read config: {}", error);
+                eprintln!("{}", error);
             }
             std::process::exit(1);
-        });
-
-        toml::from_str::<Config>(&contents).unwrap_or_else(|error| {
-            if verbosity.allows_errors() {
-                eprintln!("Errors found in config: {}", error);
-            }
-            std::process::exit(1);
-        })
-    } else {
-        Config::default()
+        }
     }
 }
