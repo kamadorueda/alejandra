@@ -1,0 +1,4 @@
+[
+  ''a''
+  ''single line content''
+]
