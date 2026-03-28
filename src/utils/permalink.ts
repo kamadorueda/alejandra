@@ -39,5 +39,5 @@ export const getStateFromUrl = (): PermalinkState | null => {
  * Set state in URL hash
  */
 export const setStateInUrl = (state: PermalinkState): void => {
-  window.location.hash = encodeState(state);
+  history.replaceState(null, "", "#" + encodeState(state));
 };
