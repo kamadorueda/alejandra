@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest run --coverage"
   },
   "dependencies": {
     "alejandra_front": "file:./pkg",
@@ -20,10 +21,16 @@
     "@playwright/cli": "^0.1.1",
     "@playwright/mcp": "latest",
     "@tailwindcss/vite": "^4.0.0-alpha.19",
+    "@testing-library/jest-dom": "^6.1.5",
+    "@testing-library/react": "^14.1.2",
+    "@testing-library/user-event": "^14.5.1",
     "@vitejs/plugin-react": "^4.3.0",
+    "@vitest/coverage-v8": "^1.0.4",
+    "happy-dom": "^12.10.3",
     "tailwindcss": "^4.0.0-alpha.19",
     "typescript": "^5.3.3",
-    "vite": "^6.1.0"
+    "vite": "^6.1.0",
+    "vitest": "^1.0.4"
   },
   "engines": {
     "node": ">=20",

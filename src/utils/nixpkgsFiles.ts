@@ -17,3 +17,8 @@ export const getFiles = async (): Promise<string[]> => {
   cachedFiles = await response.json();
   return cachedFiles;
 };
+
+// Test utility: reset the cache (only used in tests)
+export const _resetCache = (): void => {
+  cachedFiles = null;
+};

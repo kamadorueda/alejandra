@@ -11,7 +11,13 @@ interface PermalinkState {
  */
 export const encodeState = (state: PermalinkState): string => {
   const json = JSON.stringify(state);
-  return btoa(json);
+  // Handle unicode characters by converting to UTF-8 bytes first
+  const uint8Array = new TextEncoder().encode(json);
+  let binary = '';
+  for (let i = 0; i < uint8Array.length; i++) {
+    binary += String.fromCharCode(uint8Array[i]);
+  }
+  return btoa(binary);
 };
 
 /**
@@ -19,7 +25,13 @@ export const encodeState = (state: PermalinkState): string => {
  */
 export const decodeState = (encoded: string): PermalinkState | null => {
   try {
-    const json = atob(encoded);
+    const binary = atob(encoded);
+    // Convert binary string back to UTF-8 bytes
+    const uint8Array = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) {
+      uint8Array[i] = binary.charCodeAt(i);
+    }
+    const json = new TextDecoder().decode(uint8Array);
     return JSON.parse(json) as PermalinkState;
   } catch {
     return null;
