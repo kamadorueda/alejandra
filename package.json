@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "deploy": "vite build && gh-pages -d dist -b front-build",
     "preview": "vite preview",
     "test": "vitest run --coverage"
   },
@@ -26,6 +27,7 @@
     "@testing-library/user-event": "^14.5.1",
     "@vitejs/plugin-react": "^4.3.0",
     "@vitest/coverage-v8": "^1.0.4",
+    "gh-pages": "^6.3.0",
     "happy-dom": "^12.10.3",
     "tailwindcss": "^4.0.0-alpha.19",
     "typescript": "^5.3.3",
