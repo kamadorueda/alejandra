@@ -75,7 +75,7 @@ export default function SideBySide() {
   return (
     <div className="space-y-6">
       {/* Instructions section */}
-      <div className="flex items-center justify-between flex-wrap gap-4 border-b border-neutral-200 pb-4">
+      <div className="border-b border-neutral-200 pb-4">
         <div className="text-sm text-text">
           Type your code below or{" "}
           <button
@@ -85,9 +85,6 @@ export default function SideBySide() {
           >
             {isLoading ? "loading..." : "click here to fetch a random file from Nixpkgs"}
           </button>
-        </div>
-        <div className="text-sm font-medium text-text-dark">
-          With Alejandra ❤️
         </div>
       </div>
 
@@ -103,7 +100,9 @@ export default function SideBySide() {
         </div>
 
         <div className="space-y-2">
-          <h2 className="text-sm font-semibold text-text-dark uppercase tracking-wide">Output</h2>
+          <div className="text-sm font-medium text-text-dark">
+            With Alejandra ❤️
+          </div>
           <Editor
             value={state.output}
             onChange={() => {}}
