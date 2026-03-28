@@ -62,5 +62,5 @@ export default function Editor({ value, onChange, readOnly = false }: EditorProp
     }
   }, [value]);
 
-  return <div ref={containerRef} className="w-full rounded-lg overflow-hidden min-h-96 flex flex-col" />;
+  return <div ref={containerRef} className="w-full rounded-lg overflow-hidden h-96 flex flex-col" />;
 }
