@@ -7,6 +7,12 @@
   --color-surface-dim: #f8fafc;
   --color-text: #475569;
   --color-text-dark: #0f172a;
+  --color-editor-bg: #2d2d2d;
+  --color-editor-text: #e8e8e8;
+  --color-diff-add: #a6e22e;
+  --color-diff-add-bg: #e8f5e9;
+  --color-diff-remove: #ff6b6b;
+  --color-diff-remove-bg: #ffebee;
 
   /* Fonts */
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;

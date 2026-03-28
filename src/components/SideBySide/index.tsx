@@ -73,20 +73,28 @@ export default function SideBySide() {
   };
 
   return (
-    <div className="space-y-4">
-      <div className="flex gap-4 flex-col sm:flex-row">
-        <button
-          onClick={handleLoadRandom}
-          disabled={isLoading}
-          className="rounded-lg bg-primary px-4 py-2 font-medium text-white hover:bg-blue-600 disabled:opacity-50"
-        >
-          {isLoading ? "Loading..." : "Load Random File"}
-        </button>
+    <div className="space-y-6">
+      {/* Instructions section */}
+      <div className="flex items-center justify-between flex-wrap gap-4 border-b border-neutral-200 pb-4">
+        <div className="text-sm text-text">
+          Type your code below or{" "}
+          <button
+            onClick={handleLoadRandom}
+            disabled={isLoading}
+            className="text-primary hover:underline font-medium"
+          >
+            {isLoading ? "loading..." : "click here to fetch a random file from Nixpkgs"}
+          </button>
+        </div>
+        <div className="text-sm font-medium text-text-dark">
+          With Alejandra ❤️
+        </div>
       </div>
 
+      {/* Input and Output editors side-by-side */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <div className="space-y-2">
-          <h2 className="text-lg font-semibold text-text-dark">Input</h2>
+          <h2 className="text-sm font-semibold text-text-dark uppercase tracking-wide">Input</h2>
           <Editor
             value={state.input}
             onChange={handleInputChange}
@@ -95,9 +103,27 @@ export default function SideBySide() {
         </div>
 
         <div className="space-y-2">
-          <h2 className="text-lg font-semibold text-text-dark">Output</h2>
-          <DiffViewer input={state.input} output={state.output} />
+          <h2 className="text-sm font-semibold text-text-dark uppercase tracking-wide">Output</h2>
+          <Editor
+            value={state.output}
+            onChange={() => {}}
+            readOnly={true}
+          />
         </div>
+      </div>
+
+      {/* Git patch diff viewer */}
+      <DiffViewer input={state.input} output={state.output} />
+
+      {/* Permalink section */}
+      <div className="flex items-center gap-2 text-sm text-text border-t border-neutral-200 pt-4">
+        <span>Permalink:</span>
+        <a
+          href={`#${window.location.hash.slice(1)}`}
+          className="text-primary hover:underline font-medium"
+        >
+          here
+        </a>
       </div>
     </div>
   );

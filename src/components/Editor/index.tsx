@@ -1,6 +1,7 @@
 import { useRef, useEffect } from "react";
 import * as CodeMirror from "codemirror";
 import "codemirror/lib/codemirror.css";
+import "codemirror/theme/monokai.css";
 
 interface EditorProps {
   value: string;
@@ -23,7 +24,7 @@ export default function Editor({ value, onChange, readOnly = false }: EditorProp
     // Create editor
     const editor = CodeMirror.fromTextArea(textarea, {
       mode: "nix",
-      theme: "default",
+      theme: "monokai",
       lineNumbers: true,
       indentUnit: 2,
       readOnly: readOnly,
@@ -60,5 +61,5 @@ export default function Editor({ value, onChange, readOnly = false }: EditorProp
     }
   }, [value]);
 
-  return <div ref={containerRef} className="border border-neutral-200 rounded-lg overflow-hidden min-h-96" />;
+  return <div ref={containerRef} className="bg-editor-bg rounded-lg overflow-hidden min-h-96" style={{ backgroundColor: '#2d2d2d' }} />;
 }
