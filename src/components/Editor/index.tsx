@@ -62,5 +62,5 @@ export default function Editor({ value, onChange, readOnly = false }: EditorProp
     }
   }, [value]);
 
-  return <div ref={containerRef} className="bg-editor-bg rounded-lg overflow-hidden min-h-96" style={{ backgroundColor: '#2d2d2d' }} />;
+  return <div ref={containerRef} className="w-full bg-editor-bg rounded-lg overflow-auto min-h-96" style={{ backgroundColor: '#2d2d2d' }} />;
 }
