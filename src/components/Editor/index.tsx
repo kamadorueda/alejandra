@@ -2,6 +2,7 @@ import { useRef, useEffect } from "react";
 import * as CodeMirror from "codemirror";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/monokai.css";
+import "codemirror/mode/shell/shell";
 
 interface EditorProps {
   value: string;
@@ -23,7 +24,7 @@ export default function Editor({ value, onChange, readOnly = false }: EditorProp
 
     // Create editor
     const editor = CodeMirror.fromTextArea(textarea, {
-      mode: "nix",
+      mode: "shell",
       theme: "monokai",
       lineNumbers: true,
       indentUnit: 2,
