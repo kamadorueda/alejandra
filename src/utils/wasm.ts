@@ -1,17 +1,30 @@
-// TEMPORARILY STUBBED - WASM integration disabled for UI testing
-// Real WASM will be re-enabled after verifying frontend functionality
+import * as wasm from "alejandra_front";
 
 let initialized = false;
 
 export const initFormatter = async () => {
   if (!initialized) {
-    console.log("Formatter initialized (stub mode - no WASM)");
-    initialized = true;
+    try {
+      await wasm.default();
+      console.log("Formatter initialized with WASM");
+      initialized = true;
+    } catch (error) {
+      console.error("Failed to initialize WASM formatter:", error);
+      throw error;
+    }
   }
 };
 
-export const formatCode = (code: string, _filename: string = "file.nix"): string => {
-  // Stub: return input unchanged for now
-  console.log("Format called (stub mode - returning input unchanged)");
-  return code;
+export const formatCode = (code: string, filename: string = "file.nix"): string => {
+  if (!initialized) {
+    console.warn("Formatter not initialized, returning input unchanged");
+    return code;
+  }
+
+  try {
+    return wasm.format(code, filename);
+  } catch (error) {
+    console.error("Formatting error:", error);
+    return code;
+  }
 };
