@@ -51,5 +51,5 @@ export default function Editor({ value, onChange, readOnly = false }: EditorProp
     }
   }, [value]);
 
-  return <div ref={containerRef} className="border border-neutral-200 rounded-lg overflow-hidden" />;
+  return <div ref={containerRef} className="border border-neutral-200 rounded-lg overflow-hidden min-h-96" />;
 }

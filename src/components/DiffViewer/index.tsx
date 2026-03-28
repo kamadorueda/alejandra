@@ -23,7 +23,7 @@ export default function DiffViewer({ input, output }: DiffViewerProps) {
   );
 
   return (
-    <div className="border border-neutral-200 rounded-lg overflow-hidden bg-white">
+    <div className="border border-neutral-200 rounded-lg overflow-hidden bg-white min-h-96">
       <ReactDiffViewer {...diffConfig} />
     </div>
   );
