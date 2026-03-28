@@ -1,5 +1,7 @@
 import { useMemo } from "react";
 import ReactDiffViewer, { DiffMethod } from "react-diff-viewer";
+import hljs from "highlight.js";
+import "highlight.js/styles/atom-one-light.css";
 
 interface DiffViewerProps {
   input: string;
@@ -16,7 +18,17 @@ export default function DiffViewer({ input, output }: DiffViewerProps) {
       compareMethod: DiffMethod.WORDS,
       showDiffOnly: false,
       renderContent: (text: string) => {
-        return <pre style={{ margin: 0, whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{text}</pre>;
+        try {
+          const highlighted = hljs.highlight(text, { language: "bash", ignoreIllegals: true }).value;
+          return (
+            <pre
+              style={{ margin: 0, whiteSpace: "pre-wrap", wordBreak: "break-word" }}
+              dangerouslySetInnerHTML={{ __html: highlighted }}
+            />
+          );
+        } catch {
+          return <pre style={{ margin: 0, whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{text}</pre>;
+        }
       },
       codeFoldMessageRenderer: () => null,
       styles: {
