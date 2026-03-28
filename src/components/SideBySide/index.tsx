@@ -24,7 +24,11 @@ export default function SideBySide() {
         console.log("SideBySide: Initializing formatter...");
         await initFormatter();
         console.log("SideBySide: Formatter initialized");
+      } catch (error) {
+        console.error("SideBySide: Formatter initialization failed:", error);
+      }
 
+      try {
         // Check if we have state in URL
         const urlState = getStateFromUrl();
         if (urlState?.code) {
@@ -33,10 +37,13 @@ export default function SideBySide() {
         } else {
           // Load random Nix file
           console.log("SideBySide: Loading random file");
-          loadRandomFile();
+          await loadRandomFile();
         }
       } catch (error) {
-        console.error("SideBySide: Initialization failed:", error);
+        console.error("SideBySide: File loading failed:", error);
+        // Fallback: load default code
+        const defaultCode = '{ lib, stdenv }:\n\nstdenv.mkDerivation {\n  name = "example";\n  src = ./.;\n}';
+        handleFormatCode(defaultCode);
       }
     };
 
@@ -47,10 +54,15 @@ export default function SideBySide() {
     setIsLoading(true);
     try {
       const path = randomPath();
+      console.log("Loading random file from:", path);
       const code = await get(path);
+      console.log("Loaded code, length:", code.length);
       handleFormatCode(code);
     } catch (error) {
       console.error("Failed to load random file:", error);
+      // Fallback: use default example
+      const defaultCode = '{ lib, stdenv }:\n\nstdenv.mkDerivation {\n  name = "example";\n  src = ./.;\n}';
+      handleFormatCode(defaultCode);
     } finally {
       setIsLoading(false);
     }
