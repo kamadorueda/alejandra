@@ -12,8 +12,9 @@ export default function Editor({ value, onChange, readOnly = false }: EditorProp
   const containerRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<CodeMirror.Editor | null>(null);
 
+  // Initialize editor once
   useEffect(() => {
-    if (!containerRef.current) return;
+    if (!containerRef.current || editorRef.current) return;
 
     // Create textarea element and add to DOM first
     const textarea = document.createElement("textarea");
@@ -31,18 +32,26 @@ export default function Editor({ value, onChange, readOnly = false }: EditorProp
 
     editorRef.current = editor;
 
-    // Handle changes
+    return () => {
+      editor.toTextArea();
+      editorRef.current = null;
+    };
+  }, [readOnly]);
+
+  // Update onChange handler
+  useEffect(() => {
+    if (!editorRef.current) return;
+
     const changeHandler = () => {
-      onChange(editor.getValue());
+      onChange(editorRef.current!.getValue());
     };
 
-    editor.on("change", changeHandler);
+    editorRef.current.on("change", changeHandler);
 
     return () => {
-      editor.off("change", changeHandler);
-      editor.toTextArea();
+      editorRef.current?.off("change", changeHandler);
     };
-  }, [onChange, readOnly]);
+  }, [onChange]);
 
   // Update content when value prop changes (external updates)
   useEffect(() => {
