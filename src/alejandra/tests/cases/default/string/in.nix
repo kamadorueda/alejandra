@@ -1,9 +1,17 @@
 [
+  # EN SPACE (U+2002) before "bar" - tests that only regular spaces are stripped
   ''
   foo
  bar
 ''
-  ""
+###
+  # Same content with normal spaces only
+  ''
+  foo
+ bar
+''
+###
+""
 ###
   "
   "

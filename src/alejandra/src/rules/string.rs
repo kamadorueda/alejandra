@@ -6,6 +6,18 @@ const PLACEHOLDER: &str = "\
     6b219abc9462c41b87e47344752e9940\
     abf9353565f69a5db5c672b89372b84c";
 
+/// Returns the indentation unit to use inside `''..''` string content.
+///
+/// Nix only strips leading **spaces** when evaluating indented strings.
+/// We must never use tabs in string content, even when the surrounding code
+/// uses tab indentation. This ensures string values are preserved correctly.
+fn string_content_indent_unit(indentation: Indentation) -> &'static str {
+    match indentation {
+        Indentation::FourSpaces => "    ",
+        Indentation::Tabs | Indentation::TwoSpaces => "  ",
+    }
+}
+
 pub(crate) fn rule(
     build_ctx: &crate::builder::BuildCtx,
     node: &rnix::SyntaxNode,
@@ -66,10 +78,11 @@ pub(crate) fn rule(
             let line = line.trim_end();
 
             if !line.is_empty() {
-                indentation = usize::min(
-                    indentation,
-                    line.chars().count() - line.trim_start().chars().count(),
-                );
+                // Only count leading spaces, not tabs. Nix only strips spaces
+                // from multiline strings.
+                let leading_spaces = line.chars().count()
+                    - line.trim_start_matches(' ').chars().count();
+                indentation = usize::min(indentation, leading_spaces);
             }
         }
         if indentation == usize::MAX {
@@ -98,11 +111,9 @@ pub(crate) fn rule(
                     if !line.trim().is_empty() {
                         format!(
                             "{}{}",
-                            match build_ctx.config.indentation {
-                                Indentation::FourSpaces => "    ",
-                                Indentation::Tabs => "\t",
-                                Indentation::TwoSpaces => "  ",
-                            },
+                            string_content_indent_unit(
+                                build_ctx.config.indentation
+                            ),
                             line
                         )
                     } else {
@@ -121,7 +132,16 @@ pub(crate) fn rule(
             if portions.len() == 1 {
                 if !portions[0].is_empty() || index + 1 == lines.len() {
                     if lines.len() > 1 {
-                        steps.push_back(crate::builder::Step::Pad);
+                        let content_pad = string_content_indent_unit(
+                            build_ctx.config.indentation,
+                        )
+                        .repeat(build_ctx.indentation);
+                        if !content_pad.is_empty() {
+                            steps.push_back(crate::builder::Step::Token(
+                                rnix::SyntaxKind::TOKEN_WHITESPACE,
+                                content_pad,
+                            ));
+                        }
                     }
                     steps.push_back(crate::builder::Step::Token(
                         rnix::SyntaxKind::TOKEN_STRING_CONTENT,
@@ -130,7 +150,16 @@ pub(crate) fn rule(
                 }
             } else {
                 if lines.len() > 1 {
-                    steps.push_back(crate::builder::Step::Pad);
+                    let content_pad = string_content_indent_unit(
+                        build_ctx.config.indentation,
+                    )
+                    .repeat(build_ctx.indentation);
+                    if !content_pad.is_empty() {
+                        steps.push_back(crate::builder::Step::Token(
+                            rnix::SyntaxKind::TOKEN_WHITESPACE,
+                            content_pad,
+                        ));
+                    }
                 }
                 for (index, portion) in portions.iter().enumerate() {
                     steps.push_back(crate::builder::Step::Token(
