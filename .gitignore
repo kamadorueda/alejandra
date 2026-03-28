@@ -1,27 +1,25 @@
+# Build
+build/
+coverage/
+dist/
+pkg/
+
 # Dependencies
 node_modules/
 pnpm-lock.yaml
 .pnpm-debug.log
 
-# Build outputs
-dist/
-build/
-pkg/
-
 # Development
-.vscode/
+.direnv/
+.env*.local
 .idea/
+.vscode/
 *.swp
 *.swo
 *~
 
-# Environment
-.env.local
-.env.*.local
-.direnv/
-
 # OS
 .DS_Store
-Thumbs.db
-.playwright-cli/
 .playwright/
+.playwright-cli/
+Thumbs.db
