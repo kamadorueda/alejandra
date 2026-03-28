@@ -6,4 +6,5 @@ opt-level = 2
 
 [workspace]
 members = ["src/*"]
+exclude = ["src/alejandra_wasm"]
 resolver = "2"
