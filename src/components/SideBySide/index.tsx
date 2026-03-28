@@ -20,15 +20,23 @@ export default function SideBySide() {
   // Initialize formatter and load state
   useEffect(() => {
     const initialize = async () => {
-      await initFormatter();
+      try {
+        console.log("SideBySide: Initializing formatter...");
+        await initFormatter();
+        console.log("SideBySide: Formatter initialized");
 
-      // Check if we have state in URL
-      const urlState = getStateFromUrl();
-      if (urlState?.code) {
-        handleFormatCode(urlState.code);
-      } else {
-        // Load random Nix file
-        loadRandomFile();
+        // Check if we have state in URL
+        const urlState = getStateFromUrl();
+        if (urlState?.code) {
+          console.log("SideBySide: Loading from URL state");
+          handleFormatCode(urlState.code);
+        } else {
+          // Load random Nix file
+          console.log("SideBySide: Loading random file");
+          loadRandomFile();
+        }
+      } catch (error) {
+        console.error("SideBySide: Initialization failed:", error);
       }
     };
 

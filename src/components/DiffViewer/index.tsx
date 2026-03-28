@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import ReactDiffViewer, { DiffMethod } from "react-diff-viewer";
-import "react-diff-viewer/bundles/react-diff-viewer.css";
 
 interface DiffViewerProps {
   input: string;

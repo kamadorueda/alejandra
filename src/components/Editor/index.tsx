@@ -15,20 +15,20 @@ export default function Editor({ value, onChange, readOnly = false }: EditorProp
   useEffect(() => {
     if (!containerRef.current) return;
 
-    // Create editor
-    const editor = CodeMirror.fromTextArea(
-      document.createElement("textarea"),
-      {
-        mode: "nix",
-        theme: "default",
-        lineNumbers: true,
-        indentUnit: 2,
-        readOnly: readOnly,
-        viewportMargin: Infinity,
-      }
-    );
+    // Create textarea element and add to DOM first
+    const textarea = document.createElement("textarea");
+    containerRef.current.appendChild(textarea);
 
-    containerRef.current.appendChild(editor.getWrapperElement());
+    // Create editor
+    const editor = CodeMirror.fromTextArea(textarea, {
+      mode: "nix",
+      theme: "default",
+      lineNumbers: true,
+      indentUnit: 2,
+      readOnly: readOnly,
+      viewportMargin: Infinity,
+    });
+
     editorRef.current = editor;
 
     // Handle changes
@@ -40,7 +40,7 @@ export default function Editor({ value, onChange, readOnly = false }: EditorProp
 
     return () => {
       editor.off("change", changeHandler);
-      editor.getWrapperElement().remove();
+      editor.toTextArea();
     };
   }, [onChange, readOnly]);
 
