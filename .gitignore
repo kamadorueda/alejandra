@@ -1,0 +1,9 @@
+/**/*.vsix
+/**/node_modules/
+/**/result*
+/**/target/
+/.direnv
+/.idea/
+/front/build
+/front/worktree
+/tarpaulin*

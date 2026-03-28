@@ -1,0 +1,2 @@
+# Ignore the generated list of nixpkgs files for language stats.
+nixpkgsFiles.js linguist-generated
