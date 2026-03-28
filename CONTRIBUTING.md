@@ -25,15 +25,8 @@ Otherwise just feel free to contribute anything you want
 1. Update dependencies with:
 
    ```sh
-   pushd .
-     cargo update
-     nix flake update
-   popd
-   pushd front/
-     cargo update
-     nix flake update
-     yarn upgrade
-   popd
+   cargo update
+   nix flake update
    pushd integrations/vscode/
      yarn upgrade
      yarn2nix > yarn.lock.nix
