@@ -13,6 +13,10 @@ pub(crate) fn nix_files(include: &[&str], exclude: &[String]) -> Vec<String> {
         .map(|path| (len_of(&path), path))
         .collect();
 
+    // Sort by file size descending: larger files first.
+    // This is a work-stealing heuristic for the thread pool — scheduling large
+    // files first ensures the pool stays busy while smaller files finish,
+    // improving overall throughput.
     paths.sort_unstable_by(|(len_a, _), (len_b, _)| len_b.cmp(len_a));
 
     paths.into_iter().map(|(_, path)| path).collect()

@@ -47,9 +47,9 @@
 #[global_allocator]
 static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
 
+pub(crate) mod annotated_children;
 pub(crate) mod builder;
 pub(crate) mod children;
-pub(crate) mod children2;
 /// Configuration options for the formatter
 pub mod config;
 /// Functions for formatting Nix code.
