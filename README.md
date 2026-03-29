@@ -6,7 +6,7 @@ Agents pick work items from here and execute them on feature branches.
 ## Structure
 
 ```
-vision/
+(vision branch)
 ├── README.md              ← You are here. Index and conventions.
 ├── product/               ← Product-level docs (strategy, positioning, research)
 │   └── strategy.md        ← Overall vision & differentiation strategy
