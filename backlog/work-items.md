@@ -9,18 +9,18 @@ Agents: pick the first `ready` item you can handle.
 
 | # | Item | Plan | Status | Issues | Notes |
 |---|---|---|---|---|---|
-| 1 | Skip-formatting directives (`# alejandra: off/on`) | `plans/002-skip-formatting.md` | draft | [#292](https://github.com/kamadorueda/alejandra/issues/292), [#418](https://github.com/kamadorueda/alejandra/issues/418), [#463](https://github.com/kamadorueda/alejandra/issues/463) | #1 most-requested feature. Every mature formatter has this. |
-| 2 | Idempotency guarantee | — | needs-plan | [#250](https://github.com/kamadorueda/alejandra/issues/250), [#408](https://github.com/kamadorueda/alejandra/issues/408) | Format twice → same output. Add CI check. |
-| 3 | Multiline string correctness | — | needs-plan | [#409](https://github.com/kamadorueda/alejandra/issues/409), [#442](https://github.com/kamadorueda/alejandra/issues/442) | Formatter must never change code semantics. |
+| 1 | Skip-formatting directives (`# alejandra: off/on`) | `plans/002-skip-formatting.md` | ready | [#292](https://github.com/kamadorueda/alejandra/issues/292), [#418](https://github.com/kamadorueda/alejandra/issues/418), [#463](https://github.com/kamadorueda/alejandra/issues/463) | #1 most-requested feature. Every mature formatter has this. |
+| 2 | Idempotency guarantee | `plans/003-idempotency.md` | ready | [#250](https://github.com/kamadorueda/alejandra/issues/250), [#408](https://github.com/kamadorueda/alejandra/issues/408) | Format twice → same output. Add CI check. |
+| 3 | Multiline string correctness | `plans/004-multiline-string-correctness.md` | ready | [#409](https://github.com/kamadorueda/alejandra/issues/409), [#442](https://github.com/kamadorueda/alejandra/issues/442) | Formatter must never change code semantics. |
 
 ## P1 — High (key differentiators)
 
 | # | Item | Plan | Status | Issues | Notes |
 |---|---|---|---|---|---|
-| 4 | Comment handling fixes | — | needs-plan | [#407](https://github.com/kamadorueda/alejandra/issues/407), [#383](https://github.com/kamadorueda/alejandra/issues/383), [#375](https://github.com/kamadorueda/alejandra/issues/375), [#429](https://github.com/kamadorueda/alejandra/issues/429) | Most visible formatting bugs. |
-| 5 | Expanded configuration (spaces in containers, line width) | — | needs-plan | [#360](https://github.com/kamadorueda/alejandra/issues/360), [#349](https://github.com/kamadorueda/alejandra/issues/349) | Graduate experimental config. Add spacing option. |
+| 4 | Comment handling fixes | `plans/005-comment-handling.md` | ready | [#407](https://github.com/kamadorueda/alejandra/issues/407), [#383](https://github.com/kamadorueda/alejandra/issues/383), [#375](https://github.com/kamadorueda/alejandra/issues/375), [#429](https://github.com/kamadorueda/alejandra/issues/429) | Most visible formatting bugs. |
+| 5 | Container spacing config (`[ x ]` vs `[x]`) | `plans/007-container-spacing.md` | ready | [#360](https://github.com/kamadorueda/alejandra/issues/360), [#181](https://github.com/kamadorueda/alejandra/issues/181), [#108](https://github.com/kamadorueda/alejandra/issues/108) | Configurable spacing in containers. |
 | 6 | Frontend config editor (WASM + UI) | `plans/001-add-config-editor.md` | ready | — | Config panel for web playground. |
-| 7 | Publish to crates.io | — | needs-plan | [#449](https://github.com/kamadorueda/alejandra/issues/449) | `cargo install alejandra` should work. |
+| 7 | Publish to crates.io | `plans/006-crates-io-publishing.md` | ready | [#449](https://github.com/kamadorueda/alejandra/issues/449) | `cargo install alejandra` should work. |
 | 8 | Line length / expression breaking improvements | — | needs-plan | [#349](https://github.com/kamadorueda/alejandra/issues/349), [#331](https://github.com/kamadorueda/alejandra/issues/331), [#462](https://github.com/kamadorueda/alejandra/issues/462) | Line 80 limit not enforced in several contexts. |
 
 ## P2 — Medium (grow the market)
