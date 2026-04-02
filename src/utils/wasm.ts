@@ -1,4 +1,5 @@
 import wasmInit, { format } from "alejandra_front";
+import { FormatterConfig, DEFAULT_CONFIG } from "~/types/config";
 
 let initialized = false;
 let initPromise: Promise<void> | null = null;
@@ -31,17 +32,16 @@ export const initFormatter = async () => {
   return initPromise;
 };
 
-export const formatCode = (code: string, filename: string = "file.nix"): string => {
+export const formatCode = (
+  code: string,
+  filename: string = "file.nix",
+  config: FormatterConfig = DEFAULT_CONFIG
+): string => {
   if (!initialized) {
     console.warn("formatCode: Formatter not initialized, returning input unchanged");
     return code;
   }
 
-  try {
-    const formatted = format(code, filename);
-    return formatted;
-  } catch (error) {
-    console.error("formatCode: Formatting error", error);
-    return code;
-  }
+  const configJson = JSON.stringify(config);
+  return format(code, filename, configJson);
 };

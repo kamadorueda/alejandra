@@ -6,7 +6,7 @@ vi.mock("alejandra_front", () => ({
     // Simulate async initialization
     return Promise.resolve();
   }),
-  format: vi.fn((code: string, filename: string) => {
+  format: vi.fn((code: string, filename: string, configJson?: string) => {
     // Simple mock: just return the code with "formatted: " prefix
     return `formatted: ${code} (${filename})`;
   }),
@@ -136,8 +136,7 @@ describe("wasm utilities", () => {
       expect(typeof result).toBe("string");
     });
 
-    it("returns code unchanged if formatting throws error", async () => {
-      // This tests the catch block in formatCode
+    it("throws error if formatting fails", async () => {
       const { initFormatter, formatCode } = await import("./wasm");
       await initFormatter();
 
@@ -148,8 +147,7 @@ describe("wasm utilities", () => {
       });
 
       const input = "test code";
-      const result = formatCode(input);
-      expect(result).toBe(input);
+      expect(() => formatCode(input)).toThrow("Format failed");
     });
 
     it("preserves code structure", async () => {
@@ -168,6 +166,53 @@ describe("wasm utilities", () => {
       const code = "with import <nixpkgs> {}; mkShell { buildInputs = [ python3 ]; }";
       const result = formatCode(code);
       expect(typeof result).toBe("string");
+    });
+
+    it("accepts config parameter", async () => {
+      const { initFormatter, formatCode } = await import("./wasm");
+      await initFormatter();
+
+      const config = { indentation: "FourSpaces" as const };
+      const result = formatCode("test", "file.nix", config);
+      expect(typeof result).toBe("string");
+    });
+
+    it("passes config as JSON to WASM format function", async () => {
+      const { initFormatter, formatCode } = await import("./wasm");
+      await initFormatter();
+
+      const { format } = await import("alejandra_front");
+      const config = { indentation: "Tabs" as const };
+      formatCode("test", "file.nix", config);
+
+      expect(format).toHaveBeenCalledWith("test", "file.nix", JSON.stringify(config));
+    });
+
+    it("uses default config when not provided", async () => {
+      const { initFormatter, formatCode } = await import("./wasm");
+      await initFormatter();
+
+      const { format } = await import("alejandra_front");
+      formatCode("test");
+
+      expect(format).toHaveBeenCalledWith(
+        "test",
+        "file.nix",
+        JSON.stringify({ indentation: "TwoSpaces" })
+      );
+    });
+
+    it("throws error on invalid config from WASM", async () => {
+      const { initFormatter, formatCode } = await import("./wasm");
+      await initFormatter();
+
+      const { format } = await import("alejandra_front");
+      (format as any).mockImplementationOnce(() => {
+        throw new Error("InvalidConfig: bad config");
+      });
+
+      const config = { indentation: "FourSpaces" as const };
+      expect(() => formatCode("code", "file.nix", config)).toThrow("InvalidConfig");
     });
   });
 

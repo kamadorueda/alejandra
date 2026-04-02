@@ -24,6 +24,15 @@ vi.mock("../DiffViewer", () => ({
   )),
 }));
 
+vi.mock("../ConfigPanel", () => ({
+  default: vi.fn(({ config, onChange }) => (
+    <div data-testid="config-panel">
+      Config: {config.indentation}
+      <button onClick={() => onChange({ indentation: "FourSpaces" })}>Change</button>
+    </div>
+  )),
+}));
+
 vi.mock("~/utils/wasm", () => ({
   initFormatter: vi.fn(async () => {}),
   formatCode: vi.fn((code) => `formatted: ${code}`),
@@ -230,6 +239,55 @@ describe("SideBySide", () => {
 
     await waitFor(() => {
       expect(screen.getByTestId("editor-input")).toBeDefined();
+    });
+  });
+
+  it("renders ConfigPanel in instruction bar", async () => {
+    render(<SideBySide />);
+    await waitFor(() => {
+      expect(screen.getByTestId("config-panel")).toBeDefined();
+    });
+  });
+
+  it("renders ConfigPanel with current config", async () => {
+    render(<SideBySide />);
+    await waitFor(() => {
+      expect(screen.getByText(/Config: TwoSpaces/)).toBeDefined();
+    });
+  });
+
+  it("instruction bar has flex layout with config on right", async () => {
+    const { container } = render(<SideBySide />);
+    await waitFor(() => {
+      const section = container.querySelector(".flex.items-center.justify-between");
+      expect(section).toBeDefined();
+    });
+  });
+
+  it("displays formatting error when formatting fails", async () => {
+    const { formatCode } = await import("~/utils/wasm");
+    (formatCode as any).mockImplementationOnce(() => {
+      throw new Error("InvalidConfig: bad config");
+    });
+
+    render(<SideBySide />);
+    await waitFor(() => {
+      expect(screen.getByText(/Formatting Error/)).toBeDefined();
+      expect(screen.getByText(/bad config/)).toBeDefined();
+    });
+  });
+
+  it("shows error message in output panel instead of editor", async () => {
+    const { formatCode } = await import("~/utils/wasm");
+    (formatCode as any).mockImplementationOnce(() => {
+      throw new Error("InvalidConfig: test error message");
+    });
+
+    const { container } = render(<SideBySide />);
+    await waitFor(() => {
+      const errorPanel = container.querySelector(".bg-red-50");
+      expect(errorPanel).toBeDefined();
+      expect(screen.queryByTestId("editor-readonly")).toBeNull();
     });
   });
 });

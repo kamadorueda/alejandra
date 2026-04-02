@@ -2,8 +2,11 @@
  * Permalink utilities for sharing formatter state via URL
  */
 
+import { FormatterConfig, DEFAULT_CONFIG } from "~/types/config";
+
 interface PermalinkState {
   code: string;
+  config: FormatterConfig;
 }
 
 /**
@@ -32,7 +35,12 @@ export const decodeState = (encoded: string): PermalinkState | null => {
       uint8Array[i] = binary.charCodeAt(i);
     }
     const json = new TextDecoder().decode(uint8Array);
-    return JSON.parse(json) as PermalinkState;
+    const parsed = JSON.parse(json);
+    // Backward compatibility: fill in default config if missing (old URLs)
+    return {
+      code: parsed.code,
+      config: parsed.config || DEFAULT_CONFIG,
+    } as PermalinkState;
   } catch {
     return null;
   }

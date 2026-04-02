@@ -1,9 +1,10 @@
 import Editor from "../Editor";
 import DiffViewer from "../DiffViewer";
+import ConfigPanel from "../ConfigPanel";
 import { useFormatter } from "~/hooks/useFormatter";
 
 export default function SideBySide() {
-  const { state, isLoading, wasmReady, wasmError, handleInputChange, loadRandomFile } = useFormatter();
+  const { state, config, isLoading, wasmReady, wasmError, formattingError, handleInputChange, handleConfigChange, loadRandomFile } = useFormatter();
 
   // Show loading state while WASM is initializing
   if (!wasmReady && !wasmError) {
@@ -45,7 +46,7 @@ export default function SideBySide() {
   return (
     <div className="space-y-6">
       {/* Instructions section */}
-      <div className="border-b border-neutral-200 pb-4">
+      <div className="flex items-center justify-between border-b border-neutral-200 pb-4">
         <div className="text-sm text-text">
           Type your code below or{" "}
           <button
@@ -56,6 +57,7 @@ export default function SideBySide() {
             {isLoading ? "loading..." : "click here to fetch a random file from Nixpkgs"}
           </button>
         </div>
+        <ConfigPanel config={config} onChange={handleConfigChange} />
       </div>
 
       {/* Input and Output editors side-by-side */}
@@ -73,11 +75,20 @@ export default function SideBySide() {
           <div className="text-sm font-medium text-text-dark">
             With Alejandra ❤️
           </div>
-          <Editor
-            value={state.output}
-            onChange={() => {}}
-            readOnly={true}
-          />
+          {formattingError ? (
+            <div className="w-full rounded-lg overflow-hidden h-96 flex items-center justify-center bg-red-50 border border-red-200">
+              <div className="text-center px-4">
+                <p className="text-red-600 font-semibold mb-1">Formatting Error</p>
+                <p className="text-sm text-red-600 break-words">{formattingError}</p>
+              </div>
+            </div>
+          ) : (
+            <Editor
+              value={state.output}
+              onChange={() => {}}
+              readOnly={true}
+            />
+          )}
         </div>
       </div>
 

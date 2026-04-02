@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { formatCode, initFormatter } from "~/utils/wasm";
 import { randomPath, get } from "~/utils/nixpkgs";
 import { getStateFromUrl, setStateInUrl } from "~/utils/permalink";
+import { FormatterConfig, DEFAULT_CONFIG } from "~/types/config";
 
 interface FormatterState {
   input: string;
@@ -13,9 +14,11 @@ export function useFormatter() {
     input: "",
     output: "",
   });
+  const [config, setConfig] = useState<FormatterConfig>(DEFAULT_CONFIG);
   const [isLoading, setIsLoading] = useState(false);
   const [wasmReady, setWasmReady] = useState(false);
   const [wasmError, setWasmError] = useState<string | null>(null);
+  const [formattingError, setFormattingError] = useState<string | null>(null);
   const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Cleanup debounce timeout on unmount
@@ -27,14 +30,29 @@ export function useFormatter() {
     };
   }, []);
 
-  // Stable format code function (memoized)
-  const handleFormatCode = useCallback((code: string) => {
-    setState({
-      input: code,
-      output: formatCode(code),
-    });
-    setStateInUrl({ code });
-  }, []);
+  // Stable format code function (memoized) - uses current config
+  const handleFormatCode = useCallback(
+    (code: string) => {
+      try {
+        const formatted = formatCode(code, "file.nix", config);
+        setState({
+          input: code,
+          output: formatted,
+        });
+        setFormattingError(null);
+        setStateInUrl({ code, config });
+      } catch (error) {
+        const errorMsg = error instanceof Error ? error.message : String(error);
+        console.error("useFormatter: Formatting error:", error);
+        setFormattingError(errorMsg);
+        setState((prev) => ({
+          ...prev,
+          input: code,
+        }));
+      }
+    },
+    [config]
+  );
 
   // Initialize formatter and load state
   useEffect(() => {
@@ -54,7 +72,25 @@ export function useFormatter() {
         // Check if we have state in URL
         const urlState = getStateFromUrl();
         if (urlState?.code) {
-          handleFormatCode(urlState.code);
+          // Load config from URL (always present due to backward compatibility in decodeState)
+          setConfig(urlState.config);
+          // Format with loaded config directly (can't use handleFormatCode due to async state update)
+          try {
+            const formatted = formatCode(urlState.code, "file.nix", urlState.config);
+            setState({
+              input: urlState.code,
+              output: formatted,
+            });
+            setFormattingError(null);
+          } catch (error) {
+            const errorMsg = error instanceof Error ? error.message : String(error);
+            console.error("useFormatter: Formatting error on URL state:", error);
+            setFormattingError(errorMsg);
+            setState({
+              input: urlState.code,
+              output: "",
+            });
+          }
         } else {
           // Load random Nix file
           await loadRandomFile();
@@ -100,23 +136,63 @@ export function useFormatter() {
       }
 
       debounceTimeoutRef.current = setTimeout(() => {
-        setState((prev) => ({
-          ...prev,
-          output: formatCode(newCode),
-        }));
-        setStateInUrl({ code: newCode });
+        try {
+          const formatted = formatCode(newCode, "file.nix", config);
+          setState((prev) => ({
+            ...prev,
+            output: formatted,
+          }));
+          setFormattingError(null);
+        } catch (error) {
+          const errorMsg = error instanceof Error ? error.message : String(error);
+          console.error("useFormatter: Formatting error on input change:", error);
+          setFormattingError(errorMsg);
+          setState((prev) => ({
+            ...prev,
+            output: "",
+          }));
+        }
+        setStateInUrl({ code: newCode, config });
       }, 300);
     },
-    []
+    [config]
+  );
+
+  const handleConfigChange = useCallback(
+    (newConfig: FormatterConfig) => {
+      setConfig(newConfig);
+      // Re-format with the new config
+      try {
+        const formatted = formatCode(state.input, "file.nix", newConfig);
+        setState((prev) => ({
+          ...prev,
+          output: formatted,
+        }));
+        setFormattingError(null);
+      } catch (error) {
+        const errorMsg = error instanceof Error ? error.message : String(error);
+        console.error("useFormatter: Formatting error on config change:", error);
+        setFormattingError(errorMsg);
+        setState((prev) => ({
+          ...prev,
+          output: "",
+        }));
+      }
+      setStateInUrl({ code: state.input, config: newConfig });
+    },
+    [state.input]
   );
 
   return {
     state,
+    config,
     isLoading,
     wasmReady,
     wasmError,
+    formattingError,
     handleFormatCode,
     handleInputChange,
+    handleConfigChange,
     loadRandomFile,
   };
 }
