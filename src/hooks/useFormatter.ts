@@ -20,12 +20,16 @@ export function useFormatter() {
   const [wasmError, setWasmError] = useState<string | null>(null);
   const [formattingError, setFormattingError] = useState<string | null>(null);
   const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const urlUpdateTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Cleanup debounce timeout on unmount
+  // Cleanup debounce timeouts on unmount
   useEffect(() => {
     return () => {
       if (debounceTimeoutRef.current) {
         clearTimeout(debounceTimeoutRef.current);
+      }
+      if (urlUpdateTimeoutRef.current) {
+        clearTimeout(urlUpdateTimeoutRef.current);
       }
     };
   }, []);
@@ -130,7 +134,7 @@ export function useFormatter() {
         input: newCode,
       }));
 
-      // Debounce formatting and diff update by 300ms
+      // Debounce formatting by 300ms
       if (debounceTimeoutRef.current) {
         clearTimeout(debounceTimeoutRef.current);
       }
@@ -152,8 +156,16 @@ export function useFormatter() {
             output: "",
           }));
         }
-        setStateInUrl({ code: newCode, config });
       }, 300);
+
+      // Debounce URL update by 1s (separate from formatting to avoid blocking)
+      if (urlUpdateTimeoutRef.current) {
+        clearTimeout(urlUpdateTimeoutRef.current);
+      }
+
+      urlUpdateTimeoutRef.current = setTimeout(() => {
+        setStateInUrl({ code: newCode, config });
+      }, 1000);
     },
     [config]
   );

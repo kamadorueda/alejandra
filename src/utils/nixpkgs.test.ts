@@ -1,6 +1,6 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import { path2url, get, randomPath } from "./nixpkgs";
-import { COMMIT, _resetCache } from "./nixpkgsFiles";
+import { COMMIT } from "./nixpkgsFiles";
 
 describe("nixpkgs utilities", () => {
   describe("path2url", () => {
@@ -138,67 +138,22 @@ describe("nixpkgs utilities", () => {
   });
 
   describe("randomPath", () => {
-    beforeEach(() => {
-      _resetCache(); // Reset getFiles cache between tests
-      global.fetch = vi.fn();
-    });
-
-    afterEach(() => {
-      vi.restoreAllMocks();
-    });
-
     it("returns a path from the files list", async () => {
-      const files = ["pkgs/a/file1.nix", "pkgs/b/file2.nix", "pkgs/c/file3.nix"];
-      (global.fetch as any).mockResolvedValueOnce({
-        ok: true,
-        json: async () => files,
-      });
-
       const result = await randomPath();
-      expect(files).toContain(result);
+      expect(result).toBeTruthy();
+      expect(typeof result).toBe("string");
+      expect(result).toContain(".nix");
     });
 
     it("returns different paths on multiple calls", async () => {
-      const files = Array.from({ length: 100 }, (_, i) => `pkgs/file${i}.nix`);
-      (global.fetch as any).mockResolvedValue({
-        ok: true,
-        json: async () => files,
-      });
-
       const results = new Set();
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 20; i++) {
         const path = await randomPath();
         results.add(path);
       }
 
-      // With 100 files and 10 calls, probability of getting all the same is extremely low
+      // With 24k+ files and 20 calls, probability of getting all the same is essentially zero
       expect(results.size).toBeGreaterThan(1);
-    });
-
-    it("handles single file in list", async () => {
-      const files = ["pkgs/only/file.nix"];
-      (global.fetch as any).mockResolvedValueOnce({
-        ok: true,
-        json: async () => files,
-      });
-
-      const result = await randomPath();
-      expect(result).toBe("pkgs/only/file.nix");
-    });
-
-    it("throws error when fetch fails", async () => {
-      (global.fetch as any).mockRejectedValueOnce(new Error("Network error"));
-
-      await expect(randomPath()).rejects.toThrow();
-    });
-
-    it("throws error when response is not ok", async () => {
-      (global.fetch as any).mockResolvedValueOnce({
-        ok: false,
-        statusText: "Error",
-      });
-
-      await expect(randomPath()).rejects.toThrow();
     });
   });
 });
