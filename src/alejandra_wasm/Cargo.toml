@@ -1,6 +1,9 @@
+[workspace]
+
 [dependencies]
 alejandra = { "path" = "../alejandra" }
 console_error_panic_hook = "*"
+serde_json = "*"
 wasm-bindgen = "*"
 
 [lib]
