@@ -29,10 +29,12 @@
     "@vitest/coverage-v8": "^1.0.4",
     "gh-pages": "^6.3.0",
     "happy-dom": "^12.10.3",
+    "rollup-plugin-visualizer": "^7.0.1",
     "tailwindcss": "^4.0.0-alpha.19",
     "typescript": "^5.3.3",
     "vite": "^6.1.0",
-    "vitest": "^1.0.4"
+    "vitest": "^1.0.4",
+    "webpack-bundle-analyzer": "^5.3.0"
   },
   "engines": {
     "node": ">=20",

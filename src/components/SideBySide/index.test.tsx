@@ -2,6 +2,8 @@ import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import SideBySide from "./index";
+import { getRandomFile } from "~/utils/nixpkgs";
+import { initFormatter, formatCode } from "~/utils/wasm";
 
 // Mock dependencies
 vi.mock("../Editor", () => ({
@@ -39,8 +41,10 @@ vi.mock("~/utils/wasm", () => ({
 }));
 
 vi.mock("~/utils/nixpkgs", () => ({
-  randomPath: vi.fn(async () => "pkgs/test/default.nix"),
-  get: vi.fn(async () => "# Fetched content"),
+  getRandomFile: vi.fn(async () => ({
+    path: "pkgs/test/default.nix",
+    content: "# Fetched content",
+  })),
 }));
 
 vi.mock("~/utils/permalink", () => ({
@@ -113,7 +117,7 @@ describe("SideBySide", () => {
   });
 
   it("initializes formatter on mount", async () => {
-    const { initFormatter } = await import("~/utils/wasm");
+    
     render(<SideBySide />);
     await waitFor(() => {
       expect(initFormatter).toHaveBeenCalled();
@@ -121,7 +125,7 @@ describe("SideBySide", () => {
   });
 
   it("handles WASM initialization error", async () => {
-    const { initFormatter } = await import("~/utils/wasm");
+    
     (initFormatter as any).mockRejectedValueOnce(new Error("WASM failed"));
 
     render(<SideBySide />);
@@ -131,7 +135,7 @@ describe("SideBySide", () => {
   });
 
   it("shows retry button on initialization error", async () => {
-    const { initFormatter } = await import("~/utils/wasm");
+    
     (initFormatter as any).mockRejectedValueOnce(new Error("WASM failed"));
 
     render(<SideBySide />);
@@ -141,7 +145,6 @@ describe("SideBySide", () => {
   });
 
   it("loads random file on button click", async () => {
-    const { randomPath, get } = await import("~/utils/nixpkgs");
     const user = userEvent.setup();
 
     render(<SideBySide />);
@@ -153,13 +156,12 @@ describe("SideBySide", () => {
     await user.click(button);
 
     await waitFor(() => {
-      expect(randomPath).toHaveBeenCalled();
-      expect(get).toHaveBeenCalled();
+      expect(getRandomFile).toHaveBeenCalled();
     });
   });
 
   it("handles formatting when input changes", async () => {
-    const { formatCode } = await import("~/utils/wasm");
+    
     render(<SideBySide />);
 
     await waitFor(() => {
@@ -168,8 +170,7 @@ describe("SideBySide", () => {
   });
 
   it("displays error state with fallback on network failure", async () => {
-    const { randomPath } = await import("~/utils/nixpkgs");
-    (randomPath as any).mockRejectedValueOnce(new Error("Network error"));
+    (getRandomFile as any).mockRejectedValueOnce(new Error("Network error"));
 
     const user = userEvent.setup();
     render(<SideBySide />);
@@ -214,8 +215,7 @@ describe("SideBySide", () => {
   });
 
   it("handles default code fallback", async () => {
-    const { randomPath } = await import("~/utils/nixpkgs");
-    (randomPath as any).mockRejectedValueOnce(new Error("Network failed"));
+    (getRandomFile as any).mockRejectedValueOnce(new Error("Network failed"));
 
     render(<SideBySide />);
     await waitFor(() => {
@@ -265,7 +265,7 @@ describe("SideBySide", () => {
   });
 
   it("displays formatting error when formatting fails", async () => {
-    const { formatCode } = await import("~/utils/wasm");
+    
     (formatCode as any).mockImplementationOnce(() => {
       throw new Error("InvalidConfig: bad config");
     });
@@ -278,7 +278,7 @@ describe("SideBySide", () => {
   });
 
   it("shows error message in output panel instead of editor", async () => {
-    const { formatCode } = await import("~/utils/wasm");
+    
     (formatCode as any).mockImplementationOnce(() => {
       throw new Error("InvalidConfig: test error message");
     });

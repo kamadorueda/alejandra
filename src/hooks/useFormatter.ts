@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { formatCode, initFormatter } from "~/utils/wasm";
-import { randomPath, get } from "~/utils/nixpkgs";
+import { getRandomFile } from "~/utils/nixpkgs";
 import { getStateFromUrl, setStateInUrl } from "~/utils/permalink";
 import { FormatterConfig, DEFAULT_CONFIG } from "~/types/config";
 
@@ -113,8 +113,7 @@ export function useFormatter() {
   const loadRandomFile = async () => {
     setIsLoading(true);
     try {
-      const path = await randomPath();
-      const code = await get(path);
+      const { content: code } = await getRandomFile();
       handleFormatCode(code);
     } catch (error) {
       console.error("useFormatter: Failed to load random file:", error);

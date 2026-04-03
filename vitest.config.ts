@@ -20,6 +20,7 @@ export default defineConfig({
       exclude: [
         "node_modules/",
         "src/test/",
+        "src/data/nixpkgs/content/",
         "**/*.d.ts",
         "**/*.test.{ts,tsx}",
       ],
