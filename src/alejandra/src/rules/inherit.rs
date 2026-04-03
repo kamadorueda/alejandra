@@ -22,26 +22,20 @@ pub(crate) fn rule(
         steps.push(crate::builder::Step::Indent);
     }
 
-    if let Some(text) = child.inline_comment {
-        steps.push(crate::builder::Step::Whitespace);
-        steps.push(crate::builder::Step::Comment(text));
-        steps.push(crate::builder::Step::NewLine);
-        steps.push(crate::builder::Step::Pad);
+    if child.inline_comment.is_some() {
+        crate::annotated_children::emit_inline_comment(
+            &child.inline_comment,
+            &mut steps,
+        );
     } else if vertical {
         steps.push(crate::builder::Step::NewLine);
         steps.push(crate::builder::Step::Pad);
     }
 
-    for trivia in child.trivialities {
-        match trivia {
-            crate::annotated_children::Trivia::Comment(text) => {
-                steps.push(crate::builder::Step::Comment(text));
-                steps.push(crate::builder::Step::NewLine);
-                steps.push(crate::builder::Step::Pad);
-            }
-            crate::annotated_children::Trivia::Newlines => {}
-        }
-    }
+    crate::annotated_children::emit_trivialities_comment_first(
+        &child.trivialities,
+        &mut steps,
+    );
 
     for (index, child) in children.enumerate() {
         let not_last_child = index + 1 < children_count;

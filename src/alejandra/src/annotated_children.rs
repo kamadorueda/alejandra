@@ -14,6 +14,53 @@ pub(crate) struct Child {
     pub has_trivialities: bool,
 }
 
+/// Emit an inline comment: Whitespace + Comment + NewLine + Pad
+pub(crate) fn emit_inline_comment(
+    inline_comment: &Option<String>,
+    steps: &mut Vec<crate::builder::Step>,
+) {
+    if let Some(text) = inline_comment {
+        steps.push(crate::builder::Step::Whitespace);
+        steps.push(crate::builder::Step::Comment(text.clone()));
+        steps.push(crate::builder::Step::NewLine);
+        steps.push(crate::builder::Step::Pad);
+    }
+}
+
+/// Emit trivialities with NewLine + Pad + Comment style
+pub(crate) fn emit_trivialities_newline_first(
+    trivialities: &[Trivia],
+    steps: &mut Vec<crate::builder::Step>,
+) {
+    for trivia in trivialities {
+        match trivia {
+            Trivia::Comment(text) => {
+                steps.push(crate::builder::Step::NewLine);
+                steps.push(crate::builder::Step::Pad);
+                steps.push(crate::builder::Step::Comment(text.clone()));
+            }
+            Trivia::Newlines => {}
+        }
+    }
+}
+
+/// Emit trivialities with Comment + NewLine + Pad style
+pub(crate) fn emit_trivialities_comment_first(
+    trivialities: &[Trivia],
+    steps: &mut Vec<crate::builder::Step>,
+) {
+    for trivia in trivialities {
+        match trivia {
+            Trivia::Comment(text) => {
+                steps.push(crate::builder::Step::Comment(text.clone()));
+                steps.push(crate::builder::Step::NewLine);
+                steps.push(crate::builder::Step::Pad);
+            }
+            Trivia::Newlines => {}
+        }
+    }
+}
+
 pub(crate) fn annotated(
     build_ctx: &crate::builder::BuildCtx,
     node: &rnix::SyntaxNode,

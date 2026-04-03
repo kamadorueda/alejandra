@@ -24,11 +24,11 @@ pub(crate) fn rule(
     // first
     steps.push(crate::builder::Step::Format(first.element));
 
-    if let Some(text) = first.inline_comment {
-        steps.push(crate::builder::Step::Whitespace);
-        steps.push(crate::builder::Step::Comment(text));
-        steps.push(crate::builder::Step::NewLine);
-        steps.push(crate::builder::Step::Pad);
+    if first.inline_comment.is_some() {
+        crate::annotated_children::emit_inline_comment(
+            &first.inline_comment,
+            &mut steps,
+        );
     } else if first.has_comments {
         steps.push(crate::builder::Step::NewLine);
         steps.push(crate::builder::Step::Pad);
@@ -36,16 +36,10 @@ pub(crate) fn rule(
         steps.push(crate::builder::Step::Whitespace);
     }
 
-    for trivia in first.trivialities {
-        match trivia {
-            crate::annotated_children::Trivia::Comment(text) => {
-                steps.push(crate::builder::Step::Comment(text));
-                steps.push(crate::builder::Step::NewLine);
-                steps.push(crate::builder::Step::Pad);
-            }
-            crate::annotated_children::Trivia::Newlines => {}
-        }
-    }
+    crate::annotated_children::emit_trivialities_comment_first(
+        &first.trivialities,
+        &mut steps,
+    );
 
     // second
     if vertical {
@@ -57,23 +51,14 @@ pub(crate) fn rule(
     // third
     steps.push(crate::builder::Step::Format(third.element));
 
-    if let Some(text) = third.inline_comment {
-        steps.push(crate::builder::Step::Whitespace);
-        steps.push(crate::builder::Step::Comment(text));
-        steps.push(crate::builder::Step::NewLine);
-        steps.push(crate::builder::Step::Pad);
-    }
-
-    for trivia in third.trivialities {
-        match trivia {
-            crate::annotated_children::Trivia::Comment(text) => {
-                steps.push(crate::builder::Step::NewLine);
-                steps.push(crate::builder::Step::Pad);
-                steps.push(crate::builder::Step::Comment(text));
-            }
-            crate::annotated_children::Trivia::Newlines => {}
-        }
-    }
+    crate::annotated_children::emit_inline_comment(
+        &third.inline_comment,
+        &mut steps,
+    );
+    crate::annotated_children::emit_trivialities_newline_first(
+        &third.trivialities,
+        &mut steps,
+    );
 
     // fourth
     if vertical {

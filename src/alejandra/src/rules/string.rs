@@ -183,9 +183,8 @@ pub(crate) fn rule(
         }
 
         for interpolation in interpolations {
-            steps.push(crate::builder::Step::FormatWider(
-                interpolation.clone(),
-            ));
+            steps
+                .push(crate::builder::Step::FormatWider(interpolation.clone()));
         }
     }
 
