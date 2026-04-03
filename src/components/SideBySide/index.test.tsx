@@ -278,7 +278,7 @@ describe("SideBySide", () => {
   });
 
   it("shows error message in output panel instead of editor", async () => {
-    
+
     (formatCode as any).mockImplementationOnce(() => {
       throw new Error("InvalidConfig: test error message");
     });
@@ -288,6 +288,56 @@ describe("SideBySide", () => {
       const errorPanel = container.querySelector(".bg-red-50");
       expect(errorPanel).toBeDefined();
       expect(screen.queryByTestId("editor-readonly")).toBeNull();
+    });
+  });
+
+  it("shows retry button when WASM fails and handles click", async () => {
+    (initFormatter as any).mockRejectedValueOnce(new Error("WASM init failed"));
+
+    const { container } = render(<SideBySide />);
+    await waitFor(() => {
+      expect(screen.getByText("Retry")).toBeDefined();
+    });
+
+    const reloadSpy = vi.spyOn(window.location, "reload");
+    const retryButton = screen.getByText("Retry");
+    await userEvent.click(retryButton);
+    expect(reloadSpy).toHaveBeenCalled();
+    reloadSpy.mockRestore();
+  });
+
+  it("handles formatting error with non-Error object", async () => {
+    (formatCode as any).mockImplementationOnce(() => {
+      throw "string error";
+    });
+
+    const user = userEvent.setup();
+    render(<SideBySide />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("editor-input")).toBeDefined();
+    });
+
+    const input = screen.getByTestId("editor-input").querySelector("input");
+    if (input) {
+      await user.type(input, "test");
+      await waitFor(() => {
+        expect(screen.getByText(/Formatting Error/)).toBeDefined();
+      });
+    }
+  });
+
+  it("updates config and reformats code on config change", async () => {
+    render(<SideBySide />);
+    await waitFor(() => {
+      expect(screen.getByTestId("config-panel")).toBeDefined();
+    });
+
+    const changeButton = screen.getByText("Change");
+    await userEvent.click(changeButton);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Config: FourSpaces/)).toBeDefined();
     });
   });
 });
