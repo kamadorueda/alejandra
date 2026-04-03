@@ -23,9 +23,10 @@ pub(crate) fn second_through_penultimate_line_are_indented(
         return if_leq_than_two_lines;
     }
 
-    let whitespace = format!("{0:<1$}  ", "", 2 * build_ctx.indentation);
-    let lambda = format!("{0:<1$}}}:", "", 2 * build_ctx.indentation);
-    let in_ = format!("{0:<1$}in", "", 2 * build_ctx.indentation);
+    let indent = build_ctx.indent_str();
+    let whitespace = format!("{}  ", indent);
+    let lambda = format!("{}}}:", indent);
+    let in_ = format!("{}in", indent);
 
     formatted_lines.iter().skip(1).rev().skip(1).all(|line| {
         line.is_empty()
