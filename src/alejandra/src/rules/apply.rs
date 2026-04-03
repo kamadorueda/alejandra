@@ -22,23 +22,14 @@ pub(crate) fn rule(
         steps.push(crate::builder::Step::Format(first.element));
     }
 
-    if let Some(text) = first.inline_comment {
-        steps.push(crate::builder::Step::Whitespace);
-        steps.push(crate::builder::Step::Comment(text));
-        steps.push(crate::builder::Step::NewLine);
-        steps.push(crate::builder::Step::Pad);
-    }
-
-    for trivia in first.trivialities {
-        match trivia {
-            crate::annotated_children::Trivia::Comment(text) => {
-                steps.push(crate::builder::Step::NewLine);
-                steps.push(crate::builder::Step::Pad);
-                steps.push(crate::builder::Step::Comment(text));
-            }
-            crate::annotated_children::Trivia::Newlines => {}
-        }
-    }
+    crate::annotated_children::emit_inline_comment(
+        &first.inline_comment,
+        &mut steps,
+    );
+    crate::annotated_children::emit_trivialities_newline_first(
+        &first.trivialities,
+        &mut steps,
+    );
 
     // second
     if vertical {

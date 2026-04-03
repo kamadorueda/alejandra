@@ -51,26 +51,20 @@ pub(crate) fn rule(
         steps.push(crate::builder::Step::Indent);
     }
 
-    if let Some(text) = opener.inline_comment {
-        steps.push(crate::builder::Step::Whitespace);
-        steps.push(crate::builder::Step::Comment(text));
-        steps.push(crate::builder::Step::NewLine);
-        steps.push(crate::builder::Step::Pad);
+    if opener.inline_comment.is_some() {
+        crate::annotated_children::emit_inline_comment(
+            &opener.inline_comment,
+            &mut steps,
+        );
     } else if loose {
         steps.push(crate::builder::Step::NewLine);
         steps.push(crate::builder::Step::Pad);
     }
 
-    for trivia in opener.trivialities {
-        match trivia {
-            crate::annotated_children::Trivia::Comment(text) => {
-                steps.push(crate::builder::Step::Comment(text));
-                steps.push(crate::builder::Step::NewLine);
-                steps.push(crate::builder::Step::Pad);
-            }
-            crate::annotated_children::Trivia::Newlines => {}
-        }
-    }
+    crate::annotated_children::emit_trivialities_comment_first(
+        &opener.trivialities,
+        &mut steps,
+    );
 
     // expression
     if loose {
@@ -84,16 +78,10 @@ pub(crate) fn rule(
         steps.push(crate::builder::Step::Comment(text));
     }
 
-    for trivia in expression.trivialities {
-        match trivia {
-            crate::annotated_children::Trivia::Comment(text) => {
-                steps.push(crate::builder::Step::NewLine);
-                steps.push(crate::builder::Step::Pad);
-                steps.push(crate::builder::Step::Comment(text));
-            }
-            crate::annotated_children::Trivia::Newlines => {}
-        }
-    }
+    crate::annotated_children::emit_trivialities_newline_first(
+        &expression.trivialities,
+        &mut steps,
+    );
 
     // closer
     if should_indent {

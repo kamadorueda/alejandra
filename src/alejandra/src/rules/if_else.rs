@@ -22,16 +22,10 @@ pub(crate) fn rule(
         steps.push(crate::builder::Step::Comment(text));
     }
 
-    for trivia in if_.trivialities {
-        match trivia {
-            crate::annotated_children::Trivia::Comment(text) => {
-                steps.push(crate::builder::Step::NewLine);
-                steps.push(crate::builder::Step::Pad);
-                steps.push(crate::builder::Step::Comment(text));
-            }
-            crate::annotated_children::Trivia::Newlines => {}
-        }
-    }
+    crate::annotated_children::emit_trivialities_newline_first(
+        &if_.trivialities,
+        &mut steps,
+    );
     steps.push(crate::builder::Step::Dedent);
 
     // if_expr
@@ -62,16 +56,10 @@ pub(crate) fn rule(
         steps.push(crate::builder::Step::Pad);
     }
 
-    for trivia in if_expr.trivialities {
-        match trivia {
-            crate::annotated_children::Trivia::Comment(text) => {
-                steps.push(crate::builder::Step::Comment(text));
-                steps.push(crate::builder::Step::NewLine);
-                steps.push(crate::builder::Step::Pad);
-            }
-            crate::annotated_children::Trivia::Newlines => {}
-        }
-    }
+    crate::annotated_children::emit_trivialities_comment_first(
+        &if_expr.trivialities,
+        &mut steps,
+    );
 
     // then_
     steps.push(crate::builder::Step::Format(then_.element));
@@ -82,16 +70,10 @@ pub(crate) fn rule(
         steps.push(crate::builder::Step::Comment(text));
     }
 
-    for trivia in then_.trivialities {
-        match trivia {
-            crate::annotated_children::Trivia::Comment(text) => {
-                steps.push(crate::builder::Step::NewLine);
-                steps.push(crate::builder::Step::Pad);
-                steps.push(crate::builder::Step::Comment(text));
-            }
-            crate::annotated_children::Trivia::Newlines => {}
-        }
-    }
+    crate::annotated_children::emit_trivialities_newline_first(
+        &then_.trivialities,
+        &mut steps,
+    );
     steps.push(crate::builder::Step::Dedent);
 
     // then_expr
@@ -128,16 +110,10 @@ pub(crate) fn rule(
         steps.push(crate::builder::Step::Pad);
     }
 
-    for trivia in then_expr.trivialities {
-        match trivia {
-            crate::annotated_children::Trivia::Comment(text) => {
-                steps.push(crate::builder::Step::Comment(text));
-                steps.push(crate::builder::Step::NewLine);
-                steps.push(crate::builder::Step::Pad);
-            }
-            crate::annotated_children::Trivia::Newlines => {}
-        }
-    }
+    crate::annotated_children::emit_trivialities_comment_first(
+        &then_expr.trivialities,
+        &mut steps,
+    );
 
     // else_
     steps.push(crate::builder::Step::Format(else_.element));
@@ -148,16 +124,10 @@ pub(crate) fn rule(
         steps.push(crate::builder::Step::Comment(text));
     }
 
-    for trivia in else_.trivialities {
-        match trivia {
-            crate::annotated_children::Trivia::Comment(text) => {
-                steps.push(crate::builder::Step::NewLine);
-                steps.push(crate::builder::Step::Pad);
-                steps.push(crate::builder::Step::Comment(text));
-            }
-            crate::annotated_children::Trivia::Newlines => {}
-        }
-    }
+    crate::annotated_children::emit_trivialities_newline_first(
+        &else_.trivialities,
+        &mut steps,
+    );
     steps.push(crate::builder::Step::Dedent);
 
     // else_expr
