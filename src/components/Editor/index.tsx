@@ -29,7 +29,7 @@ export default function Editor({ value, onChange, readOnly = false }: EditorProp
       lineNumbers: true,
       indentUnit: 2,
       readOnly: readOnly,
-      viewportMargin: Infinity,
+      viewportMargin: 50,
     });
 
     editorRef.current = editor;
