@@ -15,21 +15,16 @@ export function useFormatter() {
     output: "",
   });
   const [config, setConfig] = useState<FormatterConfig>(DEFAULT_CONFIG);
-  const [isLoading, setIsLoading] = useState(false);
   const [wasmReady, setWasmReady] = useState(false);
   const [wasmError, setWasmError] = useState<string | null>(null);
   const [formattingError, setFormattingError] = useState<string | null>(null);
   const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const urlUpdateTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Cleanup debounce timeouts on unmount
+  // Cleanup debounce timeout on unmount
   useEffect(() => {
     return () => {
       if (debounceTimeoutRef.current) {
         clearTimeout(debounceTimeoutRef.current);
-      }
-      if (urlUpdateTimeoutRef.current) {
-        clearTimeout(urlUpdateTimeoutRef.current);
       }
     };
   }, []);
@@ -112,7 +107,6 @@ export function useFormatter() {
   }, [handleFormatCode]);
 
   const loadRandomFile = async () => {
-    setIsLoading(true);
     try {
       const { content: code } = await getRandomFile();
       handleFormatCode(code);
@@ -121,8 +115,6 @@ export function useFormatter() {
       // Fallback: use default example
       const defaultCode = '{ lib, stdenv }:\n\nstdenv.mkDerivation {\n  name = "example";\n  src = ./.;\n}';
       handleFormatCode(defaultCode);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -147,6 +139,8 @@ export function useFormatter() {
             output: formatted,
           }));
           setFormattingError(null);
+          // Update URL after formatting completes (not on every keystroke)
+          setStateInUrl({ code: newCode, config });
         } catch (error) {
           const errorMsg = error instanceof Error ? error.message : String(error);
           console.error("useFormatter: Formatting error on input change:", error);
@@ -157,15 +151,6 @@ export function useFormatter() {
           }));
         }
       }, 300);
-
-      // Debounce URL update by 1s (separate from formatting to avoid blocking)
-      if (urlUpdateTimeoutRef.current) {
-        clearTimeout(urlUpdateTimeoutRef.current);
-      }
-
-      urlUpdateTimeoutRef.current = setTimeout(() => {
-        setStateInUrl({ code: newCode, config });
-      }, 1000);
     },
     [config]
   );
@@ -181,6 +166,8 @@ export function useFormatter() {
           output: formatted,
         }));
         setFormattingError(null);
+        // Update URL after formatting completes
+        setStateInUrl({ code: state.input, config: newConfig });
       } catch (error) {
         const errorMsg = error instanceof Error ? error.message : String(error);
         console.error("useFormatter: Formatting error on config change:", error);
@@ -190,8 +177,6 @@ export function useFormatter() {
           output: "",
         }));
       }
-      // Defer URL update to avoid blocking formatting
-      setTimeout(() => setStateInUrl({ code: state.input, config: newConfig }), 0);
     },
     [state.input]
   );
@@ -199,7 +184,6 @@ export function useFormatter() {
   return {
     state,
     config,
-    isLoading,
     wasmReady,
     wasmError,
     formattingError,

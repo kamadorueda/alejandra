@@ -1,3 +1,4 @@
+import { memo } from "react";
 import ReactDiffViewer, { DiffMethod } from "react-diff-viewer";
 import hljs from "highlight.js";
 import "highlight.js/styles/atom-one-light.css";
@@ -48,7 +49,7 @@ const diffStyles = {
   },
 };
 
-export default function DiffViewer({ input, output }: DiffViewerProps) {
+function DiffViewerComponent({ input, output }: DiffViewerProps) {
   return (
     <div>
       <h3 className="text-lg font-semibold text-text-dark mt-8 mb-4">Git patch</h3>
@@ -57,7 +58,7 @@ export default function DiffViewer({ input, output }: DiffViewerProps) {
           oldValue={input}
           newValue={output}
           splitView
-          compareMethod={DiffMethod.WORDS}
+          compareMethod={DiffMethod.LINES}
           showDiffOnly={false}
           renderContent={renderContent}
           codeFoldMessageRenderer={() => null}
@@ -67,3 +68,6 @@ export default function DiffViewer({ input, output }: DiffViewerProps) {
     </div>
   );
 }
+
+// Memoize to avoid expensive re-renders when parent updates
+export default memo(DiffViewerComponent);
