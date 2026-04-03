@@ -1,0 +1,1 @@
+export default "{ buildDunePackage\n, gluten\n, lwt\n}:\n\nbuildDunePackage rec {\n  pname = \"gluten-lwt\";\n  inherit (gluten) doCheck meta src useDune2 version;\n\n  propagatedBuildInputs = [\n    gluten\n    lwt\n  ];\n}\n";

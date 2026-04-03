@@ -1,0 +1,18 @@
+[dependencies]
+alejandra = { "path" = "../alejandra" }
+console_error_panic_hook = "*"
+wasm-bindgen = "*"
+
+[lib]
+crate-type = ["cdylib"]
+
+[package]
+authors = ["Kevin Amado <kamadorueda@gmail.com>"]
+description = "The Uncompromising Nix Code Formatter"
+edition = "2021"
+name = "alejandra_wasm"
+repository = "https://github.com/kamadorueda/alejandra"
+version = "4.0.0"
+
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = false

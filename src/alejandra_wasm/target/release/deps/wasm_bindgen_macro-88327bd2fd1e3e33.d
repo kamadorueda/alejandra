@@ -1,0 +1,5 @@
+/data/alejandra/src/alejandra_wasm/target/release/deps/wasm_bindgen_macro-88327bd2fd1e3e33.d: /home/kamadorueda/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wasm-bindgen-macro-0.2.115/src/lib.rs
+
+/data/alejandra/src/alejandra_wasm/target/release/deps/libwasm_bindgen_macro-88327bd2fd1e3e33.so: /home/kamadorueda/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wasm-bindgen-macro-0.2.115/src/lib.rs
+
+/home/kamadorueda/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wasm-bindgen-macro-0.2.115/src/lib.rs:

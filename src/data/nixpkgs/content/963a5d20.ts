@@ -1,0 +1,1 @@
+export default "{ callPackage, fetchurl, ... } @ args:\n\ncallPackage ./generic.nix (args // rec {\n  version = \"1.60.0\";\n\n  src = fetchurl {\n    url = \"mirror://sourceforge/boost/boost_${builtins.replaceStrings [\".\"] [\"_\"] version}.tar.bz2\";\n    sha256 = \"0fzx6dwqbrkd4bcd8pjv0fpapwmrxxwr8yx9g67lihlsk3zzysk8\";\n  };\n\n})\n";

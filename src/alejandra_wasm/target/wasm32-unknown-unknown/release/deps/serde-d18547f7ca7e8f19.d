@@ -1,0 +1,14 @@
+/data/alejandra/src/alejandra_wasm/target/wasm32-unknown-unknown/release/deps/serde-d18547f7ca7e8f19.d: /home/kamadorueda/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /home/kamadorueda/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /home/kamadorueda/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /home/kamadorueda/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /home/kamadorueda/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /data/alejandra/src/alejandra_wasm/target/wasm32-unknown-unknown/release/build/serde-6687f11a7c7bf27c/out/private.rs
+
+/data/alejandra/src/alejandra_wasm/target/wasm32-unknown-unknown/release/deps/libserde-d18547f7ca7e8f19.rlib: /home/kamadorueda/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /home/kamadorueda/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /home/kamadorueda/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /home/kamadorueda/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /home/kamadorueda/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /data/alejandra/src/alejandra_wasm/target/wasm32-unknown-unknown/release/build/serde-6687f11a7c7bf27c/out/private.rs
+
+/data/alejandra/src/alejandra_wasm/target/wasm32-unknown-unknown/release/deps/libserde-d18547f7ca7e8f19.rmeta: /home/kamadorueda/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /home/kamadorueda/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /home/kamadorueda/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /home/kamadorueda/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /home/kamadorueda/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /data/alejandra/src/alejandra_wasm/target/wasm32-unknown-unknown/release/build/serde-6687f11a7c7bf27c/out/private.rs
+
+/home/kamadorueda/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs:
+/home/kamadorueda/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs:
+/home/kamadorueda/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs:
+/home/kamadorueda/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs:
+/home/kamadorueda/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs:
+/data/alejandra/src/alejandra_wasm/target/wasm32-unknown-unknown/release/build/serde-6687f11a7c7bf27c/out/private.rs:
+
+# env-dep:OUT_DIR=/data/alejandra/src/alejandra_wasm/target/wasm32-unknown-unknown/release/build/serde-6687f11a7c7bf27c/out
