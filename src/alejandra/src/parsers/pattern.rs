@@ -1,8 +1,6 @@
-use std::collections::LinkedList;
-
 #[derive(Default)]
 pub(crate) struct Argument {
-    pub comments_before: LinkedList<String>,
+    pub comments_before: Vec<String>,
     pub item:            Option<rnix::SyntaxElement>,
     pub comment_after:   Option<String>,
 }
@@ -10,10 +8,10 @@ pub(crate) struct Argument {
 #[derive(Default)]
 pub(crate) struct Pattern {
     pub initial_at:                    Option<rnix::SyntaxElement>,
-    pub comments_after_initial_at:     LinkedList<String>,
-    pub arguments:                     LinkedList<Argument>,
-    pub comments_before_curly_b_close: LinkedList<String>,
-    pub comments_before_end_at:        LinkedList<String>,
+    pub comments_after_initial_at:     Vec<String>,
+    pub arguments:                     Vec<Argument>,
+    pub comments_before_curly_b_close: Vec<String>,
+    pub comments_before_end_at:        Vec<String>,
     pub end_at:                        Option<rnix::SyntaxElement>,
 }
 
@@ -35,7 +33,7 @@ pub(crate) fn parse(
     // /**/
     children.drain_trivia(|element| match element {
         crate::children::Trivia::Comment(text) => {
-            pattern.comments_after_initial_at.push_back(text);
+            pattern.comments_after_initial_at.push(text);
         }
         crate::children::Trivia::Whitespace(_) => {}
     });
@@ -63,7 +61,7 @@ pub(crate) fn parse(
                 rnix::SyntaxKind::TOKEN_COMMENT => {
                     let content = child.into_token().unwrap().to_string();
 
-                    argument.comments_before.push_back(content);
+                    argument.comments_before.push(content);
                     children.move_next();
                 }
                 rnix::SyntaxKind::TOKEN_WHITESPACE => {
@@ -121,7 +119,7 @@ pub(crate) fn parse(
             }
         }
 
-        pattern.arguments.push_back(argument);
+        pattern.arguments.push(argument);
     }
 
     // }
@@ -130,7 +128,7 @@ pub(crate) fn parse(
     // /**/
     children.drain_trivia(|element| match element {
         crate::children::Trivia::Comment(text) => {
-            pattern.comments_before_end_at.push_back(text);
+            pattern.comments_before_end_at.push(text);
         }
         crate::children::Trivia::Whitespace(_) => {}
     });

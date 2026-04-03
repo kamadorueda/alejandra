@@ -1,8 +1,8 @@
 pub(crate) fn rule(
     build_ctx: &crate::builder::BuildCtx,
     node: &rnix::SyntaxNode,
-) -> std::collections::LinkedList<crate::builder::Step> {
-    let mut steps = std::collections::LinkedList::new();
+) -> Vec<crate::builder::Step> {
+    let mut steps = Vec::new();
 
     let mut children = crate::annotated_children::annotated(build_ctx, node);
 
@@ -23,30 +23,30 @@ pub(crate) fn rule(
         let kind = first.element.kind();
 
         if matches!(kind, rnix::SyntaxKind::NODE_BIN_OP) {
-            steps.push_back(crate::builder::Step::Format(first.element));
+            steps.push(crate::builder::Step::Format(first.element));
         } else {
-            steps.push_back(crate::builder::Step::FormatWider(first.element));
+            steps.push(crate::builder::Step::FormatWider(first.element));
         }
     } else {
-        steps.push_back(crate::builder::Step::Format(first.element));
+        steps.push(crate::builder::Step::Format(first.element));
     }
 
     if let Some(text) = first.inline_comment {
-        steps.push_back(crate::builder::Step::Whitespace);
-        steps.push_back(crate::builder::Step::Comment(text));
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
+        steps.push(crate::builder::Step::Whitespace);
+        steps.push(crate::builder::Step::Comment(text));
+        steps.push(crate::builder::Step::NewLine);
+        steps.push(crate::builder::Step::Pad);
     } else if vertical {
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
+        steps.push(crate::builder::Step::NewLine);
+        steps.push(crate::builder::Step::Pad);
     }
 
     for trivia in first.trivialities {
         match trivia {
             crate::annotated_children::Trivia::Comment(text) => {
-                steps.push_back(crate::builder::Step::Comment(text));
-                steps.push_back(crate::builder::Step::NewLine);
-                steps.push_back(crate::builder::Step::Pad);
+                steps.push(crate::builder::Step::Comment(text));
+                steps.push(crate::builder::Step::NewLine);
+                steps.push(crate::builder::Step::Pad);
             }
             crate::annotated_children::Trivia::Newlines => {}
         }
@@ -54,39 +54,39 @@ pub(crate) fn rule(
 
     // second
     if !vertical {
-        steps.push_back(crate::builder::Step::Whitespace);
+        steps.push(crate::builder::Step::Whitespace);
     }
-    steps.push_back(crate::builder::Step::Format(second.element));
+    steps.push(crate::builder::Step::Format(second.element));
 
     if let Some(text) = second.inline_comment {
-        steps.push_back(crate::builder::Step::Whitespace);
-        steps.push_back(crate::builder::Step::Comment(text));
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
+        steps.push(crate::builder::Step::Whitespace);
+        steps.push(crate::builder::Step::Comment(text));
+        steps.push(crate::builder::Step::NewLine);
+        steps.push(crate::builder::Step::Pad);
     }
 
     if second.has_comments {
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
+        steps.push(crate::builder::Step::NewLine);
+        steps.push(crate::builder::Step::Pad);
         for trivia in second.trivialities {
             match trivia {
                 crate::annotated_children::Trivia::Comment(text) => {
-                    steps.push_back(crate::builder::Step::Comment(text));
-                    steps.push_back(crate::builder::Step::NewLine);
-                    steps.push_back(crate::builder::Step::Pad);
+                    steps.push(crate::builder::Step::Comment(text));
+                    steps.push(crate::builder::Step::NewLine);
+                    steps.push(crate::builder::Step::Pad);
                 }
                 crate::annotated_children::Trivia::Newlines => {}
             }
         }
     } else if !second.has_inline_comment {
-        steps.push_back(crate::builder::Step::Whitespace);
+        steps.push(crate::builder::Step::Whitespace);
     }
 
     // third
     if vertical {
-        steps.push_back(crate::builder::Step::FormatWider(third.element));
+        steps.push(crate::builder::Step::FormatWider(third.element));
     } else {
-        steps.push_back(crate::builder::Step::Format(third.element));
+        steps.push(crate::builder::Step::Format(third.element));
     }
 
     steps

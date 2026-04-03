@@ -19,6 +19,6 @@ pub(crate) mod string;
 pub(crate) fn default(
     _: &crate::builder::BuildCtx,
     node: &rnix::SyntaxNode,
-) -> std::collections::LinkedList<crate::builder::Step> {
+) -> Vec<crate::builder::Step> {
     node.children_with_tokens().map(crate::builder::Step::Format).collect()
 }

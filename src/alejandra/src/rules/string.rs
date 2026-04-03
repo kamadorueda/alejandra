@@ -21,22 +21,22 @@ fn string_content_indent_unit(indentation: Indentation) -> &'static str {
 pub(crate) fn rule(
     build_ctx: &crate::builder::BuildCtx,
     node: &rnix::SyntaxNode,
-) -> std::collections::LinkedList<crate::builder::Step> {
-    let mut steps = std::collections::LinkedList::new();
+) -> Vec<crate::builder::Step> {
+    let mut steps = Vec::new();
 
     let mut children = crate::children::Children::new(build_ctx, node);
 
     let child = children.get_next().unwrap();
     let child_token = child.clone().into_token().unwrap();
     let text = child_token.text();
-    steps.push_back(crate::builder::Step::Format(child));
+    steps.push(crate::builder::Step::Format(child));
 
     if text == "\"" {
         while let Some(child) = children.get_next() {
             if build_ctx.vertical {
-                steps.push_back(crate::builder::Step::FormatWider(child));
+                steps.push(crate::builder::Step::FormatWider(child));
             } else {
-                steps.push_back(crate::builder::Step::Format(child));
+                steps.push(crate::builder::Step::Format(child));
             }
         }
     } else {
@@ -137,13 +137,13 @@ pub(crate) fn rule(
                         )
                         .repeat(build_ctx.indentation);
                         if !content_pad.is_empty() {
-                            steps.push_back(crate::builder::Step::Token(
+                            steps.push(crate::builder::Step::Token(
                                 rnix::SyntaxKind::TOKEN_WHITESPACE,
                                 content_pad,
                             ));
                         }
                     }
-                    steps.push_back(crate::builder::Step::Token(
+                    steps.push(crate::builder::Step::Token(
                         rnix::SyntaxKind::TOKEN_STRING_CONTENT,
                         portions[0].to_string(),
                     ));
@@ -155,35 +155,35 @@ pub(crate) fn rule(
                     )
                     .repeat(build_ctx.indentation);
                     if !content_pad.is_empty() {
-                        steps.push_back(crate::builder::Step::Token(
+                        steps.push(crate::builder::Step::Token(
                             rnix::SyntaxKind::TOKEN_WHITESPACE,
                             content_pad,
                         ));
                     }
                 }
                 for (index, portion) in portions.iter().enumerate() {
-                    steps.push_back(crate::builder::Step::Token(
+                    steps.push(crate::builder::Step::Token(
                         rnix::SyntaxKind::TOKEN_STRING_CONTENT,
                         portion.to_string(),
                     ));
 
                     if index + 1 != portions.len() {
-                        steps.push_back(crate::builder::Step::Indent);
-                        steps.push_back(crate::builder::Step::FormatWider(
+                        steps.push(crate::builder::Step::Indent);
+                        steps.push(crate::builder::Step::FormatWider(
                             interpolations.next().unwrap().clone(),
                         ));
-                        steps.push_back(crate::builder::Step::Dedent);
+                        steps.push(crate::builder::Step::Dedent);
                     }
                 }
             }
 
             if index + 1 < lines.len() {
-                steps.push_back(crate::builder::Step::NewLine);
+                steps.push(crate::builder::Step::NewLine);
             }
         }
 
         for interpolation in interpolations {
-            steps.push_back(crate::builder::Step::FormatWider(
+            steps.push(crate::builder::Step::FormatWider(
                 interpolation.clone(),
             ));
         }

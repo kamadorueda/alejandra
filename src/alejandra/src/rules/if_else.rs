@@ -1,8 +1,8 @@
 pub(crate) fn rule(
     build_ctx: &crate::builder::BuildCtx,
     node: &rnix::SyntaxNode,
-) -> std::collections::LinkedList<crate::builder::Step> {
-    let mut steps = std::collections::LinkedList::new();
+) -> Vec<crate::builder::Step> {
+    let mut steps = Vec::new();
 
     let mut children = crate::annotated_children::annotated(build_ctx, node);
 
@@ -14,25 +14,25 @@ pub(crate) fn rule(
     let else_expr = children.next().unwrap();
 
     // if_
-    steps.push_back(crate::builder::Step::Format(if_.element));
+    steps.push(crate::builder::Step::Format(if_.element));
 
-    steps.push_back(crate::builder::Step::Indent);
+    steps.push(crate::builder::Step::Indent);
     if let Some(text) = if_.inline_comment {
-        steps.push_back(crate::builder::Step::Whitespace);
-        steps.push_back(crate::builder::Step::Comment(text));
+        steps.push(crate::builder::Step::Whitespace);
+        steps.push(crate::builder::Step::Comment(text));
     }
 
     for trivia in if_.trivialities {
         match trivia {
             crate::annotated_children::Trivia::Comment(text) => {
-                steps.push_back(crate::builder::Step::NewLine);
-                steps.push_back(crate::builder::Step::Pad);
-                steps.push_back(crate::builder::Step::Comment(text));
+                steps.push(crate::builder::Step::NewLine);
+                steps.push(crate::builder::Step::Pad);
+                steps.push(crate::builder::Step::Comment(text));
             }
             crate::annotated_children::Trivia::Newlines => {}
         }
     }
-    steps.push_back(crate::builder::Step::Dedent);
+    steps.push(crate::builder::Step::Dedent);
 
     // if_expr
     if !if_.has_inline_comment
@@ -42,57 +42,57 @@ pub(crate) fn rule(
             if_expr.element.clone(),
         )
     {
-        steps.push_back(crate::builder::Step::Whitespace);
-        steps.push_back(crate::builder::Step::FormatWider(if_expr.element));
+        steps.push(crate::builder::Step::Whitespace);
+        steps.push(crate::builder::Step::FormatWider(if_expr.element));
     } else {
-        steps.push_back(crate::builder::Step::Indent);
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
-        steps.push_back(crate::builder::Step::FormatWider(if_expr.element));
-        steps.push_back(crate::builder::Step::Dedent);
+        steps.push(crate::builder::Step::Indent);
+        steps.push(crate::builder::Step::NewLine);
+        steps.push(crate::builder::Step::Pad);
+        steps.push(crate::builder::Step::FormatWider(if_expr.element));
+        steps.push(crate::builder::Step::Dedent);
     }
 
     if let Some(text) = if_expr.inline_comment {
-        steps.push_back(crate::builder::Step::Whitespace);
-        steps.push_back(crate::builder::Step::Comment(text));
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
+        steps.push(crate::builder::Step::Whitespace);
+        steps.push(crate::builder::Step::Comment(text));
+        steps.push(crate::builder::Step::NewLine);
+        steps.push(crate::builder::Step::Pad);
     } else {
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
+        steps.push(crate::builder::Step::NewLine);
+        steps.push(crate::builder::Step::Pad);
     }
 
     for trivia in if_expr.trivialities {
         match trivia {
             crate::annotated_children::Trivia::Comment(text) => {
-                steps.push_back(crate::builder::Step::Comment(text));
-                steps.push_back(crate::builder::Step::NewLine);
-                steps.push_back(crate::builder::Step::Pad);
+                steps.push(crate::builder::Step::Comment(text));
+                steps.push(crate::builder::Step::NewLine);
+                steps.push(crate::builder::Step::Pad);
             }
             crate::annotated_children::Trivia::Newlines => {}
         }
     }
 
     // then_
-    steps.push_back(crate::builder::Step::Format(then_.element));
+    steps.push(crate::builder::Step::Format(then_.element));
 
-    steps.push_back(crate::builder::Step::Indent);
+    steps.push(crate::builder::Step::Indent);
     if let Some(text) = then_.inline_comment {
-        steps.push_back(crate::builder::Step::Whitespace);
-        steps.push_back(crate::builder::Step::Comment(text));
+        steps.push(crate::builder::Step::Whitespace);
+        steps.push(crate::builder::Step::Comment(text));
     }
 
     for trivia in then_.trivialities {
         match trivia {
             crate::annotated_children::Trivia::Comment(text) => {
-                steps.push_back(crate::builder::Step::NewLine);
-                steps.push_back(crate::builder::Step::Pad);
-                steps.push_back(crate::builder::Step::Comment(text));
+                steps.push(crate::builder::Step::NewLine);
+                steps.push(crate::builder::Step::Pad);
+                steps.push(crate::builder::Step::Comment(text));
             }
             crate::annotated_children::Trivia::Newlines => {}
         }
     }
-    steps.push_back(crate::builder::Step::Dedent);
+    steps.push(crate::builder::Step::Dedent);
 
     // then_expr
     if !then_.has_inline_comment
@@ -108,57 +108,57 @@ pub(crate) fn rule(
             then_expr.element.clone(),
         ))
     {
-        steps.push_back(crate::builder::Step::Whitespace);
-        steps.push_back(crate::builder::Step::FormatWider(then_expr.element));
+        steps.push(crate::builder::Step::Whitespace);
+        steps.push(crate::builder::Step::FormatWider(then_expr.element));
     } else {
-        steps.push_back(crate::builder::Step::Indent);
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
-        steps.push_back(crate::builder::Step::FormatWider(then_expr.element));
-        steps.push_back(crate::builder::Step::Dedent);
+        steps.push(crate::builder::Step::Indent);
+        steps.push(crate::builder::Step::NewLine);
+        steps.push(crate::builder::Step::Pad);
+        steps.push(crate::builder::Step::FormatWider(then_expr.element));
+        steps.push(crate::builder::Step::Dedent);
     }
 
     if let Some(text) = then_expr.inline_comment {
-        steps.push_back(crate::builder::Step::Whitespace);
-        steps.push_back(crate::builder::Step::Comment(text));
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
+        steps.push(crate::builder::Step::Whitespace);
+        steps.push(crate::builder::Step::Comment(text));
+        steps.push(crate::builder::Step::NewLine);
+        steps.push(crate::builder::Step::Pad);
     } else {
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
+        steps.push(crate::builder::Step::NewLine);
+        steps.push(crate::builder::Step::Pad);
     }
 
     for trivia in then_expr.trivialities {
         match trivia {
             crate::annotated_children::Trivia::Comment(text) => {
-                steps.push_back(crate::builder::Step::Comment(text));
-                steps.push_back(crate::builder::Step::NewLine);
-                steps.push_back(crate::builder::Step::Pad);
+                steps.push(crate::builder::Step::Comment(text));
+                steps.push(crate::builder::Step::NewLine);
+                steps.push(crate::builder::Step::Pad);
             }
             crate::annotated_children::Trivia::Newlines => {}
         }
     }
 
     // else_
-    steps.push_back(crate::builder::Step::Format(else_.element));
+    steps.push(crate::builder::Step::Format(else_.element));
 
-    steps.push_back(crate::builder::Step::Indent);
+    steps.push(crate::builder::Step::Indent);
     if let Some(text) = else_.inline_comment {
-        steps.push_back(crate::builder::Step::Whitespace);
-        steps.push_back(crate::builder::Step::Comment(text));
+        steps.push(crate::builder::Step::Whitespace);
+        steps.push(crate::builder::Step::Comment(text));
     }
 
     for trivia in else_.trivialities {
         match trivia {
             crate::annotated_children::Trivia::Comment(text) => {
-                steps.push_back(crate::builder::Step::NewLine);
-                steps.push_back(crate::builder::Step::Pad);
-                steps.push_back(crate::builder::Step::Comment(text));
+                steps.push(crate::builder::Step::NewLine);
+                steps.push(crate::builder::Step::Pad);
+                steps.push(crate::builder::Step::Comment(text));
             }
             crate::annotated_children::Trivia::Newlines => {}
         }
     }
-    steps.push_back(crate::builder::Step::Dedent);
+    steps.push(crate::builder::Step::Dedent);
 
     // else_expr
     if !else_.has_inline_comment
@@ -175,14 +175,14 @@ pub(crate) fn rule(
             else_expr.element.clone(),
         ))
     {
-        steps.push_back(crate::builder::Step::Whitespace);
-        steps.push_back(crate::builder::Step::FormatWider(else_expr.element));
+        steps.push(crate::builder::Step::Whitespace);
+        steps.push(crate::builder::Step::FormatWider(else_expr.element));
     } else {
-        steps.push_back(crate::builder::Step::Indent);
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
-        steps.push_back(crate::builder::Step::FormatWider(else_expr.element));
-        steps.push_back(crate::builder::Step::Dedent);
+        steps.push(crate::builder::Step::Indent);
+        steps.push(crate::builder::Step::NewLine);
+        steps.push(crate::builder::Step::Pad);
+        steps.push(crate::builder::Step::FormatWider(else_expr.element));
+        steps.push(crate::builder::Step::Dedent);
     }
 
     steps
