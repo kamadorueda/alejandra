@@ -44,7 +44,8 @@ export function useFormatter() {
           output: formatted,
         });
         setFormattingError(null);
-        setStateInUrl({ code, config });
+        // Defer URL update to avoid blocking formatting
+        setTimeout(() => setStateInUrl({ code, config }), 0);
       } catch (error) {
         const errorMsg = error instanceof Error ? error.message : String(error);
         console.error("useFormatter: Formatting error:", error);
@@ -139,46 +140,21 @@ export function useFormatter() {
       }
 
       debounceTimeoutRef.current = setTimeout(() => {
-        // Use requestIdleCallback to defer formatting and keep UI responsive
-        if ("requestIdleCallback" in window) {
-          requestIdleCallback(() => {
-            try {
-              const formatted = formatCode(newCode, "file.nix", config);
-              setState((prev) => ({
-                ...prev,
-                output: formatted,
-              }));
-              setFormattingError(null);
-            } catch (error) {
-              const errorMsg = error instanceof Error ? error.message : String(error);
-              console.error("useFormatter: Formatting error on input change:", error);
-              setFormattingError(errorMsg);
-              setState((prev) => ({
-                ...prev,
-                output: "",
-              }));
-            }
-          });
-        } else {
-          // Fallback for browsers without requestIdleCallback
-          setTimeout(() => {
-            try {
-              const formatted = formatCode(newCode, "file.nix", config);
-              setState((prev) => ({
-                ...prev,
-                output: formatted,
-              }));
-              setFormattingError(null);
-            } catch (error) {
-              const errorMsg = error instanceof Error ? error.message : String(error);
-              console.error("useFormatter: Formatting error on input change:", error);
-              setFormattingError(errorMsg);
-              setState((prev) => ({
-                ...prev,
-                output: "",
-              }));
-            }
-          }, 0);
+        try {
+          const formatted = formatCode(newCode, "file.nix", config);
+          setState((prev) => ({
+            ...prev,
+            output: formatted,
+          }));
+          setFormattingError(null);
+        } catch (error) {
+          const errorMsg = error instanceof Error ? error.message : String(error);
+          console.error("useFormatter: Formatting error on input change:", error);
+          setFormattingError(errorMsg);
+          setState((prev) => ({
+            ...prev,
+            output: "",
+          }));
         }
       }, 300);
 
@@ -197,47 +173,25 @@ export function useFormatter() {
   const handleConfigChange = useCallback(
     (newConfig: FormatterConfig) => {
       setConfig(newConfig);
-      // Re-format with the new config, deferred to avoid blocking UI
-      if ("requestIdleCallback" in window) {
-        requestIdleCallback(() => {
-          try {
-            const formatted = formatCode(state.input, "file.nix", newConfig);
-            setState((prev) => ({
-              ...prev,
-              output: formatted,
-            }));
-            setFormattingError(null);
-          } catch (error) {
-            const errorMsg = error instanceof Error ? error.message : String(error);
-            console.error("useFormatter: Formatting error on config change:", error);
-            setFormattingError(errorMsg);
-            setState((prev) => ({
-              ...prev,
-              output: "",
-            }));
-          }
-        });
-      } else {
-        setTimeout(() => {
-          try {
-            const formatted = formatCode(state.input, "file.nix", newConfig);
-            setState((prev) => ({
-              ...prev,
-              output: formatted,
-            }));
-            setFormattingError(null);
-          } catch (error) {
-            const errorMsg = error instanceof Error ? error.message : String(error);
-            console.error("useFormatter: Formatting error on config change:", error);
-            setFormattingError(errorMsg);
-            setState((prev) => ({
-              ...prev,
-              output: "",
-            }));
-          }
-        }, 0);
+      // Re-format with the new config
+      try {
+        const formatted = formatCode(state.input, "file.nix", newConfig);
+        setState((prev) => ({
+          ...prev,
+          output: formatted,
+        }));
+        setFormattingError(null);
+      } catch (error) {
+        const errorMsg = error instanceof Error ? error.message : String(error);
+        console.error("useFormatter: Formatting error on config change:", error);
+        setFormattingError(errorMsg);
+        setState((prev) => ({
+          ...prev,
+          output: "",
+        }));
       }
-      setStateInUrl({ code: state.input, config: newConfig });
+      // Defer URL update to avoid blocking formatting
+      setTimeout(() => setStateInUrl({ code: state.input, config: newConfig }), 0);
     },
     [state.input]
   );
