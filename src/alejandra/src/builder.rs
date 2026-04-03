@@ -26,6 +26,19 @@ pub(crate) struct BuildCtx {
     pub vertical:                     bool,
 }
 
+impl BuildCtx {
+    /// Compute the indent string for the current indentation level,
+    /// respecting the configured indentation style.
+    pub(crate) fn indent_str(&self) -> String {
+        let unit = match self.config.indentation {
+            Indentation::FourSpaces => "    ",
+            Indentation::Tabs => "\t",
+            Indentation::TwoSpaces => "  ",
+        };
+        unit.repeat(self.indentation)
+    }
+}
+
 pub(crate) fn build(
     build_ctx: &mut BuildCtx,
     element: rnix::SyntaxElement,
@@ -60,6 +73,7 @@ fn build_step(
             let mut lines: Vec<String> =
                 text.lines().map(|line| line.trim_end().to_string()).collect();
 
+            let indent = build_ctx.indent_str();
             lines = lines
                 .iter()
                 .enumerate()
@@ -67,12 +81,7 @@ fn build_step(
                     if index == 0 || line.is_empty() {
                         line.to_string()
                     } else {
-                        format!(
-                            "{0:<1$}{2}",
-                            "",
-                            2 * build_ctx.indentation,
-                            line,
-                        )
+                        format!("{}{}", indent, line)
                     }
                 })
                 .collect();
