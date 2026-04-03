@@ -1,5 +1,3 @@
-use std::collections::LinkedList;
-
 pub(crate) enum Trivia {
     Comment(String),
     Newlines,
@@ -11,7 +9,7 @@ pub(crate) struct Child {
     pub inline_comment:     Option<String>,
     pub has_inline_comment: bool,
 
-    pub trivialities:     LinkedList<Trivia>,
+    pub trivialities:     Vec<Trivia>,
     pub has_comments:     bool,
     pub has_trivialities: bool,
 }
@@ -19,14 +17,14 @@ pub(crate) struct Child {
 pub(crate) fn annotated(
     build_ctx: &crate::builder::BuildCtx,
     node: &rnix::SyntaxNode,
-) -> std::collections::linked_list::IntoIter<Child> {
+) -> std::vec::IntoIter<Child> {
     let mut children = crate::children::Children::new(build_ctx, node);
 
-    let mut elements = LinkedList::new();
+    let mut elements = Vec::new();
 
     while let Some(element) = children.get_next() {
         let mut inline_comment = None;
-        let mut trivialities = LinkedList::new();
+        let mut trivialities = Vec::new();
 
         let mut skip_next_newline = false;
         children.drain_trivia(|element| match element {
@@ -38,7 +36,7 @@ pub(crate) fn annotated(
                     inline_comment = Some(text);
                     skip_next_newline = true;
                 } else {
-                    trivialities.push_back(Trivia::Comment(text));
+                    trivialities.push(Trivia::Comment(text));
                 }
             }
             crate::children::Trivia::Whitespace(text) => {
@@ -50,7 +48,7 @@ pub(crate) fn annotated(
                 }
 
                 if newlines > 0 {
-                    trivialities.push_back(Trivia::Newlines)
+                    trivialities.push(Trivia::Newlines)
                 }
             }
         });
@@ -61,7 +59,7 @@ pub(crate) fn annotated(
             .any(|trivia| matches!(trivia, Trivia::Comment(_)));
         let has_trivialities = !trivialities.is_empty();
 
-        elements.push_back(Child {
+        elements.push(Child {
             element,
 
             inline_comment,

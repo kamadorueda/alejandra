@@ -1,8 +1,8 @@
 pub(crate) fn rule(
     build_ctx: &crate::builder::BuildCtx,
     node: &rnix::SyntaxNode,
-) -> std::collections::LinkedList<crate::builder::Step> {
-    let mut steps = std::collections::LinkedList::new();
+) -> Vec<crate::builder::Step> {
+    let mut steps = Vec::new();
 
     let children: Vec<crate::annotated_children::Child> =
         crate::annotated_children::annotated(build_ctx, node).collect();
@@ -17,27 +17,27 @@ pub(crate) fn rule(
 
     // inherit
     let child = children.next().unwrap();
-    steps.push_back(crate::builder::Step::Format(child.element));
+    steps.push(crate::builder::Step::Format(child.element));
     if vertical {
-        steps.push_back(crate::builder::Step::Indent);
+        steps.push(crate::builder::Step::Indent);
     }
 
     if let Some(text) = child.inline_comment {
-        steps.push_back(crate::builder::Step::Whitespace);
-        steps.push_back(crate::builder::Step::Comment(text));
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
+        steps.push(crate::builder::Step::Whitespace);
+        steps.push(crate::builder::Step::Comment(text));
+        steps.push(crate::builder::Step::NewLine);
+        steps.push(crate::builder::Step::Pad);
     } else if vertical {
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
+        steps.push(crate::builder::Step::NewLine);
+        steps.push(crate::builder::Step::Pad);
     }
 
     for trivia in child.trivialities {
         match trivia {
             crate::annotated_children::Trivia::Comment(text) => {
-                steps.push_back(crate::builder::Step::Comment(text));
-                steps.push_back(crate::builder::Step::NewLine);
-                steps.push_back(crate::builder::Step::Pad);
+                steps.push(crate::builder::Step::Comment(text));
+                steps.push(crate::builder::Step::NewLine);
+                steps.push(crate::builder::Step::Pad);
             }
             crate::annotated_children::Trivia::Newlines => {}
         }
@@ -47,37 +47,37 @@ pub(crate) fn rule(
         let not_last_child = index + 1 < children_count;
 
         if vertical {
-            steps.push_back(crate::builder::Step::FormatWider(child.element));
+            steps.push(crate::builder::Step::FormatWider(child.element));
 
             if let Some(text) = child.inline_comment {
-                steps.push_back(crate::builder::Step::Whitespace);
-                steps.push_back(crate::builder::Step::Comment(text));
-                steps.push_back(crate::builder::Step::NewLine);
+                steps.push(crate::builder::Step::Whitespace);
+                steps.push(crate::builder::Step::Comment(text));
+                steps.push(crate::builder::Step::NewLine);
                 // Only add padding if there are no `trivialities` (that is,
                 // there's no extra `Newlines` to be added)
                 // or if the first one is a comment (that is, it'll need
                 // to be indented to match the content).
                 if matches!(
-                    child.trivialities.front(),
+                    child.trivialities.first(),
                     None | Some(crate::annotated_children::Trivia::Comment(_))
                 ) {
-                    steps.push_back(crate::builder::Step::Pad);
+                    steps.push(crate::builder::Step::Pad);
                 }
             } else if (not_last_child && !child.has_trivialities)
                 || matches!(
-                    child.trivialities.front(),
+                    child.trivialities.first(),
                     Some(crate::annotated_children::Trivia::Comment(_))
                 )
             {
-                steps.push_back(crate::builder::Step::NewLine);
-                steps.push_back(crate::builder::Step::Pad);
+                steps.push(crate::builder::Step::NewLine);
+                steps.push(crate::builder::Step::Pad);
             }
 
             let mut trivia_iter = child.trivialities.into_iter().peekable();
             while let Some(trivia) = trivia_iter.next() {
                 match trivia {
                     crate::annotated_children::Trivia::Comment(text) => {
-                        steps.push_back(crate::builder::Step::Comment(text));
+                        steps.push(crate::builder::Step::Comment(text));
                         // If the next `trivia` is a newline, don't add newlines
                         // and padding at the
                         // end of this iteration, as it will lead to a new blank
@@ -92,20 +92,20 @@ pub(crate) fn rule(
                     crate::annotated_children::Trivia::Newlines => {}
                 }
                 if not_last_child {
-                    steps.push_back(crate::builder::Step::NewLine);
-                    steps.push_back(crate::builder::Step::Pad);
+                    steps.push(crate::builder::Step::NewLine);
+                    steps.push(crate::builder::Step::Pad);
                 }
             }
         } else {
             if not_last_child {
-                steps.push_back(crate::builder::Step::Whitespace);
+                steps.push(crate::builder::Step::Whitespace);
             }
-            steps.push_back(crate::builder::Step::Format(child.element));
+            steps.push(crate::builder::Step::Format(child.element));
         }
     }
 
     if vertical {
-        steps.push_back(crate::builder::Step::Dedent);
+        steps.push(crate::builder::Step::Dedent);
     }
 
     steps

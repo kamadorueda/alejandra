@@ -1,8 +1,8 @@
 pub(crate) fn rule(
     build_ctx: &crate::builder::BuildCtx,
     node: &rnix::SyntaxNode,
-) -> std::collections::LinkedList<crate::builder::Step> {
-    let mut steps = std::collections::LinkedList::new();
+) -> Vec<crate::builder::Step> {
+    let mut steps = Vec::new();
 
     let mut children = crate::annotated_children::annotated(build_ctx, node);
 
@@ -19,27 +19,27 @@ pub(crate) fn rule(
         || third.has_trivialities;
 
     // first
-    steps.push_back(crate::builder::Step::Format(first.element));
+    steps.push(crate::builder::Step::Format(first.element));
     if vertical {
-        steps.push_back(crate::builder::Step::Indent);
+        steps.push(crate::builder::Step::Indent);
     }
 
     if let Some(text) = first.inline_comment {
-        steps.push_back(crate::builder::Step::Whitespace);
-        steps.push_back(crate::builder::Step::Comment(text));
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
+        steps.push(crate::builder::Step::Whitespace);
+        steps.push(crate::builder::Step::Comment(text));
+        steps.push(crate::builder::Step::NewLine);
+        steps.push(crate::builder::Step::Pad);
     } else if vertical {
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
+        steps.push(crate::builder::Step::NewLine);
+        steps.push(crate::builder::Step::Pad);
     }
 
     for trivia in first.trivialities {
         match trivia {
             crate::annotated_children::Trivia::Comment(text) => {
-                steps.push_back(crate::builder::Step::Comment(text));
-                steps.push_back(crate::builder::Step::NewLine);
-                steps.push_back(crate::builder::Step::Pad);
+                steps.push(crate::builder::Step::Comment(text));
+                steps.push(crate::builder::Step::NewLine);
+                steps.push(crate::builder::Step::Pad);
             }
             crate::annotated_children::Trivia::Newlines => {}
         }
@@ -47,24 +47,24 @@ pub(crate) fn rule(
 
     // second
     if vertical {
-        steps.push_back(crate::builder::Step::FormatWider(second.element));
+        steps.push(crate::builder::Step::FormatWider(second.element));
     } else {
-        steps.push_back(crate::builder::Step::Format(second.element));
+        steps.push(crate::builder::Step::Format(second.element));
     }
 
     if let Some(text) = second.inline_comment {
-        steps.push_back(crate::builder::Step::Whitespace);
-        steps.push_back(crate::builder::Step::Comment(text));
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
+        steps.push(crate::builder::Step::Whitespace);
+        steps.push(crate::builder::Step::Comment(text));
+        steps.push(crate::builder::Step::NewLine);
+        steps.push(crate::builder::Step::Pad);
     }
 
     for trivia in second.trivialities {
         match trivia {
             crate::annotated_children::Trivia::Comment(text) => {
-                steps.push_back(crate::builder::Step::NewLine);
-                steps.push_back(crate::builder::Step::Pad);
-                steps.push_back(crate::builder::Step::Comment(text));
+                steps.push(crate::builder::Step::NewLine);
+                steps.push(crate::builder::Step::Pad);
+                steps.push(crate::builder::Step::Comment(text));
             }
             crate::annotated_children::Trivia::Newlines => {}
         }
@@ -72,11 +72,11 @@ pub(crate) fn rule(
 
     // third
     if vertical {
-        steps.push_back(crate::builder::Step::Dedent);
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
+        steps.push(crate::builder::Step::Dedent);
+        steps.push(crate::builder::Step::NewLine);
+        steps.push(crate::builder::Step::Pad);
     }
-    steps.push_back(crate::builder::Step::Format(third.element));
+    steps.push(crate::builder::Step::Format(third.element));
 
     steps
 }

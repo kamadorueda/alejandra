@@ -1,8 +1,8 @@
 pub(crate) fn rule(
     build_ctx: &crate::builder::BuildCtx,
     node: &rnix::SyntaxNode,
-) -> std::collections::LinkedList<crate::builder::Step> {
-    let mut steps = std::collections::LinkedList::new();
+) -> Vec<crate::builder::Step> {
+    let mut steps = Vec::new();
 
     let mut children = crate::children::Children::new(build_ctx, node);
 
@@ -25,9 +25,9 @@ pub(crate) fn rule(
 
     // let
     let child = children.get_next().unwrap();
-    steps.push_back(crate::builder::Step::Format(child));
+    steps.push(crate::builder::Step::Format(child));
     if vertical {
-        steps.push_back(crate::builder::Step::Indent);
+        steps.push(crate::builder::Step::Indent);
     }
 
     let mut item_index: usize = 0;
@@ -38,19 +38,19 @@ pub(crate) fn rule(
         children.drain_trivia(|element| match element {
             crate::children::Trivia::Comment(text) => {
                 if inline_next_comment && text.starts_with('#') {
-                    steps.push_back(crate::builder::Step::Whitespace);
+                    steps.push(crate::builder::Step::Whitespace);
                 } else {
-                    steps.push_back(crate::builder::Step::NewLine);
-                    steps.push_back(crate::builder::Step::Pad);
+                    steps.push(crate::builder::Step::NewLine);
+                    steps.push(crate::builder::Step::Pad);
                 }
-                steps.push_back(crate::builder::Step::Comment(text));
+                steps.push(crate::builder::Step::Comment(text));
                 inline_next_comment = false;
             }
             crate::children::Trivia::Whitespace(text) => {
                 let newlines = crate::utils::count_newlines(&text);
 
                 if newlines > 1 && item_index > 0 && item_index < items_count {
-                    steps.push_back(crate::builder::Step::NewLine);
+                    steps.push(crate::builder::Step::NewLine);
                 }
 
                 inline_next_comment = newlines == 0;
@@ -65,12 +65,12 @@ pub(crate) fn rule(
             // expr
             item_index += 1;
             if vertical {
-                steps.push_back(crate::builder::Step::NewLine);
-                steps.push_back(crate::builder::Step::Pad);
-                steps.push_back(crate::builder::Step::FormatWider(child));
+                steps.push(crate::builder::Step::NewLine);
+                steps.push(crate::builder::Step::Pad);
+                steps.push(crate::builder::Step::FormatWider(child));
             } else {
-                steps.push_back(crate::builder::Step::Whitespace);
-                steps.push_back(crate::builder::Step::Format(child));
+                steps.push(crate::builder::Step::Whitespace);
+                steps.push(crate::builder::Step::Format(child));
             }
 
             children.move_next();
@@ -79,21 +79,21 @@ pub(crate) fn rule(
     }
 
     if vertical {
-        steps.push_back(crate::builder::Step::Dedent);
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
+        steps.push(crate::builder::Step::Dedent);
+        steps.push(crate::builder::Step::NewLine);
+        steps.push(crate::builder::Step::Pad);
     } else {
-        steps.push_back(crate::builder::Step::Whitespace);
+        steps.push(crate::builder::Step::Whitespace);
     }
 
     // in
     let child_in = children.get_next().unwrap();
 
     // /**/
-    let mut child_comments = std::collections::LinkedList::new();
+    let mut child_comments = Vec::new();
     children.drain_trivia(|element| match element {
         crate::children::Trivia::Comment(text) => {
-            child_comments.push_back(crate::builder::Step::Comment(text))
+            child_comments.push(crate::builder::Step::Comment(text))
         }
         crate::children::Trivia::Whitespace(_) => {}
     });
@@ -103,7 +103,7 @@ pub(crate) fn rule(
 
     // in
     let mut dedent = false;
-    steps.push_back(crate::builder::Step::Format(child_in));
+    steps.push(crate::builder::Step::Format(child_in));
     if vertical {
         if child_comments.is_empty()
             && matches!(
@@ -115,31 +115,31 @@ pub(crate) fn rule(
                     | rnix::SyntaxKind::NODE_STRING
             )
         {
-            steps.push_back(crate::builder::Step::Whitespace);
+            steps.push(crate::builder::Step::Whitespace);
         } else {
             dedent = true;
-            steps.push_back(crate::builder::Step::Indent);
-            steps.push_back(crate::builder::Step::NewLine);
-            steps.push_back(crate::builder::Step::Pad);
+            steps.push(crate::builder::Step::Indent);
+            steps.push(crate::builder::Step::NewLine);
+            steps.push(crate::builder::Step::Pad);
         }
     }
 
     // /**/
     for comment in child_comments {
-        steps.push_back(comment);
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
+        steps.push(comment);
+        steps.push(crate::builder::Step::NewLine);
+        steps.push(crate::builder::Step::Pad);
     }
 
     // expr
     if vertical {
-        steps.push_back(crate::builder::Step::FormatWider(child_expr));
+        steps.push(crate::builder::Step::FormatWider(child_expr));
         if dedent {
-            steps.push_back(crate::builder::Step::Dedent);
+            steps.push(crate::builder::Step::Dedent);
         }
     } else {
-        steps.push_back(crate::builder::Step::Whitespace);
-        steps.push_back(crate::builder::Step::Format(child_expr));
+        steps.push(crate::builder::Step::Whitespace);
+        steps.push(crate::builder::Step::Format(child_expr));
     }
 
     steps

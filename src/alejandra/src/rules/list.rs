@@ -1,8 +1,8 @@
 pub(crate) fn rule(
     build_ctx: &crate::builder::BuildCtx,
     node: &rnix::SyntaxNode,
-) -> std::collections::LinkedList<crate::builder::Step> {
-    let mut steps = std::collections::LinkedList::new();
+) -> Vec<crate::builder::Step> {
+    let mut steps = Vec::new();
 
     let mut children = crate::children::Children::new(build_ctx, node);
 
@@ -20,9 +20,9 @@ pub(crate) fn rule(
 
     // [
     let child = children.get_next().unwrap();
-    steps.push_back(crate::builder::Step::Format(child));
+    steps.push(crate::builder::Step::Format(child));
     if vertical {
-        steps.push_back(crate::builder::Step::Indent);
+        steps.push(crate::builder::Step::Indent);
     }
 
     let mut item_index: usize = 0;
@@ -34,13 +34,13 @@ pub(crate) fn rule(
             match element {
                 crate::children::Trivia::Comment(text) => {
                     if inline_next_comment && text.starts_with('#') {
-                        steps.push_back(crate::builder::Step::Whitespace);
+                        steps.push(crate::builder::Step::Whitespace);
                     } else {
-                        steps.push_back(crate::builder::Step::NewLine);
-                        steps.push_back(crate::builder::Step::Pad);
+                        steps.push(crate::builder::Step::NewLine);
+                        steps.push(crate::builder::Step::Pad);
                     }
 
-                    steps.push_back(crate::builder::Step::Comment(text));
+                    steps.push(crate::builder::Step::Comment(text));
                     item_index += 1;
                     inline_next_comment = false;
                 }
@@ -51,7 +51,7 @@ pub(crate) fn rule(
                         && item_index > 0
                         && item_index < items_count
                     {
-                        steps.push_back(crate::builder::Step::NewLine);
+                        steps.push(crate::builder::Step::NewLine);
                     }
 
                     inline_next_comment = newlines == 0;
@@ -69,14 +69,14 @@ pub(crate) fn rule(
             // item
             item_index += 1;
             if vertical {
-                steps.push_back(crate::builder::Step::NewLine);
-                steps.push_back(crate::builder::Step::Pad);
-                steps.push_back(crate::builder::Step::FormatWider(child));
+                steps.push(crate::builder::Step::NewLine);
+                steps.push(crate::builder::Step::Pad);
+                steps.push(crate::builder::Step::FormatWider(child));
             } else {
                 if item_index > 1 {
-                    steps.push_back(crate::builder::Step::Whitespace);
+                    steps.push(crate::builder::Step::Whitespace);
                 }
-                steps.push_back(crate::builder::Step::Format(child));
+                steps.push(crate::builder::Step::Format(child));
             }
 
             children.move_next();
@@ -87,11 +87,11 @@ pub(crate) fn rule(
     // ]
     let child = children.get_next().unwrap();
     if vertical {
-        steps.push_back(crate::builder::Step::Dedent);
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
+        steps.push(crate::builder::Step::Dedent);
+        steps.push(crate::builder::Step::NewLine);
+        steps.push(crate::builder::Step::Pad);
     }
-    steps.push_back(crate::builder::Step::Format(child));
+    steps.push(crate::builder::Step::Format(child));
 
     steps
 }

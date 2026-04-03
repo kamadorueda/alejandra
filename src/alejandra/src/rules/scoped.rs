@@ -1,8 +1,8 @@
 pub(crate) fn rule(
     build_ctx: &crate::builder::BuildCtx,
     node: &rnix::SyntaxNode,
-) -> std::collections::LinkedList<crate::builder::Step> {
-    let mut steps = std::collections::LinkedList::new();
+) -> Vec<crate::builder::Step> {
+    let mut steps = Vec::new();
 
     let mut children = crate::annotated_children::annotated(build_ctx, node);
 
@@ -22,26 +22,26 @@ pub(crate) fn rule(
         || fourth.has_trivialities;
 
     // first
-    steps.push_back(crate::builder::Step::Format(first.element));
+    steps.push(crate::builder::Step::Format(first.element));
 
     if let Some(text) = first.inline_comment {
-        steps.push_back(crate::builder::Step::Whitespace);
-        steps.push_back(crate::builder::Step::Comment(text));
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
+        steps.push(crate::builder::Step::Whitespace);
+        steps.push(crate::builder::Step::Comment(text));
+        steps.push(crate::builder::Step::NewLine);
+        steps.push(crate::builder::Step::Pad);
     } else if first.has_comments {
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
+        steps.push(crate::builder::Step::NewLine);
+        steps.push(crate::builder::Step::Pad);
     } else {
-        steps.push_back(crate::builder::Step::Whitespace);
+        steps.push(crate::builder::Step::Whitespace);
     }
 
     for trivia in first.trivialities {
         match trivia {
             crate::annotated_children::Trivia::Comment(text) => {
-                steps.push_back(crate::builder::Step::Comment(text));
-                steps.push_back(crate::builder::Step::NewLine);
-                steps.push_back(crate::builder::Step::Pad);
+                steps.push(crate::builder::Step::Comment(text));
+                steps.push(crate::builder::Step::NewLine);
+                steps.push(crate::builder::Step::Pad);
             }
             crate::annotated_children::Trivia::Newlines => {}
         }
@@ -49,27 +49,27 @@ pub(crate) fn rule(
 
     // second
     if vertical {
-        steps.push_back(crate::builder::Step::FormatWider(second.element));
+        steps.push(crate::builder::Step::FormatWider(second.element));
     } else {
-        steps.push_back(crate::builder::Step::Format(second.element));
+        steps.push(crate::builder::Step::Format(second.element));
     }
 
     // third
-    steps.push_back(crate::builder::Step::Format(third.element));
+    steps.push(crate::builder::Step::Format(third.element));
 
     if let Some(text) = third.inline_comment {
-        steps.push_back(crate::builder::Step::Whitespace);
-        steps.push_back(crate::builder::Step::Comment(text));
-        steps.push_back(crate::builder::Step::NewLine);
-        steps.push_back(crate::builder::Step::Pad);
+        steps.push(crate::builder::Step::Whitespace);
+        steps.push(crate::builder::Step::Comment(text));
+        steps.push(crate::builder::Step::NewLine);
+        steps.push(crate::builder::Step::Pad);
     }
 
     for trivia in third.trivialities {
         match trivia {
             crate::annotated_children::Trivia::Comment(text) => {
-                steps.push_back(crate::builder::Step::NewLine);
-                steps.push_back(crate::builder::Step::Pad);
-                steps.push_back(crate::builder::Step::Comment(text));
+                steps.push(crate::builder::Step::NewLine);
+                steps.push(crate::builder::Step::Pad);
+                steps.push(crate::builder::Step::Comment(text));
             }
             crate::annotated_children::Trivia::Newlines => {}
         }
@@ -81,9 +81,9 @@ pub(crate) fn rule(
             fourth.element.kind(),
             rnix::SyntaxKind::NODE_ASSERT | rnix::SyntaxKind::NODE_WITH
         ) {
-            steps.push_back(crate::builder::Step::NewLine);
-            steps.push_back(crate::builder::Step::Pad);
-            steps.push_back(crate::builder::Step::FormatWider(fourth.element));
+            steps.push(crate::builder::Step::NewLine);
+            steps.push(crate::builder::Step::Pad);
+            steps.push(crate::builder::Step::FormatWider(fourth.element));
         } else if third.has_inline_comment
             || third.has_comments
             || !matches!(
@@ -97,18 +97,18 @@ pub(crate) fn rule(
                     | rnix::SyntaxKind::NODE_STRING
             )
         {
-            steps.push_back(crate::builder::Step::Indent);
-            steps.push_back(crate::builder::Step::NewLine);
-            steps.push_back(crate::builder::Step::Pad);
-            steps.push_back(crate::builder::Step::FormatWider(fourth.element));
-            steps.push_back(crate::builder::Step::Dedent);
+            steps.push(crate::builder::Step::Indent);
+            steps.push(crate::builder::Step::NewLine);
+            steps.push(crate::builder::Step::Pad);
+            steps.push(crate::builder::Step::FormatWider(fourth.element));
+            steps.push(crate::builder::Step::Dedent);
         } else {
-            steps.push_back(crate::builder::Step::Whitespace);
-            steps.push_back(crate::builder::Step::FormatWider(fourth.element));
+            steps.push(crate::builder::Step::Whitespace);
+            steps.push(crate::builder::Step::FormatWider(fourth.element));
         }
     } else {
-        steps.push_back(crate::builder::Step::Whitespace);
-        steps.push_back(crate::builder::Step::Format(fourth.element));
+        steps.push(crate::builder::Step::Whitespace);
+        steps.push(crate::builder::Step::Format(fourth.element));
     }
 
     steps
