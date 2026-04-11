@@ -59,13 +59,15 @@ pub(crate) fn rule(
 
         let lines: Vec<&str> = content.split('\n').collect();
 
-        let should_trim_end: bool =
-            !lines.is_empty() && lines[lines.len() - 1].trim().is_empty();
-
+        // IMPORTANT: Nix preserves trailing whitespace in multiline strings.
+        // We must NOT trim trailing whitespace from content lines — it's semantically significant.
+        // However, trim the last line IF it's whitespace-only (it's just formatting, not content).
         let mut lines: Vec<String> = lines
             .iter()
-            .map(|line| {
-                if should_trim_end {
+            .enumerate()
+            .map(|(i, line)| {
+                // Only trim the very last line if it's whitespace-only
+                if i == lines.len() - 1 && line.trim().is_empty() {
                     line.trim_end().to_string()
                 } else {
                     line.to_string()
