@@ -7,10 +7,12 @@
     another line
   '';
 
-	# Issue #442: String escape preservation
-	# These escape sequences must not be modified
+	# Issue #442: String escape sequences must be preserved
+	# Escapes like ''${...} prevent interpolation and should not be modified
 	escapes = ''
+    ''${1+x}
     ''${variable}
+    ''${foo.bar}
     '''
     ''''
   '';
@@ -22,9 +24,10 @@
     	echo "built"
   '';
 
-	# Mixed: escapes with interpolation
+	# Mixed: escapes with interpolation and trailing spaces
 	complex = ''
-    prefix ''${expr} suffix
+    prefix ''${expr} suffix  
     ''${func "arg"}
+    escaped: '''and then '''${real_interp}
   '';
 }
