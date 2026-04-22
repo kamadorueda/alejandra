@@ -14,8 +14,16 @@ fn cases() {
         ("default", Config::default()),
         ("indentation-four-spaces", Config {
             indentation: Indentation::FourSpaces,
+            ..Default::default()
         }),
-        ("indentation-tabs", Config { indentation: Indentation::Tabs }),
+        ("indentation-tabs", Config {
+            indentation: Indentation::Tabs,
+            ..Default::default()
+        }),
+        ("space-around-brackets", Config {
+            space_around_brackets: true,
+            ..Default::default()
+        }),
     ]);
 
     let cases_path = PathBuf::new().join("tests").join("cases");
