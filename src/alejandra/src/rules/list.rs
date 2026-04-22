@@ -23,6 +23,8 @@ pub(crate) fn rule(
     steps.push(crate::builder::Step::Format(child));
     if vertical {
         steps.push(crate::builder::Step::Indent);
+    } else if items_count > 0 && build_ctx.config.space_around_brackets {
+        steps.push(crate::builder::Step::Whitespace);
     }
 
     let mut item_index: usize = 0;
@@ -90,6 +92,8 @@ pub(crate) fn rule(
         steps.push(crate::builder::Step::Dedent);
         steps.push(crate::builder::Step::NewLine);
         steps.push(crate::builder::Step::Pad);
+    } else if items_count > 0 && build_ctx.config.space_around_brackets {
+        steps.push(crate::builder::Step::Whitespace);
     }
     steps.push(crate::builder::Step::Format(child));
 

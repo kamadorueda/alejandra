@@ -7,6 +7,10 @@ pub struct Config {
     /// Indentation to use
     #[serde(default)]
     pub indentation: Indentation,
+
+    /// Whether to put spaces around brackets
+    #[serde(default)]
+    pub space_around_brackets: bool,
 }
 
 #[derive(Clone, Copy, Default, Deserialize)]
