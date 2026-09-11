@@ -42,7 +42,7 @@
 <p align="center">
   Try it on your browser!
   <a
-    href="https://kamadorueda.github.io/alejandra/"
+    href="https://alejandra.kamadorueda.com/"
   >
     here
   </a>
@@ -105,7 +105,7 @@
 ### On the web editor
 
 Please visit:
-[kamadorueda.github.io/alejandra](https://kamadorueda.github.io/alejandra/).
+[alejandra.kamadorueda.com](https://alejandra.kamadorueda.com/).
 
 ### Prebuilt binaries
 
