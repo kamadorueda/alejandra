@@ -31,7 +31,22 @@ nix flake show
 nix develop
 ```
 
-### Commands
+### Building the WASM Module
+
+The frontend requires the WASM module built from the main branch. To build it:
+
+```bash
+# Build the WASM module from the main branch
+cd /tmp
+git clone file:///path/to/alejandra wasm-build
+cd wasm-build
+nix run .#build-wasm
+
+# Copy the output to the frontend directory
+cp -r src/alejandra_wasm/pkg /path/to/frontend/pkg
+```
+
+Then install dependencies:
 
 ```bash
 # Install dependencies

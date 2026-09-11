@@ -1,26 +1,8 @@
-# Build
-build/
-coverage/
-dist/
-pkg/
-
-# Dependencies
-node_modules/
-pnpm-lock.yaml
-.pnpm-debug.log
-
-# Development
-.direnv/
-.env*.local
-.idea/
-.vscode/
-.vite/
-*.swp
-*.swo
-*~
-
-# OS
-.DS_Store
-.playwright/
-.playwright-cli/
-Thumbs.db
+/.direnv/
+/build/
+/target/
+/coverage/
+/dist/
+/node_modules/
+/package-lock.json
+/pkg/
