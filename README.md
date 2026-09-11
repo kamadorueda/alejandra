@@ -62,6 +62,17 @@ pnpm build
 pnpm preview
 ```
 
+## Deployment
+
+The app is served from `alejandra.kamadorueda.com` as a Cloudflare Worker
+(static assets). Credentials (`CLOUDFLARE_ACCOUNT_ID` / `CLOUDFLARE_API_TOKEN`)
+are loaded automatically via direnv from the SOPS-encrypted machine secrets.
+
+```bash
+nix run .#deploy-preview  # build + upload a preview version (dev-alejandra.<subdomain>.workers.dev), no production traffic impact
+nix run .#deploy          # build + deploy to production (alejandra.kamadorueda.com)
+```
+
 ## Project Structure
 
 ```

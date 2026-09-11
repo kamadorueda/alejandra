@@ -1,4 +1,6 @@
 /.direnv/
+/.wrangler/
+.env
 /build/
 /target/
 /coverage/

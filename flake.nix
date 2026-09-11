@@ -11,14 +11,36 @@
       import inputs.nixpkgs {
         inherit system;
         overlays = [
-          (nixpkgs: _: {
-            alejandra-frontend = nixpkgs.mkShell {
-              name = "alejandra-frontend";
-              packages = [
-                nixpkgs.nodejs
-                nixpkgs.nodePackages_latest.pnpm
-                nixpkgs.mprocs
-              ];
+          (nixpkgs: _: rec {
+            alejandra-frontend = {
+              deploy = nixpkgs.writeShellApplication {
+                name = "deploy";
+                runtimeInputs = [nixpkgs.nodejs];
+                text = ''
+                  pnpm run build
+                  pnpm exec wrangler deploy
+                '';
+              };
+
+              deployPreview = nixpkgs.writeShellApplication {
+                name = "deploy-preview";
+                runtimeInputs = [nixpkgs.nodejs];
+                text = ''
+                  pnpm run build
+                  pnpm exec wrangler versions upload --preview-alias dev
+                '';
+              };
+
+              shell = nixpkgs.mkShell {
+                name = "alejandra-frontend";
+                packages = [
+                  alejandra-frontend.deploy
+                  alejandra-frontend.deployPreview
+                  nixpkgs.nodejs
+                  nixpkgs.nodePackages_latest.pnpm
+                  nixpkgs.mprocs
+                ];
+              };
             };
           })
         ];
@@ -26,7 +48,12 @@
     nixpkgs = forEachSystem nixpkgsForSystem;
   in {
     devShells = forEachSystem (system: {
-      default = nixpkgs.${system}.alejandra-frontend;
+      default = nixpkgs.${system}.alejandra-frontend.shell;
+    });
+
+    packages = forEachSystem (system: {
+      deploy = nixpkgs.${system}.alejandra-frontend.deploy;
+      "deploy-preview" = nixpkgs.${system}.alejandra-frontend.deployPreview;
     });
   };
 }
