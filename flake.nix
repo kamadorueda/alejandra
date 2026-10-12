@@ -159,8 +159,13 @@
             wasm-pack
           ];
           text = ''
+            target="''${1:-web}"
+            case "''${target}" in
+              web|nodejs) ;;
+              *) echo "unsupported wasm target: ''${target}" >&2; exit 2 ;;
+            esac
             cd src/alejandra_wasm
-            wasm-pack build --target web
+            wasm-pack build --target "''${target}"
           '';
         };
       };
