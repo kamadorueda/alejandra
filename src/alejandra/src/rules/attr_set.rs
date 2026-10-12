@@ -21,10 +21,7 @@ pub(crate) fn rule(
         })
         .count();
 
-    let vertical = items_count > 1
-        || children.has_comments()
-        || children.has_newlines()
-        || build_ctx.vertical;
+    let vertical = children.has_comments() || children.has_newlines() || build_ctx.vertical;
 
     // rec
     let child = children.peek_next().unwrap();
