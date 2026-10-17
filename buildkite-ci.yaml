@@ -58,6 +58,14 @@ steps:
       - echo +++ Run Linter
       - cargo clippy
 
+  - label: wasm tests
+    command:
+      - echo --- Load environment
+      - direnv allow
+      - eval "$(direnv export bash)"
+      - echo +++ Test WASM package
+      - cargo test --manifest-path src/alejandra_wasm/Cargo.toml
+
   - label: flake check
     command:
       - echo +++
