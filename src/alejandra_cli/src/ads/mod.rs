@@ -44,6 +44,7 @@ fn contributor_thanks() -> String {
         (1.0, ("Fabian Möller", "B4dM4n")),
         (1.0, ("Florian Finkernagel", "TyberiusPrime")),
         (1.0, ("HigherOrderLogic", "HigherOrderLogic")),
+        (1.0, ("icefery", "icefery")),
         (1.0, ("Jamie Quigley", "Sciencentistguy")),
         (1.0, ("Jan T. Sott", "idleberg")),
         (1.0, ("Joachim Ernst", "0x4A6F")),
