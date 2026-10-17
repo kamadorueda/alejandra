@@ -15,7 +15,7 @@ description = "The Uncompromising Nix Code Formatter"
 edition = "2021"
 name = "alejandra_wasm"
 repository = "https://github.com/kamadorueda/alejandra"
-version = "4.0.0"
+version = "4.1.0"
 
 [package.metadata.wasm-pack.profile.release]
 wasm-opt = false

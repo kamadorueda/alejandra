@@ -17,6 +17,34 @@ Types of changes
 - Security in case of vulnerabilities.
 -->
 
+## [4.1.0] - 2026-10-17
+
+### Added
+
+- (experimental) A `space_around_brackets` configuration option.
+- The WASM `format` function accepts an optional configuration
+  and returns formatter errors.
+- The `build-wasm` app accepts the wasm-pack target (`web` or `nodejs`).
+- Homebrew installation instructions.
+- Thank you messages for HigherOrderLogic, Jan T. Sott, Jonathan Ringer
+  and icefery.
+
+### Changed
+
+- Recursion depth is controlled for faster formatting.
+- The WASM package moved into `src/` and its tests run in CI.
+- Website links point to alejandra.kamadorueda.com.
+- Upgraded dependencies to their latest version.
+
+### Fixed
+
+- Multiline strings are not indented with tabs
+  when tab indentation is used, because Nix keeps leading tabs (#474).
+- Trailing whitespace in multiline strings is kept (#409, #442).
+- Comment re-indentation uses the configured indentation.
+- The WASM `format` function returns an error
+  instead of the unformatted input when the input does not parse.
+
 ## [4.0.0] - 2025-04-10
 
 ### Added
@@ -708,7 +736,9 @@ Types of changes
 
 ---
 
-[unreleased]: https://github.com/kamadorueda/alejandra/compare/3.1.0...HEAD
+[unreleased]: https://github.com/kamadorueda/alejandra/compare/4.1.0...HEAD
+[4.1.0]: https://github.com/kamadorueda/alejandra/compare/4.0.0...4.1.0
+[4.0.0]: https://github.com/kamadorueda/alejandra/compare/3.1.0...4.0.0
 [3.1.0]: https://github.com/kamadorueda/alejandra/compare/3.0.0...3.1.0
 [3.0.0]: https://github.com/kamadorueda/alejandra/compare/2.0.0...3.0.0
 [2.0.0]: https://github.com/kamadorueda/alejandra/compare/1.5.0...2.0.0
