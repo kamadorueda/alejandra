@@ -17,9 +17,8 @@ pub(crate) fn rule(
         || !pattern.comments_before_end_at.is_empty();
 
     let has_ellipsis = pattern.arguments.iter().any(|argument| {
-        if argument.item.is_some() {
-            argument.item.as_ref().unwrap().kind()
-                == rnix::SyntaxKind::TOKEN_ELLIPSIS
+        if let Some(item) = &argument.item {
+            item.kind() == rnix::SyntaxKind::TOKEN_ELLIPSIS
         } else {
             false
         }
