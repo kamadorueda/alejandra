@@ -1,3 +1,25 @@
+# This package only exists so that the `alejandra` pre-commit hook works:
+# pre-commit runs `cargo install --path .` at the root of the repository,
+# which needs a package here, not only a workspace.
+[package]
+autobenches = false
+autobins = false
+autoexamples = false
+autolib = false
+autotests = false
+edition = "2021"
+license = "Unlicense"
+name = "alejandra_pre_commit"
+publish = false
+version = "4.1.0"
+
+[[bin]]
+name = "alejandra-pre-commit"
+path = "src/alejandra_cli/src/main.rs"
+
+[dependencies]
+alejandra_cli = { path = "src/alejandra_cli" }
+
 [profile.release]
 lto = true
 
@@ -5,6 +27,7 @@ lto = true
 opt-level = 2
 
 [workspace]
+default-members = ["src/alejandra", "src/alejandra_cli"]
 members = ["src/*"]
 exclude = ["src/alejandra_wasm"]
 resolver = "2"

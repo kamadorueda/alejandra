@@ -34,6 +34,9 @@ Types of changes
   [#411](https://github.com/kamadorueda/alejandra/issues/411)
 - Spaces around `.` in attribute paths and selections are now removed (#469).
 - A comment at the end of a file no longer gets an extra blank line after it (#412).
+- The `alejandra` pre-commit hook failed to install with
+  "found a virtual manifest at `Cargo.toml` instead of a package manifest".
+  [#501](https://github.com/kamadorueda/alejandra/issues/501)
 
 ## [4.1.0] - 2026-10-17
 
