@@ -28,6 +28,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "alejandra_pre_commit"
+version = "4.1.0"
+dependencies = [
+ "alejandra_cli",
+]
+
+[[package]]
 name = "atty"
 version = "0.2.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"

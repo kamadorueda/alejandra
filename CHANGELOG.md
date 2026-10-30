@@ -17,6 +17,15 @@ Types of changes
 - Security in case of vulnerabilities.
 -->
 
+### Fixed
+
+- The `alejandra` pre-commit hook failed to install with
+  "found a virtual manifest at `Cargo.toml` instead of a package manifest".
+  [#501](https://github.com/kamadorueda/alejandra/issues/501)
+- `cargo install` failed to compile, because it ignores `Cargo.lock`
+  and picked rnix 0.15, which needs another rowan version.
+  rnix is now pinned to 0.14.0.
+
 ## [4.1.0] - 2026-10-17
 
 ### Added
