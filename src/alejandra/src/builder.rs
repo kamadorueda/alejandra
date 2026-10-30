@@ -24,6 +24,27 @@ pub(crate) struct BuildCtx {
     pub pos_old:                      crate::position::Position,
     pub path:                         String,
     pub vertical:                     bool,
+    /// Memoizes trial formats made by `utils`, which would otherwise be
+    /// repeated (once per ancestor) and make nesting exponential.
+    pub trial_cache:                  TrialCache,
+}
+
+pub(crate) type TrialCache = std::rc::Rc<
+    std::cell::RefCell<
+        std::collections::HashMap<TrialKey, std::rc::Rc<String>>,
+    >,
+>;
+
+/// Everything that can influence the output of formatting a node.
+#[derive(Eq, Hash, PartialEq)]
+pub(crate) struct TrialKey {
+    pub start:       u32,
+    pub end:         u32,
+    pub kind:        u16,
+    pub indentation: usize,
+    pub depth:       usize,
+    pub column:      usize,
+    pub vertical:    bool,
 }
 
 impl BuildCtx {
