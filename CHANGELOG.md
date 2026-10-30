@@ -17,6 +17,12 @@ Types of changes
 - Security in case of vulnerabilities.
 -->
 
+### Added
+
+- (experimental) A `preserve_one_line_attr_sets` configuration option:
+  attribute sets written on one line stay on one line.
+  [#494](https://github.com/kamadorueda/alejandra/issues/494)
+
 ## [4.1.0] - 2026-10-17
 
 ### Added

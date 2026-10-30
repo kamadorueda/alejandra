@@ -20,6 +20,10 @@ fn cases() {
             indentation: Indentation::Tabs,
             ..Default::default()
         }),
+        ("preserve-one-line-attr-sets", Config {
+            preserve_one_line_attr_sets: true,
+            ..Default::default()
+        }),
         ("space-around-brackets", Config {
             space_around_brackets: true,
             ..Default::default()

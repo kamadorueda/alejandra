@@ -21,7 +21,8 @@ pub(crate) fn rule(
         })
         .count();
 
-    let vertical = items_count > 1
+    let vertical = (items_count > 1
+        && !build_ctx.config.preserve_one_line_attr_sets)
         || children.has_comments()
         || children.has_newlines()
         || build_ctx.vertical;
