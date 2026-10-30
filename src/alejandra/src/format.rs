@@ -78,6 +78,7 @@ pub fn in_memory(
         path,
         pos_old: crate::position::Position::default(),
         vertical: true,
+        trial_cache: Default::default(),
     };
 
     let root = parsed.syntax();
