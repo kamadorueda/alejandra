@@ -1,7 +1,7 @@
 - id: alejandra
   name: alejandra
   description: Format Nix code with Alejandra.
-  entry: alejandra
+  entry: alejandra-pre-commit
   language: rust
   files: \.nix$
   minimum_pre_commit_version: 2.21.0
