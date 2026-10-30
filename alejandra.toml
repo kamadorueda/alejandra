@@ -1,3 +1,10 @@
 # (experimental) Configuration options for Alejandra
 
 indentation = "TwoSpaces" # Or: FourSpaces, Tabs
+
+space_around_brackets = false # Or: true
+
+# Keep attribute sets that are written on one line on one line,
+# for example `{a = 1; b = 2;}`. By default, a set with two or more
+# items is always written on many lines.
+preserve_one_line_attr_sets = false # Or: true

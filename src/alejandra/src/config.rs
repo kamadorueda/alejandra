@@ -11,6 +11,10 @@ pub struct Config {
     /// Whether to put spaces around brackets
     #[serde(default)]
     pub space_around_brackets: bool,
+
+    /// Whether to keep attribute sets written on one line on one line
+    #[serde(default)]
+    pub preserve_one_line_attr_sets: bool,
 }
 
 #[derive(Clone, Copy, Default, Deserialize)]

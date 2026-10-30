@@ -297,7 +297,7 @@ stderr:
     |
   1 | asdf = "asdf"
     | ^^^^
-  unknown field `asdf`, expected `indentation` or `space_around_brackets`
+  unknown field `asdf`, expected one of `indentation`, `space_around_brackets`, `preserve_one_line_attr_sets`
   
 
 exit code: Some(1)
