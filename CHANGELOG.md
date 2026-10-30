@@ -17,6 +17,12 @@ Types of changes
 - Security in case of vulnerabilities.
 -->
 
+### Fixed
+
+- The `alejandra` pre-commit hook failed to install with
+  "found a virtual manifest at `Cargo.toml` instead of a package manifest".
+  [#501](https://github.com/kamadorueda/alejandra/issues/501)
+
 ## [4.1.0] - 2026-10-17
 
 ### Added
