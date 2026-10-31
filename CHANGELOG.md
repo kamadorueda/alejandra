@@ -33,6 +33,7 @@ Types of changes
   matching how Nix reads them.
   [#411](https://github.com/kamadorueda/alejandra/issues/411)
 - Spaces around `.` in attribute paths and selections are now removed (#469).
+- A comment at the end of a file no longer gets an extra blank line after it (#412).
 
 ## [4.1.0] - 2026-10-17
 

@@ -30,6 +30,11 @@ pub(crate) fn rule(
         }
     }
 
+    // A trailing comment is already followed by a newline
+    while steps.last() == Some(&crate::builder::Step::Pad) {
+        steps.pop();
+    }
+
     // Trailing newline
     if let Some(last_step) = steps.last() {
         if *last_step != crate::builder::Step::NewLine {
