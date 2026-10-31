@@ -3,23 +3,23 @@
     /*
     c
     */
-      d)
+    d)
   ({}: b:
     /*
     c
     */
-      d)
+    d)
   (a: {}:
     /*
     c
     */
-      d)
+    d)
   (a: d)
   (a:
     /*
     c
     */
-      d)
+    d)
   (a
     /*
     b
@@ -31,9 +31,9 @@
     b
     */
     :
-    /*
-    c
-    */
+      /*
+      c
+      */
       d)
   (
     aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

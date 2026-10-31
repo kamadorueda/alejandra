@@ -41,16 +41,14 @@ pub(crate) fn rule(
     steps.push(crate::builder::Step::Format(child));
 
     // /**/
-    let mut comment = false;
+    let mut comments = Vec::new();
     children.drain_trivia(|element| match element {
         crate::children::Trivia::Comment(text) => {
-            comment = true;
-            steps.push(crate::builder::Step::NewLine);
-            steps.push(crate::builder::Step::Pad);
-            steps.push(crate::builder::Step::Comment(text));
+            comments.push(crate::builder::Step::Comment(text));
         }
         crate::children::Trivia::Whitespace(_) => {}
     });
+    let comment = !comments.is_empty();
 
     // c
     let child = children.get_next().unwrap();
@@ -79,6 +77,12 @@ pub(crate) fn rule(
 
             if should_indent {
                 steps.push(crate::builder::Step::Indent);
+            }
+
+            for comment in comments {
+                steps.push(crate::builder::Step::NewLine);
+                steps.push(crate::builder::Step::Pad);
+                steps.push(comment);
             }
 
             steps.push(crate::builder::Step::NewLine);
