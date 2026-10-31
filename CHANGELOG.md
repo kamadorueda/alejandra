@@ -44,6 +44,10 @@ Types of changes
 - A comment at the end of a line inside a function application, `assert` or `with`
   no longer adds a blank line with trailing spaces after it.
   [#407](https://github.com/kamadorueda/alejandra/issues/407)
+- A line that holds only a tab in an indented string (`''...''`),
+  for example the last line before the closing `''`,
+  is no longer removed or left out of the indentation,
+  which changed the value of the string.
 
 ## [4.1.0] - 2026-10-17
 
