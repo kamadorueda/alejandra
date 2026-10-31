@@ -289,6 +289,9 @@ fn format_wider(
                 !fits_in_single_line(build_ctx, node.clone().into());
 
             format(builder, &mut build_ctx_clone, element);
+
+            // A line break inside means that it does not fit in a single line
+            build_ctx.force_wide_success = build_ctx_clone.force_wide_success;
         }
         rnix::SyntaxElement::Token(_) => {
             format(builder, build_ctx, element);

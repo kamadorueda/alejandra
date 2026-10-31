@@ -23,6 +23,13 @@ Types of changes
   attribute sets written on one line stay on one line.
   [#494](https://github.com/kamadorueda/alejandra/issues/494)
 
+### Fixed
+
+- Formatting a file now gives the final result on the first run:
+  function applications and lambdas in `else` branches
+  no longer change layout when the output is formatted again.
+  [#250](https://github.com/kamadorueda/alejandra/issues/250)
+
 ## [4.1.0] - 2026-10-17
 
 ### Added
