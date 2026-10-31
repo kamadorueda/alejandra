@@ -51,10 +51,11 @@ pub(crate) fn rule(
     // third
     steps.push(crate::builder::Step::Format(third.element));
 
-    crate::annotated_children::emit_inline_comment(
-        &third.inline_comment,
-        &mut steps,
-    );
+    // The line break after the comment comes with `fourth`
+    if let Some(text) = third.inline_comment {
+        steps.push(crate::builder::Step::Whitespace);
+        steps.push(crate::builder::Step::Comment(text));
+    }
     crate::annotated_children::emit_trivialities_newline_first(
         &third.trivialities,
         &mut steps,
