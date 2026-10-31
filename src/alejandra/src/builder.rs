@@ -159,7 +159,7 @@ fn format(
                 rnix::SyntaxKind::NODE_ASSERT => crate::rules::scoped::rule,
 
                 // a.b.c
-                rnix::SyntaxKind::NODE_ATTRPATH => crate::rules::default,
+                rnix::SyntaxKind::NODE_ATTRPATH => crate::rules::dotted,
 
                 // a = b;
                 rnix::SyntaxKind::NODE_ATTRPATH_VALUE => {
@@ -244,7 +244,7 @@ fn format(
                 rnix::SyntaxKind::NODE_ROOT => crate::rules::root::rule,
 
                 // a.b | a.NODE_DYNAMIC
-                rnix::SyntaxKind::NODE_SELECT => crate::rules::default,
+                rnix::SyntaxKind::NODE_SELECT => crate::rules::dotted,
 
                 // "..." || ''...''
                 rnix::SyntaxKind::NODE_STRING => crate::rules::string::rule,

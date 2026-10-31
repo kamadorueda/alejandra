@@ -32,6 +32,7 @@ Types of changes
 - Comments that end with a lone carriage return (`\r`) no longer fail to parse,
   matching how Nix reads them.
   [#411](https://github.com/kamadorueda/alejandra/issues/411)
+- Spaces around `.` in attribute paths and selections are now removed (#469).
 
 ## [4.1.0] - 2026-10-17
 
