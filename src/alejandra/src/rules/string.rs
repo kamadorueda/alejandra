@@ -18,6 +18,11 @@ fn string_content_indent_unit(indentation: Indentation) -> &'static str {
     }
 }
 
+/// Nix only strips spaces as indentation, so a line with a tab is content.
+fn is_spaces_only(line: &str) -> bool {
+    line.chars().all(|c| c == ' ')
+}
+
 pub(crate) fn rule(
     build_ctx: &crate::builder::BuildCtx,
     node: &rnix::SyntaxNode,
@@ -61,14 +66,15 @@ pub(crate) fn rule(
 
         // IMPORTANT: Nix preserves trailing whitespace in multiline strings.
         // We must NOT trim trailing whitespace from content lines — it's semantically significant.
-        // However, trim the last line IF it's whitespace-only (it's just formatting, not content).
+        // However, trim the last line IF it's spaces-only (it's just formatting, not content).
+        // A tab is content: Nix only treats spaces as indentation.
         let mut lines: Vec<String> = lines
             .iter()
             .enumerate()
             .map(|(i, line)| {
-                // Only trim the very last line if it's whitespace-only
-                if i == lines.len() - 1 && line.trim().is_empty() {
-                    line.trim_end().to_string()
+                // Only trim the very last line if it's spaces-only
+                if i == lines.len() - 1 && is_spaces_only(line) {
+                    String::new()
                 } else {
                     line.to_string()
                 }
@@ -77,7 +83,8 @@ pub(crate) fn rule(
 
         let mut indentation: usize = usize::MAX;
         for line in lines.iter() {
-            let line = line.trim_end();
+            // A line holding only spaces does not count, but one with a tab does
+            let line = line.trim_end_matches(' ');
 
             if !line.is_empty() {
                 // Only count leading spaces, not tabs. Nix only strips spaces
@@ -105,12 +112,12 @@ pub(crate) fn rule(
 
         // Indent everything
         if lines.len() > 1
-            && lines.iter().filter(|line| !line.trim().is_empty()).count() >= 1
+            && lines.iter().filter(|line| !is_spaces_only(line)).count() >= 1
         {
             lines = lines
                 .iter()
                 .map(|line| {
-                    if !line.trim().is_empty() {
+                    if !is_spaces_only(line) {
                         format!(
                             "{}{}",
                             string_content_indent_unit(
