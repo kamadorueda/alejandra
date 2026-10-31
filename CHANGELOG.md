@@ -41,6 +41,9 @@ Types of changes
   and picked rnix 0.15, which needs another rowan version.
   rnix is now pinned to 0.14.0.
 - A comment at the top of a function body is now indented with the body (#383).
+- A comment at the end of a line inside a function application, `assert` or `with`
+  no longer adds a blank line with trailing spaces after it.
+  [#407](https://github.com/kamadorueda/alejandra/issues/407)
 
 ## [4.1.0] - 2026-10-17
 

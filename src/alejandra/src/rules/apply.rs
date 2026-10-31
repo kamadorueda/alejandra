@@ -22,10 +22,11 @@ pub(crate) fn rule(
         steps.push(crate::builder::Step::Format(first.element));
     }
 
-    crate::annotated_children::emit_inline_comment(
-        &first.inline_comment,
-        &mut steps,
-    );
+    // The line break after the comment comes with `second`
+    if let Some(text) = first.inline_comment {
+        steps.push(crate::builder::Step::Whitespace);
+        steps.push(crate::builder::Step::Comment(text));
+    }
     crate::annotated_children::emit_trivialities_newline_first(
         &first.trivialities,
         &mut steps,
