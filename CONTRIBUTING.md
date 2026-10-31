@@ -18,6 +18,14 @@ please open an issue first so that we can discuss it first.
 Otherwise just feel free to contribute anything you want
 (if it makes the project _better_).
 
+# Checking against nixpkgs
+
+`scripts/check-nixpkgs.sh [--formatter BIN] [--nixpkgs DIR] [PATH...]`
+formats a copy of nixpkgs (or only the given `PATH`s) twice and reports
+the files that change on the second run and the files whose meaning changes
+according to `nix-instantiate --parse`, and exits with an error if there are any.
+Add `--compare OTHER_BIN` to count the lines that differ between two formatters.
+
 # Maintainers zone
 
 ## Release process
