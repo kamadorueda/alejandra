@@ -105,7 +105,15 @@ pub(crate) fn rule(
             rnix::SyntaxKind::NODE_APPLY
         )
             && crate::utils::second_through_penultimate_line_are_indented(
-                build_ctx,
+                // Measure the layout `FormatWider` will produce below,
+                // not the one inherited from the surroundings
+                &crate::builder::BuildCtx {
+                    vertical: !crate::builder::fits_in_single_line(
+                        build_ctx,
+                        child_expr.clone(),
+                    ),
+                    ..build_ctx.clone()
+                },
                 child_expr.clone(),
                 false,
             ))
