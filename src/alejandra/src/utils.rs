@@ -14,8 +14,33 @@ pub(crate) fn second_through_penultimate_line_are_indented(
     let mut build_ctx =
         crate::builder::BuildCtx { force_wide: false, ..build_ctx.clone() };
 
-    let formatted =
-        crate::builder::build(&mut build_ctx, element).unwrap().to_string();
+    let range = element.text_range();
+    let key = crate::builder::TrialKey {
+        start:       range.start().into(),
+        end:         range.end().into(),
+        kind:        element.kind() as u16,
+        indentation: build_ctx.indentation,
+        depth:       build_ctx.fitting_in_single_line_depth,
+        column:      build_ctx.pos_old.column,
+        vertical:    build_ctx.vertical,
+    };
+
+    let cached = build_ctx.trial_cache.borrow().get(&key).cloned();
+    let formatted = match cached {
+        Some(formatted) => formatted,
+        None => {
+            let formatted = std::rc::Rc::new(
+                crate::builder::build(&mut build_ctx, element)
+                    .unwrap()
+                    .to_string(),
+            );
+            build_ctx
+                .trial_cache
+                .borrow_mut()
+                .insert(key, formatted.clone());
+            formatted
+        }
+    };
 
     let formatted_lines: Vec<&str> = formatted.split('\n').collect();
 
