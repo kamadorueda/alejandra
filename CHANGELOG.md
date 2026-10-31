@@ -40,6 +40,7 @@ Types of changes
 - `cargo install` failed to compile, because it ignores `Cargo.lock`
   and picked rnix 0.15, which needs another rowan version.
   rnix is now pinned to 0.14.0.
+- A comment at the top of a function body is now indented with the body (#383).
 
 ## [4.1.0] - 2026-10-17
 
