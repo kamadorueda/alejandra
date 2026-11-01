@@ -56,7 +56,35 @@ steps:
       - direnv allow
       - eval "$(direnv export bash)"
       - echo +++ Run Linter
-      - cargo clippy
+      - cargo clippy --all-targets -- -D warnings
+      - cargo clippy --all-targets --manifest-path src/alejandra_wasm/Cargo.toml -- -D warnings
+
+  - label: rustfmt
+    command:
+      - echo --- Load environment
+      - direnv allow
+      - eval "$(direnv export bash)"
+      - echo +++ Check formatting
+      - cargo fmt --all --check
+      - cargo fmt --manifest-path src/alejandra_wasm/Cargo.toml --check
+
+  - label: nixpkgs idempotence and meaning
+    command:
+      - echo --- Cloning nixpkgs
+      - git config --global --add safe.directory /data/nixpkgs/.git
+      - git clone --branch=master --depth 1 --origin=upstream file:///data/nixpkgs
+
+      - echo --- Building alejandra
+      - nix build --out-link alejandra-result .
+
+      - echo +++ Check a part of nixpkgs
+      - scripts/check-nixpkgs.sh
+        --formatter alejandra-result/bin/alejandra
+        --nixpkgs nixpkgs
+        lib
+        pkgs/stdenv
+        pkgs/top-level
+        nixos/modules/services/networking
 
   - label: cargo deny
     command:
