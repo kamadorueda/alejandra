@@ -198,6 +198,74 @@ exit code: Some(0)
 args: ["--exclude", ".", "--quiet", "--quiet", "--", "."]
 exit code: Some(0)
 ===
+args: ["-"]
+stdin: "[\t]"
+stdout:
+  []
+
+stderr:
+  Formatting stdin.
+  Use --help to see all command line options.
+  use --quiet to suppress this and other messages.
+  
+  Success! 1 file was formatted.
+  
+
+exit code: Some(0)
+===
+args: ["--check", "-"]
+stdin: "[\t]"
+stdout:
+  []
+
+stderr:
+  Formatting stdin.
+  Use --help to see all command line options.
+  use --quiet to suppress this and other messages.
+  
+  Alert! 1 file requires formatting.
+
+exit code: Some(2)
+===
+args: ["--check", "-", "-qq"]
+stdin: "[]\n"
+stdout:
+  []
+
+exit code: Some(0)
+===
+args: ["-", "-qq"]
+stdin: "{"
+stdout:
+  {
+
+exit code: Some(1)
+===
+args: ["--check", "tests/inputs", "-e", "tests/inputs/error.nix"]
+stdout:
+  Requires formatting: tests/inputs/changed.nix
+
+stderr:
+  Checking style in 2 files using 1 thread.
+  
+  
+  Alert! 1 file requires formatting.
+
+exit code: Some(2)
+===
+args: ["--check", "tests/inputs", "-e", "tests/inputs/error.nix", "-e", "tests/inputs/changed.nix"]
+stderr:
+  Checking style in 1 file using 1 thread.
+  
+  
+  Congratulations! Your code complies with the Alejandra style.
+  
+
+exit code: Some(0)
+===
+args: ["--check", "tests/inputs/changed.nix", "tests/inputs/error.nix", "-qq"]
+exit code: Some(1)
+===
 args: ["--check", "tests/inputs/changed.nix"]
 stdout:
   Requires formatting: tests/inputs/changed.nix
