@@ -48,6 +48,7 @@ Types of changes
   for example the last line before the closing `''`,
   is no longer removed or left out of the indentation,
   which changed the value of the string.
+- A newline after a dot in an attribute path no longer leaves a trailing space.
 
 ## [4.1.0] - 2026-10-17
 
