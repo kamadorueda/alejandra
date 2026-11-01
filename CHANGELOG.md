@@ -49,6 +49,8 @@ Types of changes
   is no longer removed or left out of the indentation,
   which changed the value of the string.
 - A newline after a dot in an attribute path no longer leaves a trailing space.
+- Spaces around `.` in attribute paths and selections are now also removed
+  when the path has a comment.
 
 ## [4.1.0] - 2026-10-17
 

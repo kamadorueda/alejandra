@@ -25,17 +25,12 @@ pub(crate) fn default(
 
 /// Like `default`, but removes the spaces around dots: `a . b` -> `a.b`.
 /// A newline next to a dot is kept, the user decides there.
-/// Nodes with comments are left untouched.
 pub(crate) fn dotted(
     _: &crate::builder::BuildCtx,
     node: &rnix::SyntaxNode,
 ) -> Vec<crate::builder::Step> {
     let elements: Vec<rnix::SyntaxElement> =
         node.children_with_tokens().collect();
-
-    let has_comments = elements
-        .iter()
-        .any(|element| element.kind() == rnix::SyntaxKind::TOKEN_COMMENT);
 
     let is_dot = |element: Option<&rnix::SyntaxElement>| {
         element.is_some_and(|element| {
@@ -47,8 +42,7 @@ pub(crate) fn dotted(
         .iter()
         .enumerate()
         .filter(|(index, element)| {
-            has_comments
-                || element.kind() != rnix::SyntaxKind::TOKEN_WHITESPACE
+            element.kind() != rnix::SyntaxKind::TOKEN_WHITESPACE
                 || element.to_string().contains('\n')
                 || !(is_dot(elements.get(index.wrapping_sub(1)))
                     || is_dot(elements.get(index + 1)))
