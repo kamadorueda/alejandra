@@ -53,6 +53,21 @@ pub(crate) fn dotted(
                 || !(is_dot(elements.get(index.wrapping_sub(1)))
                     || is_dot(elements.get(index + 1)))
         })
-        .map(|(_, element)| crate::builder::Step::Format(element.clone()))
+        .map(|(_, element)| {
+            if element.kind() == rnix::SyntaxKind::TOKEN_WHITESPACE {
+                // No trailing spaces before a kept newline
+                let text = element.to_string();
+                if let Some(newline) = text.find('\n') {
+                    let blanks = text[..newline]
+                        .trim_start_matches([' ', '\t'])
+                        .len();
+                    return crate::builder::Step::Token(
+                        rnix::SyntaxKind::TOKEN_WHITESPACE,
+                        text[newline - blanks..].to_string(),
+                    );
+                }
+            }
+            crate::builder::Step::Format(element.clone())
+        })
         .collect()
 }
