@@ -40,6 +40,36 @@ const CASES: &[TestCase] = &[
         args:  &["--exclude", ".", "--quiet", "--quiet", "--", "."],
         stdin: None,
     },
+    // explicit stdin
+    TestCase { args: &["-"], stdin: Some("[\t]") },
+    TestCase { args: &["--check", "-"], stdin: Some("[\t]") },
+    TestCase { args: &["--check", "-", "-qq"], stdin: Some("[]\n") },
+    TestCase { args: &["-", "-qq"], stdin: Some("{") },
+    // directories with exclusions
+    TestCase {
+        args:  &["--check", "tests/inputs", "-e", "tests/inputs/error.nix"],
+        stdin: None,
+    },
+    TestCase {
+        args:  &[
+            "--check",
+            "tests/inputs",
+            "-e",
+            "tests/inputs/error.nix",
+            "-e",
+            "tests/inputs/changed.nix",
+        ],
+        stdin: None,
+    },
+    TestCase {
+        args:  &[
+            "--check",
+            "tests/inputs/changed.nix",
+            "tests/inputs/error.nix",
+            "-qq",
+        ],
+        stdin: None,
+    },
     //
     TestCase { args: &["--check", "tests/inputs/changed.nix"], stdin: None },
     TestCase {
