@@ -51,6 +51,8 @@ Types of changes
 - A newline after a dot in an attribute path no longer leaves a trailing space.
 - Spaces around `.` in attribute paths and selections are now also removed
   when the path has a comment.
+- A lone carriage return (`\r`) in a block comment is now a line break when
+  the comment is reflowed, instead of staying as a raw `\r`.
 
 ## [4.1.0] - 2026-10-17
 
