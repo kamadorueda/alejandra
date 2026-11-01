@@ -53,6 +53,8 @@ Types of changes
   when the path has a comment.
 - A lone carriage return (`\r`) in a block comment is now a line break when
   the comment is reflowed, instead of staying as a raw `\r`.
+- The last argument of a function call no longer loses its indentation after
+  an argument that is a function with a comment in its body.
 
 ## [4.1.0] - 2026-10-17
 
