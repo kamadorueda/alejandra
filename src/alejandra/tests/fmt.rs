@@ -193,7 +193,13 @@ fn normalize(node: &rnix::SyntaxNode, out: &mut Vec<String>) {
             )
             .take_while(|n| {
                 n.kind() == rnix::SyntaxKind::NODE_PAREN
-                    && n.children_with_tokens().count() == 3
+                    && n.children_with_tokens()
+                        .filter(|element| {
+                            element.kind() != rnix::SyntaxKind::TOKEN_WHITESPACE
+                                || element.to_string().contains('\n')
+                        })
+                        .count()
+                        == 3
             })
             .last()
             .and_then(|outermost| outermost.parent())

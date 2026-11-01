@@ -59,6 +59,8 @@ Types of changes
   when the body is an attribute set, list, string or `let`.
 - Comments between the expression and the `;` of `assert` and `with`
   are no longer deleted.
+- Parentheses around a value in a binding, such as `a = (b c );`,
+  are removed on the first run instead of the second.
 
 ## [4.1.0] - 2026-10-17
 
