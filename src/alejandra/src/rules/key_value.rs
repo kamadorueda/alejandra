@@ -59,8 +59,17 @@ pub(crate) fn rule(
     // Superfluous parens can be removed: `a = (x);` -> `a = x;`
     let child_expr =
         if matches!(child_expr.kind(), rnix::SyntaxKind::NODE_PAREN) {
-            let mut children: Vec<rnix::SyntaxElement> =
-                child_expr.as_node().unwrap().children_with_tokens().collect();
+            // Spaces inside the parens are not a reason to keep them,
+            // a newline is: the user decides there
+            let mut children: Vec<rnix::SyntaxElement> = child_expr
+                .as_node()
+                .unwrap()
+                .children_with_tokens()
+                .filter(|element| {
+                    element.kind() != rnix::SyntaxKind::TOKEN_WHITESPACE
+                        || element.to_string().contains('\n')
+                })
+                .collect();
 
             if children.len() == 3 {
                 children.swap_remove(1)
