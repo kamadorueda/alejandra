@@ -62,12 +62,25 @@ pub(crate) fn rule(
             })
             .collect();
 
+        // The text of a string can contain the placeholder itself,
+        // in which case the interpolations can't be told apart: keep as is
+        if elements.iter().any(|element| {
+            element.kind() == rnix::SyntaxKind::TOKEN_STRING_CONTENT
+                && element.to_string().contains(PLACEHOLDER)
+        }) {
+            steps.extend(
+                elements.iter().cloned().map(crate::builder::Step::Format),
+            );
+            return steps;
+        }
+
         let lines: Vec<&str> = content.split('\n').collect();
 
         // IMPORTANT: Nix preserves trailing whitespace in multiline strings.
-        // We must NOT trim trailing whitespace from content lines — it's semantically significant.
-        // However, trim the last line IF it's spaces-only (it's just formatting, not content).
-        // A tab is content: Nix only treats spaces as indentation.
+        // We must NOT trim trailing whitespace from content lines — it's
+        // semantically significant. However, trim the last line IF it's
+        // spaces-only (it's just formatting, not content). A tab is content:
+        // Nix only treats spaces as indentation.
         let mut lines: Vec<String> = lines
             .iter()
             .enumerate()
@@ -83,7 +96,8 @@ pub(crate) fn rule(
 
         let mut indentation: usize = usize::MAX;
         for line in lines.iter() {
-            // A line holding only spaces does not count, but one with a tab does
+            // A line holding only spaces does not count, but one with a tab
+            // does
             let line = line.trim_end_matches(' ');
 
             if !line.is_empty() {
