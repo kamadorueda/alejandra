@@ -91,6 +91,7 @@
         name = "alejandra";
         packages = [
           cargo-bloat
+          cargo-deny
           cargo-license
           cargo-tarpaulin
           jq

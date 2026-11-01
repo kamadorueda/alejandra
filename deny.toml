@@ -1,0 +1,21 @@
+[graph]
+exclude-dev = true
+
+[advisories]
+ignore = [
+  # Both come from clap 3, which the CLI keeps for now
+  { id = "RUSTSEC-2024-0375", reason = "atty is unmaintained, only used by clap 3" },
+  { id = "RUSTSEC-2024-0370", reason = "proc-macro-error is unmaintained, only used by clap_derive 3" },
+]
+
+[licenses]
+allow = ["Apache-2.0", "MIT", "Unicode-3.0", "Unlicense"]
+confidence-threshold = 0.8
+
+[bans]
+multiple-versions = "allow"
+wildcards = "allow"
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
