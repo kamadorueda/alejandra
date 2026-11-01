@@ -5,8 +5,16 @@
     d
     */
       e)
-  (assert b; e)
-  (assert b;
+  (assert b
+    /*
+    c
+    */
+    ; e)
+  (assert b
+    /*
+    c
+    */
+    ;
     /*
     d
     */
@@ -29,12 +37,20 @@
     /*
     a
     */
-    b; e)
+    b
+    /*
+    c
+    */
+    ; e)
   (assert
     /*
     a
     */
-    b;
+    b
+    /*
+    c
+    */
+    ;
     /*
     d
     */

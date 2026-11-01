@@ -57,6 +57,8 @@ Types of changes
   an argument that is a function with a comment in its body.
 - A comment at the top of a function body is now also indented with the body
   when the body is an attribute set, list, string or `let`.
+- Comments between the expression and the `;` of `assert` and `with`
+  are no longer deleted.
 
 ## [4.1.0] - 2026-10-17
 
