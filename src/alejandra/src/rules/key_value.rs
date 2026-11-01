@@ -103,21 +103,25 @@ pub(crate) fn rule(
         ) || (matches!(
             child_expr.kind(),
             rnix::SyntaxKind::NODE_APPLY
-        )
-            && crate::utils::second_through_penultimate_line_are_indented(
-                // Measure the layout `FormatWider` will produce below,
-                // not the one inherited from the surroundings
-                &crate::builder::BuildCtx {
-                    vertical: !crate::builder::fits_in_single_line(
-                        build_ctx,
-                        child_expr.clone(),
-                    ),
-                    ..build_ctx.clone()
-                },
+        ) && {
+            // Measure the layout `FormatWider` will produce below,
+            // not the one inherited from the surroundings
+            let build_ctx = crate::builder::BuildCtx {
+                vertical: !crate::builder::fits_in_single_line(
+                    build_ctx,
+                    child_expr.clone(),
+                ),
+                ..build_ctx.clone()
+            };
+            crate::utils::second_through_penultimate_line_are_indented(
+                &build_ctx,
                 child_expr.clone(),
                 false,
-            ))
-        {
+            ) && !crate::utils::last_line_is_dedented_argument(
+                &build_ctx,
+                child_expr.clone(),
+            )
+        }) {
             steps.push(crate::builder::Step::Whitespace);
         } else {
             dedent = true;

@@ -6,11 +6,10 @@ pub(crate) fn count_newlines(string: &str) -> usize {
     string.chars().filter(|c| *c == '\n').count()
 }
 
-pub(crate) fn second_through_penultimate_line_are_indented(
+fn trial_format(
     build_ctx: &crate::builder::BuildCtx,
     element: rnix::SyntaxElement,
-    if_leq_than_two_lines: bool,
-) -> bool {
+) -> std::rc::Rc<String> {
     let mut build_ctx =
         crate::builder::BuildCtx { force_wide: false, ..build_ctx.clone() };
 
@@ -26,7 +25,7 @@ pub(crate) fn second_through_penultimate_line_are_indented(
     };
 
     let cached = build_ctx.trial_cache.borrow().get(&key).cloned();
-    let formatted = match cached {
+    match cached {
         Some(formatted) => formatted,
         None => {
             let formatted = std::rc::Rc::new(
@@ -34,13 +33,18 @@ pub(crate) fn second_through_penultimate_line_are_indented(
                     .unwrap()
                     .to_string(),
             );
-            build_ctx
-                .trial_cache
-                .borrow_mut()
-                .insert(key, formatted.clone());
+            build_ctx.trial_cache.borrow_mut().insert(key, formatted.clone());
             formatted
         }
-    };
+    }
+}
+
+pub(crate) fn second_through_penultimate_line_are_indented(
+    build_ctx: &crate::builder::BuildCtx,
+    element: rnix::SyntaxElement,
+    if_leq_than_two_lines: bool,
+) -> bool {
+    let formatted = trial_format(build_ctx, element);
 
     let formatted_lines: Vec<&str> = formatted.split('\n').collect();
 
@@ -59,4 +63,24 @@ pub(crate) fn second_through_penultimate_line_are_indented(
             || line.starts_with(&in_)
             || line.starts_with(&whitespace)
     })
+}
+
+/// Whether the last line of the element is a continuation at the same
+/// indentation, like the last argument of a function application that
+/// the layout put on a line of its own, instead of a closing bracket.
+pub(crate) fn last_line_is_dedented_argument(
+    build_ctx: &crate::builder::BuildCtx,
+    element: rnix::SyntaxElement,
+) -> bool {
+    let formatted = trial_format(build_ctx, element);
+    let indent = build_ctx.indent_str();
+
+    match formatted.rsplit('\n').next().unwrap().strip_prefix(&indent) {
+        Some(line) => {
+            !line.is_empty()
+                && !line.starts_with(char::is_whitespace)
+                && !line.starts_with(['}', ']', ')', '\'', '"'])
+        }
+        None => false,
+    }
 }

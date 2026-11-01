@@ -39,11 +39,17 @@ pub(crate) fn rule(
                 | rnix::SyntaxKind::NODE_LAMBDA
                 | rnix::SyntaxKind::NODE_SELECT
                 | rnix::SyntaxKind::NODE_WITH
-        ) && !crate::utils::second_through_penultimate_line_are_indented(
+        ) && (!crate::utils::second_through_penultimate_line_are_indented(
             build_ctx,
             expression.element.clone(),
             matches!(expression.element.kind(), rnix::SyntaxKind::NODE_LAMBDA),
-        );
+        ) || matches!(
+            expression.element.kind(),
+            rnix::SyntaxKind::NODE_APPLY
+        ) && crate::utils::last_line_is_dedented_argument(
+            build_ctx,
+            expression.element.clone(),
+        ));
 
     // opener
     steps.push(crate::builder::Step::Format(opener.element));
