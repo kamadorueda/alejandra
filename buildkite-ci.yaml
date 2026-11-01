@@ -58,6 +58,15 @@ steps:
       - echo +++ Run Linter
       - cargo clippy
 
+  - label: cargo deny
+    command:
+      - echo --- Load environment
+      - direnv allow
+      - eval "$(direnv export bash)"
+      - echo +++ Check licenses and advisories
+      - cargo deny check
+      - cargo deny --manifest-path src/alejandra_wasm/Cargo.toml check
+
   - label: wasm tests
     command:
       - echo --- Load environment
