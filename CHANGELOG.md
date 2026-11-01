@@ -55,6 +55,8 @@ Types of changes
   the comment is reflowed, instead of staying as a raw `\r`.
 - The last argument of a function call no longer loses its indentation after
   an argument that is a function with a comment in its body.
+- A comment at the top of a function body is now also indented with the body
+  when the body is an attribute set, list, string or `let`.
 
 ## [4.1.0] - 2026-10-17
 

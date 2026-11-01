@@ -65,15 +65,11 @@ pub(crate) fn rule(
                     | rnix::SyntaxKind::NODE_STRING
             )
         {
-            let should_indent = !matches!(
-                child.kind(),
-                rnix::SyntaxKind::NODE_ATTR_SET
-                    | rnix::SyntaxKind::NODE_PAREN
-                    | rnix::SyntaxKind::NODE_LAMBDA
-                    | rnix::SyntaxKind::NODE_LET_IN
-                    | rnix::SyntaxKind::NODE_LIST
-                    | rnix::SyntaxKind::NODE_STRING
-            ) && build_ctx.indentation > 0;
+            // A function in the body keeps its comments aligned with its
+            // argument, like the documented arguments of nixpkgs' lib
+            let should_indent =
+                !matches!(child.kind(), rnix::SyntaxKind::NODE_LAMBDA)
+                    && build_ctx.indentation > 0;
 
             if should_indent {
                 steps.push(crate::builder::Step::Indent);
