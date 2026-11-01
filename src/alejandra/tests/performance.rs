@@ -85,3 +85,31 @@ fn nested_apply() {
         format!("{}x{}", "f (".repeat(SLOW_DEPTH), ")".repeat(SLOW_DEPTH)),
     );
 }
+
+#[test]
+fn nested_lists_of_attr_sets() {
+    assert_fast(
+        "nested_lists_of_attr_sets",
+        format!("{}x{}", "[ { a = ".repeat(DEPTH), "; } ]".repeat(DEPTH)),
+    );
+}
+
+#[test]
+fn nested_let_in_attr_sets() {
+    assert_fast(
+        "nested_let_in_attr_sets",
+        format!(
+            "{}1{}",
+            "let a = { b = ".repeat(DEPTH),
+            "; }; in a".repeat(DEPTH)
+        ),
+    );
+}
+
+#[test]
+fn nested_lambdas() {
+    assert_fast(
+        "nested_lambdas",
+        format!("{}x", "a: { b = ".repeat(DEPTH) + &"1; }".repeat(DEPTH)),
+    );
+}
