@@ -4,24 +4,24 @@ path = "src/main.rs"
 
 [dependencies]
 alejandra = { path = "../alejandra" }
-clap = { version = "*", default-features = false, features = [
+clap = { version = "3.2.25", default-features = false, features = [
   "color",
   "derive",
   "env",
   "std",
   "strsim",
 ] }
-futures = { version = "*", default-features = false, features = [
+futures = { version = "0.3.32", default-features = false, features = [
   "executor",
   "thread-pool",
 ] }
-num_cpus = { version = "*", default-features = false, features = [] }
-rand = { version = "*", default-features = false, features = [
+num_cpus = { version = "1.17.0", default-features = false, features = [] }
+rand = { version = "0.8.6", default-features = false, features = [
   "alloc",
   "getrandom",
 ] }
-toml = { version = "*", default-features = false, features = ["parse", "serde"] }
-walkdir = { version = "*", default-features = false, features = [] }
+toml = { version = "1.1.0", default-features = false, features = ["parse", "serde"] }
+walkdir = { version = "2.5.0", default-features = false, features = [] }
 
 [package]
 authors = ["Kevin Amado <kamadorueda@gmail.com>"]
@@ -30,6 +30,7 @@ edition = "2021"
 license = "Unlicense"
 name = "alejandra_cli"
 repository = "https://github.com/kamadorueda/alejandra"
+rust-version = "1.85"
 version = "4.1.0"
 
 [dev-dependencies]
