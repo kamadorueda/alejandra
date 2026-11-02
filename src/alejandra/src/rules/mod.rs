@@ -52,9 +52,8 @@ pub(crate) fn dotted(
                 // No trailing spaces before a kept newline
                 let text = element.to_string();
                 if let Some(newline) = text.find('\n') {
-                    let blanks = text[..newline]
-                        .trim_start_matches([' ', '\t'])
-                        .len();
+                    let blanks =
+                        text[..newline].trim_start_matches([' ', '\t']).len();
                     return crate::builder::Step::Token(
                         rnix::SyntaxKind::TOKEN_WHITESPACE,
                         text[newline - blanks..].to_string(),
