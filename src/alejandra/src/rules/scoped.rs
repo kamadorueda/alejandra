@@ -48,6 +48,21 @@ pub(crate) fn rule(
         steps.push(crate::builder::Step::Format(second.element));
     }
 
+    // comments between the expression and `;`
+    if second.inline_comment.is_some() {
+        crate::annotated_children::emit_inline_comment(
+            &second.inline_comment,
+            &mut steps,
+        );
+    } else if second.has_comments {
+        steps.push(crate::builder::Step::NewLine);
+        steps.push(crate::builder::Step::Pad);
+    }
+    crate::annotated_children::emit_trivialities_comment_first(
+        &second.trivialities,
+        &mut steps,
+    );
+
     // third
     steps.push(crate::builder::Step::Format(third.element));
 
