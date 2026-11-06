@@ -18,6 +18,12 @@ please open an issue first so that we can discuss it first.
 Otherwise just feel free to contribute anything you want
 (if it makes the project _better_).
 
+# Running the checks
+
+`nix run .#check` runs rustfmt, clippy, the tests
+and checks that the repository's own .nix files are formatted.
+Add `--nixpkgs DIR` to also run `scripts/check-nixpkgs.sh` on a nixpkgs checkout.
+
 # Checking against nixpkgs
 
 `scripts/check-nixpkgs.sh [--formatter BIN] [--nixpkgs DIR] [PATH...]`
