@@ -1,9 +1,8 @@
 use std::panic;
 
-use wasm_bindgen::prelude::*;
-
 use alejandra::config;
 use alejandra::format::Status;
+use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen(start)]
 pub fn main() -> Result<(), JsValue> {
