@@ -4,7 +4,7 @@
 set -euo pipefail
 
 usage() {
-  cat <<'USAGE'
+  cat << 'USAGE'
 Usage: scripts/check-nixpkgs.sh [options] [PATH...]
 
 Formats a copy of nixpkgs twice and reports:
@@ -33,13 +33,13 @@ paths=()
 
 while [ $# -gt 0 ]; do
   case $1 in
-  --formatter) formatter=$2 && shift 2 ;;
-  --nixpkgs) nixpkgs=$2 && shift 2 ;;
-  --compare) compare=$2 && shift 2 ;;
-  -h | --help) usage && exit 0 ;;
-  --) shift && paths+=("$@") && break ;;
-  -*) echo "Unknown option: $1" >&2 && usage >&2 && exit 64 ;;
-  *) paths+=("$1") && shift ;;
+    --formatter) formatter=$2 && shift 2 ;;
+    --nixpkgs) nixpkgs=$2 && shift 2 ;;
+    --compare) compare=$2 && shift 2 ;;
+    -h | --help) usage && exit 0 ;;
+    --) shift && paths+=("$@") && break ;;
+    -*) echo "Unknown option: $1" >&2 && usage >&2 && exit 64 ;;
+    *) paths+=("$1") && shift ;;
   esac
 done
 
@@ -70,8 +70,8 @@ copy_nix_files() {
   mkdir -p "$dest"
   (
     cd "$nixpkgs"
-    find "${paths[@]}" -name '*.nix' -type f -print0 |
-      xargs -0 --no-run-if-empty cp --parents -t "$dest"
+    find "${paths[@]}" -name '*.nix' -type f -print0 \
+      | xargs -0 --no-run-if-empty cp --parents -t "$dest"
   )
   chmod -R u+w "$dest"
 }
@@ -84,21 +84,21 @@ cp -a "$work/before" "$work/once"
 
 # alejandra exits with an error on files that do not parse, that is expected
 start=$(date +%s)
-"$formatter" --quiet "$work/once" >/dev/null 2>&1 || true
+"$formatter" --quiet "$work/once" > /dev/null 2>&1 || true
 elapsed=$(($(date +%s) - start))
 
 cp -a "$work/once" "$work/twice"
-"$formatter" --quiet "$work/twice" >/dev/null 2>&1 || true
+"$formatter" --quiet "$work/twice" > /dev/null 2>&1 || true
 
 # idempotence
-(cd "$work/once" && diff -rq . "$work/twice" || true) |
-  sed -n 's/^Files \.\/\(.*\) and .* differ$/\1/p' |
-  sort >"$work/not-idempotent.txt"
+(cd "$work/once" && diff -rq . "$work/twice" || true) \
+  | sed -n 's/^Files \.\/\(.*\) and .* differ$/\1/p' \
+  | sort > "$work/not-idempotent.txt"
 
 # meaning: compare the syntax trees that Nix parses, in original and formatted
 parse() {
   # relative paths are printed as absolute: hide the directory
-  nix-instantiate --parse "$1" 2>/dev/null | sed "s|$2|ROOT|g"
+  nix-instantiate --parse "$1" 2> /dev/null | sed "s|$2|ROOT|g"
 }
 check_meaning() {
   local file original formatted
@@ -106,20 +106,20 @@ check_meaning() {
   for file in "$@"; do
     original=$(parse "$work/before/$file" "$work/before") || continue
     formatted=$(parse "$work/once/$file" "$work/once") || formatted=
-    [ "$original" = "$formatted" ] || echo "$file" >>"$work/meaning.txt"
+    [ "$original" = "$formatted" ] || echo "$file" >> "$work/meaning.txt"
   done
 }
 export -f parse check_meaning
 export work
 
-: >"$work/meaning.txt"
-(cd "$work/before" && find . -type f -name '*.nix' -print0 | cut -z -c3-) |
-  xargs -0 -P "$(nproc)" -n 20 bash -c 'check_meaning "$@"' _
+: > "$work/meaning.txt"
+(cd "$work/before" && find . -type f -name '*.nix' -print0 | cut -z -c3-) \
+  | xargs -0 -P "$(nproc)" -n 20 bash -c 'check_meaning "$@"' _
 sort -o "$work/meaning.txt" "$work/meaning.txt"
 
 report() {
   local name=$1 list=$2
-  echo "$name: $(wc -l <"$list")"
+  echo "$name: $(wc -l < "$list")"
   sed 's/^/  /' "$list"
 }
 
@@ -130,9 +130,9 @@ report "Files where the meaning changes" "$work/meaning.txt"
 
 if [ -n "$compare" ]; then
   copy_nix_files "$work/other"
-  "$compare" --quiet "$work/other" >/dev/null 2>&1 || true
-  changed=$(diff -r -U0 "$work/once" "$work/other" |
-    grep -E '^[-+]' | grep -cvE '^(\+\+\+|---) ' || true)
+  "$compare" --quiet "$work/other" > /dev/null 2>&1 || true
+  changed=$(diff -r -U0 "$work/once" "$work/other" \
+    | grep -E '^[-+]' | grep -cvE '^(\+\+\+|---) ' || true)
   echo "Lines that differ between the two formatters: $changed"
 fi
 

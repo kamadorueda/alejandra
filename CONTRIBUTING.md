@@ -20,7 +20,8 @@ Otherwise just feel free to contribute anything you want
 
 # Running the checks
 
-`nix run .#check` runs rustfmt, clippy, the tests
+`nix run .#check` (`scripts/check.sh`) runs rustfmt, clippy, the tests,
+shfmt and shellcheck on the shell scripts
 and checks that the repository's own .nix files are formatted.
 Add `--nixpkgs DIR` to also run `scripts/check-nixpkgs.sh` on a nixpkgs checkout.
 
