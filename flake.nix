@@ -100,6 +100,7 @@
           nodejs
           nodePackages.prettier
           perf
+          shellcheck
           shfmt
           treefmt
           yarn
@@ -152,49 +153,12 @@
             fenix."x86_64-linux".latest.rustfmt
             fenix."x86_64-linux".stable.toolchain
             git
+            shellcheck
+            shfmt
             stdenv.cc
           ];
           text = ''
-            nixpkgs=
-            while [ "$#" -gt 0 ]; do
-              case "$1" in
-                --nixpkgs) nixpkgs="$2"; shift 2 ;;
-                *) echo "usage: check [--nixpkgs DIR]" >&2; exit 2 ;;
-              esac
-            done
-
-            bin="''${CARGO_TARGET_DIR:-target}/release/alejandra"
-            current=
-            trap 'echo "+++ failed: $current" >&2' ERR
-            step() { current="$1"; echo "--- $1"; }
-
-            step rustfmt
-            git ls-files -z '*.rs' | xargs -0 rustfmt --check
-
-            step clippy
-            cargo clippy --workspace --all-targets -- -D warnings
-            cargo clippy --all-targets \
-              --manifest-path src/alejandra_wasm/Cargo.toml -- -D warnings
-
-            step tests
-            cargo test --workspace
-            cargo test --manifest-path src/alejandra_wasm/Cargo.toml
-
-            step "nix files formatted"
-            cargo build --release --package alejandra_cli
-            git ls-files -z '*.nix' \
-              ':!:src/alejandra/tests/cases/' \
-              ':!:src/alejandra_cli/tests/inputs/' \
-              | xargs -0 "$bin" --check --quiet
-
-            if [ -n "$nixpkgs" ]; then
-              step nixpkgs
-              scripts/check-nixpkgs.sh \
-                --formatter "$bin" \
-                --nixpkgs "$nixpkgs"
-            fi
-
-            echo "+++ all checks passed"
+            exec bash ${./scripts/check.sh} "$@"
           '';
         };
         "build-wasm" = writeShellApplication {
