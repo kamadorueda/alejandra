@@ -27,6 +27,9 @@ Types of changes
 
 - Parse errors show the line and column where they start
   (`at line 4, column 11`) in place of a byte range (`at 66..70`).
+  When a `;` is missing, they also show where the code
+  on the lines before ends (`after line 3, column 20`),
+  because the parser finds the error only on the next line.
   [#351](https://github.com/kamadorueda/alejandra/issues/351)
 - A block comment on one line (`/* sh */`) stays on one line, as it is.
   Between `=` and a string, with no line break,
