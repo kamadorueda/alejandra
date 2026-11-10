@@ -76,9 +76,7 @@
     else if a
     then b
     else
-      /*
-      x
-      */
+      /*x*/
       if a
       then b
       else c

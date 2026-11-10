@@ -1,39 +1,25 @@
 [
   (a: b:
-    /*
-    c
-    */
+    /*c*/
     d)
   ({}: b:
-    /*
-    c
-    */
+    /*c*/
     d)
   (a: {}:
-    /*
-    c
-    */
+    /*c*/
     d)
   (a: d)
   (a:
-    /*
-    c
-    */
+    /*c*/
     d)
   (a
-    /*
-    b
-    */
+    /*b*/
     :
       d)
   (a
-    /*
-    b
-    */
+    /*b*/
     :
-      /*
-      c
-      */
+      /*c*/
       d)
   (
     aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

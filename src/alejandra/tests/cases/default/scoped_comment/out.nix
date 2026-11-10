@@ -1,42 +1,26 @@
 [
   (assert b
-    /*
-    c
-    */
+    /*c*/
     ; e)
   (assert b # c
     ; e)
   (assert
-    /*
-    a
-    */
+    /*a*/
     b
-    /*
-    c
-    */
+    /*c*/
     ;
-    /*
-    d
-    */
+    /*d*/
       e)
   (with a
-    /*
-    c
-    */
+    /*c*/
     ; a)
   (with a # c
     ; a)
   (with
-    /*
+    /*a*/
     a
-    */
-    a
-    /*
-    c
-    */
+    /*c*/
     ;
-    /*
-    d
-    */
+    /*d*/
       a)
 ]

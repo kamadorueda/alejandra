@@ -1,23 +1,15 @@
 [
   (with b; c)
   (with b;
-    /*
-    b
-    */
+    /*b*/
       c)
   (with
-    /*
-    a
-    */
+    /*a*/
     b; c)
   (with
-    /*
-    a
-    */
+    /*a*/
     b;
-    /*
-    b
-    */
+    /*b*/
       c)
   (with b; cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc)
   (with b; cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc)
@@ -48,9 +40,7 @@
       b = 2;
     })
   (with a;
-    /*
-    comment
-    */
+    /* comment */
     with b;
     with c; {
       a = 1;
