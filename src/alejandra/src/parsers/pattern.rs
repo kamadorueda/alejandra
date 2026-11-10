@@ -1,8 +1,10 @@
 #[derive(Default)]
 pub(crate) struct Argument {
-    pub comments_before: Vec<String>,
-    pub item:            Option<rnix::SyntaxElement>,
-    pub comment_after:   Option<String>,
+    /// An empty line before the argument (or its comments) in the input
+    pub blank_line_before: bool,
+    pub comments_before:   Vec<String>,
+    pub item:              Option<rnix::SyntaxElement>,
+    pub comment_after:     Option<String>,
 }
 
 #[derive(Default)]
@@ -42,8 +44,13 @@ pub(crate) fn parse(
     children.move_next();
 
     // arguments
+    let mut blank_line_after_previous = false;
     loop {
-        let mut argument = Argument::default();
+        let mut argument = Argument {
+            blank_line_before: blank_line_after_previous,
+            ..Default::default()
+        };
+        blank_line_after_previous = false;
 
         // Before an item we can have: comma, comments, whitespace
         loop {
@@ -65,7 +72,14 @@ pub(crate) fn parse(
                     children.move_next();
                 }
                 rnix::SyntaxKind::TOKEN_WHITESPACE => {
+                    let content = child.into_token().unwrap().to_string();
+
                     children.move_next();
+                    if argument.comments_before.is_empty()
+                        && crate::utils::count_newlines(&content) > 1
+                    {
+                        argument.blank_line_before = true;
+                    }
                 }
                 _ => {}
             }
@@ -111,7 +125,11 @@ pub(crate) fn parse(
                     let content = child.into_token().unwrap().to_string();
 
                     children.move_next();
-                    if crate::utils::count_newlines(&content) > 0 {
+                    let newlines = crate::utils::count_newlines(&content);
+                    if newlines > 1 {
+                        blank_line_after_previous = true;
+                    }
+                    if newlines > 0 {
                         break;
                     }
                 }
