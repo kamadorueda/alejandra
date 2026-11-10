@@ -12,78 +12,54 @@
     inherit
       b
       d
-      /*
-      e
-      */
+      /*e*/
       ;
   }
   {
     inherit
       b
-      /*
-      c
-      */
+      /*c*/
       d
       ;
   }
   {
     inherit
       b
-      /*
-      c
-      */
+      /*c*/
       d
-      /*
-      e
-      */
+      /*e*/
       ;
   }
   {
     inherit
-      /*
-      a
-      */
+      /*a*/
       b
       d
       ;
   }
   {
     inherit
-      /*
-      a
-      */
+      /*a*/
       b
       d
-      /*
-      e
-      */
+      /*e*/
       ;
   }
   {
     inherit
-      /*
-      a
-      */
+      /*a*/
       b
-      /*
-      c
-      */
+      /*c*/
       d
       ;
   }
   {
     inherit
-      /*
-      a
-      */
+      /*a*/
       b
-      /*
-      c
-      */
+      /*c*/
       d
-      /*
-      e
-      */
+      /*e*/
       ;
   }
   {

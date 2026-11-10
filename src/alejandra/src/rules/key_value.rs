@@ -43,9 +43,7 @@ pub(crate) fn rule(
     let mut comments_before = Vec::new();
     let mut newlines = false;
     children.drain_trivia(|element| match element {
-        crate::children::Trivia::Comment(text) => {
-            comments_before.push(crate::builder::Step::Comment(text))
-        }
+        crate::children::Trivia::Comment(text) => comments_before.push(text),
         crate::children::Trivia::Whitespace(text) => {
             if crate::utils::count_newlines(&text) > 0 {
                 newlines = true;
@@ -89,12 +87,24 @@ pub(crate) fn rule(
         crate::children::Trivia::Whitespace(_) => {}
     });
 
+    // A one-line block comment between `=` and a string, with no line
+    // break, stays there: `a = /* sh */ ''...'';` (an editor hint)
+    let inline_hint = !newlines
+        && comments_after.is_empty()
+        && matches!(child_expr.kind(), rnix::SyntaxKind::NODE_STRING)
+        && matches!(
+            comments_before.as_slice(),
+            [text] if text.starts_with("/*") && !text.contains('\n')
+        );
+
     // =
     let mut dedent = false;
     steps.push(crate::builder::Step::Format(child_equal));
 
     if vertical {
-        if !comments_before.is_empty() || !comments_after.is_empty() {
+        if (!comments_before.is_empty() && !inline_hint)
+            || !comments_after.is_empty()
+        {
             dedent = true;
             steps.push(crate::builder::Step::Indent);
             steps.push(crate::builder::Step::NewLine);
@@ -146,10 +156,14 @@ pub(crate) fn rule(
     }
 
     // /**/
-    for comment in comments_before {
-        steps.push(comment);
-        steps.push(crate::builder::Step::NewLine);
-        steps.push(crate::builder::Step::Pad);
+    for text in comments_before {
+        steps.push(crate::builder::Step::Comment(text));
+        if inline_hint {
+            steps.push(crate::builder::Step::Whitespace);
+        } else {
+            steps.push(crate::builder::Step::NewLine);
+            steps.push(crate::builder::Step::Pad);
+        }
     }
 
     // expr

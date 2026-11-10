@@ -1,59 +1,35 @@
 [
   (assert b; e)
   (assert b;
-    /*
-    d
-    */
+    /*d*/
       e)
   (assert b
-    /*
-    c
-    */
+    /*c*/
     ; e)
   (assert b
-    /*
-    c
-    */
+    /*c*/
     ;
-    /*
-    d
-    */
+    /*d*/
       e)
   (assert
-    /*
-    a
-    */
+    /*a*/
     b; e)
   (assert
-    /*
-    a
-    */
+    /*a*/
     b;
-    /*
-    d
-    */
+    /*d*/
       e)
   (assert
-    /*
-    a
-    */
+    /*a*/
     b
-    /*
-    c
-    */
+    /*c*/
     ; e)
   (assert
-    /*
-    a
-    */
+    /*a*/
     b
-    /*
-    c
-    */
+    /*c*/
     ;
-    /*
-    d
-    */
+    /*d*/
       e)
   (assert b; cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc)
   (assert b; cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc)

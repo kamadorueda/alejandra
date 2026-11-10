@@ -1,516 +1,230 @@
 {
-  /*
-  Foo
-  */
+  /*Foo*/
   stdenv,
-  /*
-  Foo
-  */
-  /*
-  Foo
-  */
+  /*Foo*/
+  /*Foo*/
   lib,
-  /*
-  Foo
-  */
-  /*
-  Foo
-  */
+  /*Foo*/
+  /*Foo*/
   fetchFromGitLab,
-  /*
-  Foo
-  */
-  /*
-  Foo
-  */
+  /*Foo*/
+  /*Foo*/
   cairo,
-  /*
-  Foo
-  */
-  /*
-  Foo
-  */
+  /*Foo*/
+  /*Foo*/
   desktop-file-utils,
-  /*
-  Foo
-  */
-  /*
-  Foo
-  */
+  /*Foo*/
+  /*Foo*/
   gettext,
-  /*
-  Foo
-  */
-  /*
-  Foo
-  */
+  /*Foo*/
+  /*Foo*/
   glib,
-  /*
-  Foo
-  */
-  /*
-  Foo
-  */
+  /*Foo*/
+  /*Foo*/
   gtk4,
-  /*
-  Foo
-  */
-  /*
-  Foo
-  */
+  /*Foo*/
+  /*Foo*/
   libadwaita,
-  /*
-  Foo
-  */
-  /*
-  Foo
-  */
+  /*Foo*/
+  /*Foo*/
   meson,
-  /*
-  Foo
-  */
-  /*
-  Foo
-  */
+  /*Foo*/
+  /*Foo*/
   ninja,
-  /*
-  Foo
-  */
-  /*
-  Foo
-  */
+  /*Foo*/
+  /*Foo*/
   pango,
-  /*
-  Foo
-  */
-  /*
-  Foo
-  */
+  /*Foo*/
+  /*Foo*/
   pkg-config,
-  /*
-  Foo
-  */
-  /*
-  Foo
-  */
+  /*Foo*/
+  /*Foo*/
   python3,
-  /*
-  Foo
-  */
-  /*
-  Foo
-  */
+  /*Foo*/
+  /*Foo*/
   rustPlatform,
-  /*
-  Foo
-  */
-  /*
-  Foo
-  */
+  /*Foo*/
+  /*Foo*/
   wrapGAppsHook4,
-  /*
-  Foo
-  */
+  /*Foo*/
 }:
-/*
-Foo
-*/
+/*Foo*/
 stdenv.mkDerivation
-/*
-Foo
-*/
+/*Foo*/
 rec
-/*
-Foo
-*/
+/*Foo*/
 {
-  /*
-  Foo
-  */
+  /*Foo*/
   pname
-  /*
-  Foo
-  */
-  =
-    /*
-    Foo
-    */
-    "contrast";
-  /*
-  Foo
-  */
+  /*Foo*/
+  = /*Foo*/ "contrast";
+  /*Foo*/
   version
-  /*
-  Foo
-  */
-  =
-    /*
-    Foo
-    */
-    "0.0.5";
-  /*
-  Foo
-  */
+  /*Foo*/
+  = /*Foo*/ "0.0.5";
+  /*Foo*/
   src
-  /*
-  Foo
-  */
+  /*Foo*/
   =
-    /*
-    Foo
-    */
+    /*Foo*/
     fetchFromGitLab
-    /*
-    Foo
-    */
+    /*Foo*/
     {
-      /*
-      Foo
-      */
+      /*Foo*/
       domain
-      /*
-      Foo
-      */
-      =
-        /*
-        Foo
-        */
-        "gitlab.gnome.org";
-      /*
-      Foo
-      */
+      /*Foo*/
+      = /*Foo*/ "gitlab.gnome.org";
+      /*Foo*/
       group
-      /*
-      Foo
-      */
-      =
-        /*
-        Foo
-        */
-        "World";
-      /*
-      Foo
-      */
+      /*Foo*/
+      = /*Foo*/ "World";
+      /*Foo*/
       owner
-      /*
-      Foo
-      */
-      =
-        /*
-        Foo
-        */
-        "design";
-      /*
-      Foo
-      */
+      /*Foo*/
+      = /*Foo*/ "design";
+      /*Foo*/
       repo
-      /*
-      Foo
-      */
-      =
-        /*
-        Foo
-        */
-        "contrast";
-      /*
-      Foo
-      */
+      /*Foo*/
+      = /*Foo*/ "contrast";
+      /*Foo*/
       rev
-      /*
-      Foo
-      */
+      /*Foo*/
       =
-        /*
-        Foo
-        */
+        /*Foo*/
         version;
-      /*
-      Foo
-      */
+      /*Foo*/
       sha256
-      /*
-      Foo
-      */
-      =
-        /*
-        Foo
-        */
-        "cypSbqLwSmauOoWOuppWpF3hvrxiqmkLspxAWzvlUC0=";
-      /*
-      Foo
-      */
+      /*Foo*/
+      = /*Foo*/ "cypSbqLwSmauOoWOuppWpF3hvrxiqmkLspxAWzvlUC0=";
+      /*Foo*/
     };
-  /*
-  Foo
-  */
+  /*Foo*/
   cargoDeps
-  /*
-  Foo
-  */
+  /*Foo*/
   =
-    /*
-    Foo
-    */
+    /*Foo*/
     rustPlatform.fetchCargoTarball
-    /*
-    Foo
-    */
+    /*Foo*/
     {
-      /*
-      Foo
-      */
+      /*Foo*/
       inherit
-        /*
-        Foo
-        */
+        /*Foo*/
         src
         ;
-      /*
-      Foo
-      */
+      /*Foo*/
       name
-      /*
-      Foo
-      */
-      =
-        /*
-        Foo
-        */
-        "${pname}-${version}";
-      /*
-      Foo
-      */
+      /*Foo*/
+      = /*Foo*/ "${pname}-${version}";
+      /*Foo*/
       hash
-      /*
-      Foo
-      */
-      =
-        /*
-        Foo
-        */
-        "sha256-W4FyqwJpimf0isQRCq9TegpTQPQfsumx40AFQCFG5VQ=";
-      /*
-      Foo
-      */
+      /*Foo*/
+      = /*Foo*/ "sha256-W4FyqwJpimf0isQRCq9TegpTQPQfsumx40AFQCFG5VQ=";
+      /*Foo*/
     };
-  /*
-  Foo
-  */
+  /*Foo*/
   nativeBuildInputs
-  /*
-  Foo
-  */
+  /*Foo*/
   =
-    /*
-    Foo
-    */
+    /*Foo*/
     [
-      /*
-      Foo
-      */
+      /*Foo*/
       desktop-file-utils
-      /*
-      Foo
-      */
+      /*Foo*/
       gettext
-      /*
-      Foo
-      */
+      /*Foo*/
       meson
-      /*
-      Foo
-      */
+      /*Foo*/
       ninja
-      /*
-      Foo
-      */
+      /*Foo*/
       pkg-config
-      /*
-      Foo
-      */
+      /*Foo*/
       python3
-      /*
-      Foo
-      */
+      /*Foo*/
       rustPlatform.rust.cargo
-      /*
-      Foo
-      */
+      /*Foo*/
       rustPlatform.cargoSetupHook
-      /*
-      Foo
-      */
+      /*Foo*/
       rustPlatform.rust.rustc
-      /*
-      Foo
-      */
+      /*Foo*/
       wrapGAppsHook4
-      /*
-      Foo
-      */
+      /*Foo*/
       glib
-      /*
-      Foo
-      */
+      /*Foo*/
       # for glib-compile-resources
-      /*
-      Foo
-      */
+      /*Foo*/
     ];
-  /*
-  Foo
-  */
+  /*Foo*/
   buildInputs
-  /*
-  Foo
-  */
+  /*Foo*/
   =
-    /*
-    Foo
-    */
+    /*Foo*/
     [
-      /*
-      Foo
-      */
+      /*Foo*/
       cairo
-      /*
-      Foo
-      */
+      /*Foo*/
       glib
-      /*
-      Foo
-      */
+      /*Foo*/
       gtk4
-      /*
-      Foo
-      */
+      /*Foo*/
       libadwaita
-      /*
-      Foo
-      */
+      /*Foo*/
       pango
-      /*
-      Foo
-      */
+      /*Foo*/
     ];
-  /*
-  Foo
-  */
+  /*Foo*/
   postPatch
-  /*
-  Foo
-  */
-  =
-    /*
-    Foo
-    */
-    ''
-      patchShebangs build-aux/meson_post_install.py
-      # https://gitlab.gnome.org/World/design/contrast/-/merge_requests/23
-      substituteInPlace build-aux/meson_post_install.py \
-        --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
-    '';
-  /*
-  Foo
-  */
+  /*Foo*/
+  = /*Foo*/ ''
+    patchShebangs build-aux/meson_post_install.py
+    # https://gitlab.gnome.org/World/design/contrast/-/merge_requests/23
+    substituteInPlace build-aux/meson_post_install.py \
+      --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
+  '';
+  /*Foo*/
   meta
-  /*
-  Foo
-  */
+  /*Foo*/
   =
-    /*
-    Foo
-    */
+    /*Foo*/
     with
-    /*
-    Foo
-    */
+    /*Foo*/
     lib;
-    /*
-    Foo
-    */
+    /*Foo*/
       {
-        /*
-        Foo
-        */
+        /*Foo*/
         description
-        /*
-        Foo
-        */
-        =
-          /*
-          Foo
-          */
-          "Checks whether the contrast between two colors meet the WCAG requirements";
-        /*
-        Foo
-        */
+        /*Foo*/
+        = /*Foo*/ "Checks whether the contrast between two colors meet the WCAG requirements";
+        /*Foo*/
         homepage
-        /*
-        Foo
-        */
-        =
-          /*
-          Foo
-          */
-          "https://gitlab.gnome.org/World/design/contrast";
-        /*
-        Foo
-        */
+        /*Foo*/
+        = /*Foo*/ "https://gitlab.gnome.org/World/design/contrast";
+        /*Foo*/
         license
-        /*
-        Foo
-        */
+        /*Foo*/
         =
-          /*
-          Foo
-          */
+          /*Foo*/
           licenses.gpl3Plus;
-        /*
-        Foo
-        */
+        /*Foo*/
         maintainers
-        /*
-        Foo
-        */
+        /*Foo*/
         =
-          /*
-          Foo
-          */
+          /*Foo*/
           with
-          /*
-          Foo
-          */
+          /*Foo*/
           maintainers;
-          /*
-          Foo
-          */
+          /*Foo*/
             [
-              /*
-              Foo
-              */
+              /*Foo*/
               jtojnar
-              /*
-              Foo
-              */
+              /*Foo*/
             ];
-        /*
-        Foo
-        */
+        /*Foo*/
         platforms
-        /*
-        Foo
-        */
+        /*Foo*/
         =
-          /*
-          Foo
-          */
+          /*Foo*/
           platforms.unix;
-        /*
-        Foo
-        */
+        /*Foo*/
       };
-  /*
-  Foo
-  */
+  /*Foo*/
 }

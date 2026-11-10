@@ -1,8 +1,6 @@
 {
   f = x:
-    /*
-    block comment
-    */
+    /* block comment */
     x;
   g = x:
     /*

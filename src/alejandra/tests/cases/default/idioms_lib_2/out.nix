@@ -81,19 +81,13 @@
   */
   concat = x: y: x ++ y;
 
-  /*
-  boolean “or”
-  */
+  /* boolean “or” */
   or = x: y: x || y;
 
-  /*
-  boolean “and”
-  */
+  /* boolean “and” */
   and = x: y: x && y;
 
-  /*
-  bitwise “and”
-  */
+  /* bitwise “and” */
   bitAnd =
     builtins.bitAnd
     or (import ./zip-int-bits.nix
@@ -102,9 +96,7 @@
         then 1
         else 0));
 
-  /*
-  bitwise “or”
-  */
+  /* bitwise “or” */
   bitOr =
     builtins.bitOr
     or (import ./zip-int-bits.nix
@@ -113,9 +105,7 @@
         then 1
         else 0));
 
-  /*
-  bitwise “xor”
-  */
+  /* bitwise “xor” */
   bitXor =
     builtins.bitXor
     or (import ./zip-int-bits.nix
@@ -124,9 +114,7 @@
         then 1
         else 0));
 
-  /*
-  bitwise “not”
-  */
+  /* bitwise “not” */
   bitNot = builtins.sub (-1);
 
   /*
@@ -205,14 +193,10 @@
 
   ## nixpkgs version strings
 
-  /*
-  Returns the current full nixpkgs version number.
-  */
+  /* Returns the current full nixpkgs version number. */
   version = release + versionSuffix;
 
-  /*
-  Returns the current nixpkgs release number as string.
-  */
+  /* Returns the current nixpkgs release number as string. */
   release = lib.strings.fileContents ../.version;
 
   /*
@@ -223,9 +207,7 @@
   */
   codeName = "Quokka";
 
-  /*
-  Returns the current nixpkgs version suffix as string.
-  */
+  /* Returns the current nixpkgs version suffix as string. */
   versionSuffix = let
     suffixFile = ../.version-suffix;
   in
@@ -263,17 +245,13 @@
 
   ## Integer operations
 
-  /*
-  Return minimum of two numbers.
-  */
+  /* Return minimum of two numbers. */
   min = x: y:
     if x < y
     then x
     else y;
 
-  /*
-  Return maximum of two numbers.
-  */
+  /* Return maximum of two numbers. */
   max = x: y:
     if x > y
     then x

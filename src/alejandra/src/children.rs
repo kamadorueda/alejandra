@@ -222,11 +222,14 @@ fn dedent_comment(pos: &crate::position::Position, text: &str) -> String {
             }
         }
 
-        // Make sure it starts with empty line
+        // A comment on one line stays on one line, as it is:
+        // `/* sh */` is a hint for editors
         if lines.len() == 1 {
-            lines.insert(0, "".to_string());
-            lines[1] = format!("{0:<1$}{2}", "", pos.column + 2, lines[1]);
-        } else if lines[0].trim().is_empty() {
+            return text;
+        }
+
+        // Make sure it starts with empty line
+        if lines[0].trim().is_empty() {
             lines[0] = "".to_string();
         } else {
             lines.insert(0, format!("{0:<1$}", "", pos.column + 1));

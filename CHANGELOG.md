@@ -25,6 +25,12 @@ Types of changes
 
 ### Changed
 
+- A block comment on one line (`/* sh */`) stays on one line, as it is.
+  Between `=` and a string, with no line break,
+  it stays in its place (`a = /* sh */ ''...'';`),
+  so editors can use it as a language hint.
+  [#366](https://github.com/kamadorueda/alejandra/issues/366)
+  [#429](https://github.com/kamadorueda/alejandra/issues/429)
 - Function arguments go on separate lines
   when one of them has a default value (`x ? default`),
   so the default is easy to see:
