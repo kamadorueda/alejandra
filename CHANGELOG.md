@@ -26,7 +26,7 @@ Types of changes
 ### Changed
 
 - Parse errors show the line and column where they start
-  (`at line 4, column 11`) in place of a byte range (`at 59..60`).
+  (`at line 4, column 11`) in place of a byte range (`at 66..70`).
   [#351](https://github.com/kamadorueda/alejandra/issues/351)
 - A block comment on one line (`/* sh */`) stays on one line, as it is.
   Between `=` and a string, with no line break,
