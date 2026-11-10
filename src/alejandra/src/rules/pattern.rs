@@ -24,11 +24,24 @@ pub(crate) fn rule(
         }
     });
 
+    // An argument with a default value (`x ? default`) goes on its own line,
+    // so the default is easy to see
+    let has_default = pattern.arguments.iter().any(|argument| {
+        argument.item.as_ref().is_some_and(|item| {
+            item.as_node().is_some_and(|node| {
+                node.children_with_tokens().any(|child| {
+                    child.kind() == rnix::SyntaxKind::TOKEN_QUESTION
+                })
+            })
+        })
+    });
+
     let arguments_count = pattern.arguments.len();
 
     let arguments_count_for_tall = if has_ellipsis { 2 } else { 1 };
 
     let vertical = has_comments
+        || has_default
         || arguments_count > arguments_count_for_tall
         || (arguments_count > 0 && has_comments_between_curly_b)
         || build_ctx.vertical;
