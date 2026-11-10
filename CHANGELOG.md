@@ -25,6 +25,11 @@ Types of changes
 
 ### Changed
 
+- Function arguments go on separate lines
+  when one of them has a default value (`x ? default`),
+  so the default is easy to see:
+  `{nixpkgs ? import <nixpkgs> {}}:` becomes three lines.
+  [#472](https://github.com/kamadorueda/alejandra/issues/472)
 - `f <| x` stays on one line with the start of `x`,
   like the application `f (x)`, when the input has no line break around `<|`:
   `a = attrsOf <| submodule {` instead of `attrsOf` and `<| submodule {`

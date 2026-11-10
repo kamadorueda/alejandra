@@ -8,7 +8,10 @@ let
   };
   flake = import flakeCompatSrc {src = ./.;};
 in
-  {system ? builtins.currentSystem, ...}:
+  {
+    system ? builtins.currentSystem,
+    ...
+  }:
     if builtins.hasAttr system flake.defaultNix.defaultPackage
     then flake.defaultNix.defaultPackage.${system}
     else
