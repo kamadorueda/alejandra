@@ -25,6 +25,10 @@ Types of changes
 
 ### Changed
 
+- One empty line between function arguments is kept,
+  like in attribute sets and lists,
+  so arguments can be put in groups.
+  [#344](https://github.com/kamadorueda/alejandra/issues/344)
 - Parse errors show the line and column where they start
   (`at line 4, column 11`) in place of a byte range (`at 66..70`).
   When a `;` is missing, they also show where the code

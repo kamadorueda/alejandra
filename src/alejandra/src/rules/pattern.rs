@@ -81,6 +81,11 @@ pub(crate) fn rule(
     // arguments
     for (index, argument) in pattern.arguments.into_iter().enumerate() {
         if vertical {
+            // Keep one empty line between groups of arguments,
+            // like in attribute sets
+            if index > 0 && argument.blank_line_before {
+                steps.push(crate::builder::Step::NewLine);
+            }
             steps.push(crate::builder::Step::NewLine);
             steps.push(crate::builder::Step::Pad);
         } else if index > 0 {
