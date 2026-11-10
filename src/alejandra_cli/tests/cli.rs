@@ -33,6 +33,8 @@ const CASES: &[TestCase] = &[
     TestCase { args: &[], stdin: Some("[") },
     TestCase { args: &["--quiet"], stdin: Some("[") },
     TestCase { args: &["--quiet", "--quiet"], stdin: Some("[") },
+    // check error with a position
+    TestCase { args: &[], stdin: Some("{\n  a = 1\n  b = 2;\n}\n") },
     // nothing to format
     TestCase { args: &[".", "--exclude", "."], stdin: None },
     TestCase { args: &[".", "--exclude", ".", "--quiet"], stdin: None },
