@@ -76,6 +76,17 @@ pub(crate) fn rule(
 
         let lines: Vec<&str> = content.split('\n').collect();
 
+        // Text right after the opening `''` is part of the first line, and Nix
+        // strips the indentation of every line by the same amount, including
+        // that one. Any indentation added here would show up after the `''`,
+        // so keep the string as written
+        if lines.len() > 1 && !is_spaces_only(lines[0]) {
+            steps.extend(
+                elements.iter().cloned().map(crate::builder::Step::Format),
+            );
+            return steps;
+        }
+
         // IMPORTANT: Nix preserves trailing whitespace in multiline strings.
         // We must NOT trim trailing whitespace from content lines — it's
         // semantically significant. However, trim the last line IF it's

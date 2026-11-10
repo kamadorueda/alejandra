@@ -25,6 +25,11 @@ Types of changes
 
 ### Fixed
 
+- Indented strings with text right after the opening `''`
+  are kept as written,
+  instead of getting spaces after the `''` and extra indentation.
+  [#399](https://github.com/kamadorueda/alejandra/issues/399)
+  [#62](https://github.com/kamadorueda/alejandra/issues/62)
 - Formatting a file now gives the final result on the first run:
   function applications and lambdas in `else` branches
   no longer change layout when the output is formatted again.
