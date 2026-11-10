@@ -29,6 +29,8 @@ Types of changes
   Between `=` and a string, with no line break,
   it stays in its place (`a = /* sh */ ''...'';`),
   so editors can use it as a language hint.
+  The same is true between a function and a string argument
+  (`writeShellScript "x" /* sh */ ''...''`).
   [#366](https://github.com/kamadorueda/alejandra/issues/366)
   [#429](https://github.com/kamadorueda/alejandra/issues/429)
 - Function arguments go on separate lines

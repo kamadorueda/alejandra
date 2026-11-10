@@ -32,12 +32,9 @@ let
       x
     '';
   };
-  p =
-    pkgs.writeShellScript "p"
-    /* sh */
-    ''
-      echo p
-    '';
+  p = pkgs.writeShellScript "p" /* sh */ ''
+    echo p
+  '';
   q = [
     /* sh */
     ''
