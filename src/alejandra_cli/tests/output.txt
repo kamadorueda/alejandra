@@ -182,6 +182,24 @@ stdout:
 
 exit code: Some(1)
 ===
+args: []
+stdin: "{\n  a = 1\n  b = 2;\n}\n"
+stdout:
+  {
+    a = 1
+    b = 2;
+  }
+
+stderr:
+  Formatting stdin.
+  Use --help to see all command line options.
+  use --quiet to suppress this and other messages.
+  
+  Failed! 1 error found at:
+  - <anonymous file on stdin>: unexpected TOKEN_ASSIGN at line 3, column 5, wanted any of [TOKEN_SEMICOLON]
+
+exit code: Some(1)
+===
 args: [".", "--exclude", "."]
 stderr:
   Checking style in 0 files using 1 thread.

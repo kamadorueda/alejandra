@@ -54,6 +54,51 @@ fn end_comments_at_carriage_returns(code: &str) -> std::borrow::Cow<'_, str> {
     fixed.into()
 }
 
+/// The line and column (both from 1) of the byte `offset` of `code`.
+/// The column counts characters, not bytes.
+fn line_and_column(code: &str, offset: usize) -> (usize, usize) {
+    let before = &code[..offset];
+    let line = before.matches('\n').count() + 1;
+    let column = match before.rfind('\n') {
+        Some(newline) => before[newline + 1..].chars().count() + 1,
+        None => before.chars().count() + 1,
+    };
+    (line, column)
+}
+
+/// The message of a parse error, with the line and column where it starts
+/// in place of the byte range (`at 12..15`), which is hard to find.
+fn describe_error(code: &str, error: &rnix::ParseError) -> String {
+    use rnix::ParseError;
+
+    let message = error.to_string();
+    let range = match error {
+        ParseError::Unexpected(range)
+        | ParseError::UnexpectedExtra(range)
+        | ParseError::UnexpectedWanted(_, range, _)
+        | ParseError::UnexpectedDoubleBind(range)
+        | ParseError::DuplicatedArgs(range, _) => *range,
+        _ => return message,
+    };
+
+    let start = usize::from(range.start());
+    let end = usize::from(range.end());
+    if end > code.len() || !code.is_char_boundary(start) {
+        return message;
+    }
+
+    let (line, column) = line_and_column(code, start);
+    let position = format!("at line {line}, column {column}");
+    // rnix writes `at 12..15`, or `in 12..15` for duplicated arguments
+    for word in ["at", "in"] {
+        let range = format!("{word} {start}..{end}");
+        if message.contains(&range) {
+            return message.replacen(&range, &position, 1);
+        }
+    }
+    message
+}
+
 /// Formats the content of `before` in-memory
 /// assuming the contents come from `path` when displaying error messages
 pub fn in_memory(
@@ -61,12 +106,13 @@ pub fn in_memory(
     before: String,
     config: Config,
 ) -> (Status, String) {
-    let parsed = rnix::Root::parse(&end_comments_at_carriage_returns(&before));
+    let code = end_comments_at_carriage_returns(&before);
+    let parsed = rnix::Root::parse(&code);
 
     let errors = parsed.errors();
 
     if !errors.is_empty() {
-        return (Status::Error(errors[0].to_string()), before);
+        return (Status::Error(describe_error(&code, &errors[0])), before);
     }
 
     let mut build_ctx = crate::builder::BuildCtx {
