@@ -66,6 +66,27 @@ fn line_and_column(code: &str, offset: usize) -> (usize, usize) {
     (line, column)
 }
 
+/// The byte offset where the last token before `offset` ends,
+/// not counting whitespace and comments.
+fn end_of_token_before(code: &str, offset: usize) -> Option<usize> {
+    let mut position = 0;
+    let mut end = None;
+    for (kind, text) in rnix::tokenize(code) {
+        if position + text.len() > offset {
+            break;
+        }
+        position += text.len();
+        if !matches!(
+            kind,
+            rnix::SyntaxKind::TOKEN_WHITESPACE
+                | rnix::SyntaxKind::TOKEN_COMMENT
+        ) {
+            end = Some(position);
+        }
+    }
+    end
+}
+
 /// The message of a parse error, with the line and column where it starts
 /// in place of the byte range (`at 12..15`), which is hard to find.
 fn describe_error(code: &str, error: &rnix::ParseError) -> String {
@@ -88,7 +109,28 @@ fn describe_error(code: &str, error: &rnix::ParseError) -> String {
     }
 
     let (line, column) = line_and_column(code, start);
-    let position = format!("at line {line}, column {column}");
+    let mut position = format!("at line {line}, column {column}");
+
+    // A missing `;` is often at the end of a line, but the parser sees it
+    // only later, on the next line: also say where the code before that
+    // line ends
+    let wants_semicolon = matches!(
+        error,
+        ParseError::UnexpectedWanted(_, _, kinds)
+            if kinds.contains(&rnix::SyntaxKind::TOKEN_SEMICOLON)
+    );
+    let line_start = code[..start].rfind('\n').map_or(0, |index| index + 1);
+    if wants_semicolon {
+        if let Some((last_char, _)) = end_of_token_before(code, line_start)
+            .and_then(|end_before| code[..end_before].char_indices().last())
+        {
+            let (line_before, column_before) = line_and_column(code, last_char);
+            position.push_str(&format!(
+                " (after line {line_before}, column {column_before})"
+            ));
+        }
+    }
+
     // rnix writes `at 12..15`, or `in 12..15` for duplicated arguments
     for word in ["at", "in"] {
         let range = format!("{word} {start}..{end}");

@@ -196,7 +196,7 @@ stderr:
   use --quiet to suppress this and other messages.
   
   Failed! 1 error found at:
-  - <anonymous file on stdin>: unexpected TOKEN_ASSIGN at line 3, column 5, wanted any of [TOKEN_SEMICOLON]
+  - <anonymous file on stdin>: unexpected TOKEN_ASSIGN at line 3, column 5 (after line 2, column 7), wanted any of [TOKEN_SEMICOLON]
 
 exit code: Some(1)
 ===

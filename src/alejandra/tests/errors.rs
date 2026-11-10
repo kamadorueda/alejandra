@@ -18,11 +18,30 @@ fn error(code: &str) -> String {
 #[test]
 fn errors_show_line_and_column() {
     let cases = [
-        // A missing `;`: the error is on line 4
+        // A missing `;` at the end of line 3: the parser sees it at the `=`
+        // of line 4, so the message also says where line 3 ends
         (
             "{pkgs, lib}: {\n  mypkg = lib.test;\n  mypkg2 = lib.test2\n  \
              mistake = {};\n}\n",
-            "unexpected TOKEN_ASSIGN at line 4, column 11, wanted any of \
+            "unexpected TOKEN_ASSIGN at line 4, column 11 (after line 3, \
+             column 20), wanted any of [TOKEN_SEMICOLON]",
+        ),
+        // Comments and empty lines between do not count
+        (
+            "{\n  a = 1 # one\n\n  # two\n  b = 2;\n}\n",
+            "unexpected TOKEN_ASSIGN at line 5, column 5 (after line 2, \
+             column 7), wanted any of [TOKEN_SEMICOLON]",
+        ),
+        // The column of the code before counts characters too
+        (
+            "{\n  a = \"ñ\"\n  b = 2;\n}\n",
+            "unexpected TOKEN_ASSIGN at line 3, column 5 (after line 2, \
+             column 9), wanted any of [TOKEN_SEMICOLON]",
+        ),
+        // The code before is on the same line: nothing more to say
+        (
+            "{ a = 1 b = 2; }",
+            "unexpected TOKEN_ASSIGN at line 1, column 11, wanted any of \
              [TOKEN_SEMICOLON]",
         ),
         // On the first line
