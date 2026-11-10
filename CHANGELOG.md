@@ -23,6 +23,14 @@ Types of changes
   attribute sets written on one line stay on one line.
   [#494](https://github.com/kamadorueda/alejandra/issues/494)
 
+### Changed
+
+- `f <| x` stays on one line with the start of `x`,
+  like the application `f (x)`, when the input has no line break around `<|`:
+  `a = attrsOf <| submodule {` instead of `attrsOf` and `<| submodule {`
+  on separate lines.
+  [#467](https://github.com/kamadorueda/alejandra/issues/467)
+
 ### Fixed
 
 - Indented strings with text right after the opening `''`
