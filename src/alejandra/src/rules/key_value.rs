@@ -109,10 +109,13 @@ pub(crate) fn rule(
                 | rnix::SyntaxKind::NODE_LIST
                 | rnix::SyntaxKind::NODE_STRING
                 | rnix::SyntaxKind::NODE_WITH
-        ) || (matches!(
+        ) || ((matches!(
             child_expr.kind(),
             rnix::SyntaxKind::NODE_APPLY
-        ) && {
+        ) || crate::rules::bin_op::is_hanging_pipe_left_node(
+            build_ctx,
+            &child_expr,
+        )) && {
             // Measure the layout `FormatWider` will produce below,
             // not the one inherited from the surroundings
             let build_ctx = crate::builder::BuildCtx {

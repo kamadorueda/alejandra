@@ -18,6 +18,17 @@ pub(crate) fn rule(
         || third.has_inline_comment
         || third.has_trivialities;
 
+    // `f <| x` reads like an application: when the input has no line break
+    // around `<|`, keep `f <|` on the line where `x` starts
+    if vertical && is_hanging_pipe_left(&first, &second, &third) {
+        steps.push(crate::builder::Step::FormatWider(first.element));
+        steps.push(crate::builder::Step::Whitespace);
+        steps.push(crate::builder::Step::Format(second.element));
+        steps.push(crate::builder::Step::Whitespace);
+        steps.push(crate::builder::Step::FormatWider(third.element));
+        return steps;
+    }
+
     // first
     if vertical {
         let kind = first.element.kind();
@@ -76,4 +87,41 @@ pub(crate) fn rule(
     }
 
     steps
+}
+
+fn is_hanging_pipe_left(
+    first: &crate::annotated_children::Child,
+    second: &crate::annotated_children::Child,
+    third: &crate::annotated_children::Child,
+) -> bool {
+    second.element.to_string() == "<|"
+        && !first.has_inline_comment
+        && !first.has_trivialities
+        && !second.has_inline_comment
+        && !second.has_trivialities
+        && !third.has_inline_comment
+        && !third.has_trivialities
+}
+
+/// Whether `node` is `f <| x` written with no line break or comment around
+/// the `<|`
+pub(crate) fn is_hanging_pipe_left_node(
+    build_ctx: &crate::builder::BuildCtx,
+    node: &rnix::SyntaxElement,
+) -> bool {
+    match node {
+        rnix::SyntaxElement::Node(node)
+            if node.kind() == rnix::SyntaxKind::NODE_BIN_OP =>
+        {
+            let mut children =
+                crate::annotated_children::annotated(build_ctx, node);
+            match (children.next(), children.next(), children.next()) {
+                (Some(first), Some(second), Some(third)) => {
+                    is_hanging_pipe_left(&first, &second, &third)
+                }
+                _ => false,
+            }
+        }
+        _ => false,
+    }
 }
