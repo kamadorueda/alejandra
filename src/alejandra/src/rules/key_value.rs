@@ -101,9 +101,29 @@ pub(crate) fn rule(
     let mut dedent = false;
     steps.push(crate::builder::Step::Format(child_equal));
 
+    // A chain of `with` (or `assert`) on more than one line starts on its
+    // own line, so the next `with` is not at the level of the key:
+    //   a =
+    //     with pkgs;
+    //     with lib; {
+    let is_scope = |kind| {
+        matches!(
+            kind,
+            rnix::SyntaxKind::NODE_ASSERT | rnix::SyntaxKind::NODE_WITH
+        )
+    };
+    let is_multiline_scope_chain = vertical
+        && is_scope(child_expr.kind())
+        && child_expr
+            .as_node()
+            .and_then(|node| node.children().last())
+            .is_some_and(|body| is_scope(body.kind()))
+        && !crate::builder::fits_in_single_line(build_ctx, child_expr.clone());
+
     if vertical {
         if (!comments_before.is_empty() && !inline_hint)
             || !comments_after.is_empty()
+            || is_multiline_scope_chain
         {
             dedent = true;
             steps.push(crate::builder::Step::Indent);

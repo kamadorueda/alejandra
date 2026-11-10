@@ -25,6 +25,10 @@ Types of changes
 
 ### Changed
 
+- A chain of `with` (or `assert`) on more than one line
+  starts on its own line after `=`,
+  so the second `with` is not at the level of the key.
+  [#258](https://github.com/kamadorueda/alejandra/issues/258)
 - One empty line between function arguments is kept,
   like in attribute sets and lists,
   so arguments can be put in groups.
