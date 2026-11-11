@@ -12,6 +12,10 @@ pub(crate) struct Child {
     pub trivialities:     Vec<Trivia>,
     pub has_comments:     bool,
     pub has_trivialities: bool,
+
+    /// An empty line follows the element (after its inline comment),
+    /// before any other comment or the next element.
+    pub blank_line_after: bool,
 }
 
 /// Emit an inline comment: Whitespace + Comment + NewLine + Pad
@@ -74,6 +78,7 @@ pub(crate) fn annotated(
         let mut trivialities = Vec::new();
 
         let mut skip_next_newline = false;
+        let mut blank_line_after = false;
         children.drain_trivia(|element| match element {
             crate::children::Trivia::Comment(text) => {
                 if inline_comment.is_none()
@@ -88,6 +93,10 @@ pub(crate) fn annotated(
             }
             crate::children::Trivia::Whitespace(text) => {
                 let mut newlines = crate::utils::count_newlines(&text);
+
+                if newlines > 1 && trivialities.is_empty() {
+                    blank_line_after = true;
+                }
 
                 if skip_next_newline && newlines > 0 {
                     newlines -= 1;
@@ -115,6 +124,8 @@ pub(crate) fn annotated(
             trivialities,
             has_comments,
             has_trivialities,
+
+            blank_line_after,
         })
     }
 

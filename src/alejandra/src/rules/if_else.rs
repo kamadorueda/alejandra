@@ -103,12 +103,13 @@ pub(crate) fn rule(
     if let Some(text) = then_expr.inline_comment {
         steps.push(crate::builder::Step::Whitespace);
         steps.push(crate::builder::Step::Comment(text));
-        steps.push(crate::builder::Step::NewLine);
-        steps.push(crate::builder::Step::Pad);
-    } else {
-        steps.push(crate::builder::Step::NewLine);
-        steps.push(crate::builder::Step::Pad);
     }
+    steps.push(crate::builder::Step::NewLine);
+    // An empty line before `else` stays, to separate the branches (#222)
+    if then_expr.blank_line_after {
+        steps.push(crate::builder::Step::NewLine);
+    }
+    steps.push(crate::builder::Step::Pad);
 
     crate::annotated_children::emit_trivialities_comment_first(
         &then_expr.trivialities,

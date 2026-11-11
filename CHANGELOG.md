@@ -64,6 +64,9 @@ Types of changes
   `a = attrsOf <| submodule {` instead of `attrsOf` and `<| submodule {`
   on separate lines.
   [#467](https://github.com/kamadorueda/alejandra/issues/467)
+- An empty line before `else` is kept,
+  to separate the branches of a long `if`.
+  [#222](https://github.com/kamadorueda/alejandra/issues/222)
 
 ### Fixed
 
