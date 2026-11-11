@@ -224,7 +224,6 @@ You can find a full configuration file and the supported options here: [alejandr
 ## Alternatives
 
 - [NixOS/nixfmt](https://github.com/NixOS/nixfmt)
-- [serokell/nixfmt](https://github.com/serokell/nixfmt)
 - [nixpkgs-fmt](https://github.com/nix-community/nixpkgs-fmt)
 
 ## Versioning
