@@ -54,6 +54,7 @@ cargo build --release --package alejandra_cli
 git ls-files -z '*.nix' \
   ':!:src/alejandra/tests/cases/' \
   ':!:src/alejandra_cli/tests/inputs/' \
+  ':!:src/alejandra_cli/tests/gitignore/' \
   | xargs -0 "$bin" --check --quiet
 
 if [ -n "$nixpkgs" ]; then

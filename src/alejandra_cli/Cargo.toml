@@ -15,13 +15,13 @@ futures = { version = "0.3.32", default-features = false, features = [
   "executor",
   "thread-pool",
 ] }
+ignore = { version = "0.4.25", default-features = false, features = [] }
 num_cpus = { version = "1.17.0", default-features = false, features = [] }
 rand = { version = "0.8.6", default-features = false, features = [
   "alloc",
   "getrandom",
 ] }
 toml = { version = "1.1.0", default-features = false, features = ["parse", "serde"] }
-walkdir = { version = "2.5.0", default-features = false, features = [] }
 
 [package]
 authors = ["Kevin Amado <kamadorueda@gmail.com>"]

@@ -105,6 +105,20 @@ const CASES: &[TestCase] = &[
         args:  &["--check", "tests/inputs/unchanged.nix", "-qq"],
         stdin: None,
     },
+    // .gitignore: ignored files are skipped, unless named or --no-gitignore
+    TestCase { args: &["--check", "tests/gitignore"], stdin: None },
+    TestCase {
+        args:  &["--check", "tests/gitignore", "--no-gitignore"],
+        stdin: None,
+    },
+    TestCase {
+        args:  &["--check", "tests/gitignore/ignored.nix"],
+        stdin: None,
+    },
+    TestCase {
+        args:  &["--check", "tests/gitignore/ignored-dir"],
+        stdin: None,
+    },
     TestCase { args: &["--check", "tests/inputs/error.nix"], stdin: None },
     TestCase {
         args:  &["--check", "tests/inputs/error.nix", "-q"],

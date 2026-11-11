@@ -19,6 +19,13 @@ Types of changes
 
 ### Added
 
+- Files that `.gitignore` files ignore are skipped
+  when Alejandra searches a directory (`alejandra .`).
+  It also reads the `.gitignore` files of parent directories,
+  `.git/info/exclude` and the global git ignore file.
+  A file or directory named on the command line is always formatted.
+  Use `--no-gitignore` to format ignored files too.
+  [#428](https://github.com/kamadorueda/alejandra/issues/428)
 - (experimental) A `preserve_one_line_attr_sets` configuration option:
   attribute sets written on one line stay on one line.
   [#494](https://github.com/kamadorueda/alejandra/issues/494)
