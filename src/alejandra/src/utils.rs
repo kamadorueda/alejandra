@@ -84,3 +84,41 @@ pub(crate) fn last_line_is_dedented_argument(
         None => false,
     }
 }
+
+/// The width in characters of the element formatted on a single line,
+/// or `None` if it does not fit on a single line.
+pub(crate) fn single_line_width(
+    build_ctx: &crate::builder::BuildCtx,
+    element: rnix::SyntaxElement,
+) -> Option<usize> {
+    if build_ctx.fitting_in_single_line_depth > 0 {
+        return None;
+    }
+
+    let mut build_ctx = crate::builder::BuildCtx {
+        force_wide: true,
+        force_wide_success: true,
+        fitting_in_single_line_depth: 1,
+        vertical: false,
+        ..build_ctx.clone()
+    };
+
+    let formatted = crate::builder::build(&mut build_ctx, element)?.to_string();
+
+    if has_newlines(&formatted) {
+        None
+    } else {
+        Some(formatted.chars().count())
+    }
+}
+
+/// The width in characters of the indentation of the current line.
+/// A tab counts as two characters, like one level of two spaces.
+pub(crate) fn indentation_width(build_ctx: &crate::builder::BuildCtx) -> usize {
+    let unit = match build_ctx.config.indentation {
+        crate::config::Indentation::FourSpaces => 4,
+        crate::config::Indentation::Tabs
+        | crate::config::Indentation::TwoSpaces => 2,
+    };
+    unit * build_ctx.indentation
+}

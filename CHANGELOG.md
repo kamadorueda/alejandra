@@ -32,6 +32,11 @@ Types of changes
 
 ### Changed
 
+- A line break after `=` is kept when the input has it
+  and the value is a string or a function
+  that would make the line longer than 80 characters.
+  [#368](https://github.com/kamadorueda/alejandra/issues/368)
+  [#271](https://github.com/kamadorueda/alejandra/issues/271)
 - A chain of `with` (or `assert`) on more than one line
   starts on its own line after `=`,
   so the second `with` is not at the level of the key.
