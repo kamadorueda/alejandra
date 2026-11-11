@@ -27,6 +27,10 @@ stdout:
       -h, --help
               Print help information
   
+          --no-gitignore
+              Also format the files that .gitignore files ignore. By default they
+              are skipped, unless named directly
+  
       -q, --quiet
               Use once to hide informational messages, twice to hide error
               messages
@@ -332,6 +336,53 @@ exit code: Some(0)
 ===
 args: ["--check", "tests/inputs/unchanged.nix", "-qq"]
 exit code: Some(0)
+===
+args: ["--check", "tests/gitignore"]
+stderr:
+  Checking style in 1 file using 1 thread.
+  
+  
+  Congratulations! Your code complies with the Alejandra style.
+  
+
+exit code: Some(0)
+===
+args: ["--check", "tests/gitignore", "--no-gitignore"]
+stdout:
+  Requires formatting: tests/gitignore/ignored-dir/a.nix
+  Requires formatting: tests/gitignore/ignored.nix
+
+stderr:
+  Checking style in 3 files using 1 thread.
+  
+  
+  Alert! 2 files require formatting.
+
+exit code: Some(2)
+===
+args: ["--check", "tests/gitignore/ignored.nix"]
+stdout:
+  Requires formatting: tests/gitignore/ignored.nix
+
+stderr:
+  Checking style in 1 file using 1 thread.
+  
+  
+  Alert! 1 file requires formatting.
+
+exit code: Some(2)
+===
+args: ["--check", "tests/gitignore/ignored-dir"]
+stdout:
+  Requires formatting: tests/gitignore/ignored-dir/a.nix
+
+stderr:
+  Checking style in 1 file using 1 thread.
+  
+  
+  Alert! 1 file requires formatting.
+
+exit code: Some(2)
 ===
 args: ["--check", "tests/inputs/error.nix"]
 stderr:

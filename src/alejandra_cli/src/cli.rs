@@ -35,6 +35,11 @@ struct CLIArgs {
     #[clap(long, short, multiple_occurrences = true)]
     exclude: Vec<String>,
 
+    /// Also format the files that .gitignore files ignore. By default they
+    /// are skipped, unless named directly.
+    #[clap(long)]
+    no_gitignore: bool,
+
     /// Check if the input is already formatted and disable writing in-place
     /// the modified content.
     #[clap(long, short)]
@@ -165,7 +170,11 @@ pub fn main() -> ! {
             vec![crate::cli::format_stdin(config, verbosity)]
         }
         include => {
-            let paths = crate::find::nix_files(include, &args.exclude);
+            let paths = crate::find::nix_files(
+                include,
+                &args.exclude,
+                !args.no_gitignore,
+            );
 
             crate::cli::format_paths(
                 paths, config, in_place, threads, verbosity,
