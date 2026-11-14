@@ -76,6 +76,8 @@ pub(crate) fn rule(
     ));
     if vertical {
         steps.push(crate::builder::Step::Indent);
+    } else if arguments_count > 0 && build_ctx.config.space_around_brackets {
+        steps.push(crate::builder::Step::Whitespace);
     }
 
     // arguments
@@ -153,6 +155,8 @@ pub(crate) fn rule(
             steps.push(crate::builder::Step::NewLine);
             steps.push(crate::builder::Step::Pad);
         }
+    } else if arguments_count > 0 && build_ctx.config.space_around_brackets {
+        steps.push(crate::builder::Step::Whitespace);
     }
     steps.push(crate::builder::Step::Token(
         rnix::SyntaxKind::TOKEN_R_BRACE,
