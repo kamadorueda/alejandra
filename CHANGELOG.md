@@ -75,6 +75,10 @@ Types of changes
 
 ### Fixed
 
+- With `space_around_brackets = true`,
+  function arguments on one line get spaces inside the braces too:
+  `{ foo }: ...` instead of `{foo}: ...`.
+  [#540](https://github.com/kamadorueda/alejandra/issues/540)
 - Indented strings with text right after the opening `''`
   are kept as written,
   instead of getting spaces after the `''` and extra indentation.
