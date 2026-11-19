@@ -72,6 +72,9 @@ Types of changes
 - An empty line before `else` is kept,
   to separate the branches of a long `if`.
   [#222](https://github.com/kamadorueda/alejandra/issues/222)
+- After a comment between the arguments of a function, the following arguments
+  stay one per line instead of collapsing into `final: prev: ...`.
+  [#375](https://github.com/kamadorueda/alejandra/issues/375)
 
 ### Fixed
 
