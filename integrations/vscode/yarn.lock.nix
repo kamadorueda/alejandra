@@ -280,6 +280,14 @@
       };
     }
     {
+      name = "balanced_match___balanced_match_4.0.4.tgz";
+      path = fetchurl {
+        name = "balanced_match___balanced_match_4.0.4.tgz";
+        url = "https://registry.yarnpkg.com/balanced-match/-/balanced-match-4.0.4.tgz";
+        sha512 = "BLrgEcRTwX2o6gGxGOCNyMvGSp35YofuYzw9h1IMTRmKqttAZZVU67bdb9Pr2vUHA8+j3i2tJfjO6C6+4myGTA==";
+      };
+    }
+    {
       name = "base64_js___base64_js_1.5.1.tgz";
       path = fetchurl {
         name = "base64_js___base64_js_1.5.1.tgz";
@@ -312,11 +320,11 @@
       };
     }
     {
-      name = "brace_expansion___brace_expansion_2.1.7.tgz";
+      name = "brace_expansion___brace_expansion_5.0.12.tgz";
       path = fetchurl {
-        name = "brace_expansion___brace_expansion_2.1.7.tgz";
-        url = "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-2.1.7.tgz";
-        sha512 = "uZbew1NqdmPDTMJ8ah1y+b+9QEJrfkXFk3RcTQw3X0jW/xRUvFKsg1CfQdSYGdTbXZWExtU3J3ccxtnfw1Fi0g==";
+        name = "brace_expansion___brace_expansion_5.0.12.tgz";
+        url = "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-5.0.12.tgz";
+        sha512 = "YovQ3rzhaLMIrDjNDMkNS01tea93qhEhG5xy8f6+R0l+dw3Ki+5sCoIoI942iuLZTHWogWktgwVDhU09iNEimQ==";
       };
     }
     {
@@ -1224,19 +1232,19 @@
       };
     }
     {
-      name = "minimatch___minimatch_10.0.1.tgz";
+      name = "minimatch___minimatch_10.2.6.tgz";
       path = fetchurl {
-        name = "minimatch___minimatch_10.0.1.tgz";
-        url = "https://registry.yarnpkg.com/minimatch/-/minimatch-10.0.1.tgz";
-        sha512 = "ethXTt3SGGR+95gudmqJ1eNhRO7eGEGIgYA9vnPatK4/etz2MEVDno5GMCibdMTuBMyElzIlgxMna3K94XDIDQ==";
+        name = "minimatch___minimatch_10.2.6.tgz";
+        url = "https://registry.yarnpkg.com/minimatch/-/minimatch-10.2.6.tgz";
+        sha512 = "vpLQEs+VLCr1nU0BXS07maYoFwlDAH0gngQuuttxIwutDFEMHq2blX+8vpgxDdK3J1PwjCJiep77OitTZ4Ll1A==";
       };
     }
     {
-      name = "minimatch___minimatch_3.1.2.tgz";
+      name = "minimatch___minimatch_3.1.5.tgz";
       path = fetchurl {
-        name = "minimatch___minimatch_3.1.2.tgz";
-        url = "https://registry.yarnpkg.com/minimatch/-/minimatch-3.1.2.tgz";
-        sha512 = "J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==";
+        name = "minimatch___minimatch_3.1.5.tgz";
+        url = "https://registry.yarnpkg.com/minimatch/-/minimatch-3.1.5.tgz";
+        sha512 = "VgjWUsnnT6n+NUk6eZq77zeFdpW2LWDzP6zFGrCbHXiYNul5Dzqk2HHQ5uFH2DNW5Xbp8+jVzaeNt94ssEEl4w==";
       };
     }
     {
