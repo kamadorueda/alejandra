@@ -52,7 +52,20 @@ pub(crate) fn rule(
 
     // c
     let child = children.get_next().unwrap();
-    if vertical {
+    if !comment
+        && matches!(child.kind(), rnix::SyntaxKind::NODE_LAMBDA)
+        && child.as_node().is_some_and(|lambda| {
+            lambda.first_child().is_some_and(|argument| {
+                argument.kind() == rnix::SyntaxKind::NODE_IDENT_PARAM
+            })
+        })
+        && after_comment(node)
+    {
+        // Arguments that follow a comment keep one per line
+        steps.push(crate::builder::Step::NewLine);
+        steps.push(crate::builder::Step::Pad);
+        steps.push(crate::builder::Step::FormatWider(child));
+    } else if vertical {
         if comment
             || !matches!(
                 child.kind(),
@@ -97,4 +110,29 @@ pub(crate) fn rule(
     }
 
     steps
+}
+
+/// Whether `node` is a lambda in the body of a chain of lambdas
+/// (`a: b: c: d`) that has a comment between two of its arguments before it.
+fn after_comment(node: &rnix::SyntaxNode) -> bool {
+    let mut current = node.clone();
+
+    while let Some(parent) = current.parent() {
+        if parent.kind() != rnix::SyntaxKind::NODE_LAMBDA
+            || parent.children().last().as_ref() != Some(&current)
+        {
+            return false;
+        }
+
+        if parent
+            .children_with_tokens()
+            .any(|element| element.kind() == rnix::SyntaxKind::TOKEN_COMMENT)
+        {
+            return true;
+        }
+
+        current = parent;
+    }
+
+    false
 }
