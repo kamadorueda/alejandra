@@ -78,6 +78,10 @@ Types of changes
 - After a comment between the arguments of a function, the following arguments
   stay one per line instead of collapsing into `final: prev: ...`.
   [#375](https://github.com/kamadorueda/alejandra/issues/375)
+- The Nix parser rnix is upgraded to 0.15.1 (and rowan to 0.17.0).
+  The output is the same on all of nixpkgs;
+  an empty dynamic attribute such as `{}.${}` is now a parse error, as in Nix.
+  [#363](https://github.com/kamadorueda/alejandra/issues/363)
 
 ### Fixed
 
