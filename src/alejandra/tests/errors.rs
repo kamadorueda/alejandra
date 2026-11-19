@@ -54,6 +54,13 @@ fn errors_show_line_and_column() {
         ("[\r\n  1\r\n  ]]\r\n", "unexpected token at line 3, column 4"),
         // A pattern bound twice
         ("a@{b}@c: a", "unexpected double bind at line 1, column 6"),
+        // An empty dynamic attribute is not valid
+        (
+            "{}.${}",
+            "unexpected TOKEN_INTERPOL_END at line 1, column 6, wanted any of \
+             [TOKEN_L_PAREN, TOKEN_REC, TOKEN_L_BRACE, TOKEN_L_BRACK, \
+             TOKEN_STRING_START, TOKEN_IDENT]",
+        ),
         // No range: the message does not change
         ("[", "unexpected end of file"),
     ];
