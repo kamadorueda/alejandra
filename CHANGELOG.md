@@ -37,6 +37,9 @@ Types of changes
   that would make the line longer than 80 characters.
   [#368](https://github.com/kamadorueda/alejandra/issues/368)
   [#271](https://github.com/kamadorueda/alejandra/issues/271)
+- The same for a function application
+  whose first line would make the line longer than 80 characters.
+  [#386](https://github.com/kamadorueda/alejandra/issues/386)
 - A chain of `with` (or `assert`) on more than one line
   starts on its own line after `=`,
   so the second `with` is not at the level of the key.

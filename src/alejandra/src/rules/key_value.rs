@@ -122,26 +122,57 @@ pub(crate) fn rule(
         && !crate::builder::fits_in_single_line(build_ctx, child_expr.clone());
 
     // A line break after `=` stays when the input has it, and the value
-    // is a string or a function that would make the line longer than 80
-    // characters (#368, #271):
+    // is a string, a function or a function application whose first line
+    // would make the line longer than 80 characters (#368, #271, #386):
     //   a =
     //     "a very long string";
     let keeps_long_line_break = vertical
         && newlines
         && comments_before.is_empty()
         && comments_after.is_empty()
-        && matches!(
-            child_expr.kind(),
-            rnix::SyntaxKind::NODE_LAMBDA | rnix::SyntaxKind::NODE_STRING
-        )
-        && match (
-            crate::utils::single_line_width(build_ctx, child_key),
-            crate::utils::single_line_width(build_ctx, child_expr.clone()),
-        ) {
-            (Some(key), Some(expr)) => {
-                // `key = expr;`
-                crate::utils::indentation_width(build_ctx) + key + 3 + expr + 1
-                    > 80
+        && match child_expr.kind() {
+            rnix::SyntaxKind::NODE_LAMBDA | rnix::SyntaxKind::NODE_STRING => {
+                match (
+                    crate::utils::single_line_width(build_ctx, child_key),
+                    crate::utils::single_line_width(
+                        build_ctx,
+                        child_expr.clone(),
+                    ),
+                ) {
+                    (Some(key), Some(expr)) => {
+                        // `key = expr;`
+                        crate::utils::indentation_width(build_ctx)
+                            + key
+                            + 3
+                            + expr
+                            + 1
+                            > 80
+                    }
+                    _ => false,
+                }
+            }
+            // The first line of the application, on the line of `=`
+            rnix::SyntaxKind::NODE_APPLY => {
+                match crate::utils::single_line_width(build_ctx, child_key) {
+                    Some(key) => {
+                        let build_ctx = crate::builder::BuildCtx {
+                            vertical: !crate::builder::fits_in_single_line(
+                                build_ctx,
+                                child_expr.clone(),
+                            ),
+                            ..build_ctx.clone()
+                        };
+                        crate::utils::indentation_width(&build_ctx)
+                            + key
+                            + 3
+                            + crate::utils::first_line_width(
+                                &build_ctx,
+                                child_expr.clone(),
+                            )
+                            > 80
+                    }
+                    None => false,
+                }
             }
             _ => false,
         };

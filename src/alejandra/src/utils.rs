@@ -112,6 +112,21 @@ pub(crate) fn single_line_width(
     }
 }
 
+/// The width in characters of the first line of the element as it is
+/// formatted in the current layout, with the `;` that follows it when
+/// the element is a single line.
+pub(crate) fn first_line_width(
+    build_ctx: &crate::builder::BuildCtx,
+    element: rnix::SyntaxElement,
+) -> usize {
+    let formatted = trial_format(build_ctx, element);
+
+    match formatted.split_once('\n') {
+        Some((first, _)) => first.chars().count(),
+        None => formatted.chars().count() + 1,
+    }
+}
+
 /// The width in characters of the indentation of the current line.
 /// A tab counts as two characters, like one level of two spaces.
 pub(crate) fn indentation_width(build_ctx: &crate::builder::BuildCtx) -> usize {
