@@ -88,57 +88,66 @@ fn end_of_token_before(code: &str, offset: usize) -> Option<usize> {
 }
 
 /// The message of a parse error, with the line and column where it starts
-/// in place of the byte range (`at 12..15`), which is hard to find.
+/// in place of the byte range that rnix writes (`at 12..15`), which is hard
+/// to find. The message is made from the values of the error, not from its
+/// text.
 fn describe_error(code: &str, error: &rnix::ParseError) -> String {
     use rnix::ParseError;
 
-    let message = error.to_string();
     let range = match error {
         ParseError::Unexpected(range)
         | ParseError::UnexpectedExtra(range)
         | ParseError::UnexpectedWanted(_, range, _)
         | ParseError::UnexpectedDoubleBind(range)
         | ParseError::DuplicatedArgs(range, _) => *range,
-        _ => return message,
+        // No position: rnix's own message says all there is
+        _ => return error.to_string(),
     };
 
     let start = usize::from(range.start());
     let end = usize::from(range.end());
     if end > code.len() || !code.is_char_boundary(start) {
-        return message;
+        return error.to_string();
     }
 
     let (line, column) = line_and_column(code, start);
-    let mut position = format!("at line {line}, column {column}");
+    let at = format!("line {line}, column {column}");
 
-    // A missing `;` is often at the end of a line, but the parser sees it
-    // only later, on the next line: also say where the code before that
-    // line ends
-    let wants_semicolon = matches!(
-        error,
-        ParseError::UnexpectedWanted(_, _, kinds)
-            if kinds.contains(&rnix::SyntaxKind::TOKEN_SEMICOLON)
-    );
-    let line_start = code[..start].rfind('\n').map_or(0, |index| index + 1);
-    if wants_semicolon {
-        if let Some((last_char, _)) = end_of_token_before(code, line_start)
-            .and_then(|end_before| code[..end_before].char_indices().last())
-        {
-            let (line_before, column_before) = line_and_column(code, last_char);
-            position.push_str(&format!(
-                " (after line {line_before}, column {column_before})"
-            ));
+    match error {
+        ParseError::Unexpected(_) => format!("error node at {at}"),
+        ParseError::UnexpectedExtra(_) => format!("unexpected token at {at}"),
+        ParseError::UnexpectedWanted(got, _, kinds) => {
+            // A missing `;` is often at the end of a line, but the parser
+            // sees it only later, on the next line: also say where the code
+            // before that line ends
+            let mut after = String::new();
+            if kinds.contains(&rnix::SyntaxKind::TOKEN_SEMICOLON) {
+                let line_start =
+                    code[..start].rfind('\n').map_or(0, |index| index + 1);
+                if let Some((last_char, _)) = end_of_token_before(
+                    code, line_start,
+                )
+                .and_then(|end_before| code[..end_before].char_indices().last())
+                {
+                    let (line_before, column_before) =
+                        line_and_column(code, last_char);
+                    after = format!(
+                        " (after line {line_before}, column {column_before})"
+                    );
+                }
+            }
+            format!(
+                "unexpected {got:?} at {at}{after}, wanted any of {kinds:?}"
+            )
         }
-    }
-
-    // rnix writes `at 12..15`, or `in 12..15` for duplicated arguments
-    for word in ["at", "in"] {
-        let range = format!("{word} {start}..{end}");
-        if message.contains(&range) {
-            return message.replacen(&range, &position, 1);
+        ParseError::UnexpectedDoubleBind(_) => {
+            format!("unexpected double bind at {at}")
         }
+        ParseError::DuplicatedArgs(_, ident) => {
+            format!("argument `{ident}` is duplicated in {at}")
+        }
+        _ => error.to_string(),
     }
-    message
 }
 
 /// Formats the content of `before` in-memory
@@ -215,5 +224,47 @@ pub fn in_fs(path: String, config: Config, in_place: bool) -> Status {
             }
         }
         Err(error) => Status::from(error),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use rnix::ParseError;
+    use rnix::TextRange;
+
+    fn range(start: u32, end: u32) -> TextRange {
+        TextRange::new(start.into(), end.into())
+    }
+
+    #[test]
+    fn describe_error_of_each_kind() {
+        let code = "{\n  a = 1;\n  é = 2;\n}\n";
+
+        let cases = [
+            (
+                ParseError::Unexpected(range(4, 5)),
+                "error node at line 2, column 3",
+            ),
+            (
+                ParseError::UnexpectedExtra(range(4, 5)),
+                "unexpected token at line 2, column 3",
+            ),
+            (
+                ParseError::UnexpectedDoubleBind(range(13, 15)),
+                "unexpected double bind at line 3, column 3",
+            ),
+            (
+                ParseError::DuplicatedArgs(range(4, 5), "a".to_string()),
+                "argument `a` is duplicated in line 2, column 3",
+            ),
+            (ParseError::UnexpectedEOF, "unexpected end of file"),
+            (ParseError::RecursionLimitExceeded, "recursion limit exceeded"),
+            // A range outside of the code keeps rnix's own message
+            (ParseError::Unexpected(range(90, 99)), "error node at 90..99"),
+        ];
+
+        for (error, expected) in cases {
+            assert_eq!(super::describe_error(code, &error), expected);
+        }
     }
 }
