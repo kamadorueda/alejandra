@@ -127,6 +127,48 @@ pub(crate) fn first_line_width(
     }
 }
 
+/// For an element that is formatted on several lines and "hangs" from the
+/// current line (the first line ends with an opening bracket, the last line
+/// starts with the closing bracket at the current indentation, and the
+/// lines between are indented), the width in characters of its last line.
+pub(crate) fn hanging_last_line_width(
+    build_ctx: &crate::builder::BuildCtx,
+    element: rnix::SyntaxElement,
+) -> Option<usize> {
+    if build_ctx.fitting_in_single_line_depth > 0 {
+        return None;
+    }
+
+    let vertical =
+        !crate::builder::fits_in_single_line(build_ctx, element.clone());
+    let build_ctx = crate::builder::BuildCtx { vertical, ..build_ctx.clone() };
+    let formatted = trial_format(&build_ctx, element);
+    let indent = build_ctx.indent_str();
+
+    let lines: Vec<&str> = formatted.split('\n').collect();
+    if lines.len() < 3 || !lines[0].ends_with(['{', '[']) {
+        return None;
+    }
+
+    let last = lines[lines.len() - 1];
+    let closing = last.strip_prefix(&indent)?;
+    if !closing.starts_with(['}', ']']) || !closing.ends_with(')') {
+        return None;
+    }
+
+    let between_are_indented = lines[1..lines.len() - 1].iter().all(|line| {
+        line.is_empty()
+            || line
+                .strip_prefix(&indent)
+                .is_some_and(|rest| rest.starts_with(char::is_whitespace))
+    });
+    if !between_are_indented {
+        return None;
+    }
+
+    Some(last.chars().count())
+}
+
 /// The width in characters of the indentation of the current line.
 /// A tab counts as two characters, like one level of two spaces.
 pub(crate) fn indentation_width(build_ctx: &crate::builder::BuildCtx) -> usize {
