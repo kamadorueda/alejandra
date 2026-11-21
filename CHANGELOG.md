@@ -82,6 +82,12 @@ Types of changes
   The output is the same on all of nixpkgs;
   an empty dynamic attribute such as `{}.${}` is now a parse error, as in Nix.
   [#363](https://github.com/kamadorueda/alejandra/issues/363)
+- An `inherit` with a source in parentheses that spans several lines
+  (an attribute set, a list, a function call that ends with one)
+  keeps the names on the line of the closing bracket
+  (`inherit (f {` ... `}) a b c;`) when there are no comments
+  and the line stays within 80 characters.
+  [#367](https://github.com/kamadorueda/alejandra/issues/367)
 
 ### Fixed
 

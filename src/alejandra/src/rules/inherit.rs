@@ -12,6 +12,12 @@ pub(crate) fn rule(
             .iter()
             .any(|child| child.has_inline_comment || child.has_trivialities);
 
+    // inherit (source {
+    //   ...
+    // }) a b c;
+    let hanging = vertical && is_hanging(build_ctx, node, &children);
+    let vertical = vertical && !hanging;
+
     let children_count = children.len() - 1;
     let mut children = children.into_iter();
 
@@ -94,7 +100,11 @@ pub(crate) fn rule(
             if not_last_child {
                 steps.push(crate::builder::Step::Whitespace);
             }
-            steps.push(crate::builder::Step::Format(child.element));
+            if hanging && index == 0 {
+                steps.push(crate::builder::Step::FormatWider(child.element));
+            } else {
+                steps.push(crate::builder::Step::Format(child.element));
+            }
         }
     }
 
@@ -103,4 +113,47 @@ pub(crate) fn rule(
     }
 
     steps
+}
+
+/// Whether the inherit has a source in parentheses that hangs
+/// (like an attribute set), has no comments, and the names fit
+/// in the line of the closing bracket of the source.
+fn is_hanging(
+    build_ctx: &crate::builder::BuildCtx,
+    node: &rnix::SyntaxNode,
+    children: &[crate::annotated_children::Child],
+) -> bool {
+    // inherit, source, name+, ;
+    if children.len() < 4
+        || children[1].element.kind() != rnix::SyntaxKind::NODE_INHERIT_FROM
+        || node
+            .descendants_with_tokens()
+            .any(|element| element.kind() == rnix::SyntaxKind::TOKEN_COMMENT)
+    {
+        return false;
+    }
+
+    let Some(last_line_width) = crate::utils::hanging_last_line_width(
+        build_ctx,
+        children[1].element.clone(),
+    ) else {
+        return false;
+    };
+
+    let mut width = last_line_width + 1;
+    for (index, child) in children[2..children.len() - 1].iter().enumerate() {
+        if child.element.kind() != rnix::SyntaxKind::NODE_IDENT {
+            return false;
+        }
+        match crate::utils::single_line_width(build_ctx, child.element.clone())
+        {
+            Some(name_width) => {
+                width += name_width + usize::from(index > 0);
+            }
+            None => return false,
+        }
+    }
+
+    // the `;`
+    width < 80
 }
