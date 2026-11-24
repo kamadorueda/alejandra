@@ -7,7 +7,8 @@
 
   ...
 }:
-with lib; let
+with lib;
+let
   inherit
     (config.boot)
     kernelPatches

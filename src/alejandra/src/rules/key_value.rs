@@ -102,8 +102,9 @@ pub(crate) fn rule(
     let mut dedent = false;
     steps.push(crate::builder::Step::Format(child_equal));
 
-    // A chain of `with` (or `assert`) on more than one line starts on its
-    // own line, so the next `with` is not at the level of the key:
+    // A chain of `with` (or `assert`) on more than one line, or one that
+    // ends in a `let`, starts on its own line, so the next `with` (or the
+    // `let`) is not at the level of the key:
     //   a =
     //     with pkgs;
     //     with lib; {
@@ -118,7 +119,10 @@ pub(crate) fn rule(
         && child_expr
             .as_node()
             .and_then(|node| node.children().last())
-            .is_some_and(|body| is_scope(body.kind()))
+            .is_some_and(|body| {
+                is_scope(body.kind())
+                    || matches!(body.kind(), rnix::SyntaxKind::NODE_LET_IN)
+            })
         && !crate::builder::fits_in_single_line(build_ctx, child_expr.clone());
 
     // A line break after `=` stays when the input has it, and the value
