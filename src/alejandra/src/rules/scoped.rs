@@ -80,7 +80,9 @@ pub(crate) fn rule(
     if vertical {
         if matches!(
             fourth.element.kind(),
-            rnix::SyntaxKind::NODE_ASSERT | rnix::SyntaxKind::NODE_WITH
+            rnix::SyntaxKind::NODE_ASSERT
+                | rnix::SyntaxKind::NODE_WITH
+                | rnix::SyntaxKind::NODE_LET_IN
         ) {
             steps.push(crate::builder::Step::NewLine);
             steps.push(crate::builder::Step::Pad);

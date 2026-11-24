@@ -88,6 +88,9 @@ Types of changes
   (`inherit (f {` ... `}) a b c;`) when there are no comments
   and the line stays within 80 characters.
   [#367](https://github.com/kamadorueda/alejandra/issues/367)
+- A multi-line `let` after `assert` or `with` goes on its own line,
+  at the indentation of the `assert` or `with`.
+  [#257](https://github.com/kamadorueda/alejandra/issues/257)
 
 ### Fixed
 
