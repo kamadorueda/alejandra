@@ -12,6 +12,12 @@ pub struct Config {
     #[serde(default)]
     pub space_around_brackets: bool,
 
+    /// Whether a `let ... in` on many lines starts on a line of its own,
+    /// indented one level more than the expression it belongs to, instead
+    /// of hanging at the end of the previous line (`a = let`)
+    #[serde(default)]
+    pub let_on_new_line: bool,
+
     /// Whether to keep attribute sets written on one line on one line
     #[serde(default)]
     pub preserve_one_line_attr_sets: bool,

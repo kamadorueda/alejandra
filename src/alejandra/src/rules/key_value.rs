@@ -125,6 +125,10 @@ pub(crate) fn rule(
             })
         && !crate::builder::fits_in_single_line(build_ctx, child_expr.clone());
 
+    // `let_on_new_line`: a `let` on many lines starts on a line of its own
+    let is_let_on_new_line =
+        vertical && crate::rules::let_in::on_new_line(build_ctx, &child_expr);
+
     // A line break after `=` stays when the input has it, and the value
     // is a string, a function or a function application whose first line
     // would make the line longer than 80 characters (#368, #271, #386):
@@ -185,6 +189,7 @@ pub(crate) fn rule(
         if (!comments_before.is_empty() && !inline_hint)
             || !comments_after.is_empty()
             || is_multiline_scope_chain
+            || is_let_on_new_line
             || keeps_long_line_break
         {
             dedent = true;

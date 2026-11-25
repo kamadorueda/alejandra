@@ -1,3 +1,69 @@
+/// With `let_on_new_line`, whether `element` is a `let ... in` that is
+/// formatted on many lines, so it starts on a line of its own.
+pub(crate) fn on_new_line(
+    build_ctx: &crate::builder::BuildCtx,
+    element: &rnix::SyntaxElement,
+) -> bool {
+    build_ctx.config.let_on_new_line
+        && element.kind() == rnix::SyntaxKind::NODE_LET_IN
+        && !crate::builder::fits_in_single_line(build_ctx, element.clone())
+}
+
+/// With `let_on_new_line`, whether `element` is a chain of `with` and
+/// `assert` that ends in a `let ... in` on many lines.
+pub(crate) fn scope_chain_ends_in_let(
+    build_ctx: &crate::builder::BuildCtx,
+    element: &rnix::SyntaxElement,
+) -> bool {
+    if !build_ctx.config.let_on_new_line {
+        return false;
+    }
+
+    let mut current = match element {
+        rnix::SyntaxElement::Node(node) => node.clone(),
+        rnix::SyntaxElement::Token(_) => return false,
+    };
+
+    loop {
+        if !matches!(
+            current.kind(),
+            rnix::SyntaxKind::NODE_ASSERT | rnix::SyntaxKind::NODE_WITH
+        ) {
+            break;
+        }
+
+        match current.children().last() {
+            Some(body) => current = body,
+            None => return false,
+        }
+    }
+
+    current.kind() == rnix::SyntaxKind::NODE_LET_IN
+        && !crate::builder::fits_in_single_line(build_ctx, current.into())
+}
+
+/// Whether `node` is a function in the body of functions, `with` and
+/// `assert` that start at the top of the file.
+pub(crate) fn is_top_level(node: &rnix::SyntaxNode) -> bool {
+    let mut current = node.clone();
+
+    while let Some(parent) = current.parent() {
+        match parent.kind() {
+            rnix::SyntaxKind::NODE_ROOT => return true,
+            rnix::SyntaxKind::NODE_LAMBDA
+            | rnix::SyntaxKind::NODE_WITH
+            | rnix::SyntaxKind::NODE_ASSERT
+                if parent.children().last().as_ref() == Some(&current) =>
+            {
+                current = parent;
+            }
+            _ => return false,
+        }
+    }
+
+    false
+}
+
 pub(crate) fn rule(
     build_ctx: &crate::builder::BuildCtx,
     node: &rnix::SyntaxNode,
@@ -106,6 +172,7 @@ pub(crate) fn rule(
     steps.push(crate::builder::Step::Format(child_in));
     if vertical {
         if child_comments.is_empty()
+            && !on_new_line(build_ctx, &child_expr)
             && matches!(
                 child_expr.kind(),
                 rnix::SyntaxKind::NODE_ATTR_SET

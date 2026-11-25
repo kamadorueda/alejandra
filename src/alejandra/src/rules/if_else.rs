@@ -91,6 +91,7 @@ pub(crate) fn rule(
     // then_expr
     if !then_.has_inline_comment
         && !then_.has_comments
+        && !crate::rules::let_in::on_new_line(build_ctx, &then_expr.element)
         && (matches!(
             then_expr.element.kind(),
             rnix::SyntaxKind::NODE_ATTR_SET
@@ -146,6 +147,7 @@ pub(crate) fn rule(
     // else_expr
     if !else_.has_inline_comment
         && !else_.has_comments
+        && !crate::rules::let_in::on_new_line(build_ctx, &else_expr.element)
         && (matches!(
             else_expr.element.kind(),
             rnix::SyntaxKind::NODE_ATTR_SET
