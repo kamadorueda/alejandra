@@ -15,6 +15,11 @@ pub struct Config {
     /// Whether to keep attribute sets written on one line on one line
     #[serde(default)]
     pub preserve_one_line_attr_sets: bool,
+
+    /// Whether `then` ends the line of `if`, with each branch on the
+    /// next lines, indented, and `else` at the level of `if`
+    #[serde(default)]
+    pub if_then_on_one_line: bool,
 }
 
 #[derive(Clone, Copy, Default, Deserialize)]

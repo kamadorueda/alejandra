@@ -13,6 +13,18 @@ pub(crate) fn rule(
     let else_ = children.next().unwrap();
     let else_expr = children.next().unwrap();
 
+    // With `if_then_on_one_line`, `then` ends the line of `if`
+    // and each branch goes on its own lines. With comments around the
+    // keywords the layout of the default is kept.
+    let has_comments = [&if_, &if_expr, &then_, &then_expr, &else_]
+        .iter()
+        .any(|child| child.has_inline_comment || child.has_comments);
+    if build_ctx.config.if_then_on_one_line && !has_comments {
+        return then_on_the_if_line(
+            build_ctx, if_, if_expr, then_, then_expr, else_, else_expr,
+        );
+    }
+
     // if_
     steps.push(crate::builder::Step::Format(if_.element));
 
@@ -157,4 +169,88 @@ pub(crate) fn rule(
     }
 
     steps
+}
+
+/// `if cond then`, the branches indented on the next lines and `else`
+/// at the level of `if`; `else if` chains stay flat.
+fn then_on_the_if_line(
+    build_ctx: &crate::builder::BuildCtx,
+    if_: crate::annotated_children::Child,
+    if_expr: crate::annotated_children::Child,
+    then_: crate::annotated_children::Child,
+    then_expr: crate::annotated_children::Child,
+    else_: crate::annotated_children::Child,
+    else_expr: crate::annotated_children::Child,
+) -> Vec<crate::builder::Step> {
+    use crate::builder::Step;
+
+    let else_branch = is_else_branch(&if_.element);
+    let mut steps = vec![Step::Format(if_.element)];
+
+    // `if cond then` on one line, in at most 80 characters; an `else if`
+    // starts after `else `
+    let start = crate::utils::indentation_width(build_ctx)
+        + if else_branch { 5 } else { 0 };
+    let fits =
+        crate::builder::fits_in_single_line(build_ctx, if_expr.element.clone())
+            && match crate::utils::single_line_width(
+                build_ctx,
+                if_expr.element.clone(),
+            ) {
+                Some(width) => {
+                    start + "if ".len() + width + " then".len() <= 80
+                }
+                None => true,
+            };
+
+    if fits {
+        steps.push(Step::Whitespace);
+        steps.push(Step::FormatWider(if_expr.element));
+        steps.push(Step::Whitespace);
+    } else {
+        steps.push(Step::Indent);
+        steps.push(Step::NewLine);
+        steps.push(Step::Pad);
+        steps.push(Step::FormatWider(if_expr.element));
+        steps.push(Step::Dedent);
+        steps.push(Step::NewLine);
+        steps.push(Step::Pad);
+    }
+    steps.push(Step::Format(then_.element));
+
+    steps.push(Step::Indent);
+    steps.push(Step::NewLine);
+    steps.push(Step::Pad);
+    steps.push(Step::FormatWider(then_expr.element));
+    steps.push(Step::Dedent);
+
+    steps.push(Step::NewLine);
+    // An empty line before `else` stays, to separate the branches (#222)
+    if then_expr.blank_line_after {
+        steps.push(Step::NewLine);
+    }
+    steps.push(Step::Pad);
+    steps.push(Step::Format(else_.element));
+
+    if else_expr.element.kind() == rnix::SyntaxKind::NODE_IF_ELSE {
+        steps.push(Step::Whitespace);
+        steps.push(Step::FormatWider(else_expr.element));
+    } else {
+        steps.push(Step::Indent);
+        steps.push(Step::NewLine);
+        steps.push(Step::Pad);
+        steps.push(Step::FormatWider(else_expr.element));
+        steps.push(Step::Dedent);
+    }
+
+    steps
+}
+
+/// Whether the `if` of the element is the `else` branch of another `if`
+fn is_else_branch(if_keyword: &rnix::SyntaxElement) -> bool {
+    let Some(node) = if_keyword.parent() else { return false };
+    node.parent().is_some_and(|parent| {
+        parent.kind() == rnix::SyntaxKind::NODE_IF_ELSE
+            && parent.children().last().as_ref() == Some(&node)
+    })
 }
