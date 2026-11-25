@@ -434,7 +434,7 @@ stderr:
     |
   1 | asdf = "asdf"
     | ^^^^
-  unknown field `asdf`, expected one of `indentation`, `space_around_brackets`, `preserve_one_line_attr_sets`, `if_then_on_one_line`
+  unknown field `asdf`, expected one of `indentation`, `space_around_brackets`, `let_on_new_line`, `preserve_one_line_attr_sets`, `if_then_on_one_line`
   
 
 exit code: Some(1)

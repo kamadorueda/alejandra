@@ -4,6 +4,12 @@ indentation = "TwoSpaces" # Or: FourSpaces, Tabs
 
 space_around_brackets = false # Or: true
 
+# Start a `let ... in` on many lines on a line of its own, indented one level
+# more than the expression it belongs to, instead of `a = let`. At the top of
+# a file and in the body of a top-level function, `let` stays at the start of
+# the line.
+let_on_new_line = false # Or: true
+
 # Keep attribute sets that are written on one line on one line,
 # for example `{a = 1; b = 2;}`. By default, a set with two or more
 # items is always written on many lines.

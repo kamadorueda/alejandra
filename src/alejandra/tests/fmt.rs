@@ -14,12 +14,21 @@ fn configs() -> HashMap<&'static str, Config> {
             if_then_on_one_line: true,
             ..Default::default()
         }),
+        ("if-then-on-one-line-and-let-on-new-line", Config {
+            if_then_on_one_line: true,
+            let_on_new_line: true,
+            ..Default::default()
+        }),
         ("indentation-four-spaces", Config {
             indentation: Indentation::FourSpaces,
             ..Default::default()
         }),
         ("indentation-tabs", Config {
             indentation: Indentation::Tabs,
+            ..Default::default()
+        }),
+        ("let-on-new-line", Config {
+            let_on_new_line: true,
             ..Default::default()
         }),
         ("preserve-one-line-attr-sets", Config {

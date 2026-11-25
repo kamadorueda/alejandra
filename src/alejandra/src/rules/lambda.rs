@@ -8,7 +8,14 @@ pub(crate) fn rule(
 
     let vertical = children.has_comments()
         || children.has_newlines()
-        || build_ctx.vertical;
+        || build_ctx.vertical
+        || node.children().last().is_some_and(|body| {
+            let body = rnix::SyntaxElement::Node(body);
+            crate::rules::let_in::on_new_line(build_ctx, &body)
+                || crate::rules::let_in::scope_chain_ends_in_let(
+                    build_ctx, &body,
+                )
+        });
 
     // a
     let child = children.get_next().unwrap();
@@ -66,7 +73,13 @@ pub(crate) fn rule(
         steps.push(crate::builder::Step::Pad);
         steps.push(crate::builder::Step::FormatWider(child));
     } else if vertical {
+        let let_on_new_line =
+            crate::rules::let_in::on_new_line(build_ctx, &child)
+                || crate::rules::let_in::scope_chain_ends_in_let(
+                    build_ctx, &child,
+                );
         if comment
+            || let_on_new_line
             || !matches!(
                 child.kind(),
                 rnix::SyntaxKind::NODE_ATTR_SET
@@ -80,9 +93,13 @@ pub(crate) fn rule(
         {
             // A function in the body keeps its comments aligned with its
             // argument, like the documented arguments of nixpkgs' lib
-            let should_indent =
+            let should_indent = if let_on_new_line {
+                // At the top of the file the body does not move to the right
+                !crate::rules::let_in::is_top_level(node)
+            } else {
                 !matches!(child.kind(), rnix::SyntaxKind::NODE_LAMBDA)
-                    && build_ctx.indentation > 0;
+                    && build_ctx.indentation > 0
+            };
 
             if should_indent {
                 steps.push(crate::builder::Step::Indent);

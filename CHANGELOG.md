@@ -19,6 +19,12 @@ Types of changes
 
 ### Added
 
+- (experimental) A `let_on_new_line` configuration option:
+  a `let ... in` on many lines starts on a line of its own,
+  indented one level more than the expression it belongs to,
+  instead of `a = let`. At the top of a file and in the body of a top-level
+  function, `let` stays at the start of the line.
+  [#257](https://github.com/kamadorueda/alejandra/issues/257)
 - Files that `.gitignore` files ignore are skipped
   when Alejandra searches a directory (`alejandra .`).
   It also reads the `.gitignore` files of parent directories,

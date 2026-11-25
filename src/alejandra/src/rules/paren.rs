@@ -10,7 +10,9 @@ pub(crate) fn rule(
     let expression = children.next().unwrap();
     let closer = children.next().unwrap();
 
-    let loose = opener.has_inline_comment
+    let loose = (node.kind() == rnix::SyntaxKind::NODE_PAREN
+        && crate::rules::let_in::on_new_line(build_ctx, &expression.element))
+        || opener.has_inline_comment
         || opener.has_comments
         || expression.has_inline_comment
         || expression.has_comments
