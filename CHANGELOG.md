@@ -29,6 +29,10 @@ Types of changes
 - (experimental) A `preserve_one_line_attr_sets` configuration option:
   attribute sets written on one line stay on one line.
   [#494](https://github.com/kamadorueda/alejandra/issues/494)
+- (experimental) An `if_then_on_one_line` configuration option:
+  `then` ends the line of `if`, each branch goes on its own lines,
+  indented, and `else` is at the level of `if`.
+  [#353](https://github.com/kamadorueda/alejandra/issues/353)
 
 ### Changed
 

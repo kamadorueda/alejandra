@@ -19,6 +19,7 @@ Options:
   --nixpkgs DIR     nixpkgs checkout (default: the one pinned in flake.lock)
   --compare BIN     also count the lines that differ between the output of
                     --formatter and the output of this other binary
+  --config FILE     alejandra.toml for --formatter (not for --compare)
   -h, --help        show this help
 
 Exits with status 1 on any idempotence or meaning failure.
@@ -29,6 +30,7 @@ repo=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 formatter=
 nixpkgs=
 compare=
+config_args=()
 paths=()
 
 while [ $# -gt 0 ]; do
@@ -36,6 +38,7 @@ while [ $# -gt 0 ]; do
     --formatter) formatter=$2 && shift 2 ;;
     --nixpkgs) nixpkgs=$2 && shift 2 ;;
     --compare) compare=$2 && shift 2 ;;
+    --config) config_args=(--experimental-config "$2") && shift 2 ;;
     -h | --help) usage && exit 0 ;;
     --) shift && paths+=("$@") && break ;;
     -*) echo "Unknown option: $1" >&2 && usage >&2 && exit 64 ;;
@@ -84,11 +87,11 @@ cp -a "$work/before" "$work/once"
 
 # alejandra exits with an error on files that do not parse, that is expected
 start=$(date +%s)
-"$formatter" --quiet "$work/once" > /dev/null 2>&1 || true
+"$formatter" "${config_args[@]}" --quiet "$work/once" > /dev/null 2>&1 || true
 elapsed=$(($(date +%s) - start))
 
 cp -a "$work/once" "$work/twice"
-"$formatter" --quiet "$work/twice" > /dev/null 2>&1 || true
+"$formatter" "${config_args[@]}" --quiet "$work/twice" > /dev/null 2>&1 || true
 
 # idempotence
 (cd "$work/once" && diff -rq . "$work/twice" || true) \

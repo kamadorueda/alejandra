@@ -8,3 +8,8 @@ space_around_brackets = false # Or: true
 # for example `{a = 1; b = 2;}`. By default, a set with two or more
 # items is always written on many lines.
 preserve_one_line_attr_sets = false # Or: true
+
+# Put `then` at the end of the line of `if`, each branch on the next
+# lines, indented, and `else` at the level of `if`. By default, `then`
+# and `else` start their own lines.
+if_then_on_one_line = false # Or: true

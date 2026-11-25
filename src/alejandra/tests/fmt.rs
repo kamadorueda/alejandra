@@ -10,6 +10,10 @@ use pretty_assertions::assert_eq;
 fn configs() -> HashMap<&'static str, Config> {
     HashMap::from([
         ("default", Config::default()),
+        ("if-then-on-one-line", Config {
+            if_then_on_one_line: true,
+            ..Default::default()
+        }),
         ("indentation-four-spaces", Config {
             indentation: Indentation::FourSpaces,
             ..Default::default()
