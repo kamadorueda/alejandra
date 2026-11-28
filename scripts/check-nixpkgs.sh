@@ -19,7 +19,7 @@ Options:
   --nixpkgs DIR     nixpkgs checkout (default: the one pinned in flake.lock)
   --compare BIN     also count the lines that differ between the output of
                     --formatter and the output of this other binary
-  --config FILE     alejandra.toml for --formatter (not for --compare)
+  --config FILE     alejandra.toml for --formatter and --compare
   -h, --help        show this help
 
 Exits with status 1 on any idempotence or meaning failure.
@@ -133,7 +133,7 @@ report "Files where the meaning changes" "$work/meaning.txt"
 
 if [ -n "$compare" ]; then
   copy_nix_files "$work/other"
-  "$compare" --quiet "$work/other" > /dev/null 2>&1 || true
+  "$compare" "${config_args[@]}" --quiet "$work/other" > /dev/null 2>&1 || true
   changed=$(diff -r -U0 "$work/once" "$work/other" \
     | grep -E '^[-+]' | grep -cvE '^(\+\+\+|---) ' || true)
   echo "Lines that differ between the two formatters: $changed"

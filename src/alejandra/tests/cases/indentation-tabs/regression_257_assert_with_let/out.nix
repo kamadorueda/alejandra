@@ -114,18 +114,16 @@
 			x = 1;
 		in
 			x;
-	parenArg =
-		f (with lib;
-			let
-				x = 1;
-				y = 2;
-			in
-				x + y);
-	parenChain =
-		f (with a;
-			with b; {
-				a = 1;
-			});
+	parenArg = f (with lib;
+		let
+			x = 1;
+			y = 2;
+		in
+			x + y);
+	parenChain = f (with a;
+		with b; {
+			a = 1;
+		});
 	parenApply =
 		f (with lib;
 			let
@@ -184,13 +182,12 @@
 				z = 2;
 			in
 				y + z;
-	argument =
-		f x (with lib;
-			let
-				y = 1;
-				z = 2;
-			in
-				y + z);
+	argument = f x (with lib;
+		let
+			y = 1;
+			z = 2;
+		in
+			y + z);
 	withInAttrSet = {
 		a =
 			with lib;

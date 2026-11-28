@@ -51,12 +51,17 @@ impl BuildCtx {
     /// Compute the indent string for the current indentation level,
     /// respecting the configured indentation style.
     pub(crate) fn indent_str(&self) -> String {
-        let unit = match self.config.indentation {
+        self.indent_unit().repeat(self.indentation)
+    }
+
+    /// The string of one indentation level, respecting the configured
+    /// indentation style.
+    pub(crate) fn indent_unit(&self) -> &'static str {
+        match self.config.indentation {
             Indentation::FourSpaces => "    ",
             Indentation::Tabs => "\t",
             Indentation::TwoSpaces => "  ",
-        };
-        unit.repeat(self.indentation)
+        }
     }
 }
 
@@ -135,12 +140,7 @@ fn build_step(
                 add_token(
                     builder,
                     rnix::SyntaxKind::TOKEN_WHITESPACE,
-                    &match build_ctx.config.indentation {
-                        Indentation::FourSpaces => "    ",
-                        Indentation::Tabs => "\t",
-                        Indentation::TwoSpaces => "  ",
-                    }
-                    .repeat(build_ctx.indentation),
+                    &build_ctx.indent_str(),
                 );
             }
         }

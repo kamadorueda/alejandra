@@ -53,7 +53,6 @@ pub(crate) fn second_through_penultimate_line_are_indented(
     }
 
     let indent = build_ctx.indent_str();
-    let whitespace = format!("{}  ", indent);
     let lambda = format!("{}}}:", indent);
     let in_ = format!("{}in", indent);
 
@@ -61,7 +60,9 @@ pub(crate) fn second_through_penultimate_line_are_indented(
         line.is_empty()
             || line.starts_with(&lambda)
             || line.starts_with(&in_)
-            || line.starts_with(&whitespace)
+            || line
+                .strip_prefix(&indent)
+                .is_some_and(|rest| rest.starts_with(char::is_whitespace))
     })
 }
 

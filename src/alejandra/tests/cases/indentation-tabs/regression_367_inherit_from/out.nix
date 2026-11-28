@@ -1,57 +1,38 @@
 [
 	{
-		inherit
-			(mkFruit {
-					a = "apple";
-					b = "banana";
-					c = "cherry";
-					d = "date";
-					e = "elderberry";
-				})
-			feijoa
-			grape
-			honeydew
-			;
+		inherit (mkFruit {
+			a = "apple";
+			b = "banana";
+			c = "cherry";
+			d = "date";
+			e = "elderberry";
+		}) feijoa grape honeydew;
 	}
 
 	{
-		inherit
-			(mkFruit {
-					a = "apple";
-					b = "banana";
-				})
-			feijoa
-			grape
-			honeydew
-			;
+		inherit (mkFruit {
+			a = "apple";
+			b = "banana";
+		}) feijoa grape honeydew;
 	}
 
 	{inherit (builtins.concatLists [(mkFruit "apple") (mkFruit "banana") (mkFruit "cherry") (mkFruit "date") (mkFruit "elderberry")]) a b;}
 
 	{
-		inherit
-			(builtins.concatLists [
-					"apple"
-					"banana"
-				])
-			a
-			b
-			;
+		inherit (builtins.concatLists [
+			"apple"
+			"banana"
+		]) a b;
 	}
 
 	{
-		inherit
-			(f x {
-					a = "apple";
-					b = "banana";
-					c = "cherry";
-					d = "date";
-					e = "elderberry";
-				})
-			feijoa
-			grape
-			honeydew
-			;
+		inherit (f x {
+			a = "apple";
+			b = "banana";
+			c = "cherry";
+			d = "date";
+			e = "elderberry";
+		}) feijoa grape honeydew;
 	}
 
 	{
@@ -88,12 +69,12 @@
 	{
 		inherit
 			(mkFruit {
-					a = "apple";
-					b = "banana";
-					c = "cherry";
-					d = "date";
-					e = "elderberry";
-				})
+				a = "apple";
+				b = "banana";
+				c = "cherry";
+				d = "date";
+				e = "elderberry";
+			})
 			/* names */
 			feijoa
 			grape
@@ -104,13 +85,13 @@
 	{
 		inherit
 			(mkFruit {
-					a = "apple";
-					b = "banana";
-					c = "cherry";
-					d = "date";
-					e = "elderberry";
-					/* inside */
-				})
+				a = "apple";
+				b = "banana";
+				c = "cherry";
+				d = "date";
+				e = "elderberry";
+				/* inside */
+			})
 			feijoa
 			grape
 			honeydew
@@ -121,12 +102,12 @@
 		inherit
 			/* first */
 			(mkFruit {
-					a = "apple";
-					b = "banana";
-					c = "cherry";
-					d = "date";
-					e = "elderberry";
-				})
+				a = "apple";
+				b = "banana";
+				c = "cherry";
+				d = "date";
+				e = "elderberry";
+			})
 			feijoa
 			grape
 			honeydew
@@ -136,12 +117,12 @@
 	{
 		inherit
 			(mkFruit {
-					a = "apple";
-					b = "banana";
-					c = "cherry";
-					d = "date";
-					e = "elderberry";
-				})
+				a = "apple";
+				b = "banana";
+				c = "cherry";
+				d = "date";
+				e = "elderberry";
+			})
 			feijoa
 			grape
 			honeydew
@@ -152,12 +133,12 @@
 	{
 		inherit
 			(mkFruit {
-					a = "apple";
-					b = "banana";
-					c = "cherry";
-					d = "date";
-					e = "elderberry";
-				})
+				a = "apple";
+				b = "banana";
+				c = "cherry";
+				d = "date";
+				e = "elderberry";
+			})
 			feijoaAAAAAAAAAAAAAAAA
 			graperrrrrrrrrrrrrrrrrrr
 			honeydewwwwwwwwwwwwwwwwwwww
@@ -168,12 +149,12 @@
 	{
 		inherit
 			(mkFruit {
-					a = "apple";
-					b = "banana";
-					c = "cherry";
-					d = "date";
-					e = "elderberry";
-				})
+				a = "apple";
+				b = "banana";
+				c = "cherry";
+				d = "date";
+				e = "elderberry";
+			})
 			feijoaAAAAAAAAAAAAAAAA
 			graperrrrrrrrrrrrrrrrrrrr
 			honeydewwwwwwwwwwwwwwwwwwwwwwwwwwww
@@ -183,12 +164,12 @@
 	{
 		inherit
 			(mkFruit {
-					a = "apple";
-					b = "banana";
-					c = "cherry";
-					d = "date";
-					e = "elderberry";
-				})
+				a = "apple";
+				b = "banana";
+				c = "cherry";
+				d = "date";
+				e = "elderberry";
+			})
 			"quoted"
 			${dynamic}
 			plain
@@ -196,35 +177,26 @@
 	}
 
 	{
-		inherit
-			(mkFruit {
-					a = "apple";
-					b = "banana";
-					c = "cherry";
-					d = "date";
-					e = "elderberry";
-				})
-			feijoa
-			grape
-			;
+		inherit (mkFruit {
+			a = "apple";
+			b = "banana";
+			c = "cherry";
+			d = "date";
+			e = "elderberry";
+		}) feijoa grape;
 	}
 
 	{
 		outer = {
 			inner = {
 				deep = let
-					inherit
-						(mkFruit {
-								a = "apple";
-								b = "banana";
-								c = "cherry";
-								d = "date";
-								e = "elderberry";
-							})
-						feijoa
-						grape
-						honeydew
-						;
+					inherit (mkFruit {
+						a = "apple";
+						b = "banana";
+						c = "cherry";
+						d = "date";
+						e = "elderberry";
+					}) feijoa grape honeydew;
 				in
 					feijoa;
 			};
@@ -248,17 +220,13 @@
 	}
 
 	{
-		inherit
-			(callPackage ./fruit.nix {
-					a = "apple";
-					b = "banana";
-					c = "cherry";
-					d = "date";
-					e = "elderberry";
-				})
-			feijoa
-			grape
-			;
+		inherit (callPackage ./fruit.nix {
+			a = "apple";
+			b = "banana";
+			c = "cherry";
+			d = "date";
+			e = "elderberry";
+		}) feijoa grape;
 	}
 
 	{

@@ -15,8 +15,8 @@
 	)
 
 	(a: b: c:
-			# after
-			d)
+		# after
+		d)
 
 	(
 		a:

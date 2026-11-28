@@ -101,6 +101,10 @@ Types of changes
 - A multi-line `let` after `assert` or `with` goes on its own line,
   at the indentation of the `assert` or `with`.
   [#257](https://github.com/kamadorueda/alejandra/issues/257)
+- With `indentation = "Tabs"`, an `inherit` source that is a function call
+  hangs like the other sources, and a function call, lambda or `with` in
+  parentheses or after `=` is laid out as with spaces.
+  [#367](https://github.com/kamadorueda/alejandra/issues/367)
 
 ### Fixed
 

@@ -104,8 +104,8 @@
 		d)
 
 	({
-			a, # comment
-			b ? 2, # comment
-		}:
-			_)
+		a, # comment
+		b ? 2, # comment
+	}:
+		_)
 ]
